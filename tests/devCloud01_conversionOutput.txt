@@ -1,7 +1,13 @@
 ################################################
-### *** project - corkscrew *** ###### tmos extractor output### Section 1: apps### Section 2: conversion logs (error/info/debug)### Section 3: configMultiLevelObjects (not object values yet)### Section 5: configSingleLevelObjects (another way to search config)### Section 2: apps###  2020-09-18T21:10:15.626Z
-###  9/18/2020, 4:10:15 PM
-###  Fri, 18 Sep 2020 21:10:15 GMT
+### *** project - corkscrew *** ###
+### tmos extractor output
+### Section 1: apps
+### Section 2: conversion logs (error/info/debug)
+### Section 3: configMultiLevelObjects (not object values yet)
+### Section 4: configSingleLevelObjects (another way to search config)
+###  2020-09-18T21:14:58.436Z
+###  9/18/2020, 4:14:58 PM
+###  Fri, 18 Sep 2020 21:14:58 GMT
 ################################################
 
 ################################################
@@ -263,14 +269,14 @@ when HTTP_REQUEST {
 
 #######################################
 ### conversion log ####################
-[2020-09-18T21:10:06.365Z] DeBuG: 'regular date log message'
-[9/18/2020, 4:10:06 PM] DeBuG: 'toLocalString date log message'
-[Fri, 18 Sep 2020 21:10:06 GMT] DeBuG: 'to UTC date log message'
-[2020-09-18T21:10:06.521Z] INFO: Recieved bigip.conf, version: 15.1
-[2020-09-18T21:10:06.528Z] INFO: digging vs config for /Common/app1_t80_vs
-[2020-09-18T21:10:06.530Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2020-09-18T21:10:06.541Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
-[2020-09-18T21:10:06.541Z] DEBUG: [/Common/app1_t80_vs] found the following profiles [
+[2020-09-18T21:14:58.208Z] DeBuG: 'regular date log message'
+[9/18/2020, 4:14:58 PM] DeBuG: 'toLocalString date log message'
+[Fri, 18 Sep 2020 21:14:58 GMT] DeBuG: 'to UTC date log message'
+[2020-09-18T21:14:58.310Z] INFO: Recieved bigip.conf, version: 15.1
+[2020-09-18T21:14:58.316Z] INFO: digging vs config for /Common/app1_t80_vs
+[2020-09-18T21:14:58.318Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-09-18T21:14:58.328Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-09-18T21:14:58.328Z] DEBUG: [/Common/app1_t80_vs] found the following profiles [
   'profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n',
   '\n        /Common/http { }\n        /Common/tcp { }',
   index: 171,
@@ -293,9 +299,9 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:12.500Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2020-09-18T21:10:12.500Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
-[2020-09-18T21:10:12.500Z] DEBUG: [/Common/app1_t80_vs] found the following rules [
+[2020-09-18T21:14:58.328Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2020-09-18T21:14:58.328Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
+[2020-09-18T21:14:58.329Z] DEBUG: [/Common/app1_t80_vs] found the following rules [
   'rules {\n        /Common/_sys_https_redirect\n    }\n',
   '\n        /Common/_sys_https_redirect',
   index: 241,
@@ -318,13 +324,13 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:12.500Z] INFO: digging vs config for /Common/app1_t443_vs
-[2020-09-18T21:10:12.501Z] DEBUG: digging pool config for /Common/app1_t80_pool
-[2020-09-18T21:10:12.501Z] DEBUG: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2020-09-18T21:10:12.501Z] DEBUG: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2020-09-18T21:10:12.512Z] DEBUG: pool monitor configs found: []
-[2020-09-18T21:10:12.512Z] DEBUG: /Common/app1_t80_pool references 2 system default monitors, compare previous arrays for details
-[2020-09-18T21:10:12.512Z] DEBUG: [/Common/app1_t443_vs] found the following pools [
+[2020-09-18T21:14:58.329Z] INFO: digging vs config for /Common/app1_t443_vs
+[2020-09-18T21:14:58.329Z] DEBUG: digging pool config for /Common/app1_t80_pool
+[2020-09-18T21:14:58.329Z] DEBUG: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2020-09-18T21:14:58.329Z] DEBUG: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2020-09-18T21:14:58.339Z] DEBUG: pool monitor configs found: []
+[2020-09-18T21:14:58.339Z] DEBUG: /Common/app1_t80_pool references 2 system default monitors, compare previous arrays for details
+[2020-09-18T21:14:58.340Z] DEBUG: [/Common/app1_t443_vs] found the following pools [
   'pool /Common/app1_t80_pool\n',
   '/Common/app1_t80_pool',
   index: 134,
@@ -347,9 +353,9 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:12.512Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2020-09-18T21:10:12.523Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
-[2020-09-18T21:10:12.523Z] DEBUG: [/Common/app1_t443_vs] found the following profiles [
+[2020-09-18T21:14:58.340Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-09-18T21:14:58.350Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-09-18T21:14:58.350Z] DEBUG: [/Common/app1_t443_vs] found the following profiles [
   'profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n',
   '\n        /Common/http { }\n        /Common/tcp { }',
   index: 165,
@@ -372,7 +378,7 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:13.306Z] DEBUG: [/Common/app1_t443_vs] found the following rules [
+[2020-09-18T21:14:58.350Z] DEBUG: [/Common/app1_t443_vs] found the following rules [
   'source-address-translation {\n        type automap\n    }\n',
   '\n        type automap',
   index: 287,
@@ -395,10 +401,10 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:13.306Z] INFO: digging vs config for /Common/app2_t80_vs
-[2020-09-18T21:10:13.306Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2020-09-18T21:10:13.318Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
-[2020-09-18T21:10:13.318Z] DEBUG: [/Common/app2_t80_vs] found the following profiles [
+[2020-09-18T21:14:58.350Z] INFO: digging vs config for /Common/app2_t80_vs
+[2020-09-18T21:14:58.350Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-09-18T21:14:58.360Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-09-18T21:14:58.360Z] DEBUG: [/Common/app2_t80_vs] found the following profiles [
   'profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n',
   '\n        /Common/http { }\n        /Common/tcp { }',
   index: 171,
@@ -421,9 +427,9 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.544Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2020-09-18T21:10:15.544Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
-[2020-09-18T21:10:15.544Z] DEBUG: [/Common/app2_t80_vs] found the following rules [
+[2020-09-18T21:14:58.360Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2020-09-18T21:14:58.360Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
+[2020-09-18T21:14:58.360Z] DEBUG: [/Common/app2_t80_vs] found the following rules [
   'rules {\n        /Common/_sys_https_redirect\n    }\n',
   '\n        /Common/_sys_https_redirect',
   index: 241,
@@ -446,11 +452,11 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.544Z] INFO: digging vs config for /Common/app2_t443_vs
-[2020-09-18T21:10:15.544Z] DEBUG: digging pool config for /Common/app2_t80_pool
-[2020-09-18T21:10:15.545Z] DEBUG: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2020-09-18T21:10:15.545Z] DEBUG: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2020-09-18T21:10:15.556Z] DEBUG: pool monitor configs found: [
+[2020-09-18T21:14:58.360Z] INFO: digging vs config for /Common/app2_t443_vs
+[2020-09-18T21:14:58.361Z] DEBUG: digging pool config for /Common/app2_t80_pool
+[2020-09-18T21:14:58.361Z] DEBUG: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2020-09-18T21:14:58.361Z] DEBUG: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2020-09-18T21:14:58.371Z] DEBUG: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -474,7 +480,7 @@ when HTTP_REQUEST {
     '    timeout 16\n' +
     '}\n'
 ]
-[2020-09-18T21:10:15.556Z] DEBUG: [/Common/app2_t443_vs] found the following pools [
+[2020-09-18T21:14:58.371Z] DEBUG: [/Common/app2_t443_vs] found the following pools [
   'pool /Common/app2_t80_pool\n',
   '/Common/app2_t80_pool',
   index: 134,
@@ -497,9 +503,9 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.556Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2020-09-18T21:10:15.567Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
-[2020-09-18T21:10:15.567Z] DEBUG: [/Common/app2_t443_vs] found the following profiles [
+[2020-09-18T21:14:58.371Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-09-18T21:14:58.382Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-09-18T21:14:58.382Z] DEBUG: [/Common/app2_t443_vs] found the following profiles [
   'profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n',
   '\n        /Common/http { }\n        /Common/tcp { }',
   index: 165,
@@ -522,7 +528,7 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.567Z] DEBUG: [/Common/app2_t443_vs] found the following rules [
+[2020-09-18T21:14:58.382Z] DEBUG: [/Common/app2_t443_vs] found the following rules [
   'source-address-translation {\n        type automap\n    }\n',
   '\n        type automap',
   index: 287,
@@ -545,17 +551,17 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.567Z] INFO: digging vs config for /Common/app3_t8443_vs
-[2020-09-18T21:10:15.567Z] DEBUG: digging pool config for /Common/app3_t8443_pool
-[2020-09-18T21:10:15.568Z] DEBUG: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2020-09-18T21:10:15.568Z] DEBUG: pool monitor references found: [
+[2020-09-18T21:14:58.382Z] INFO: digging vs config for /Common/app3_t8443_vs
+[2020-09-18T21:14:58.382Z] DEBUG: digging pool config for /Common/app3_t8443_pool
+[2020-09-18T21:14:58.382Z] DEBUG: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2020-09-18T21:14:58.382Z] DEBUG: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2020-09-18T21:10:15.595Z] DEBUG: pool monitor configs found: [
+[2020-09-18T21:14:58.408Z] DEBUG: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -564,8 +570,8 @@ when HTTP_REQUEST {
     '    timeout 4\n' +
     '}\n'
 ]
-[2020-09-18T21:10:15.595Z] DEBUG: /Common/app3_t8443_pool references 4 system default monitors, compare previous arrays for details
-[2020-09-18T21:10:15.595Z] DEBUG: [/Common/app3_t8443_vs] found the following pools [
+[2020-09-18T21:14:58.408Z] DEBUG: /Common/app3_t8443_pool references 4 system default monitors, compare previous arrays for details
+[2020-09-18T21:14:58.408Z] DEBUG: [/Common/app3_t8443_vs] found the following pools [
   'pool /Common/app3_t8443_pool\n',
   '/Common/app3_t8443_pool',
   index: 330,
@@ -607,14 +613,14 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.595Z] DEBUG: profile references found:  [
+[2020-09-18T21:14:58.408Z] DEBUG: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2020-09-18T21:10:15.618Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
-[2020-09-18T21:10:15.618Z] DEBUG: [/Common/app3_t8443_vs] found the following profiles [
+[2020-09-18T21:14:58.429Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-09-18T21:14:58.429Z] DEBUG: [/Common/app3_t8443_vs] found the following profiles [
   'profiles {\n' +
     '        /Common/app3_clientssl {\n' +
     '            context clientside\n' +
@@ -673,8 +679,8 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.618Z] DEBUG: rule references found:  [ '/Common/app3_rule' ]
-[2020-09-18T21:10:15.619Z] DEBUG: [/Common/app3_t8443_vs] found the following rules [
+[2020-09-18T21:14:58.429Z] DEBUG: rule references found:  [ '/Common/app3_rule' ]
+[2020-09-18T21:14:58.430Z] DEBUG: [/Common/app3_t8443_vs] found the following rules [
   'rules {\n        /Common/app3_rule\n    }\n',
   '\n        /Common/app3_rule',
   index: 581,
@@ -716,7 +722,7 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.619Z] DEBUG: [/Common/app3_t8443_vs] found the following rules [
+[2020-09-18T21:14:58.430Z] DEBUG: [/Common/app3_t8443_vs] found the following rules [
   'source-address-translation {\n' +
     '        pool /Common/app3_snat_pool\n' +
     '        type snat\n' +
@@ -761,7 +767,7 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.619Z] DEBUG: [/Common/app3_t8443_vs] found the following ltPolices [
+[2020-09-18T21:14:58.430Z] DEBUG: [/Common/app3_t8443_vs] found the following ltPolices [
   'policies {\n        /Common/app3_ltm_policy { }\n    }\n',
   '\n        /Common/app3_ltm_policy { }',
   index: 273,
@@ -803,7 +809,7 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.619Z] DEBUG: [/Common/app3_t8443_vs] found the following persistence [
+[2020-09-18T21:14:58.430Z] DEBUG: [/Common/app3_t8443_vs] found the following persistence [
   'persist {\n' +
     '        /Common/app3_cookie {\n' +
     '            default yes\n' +
@@ -849,9 +855,55 @@ when HTTP_REQUEST {
     '    translate-port enabled\n',
   groups: undefined
 ]
-[2020-09-18T21:10:15.619Z] INFO: digging vs config for /Common/forwarder_net_0.0.0.0
-[2020-09-18T21:10:15.619Z] DEBUG: profile references found:  [ '/Common/fastl4_loose' ]
-[2020-09-18T21:10:15.626Z] DEBUG: [/Common/forwarder_net_0.0.0.0] found the following profiles [
+[2020-09-18T21:14:58.431Z] DEBUG: [/Common/app3_t8443_vs] found the following persistence [
+  'persist {\n' +
+    '        /Common/app3_cookie {\n' +
+    '            default yes\n' +
+    '        }\n' +
+    '    }\n',
+  '\n        /Common/app3_cookie {\n            default yes\n        }',
+  index: 189,
+  input: '\n' +
+    '    destination /Common/192.168.1.51:8443\n' +
+    '    fallback-persistence /Common/app3_srcAddr_persist\n' +
+    '    ip-protocol tcp\n' +
+    '    last-modified-time 2020-09-17:12:45:40\n' +
+    '    mask 255.255.255.255\n' +
+    '    persist {\n' +
+    '        /Common/app3_cookie {\n' +
+    '            default yes\n' +
+    '        }\n' +
+    '    }\n' +
+    '    policies {\n' +
+    '        /Common/app3_ltm_policy { }\n' +
+    '    }\n' +
+    '    pool /Common/app3_t8443_pool\n' +
+    '    profiles {\n' +
+    '        /Common/app3_clientssl {\n' +
+    '            context clientside\n' +
+    '        }\n' +
+    '        /Common/app3_serverssl {\n' +
+    '            context serverside\n' +
+    '        }\n' +
+    '        /Common/http { }\n' +
+    '        /Common/tcp { }\n' +
+    '    }\n' +
+    '    rules {\n' +
+    '        /Common/app3_rule\n' +
+    '    }\n' +
+    '    serverssl-use-sni disabled\n' +
+    '    source 0.0.0.0/0\n' +
+    '    source-address-translation {\n' +
+    '        pool /Common/app3_snat_pool\n' +
+    '        type snat\n' +
+    '    }\n' +
+    '    translate-address enabled\n' +
+    '    translate-port enabled\n',
+  groups: undefined
+]
+[2020-09-18T21:14:58.431Z] INFO: digging vs config for /Common/forwarder_net_0.0.0.0
+[2020-09-18T21:14:58.431Z] DEBUG: profile references found:  [ '/Common/fastl4_loose' ]
+[2020-09-18T21:14:58.436Z] DEBUG: [/Common/forwarder_net_0.0.0.0] found the following profiles [
   'profiles {\n        /Common/fastl4_loose { }\n    }\n',
   '\n        /Common/fastl4_loose { }',
   index: 67,

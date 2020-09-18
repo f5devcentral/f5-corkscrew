@@ -199,6 +199,10 @@ export class LTMconfig {
             logger.debug(`[${vsName}] found the following persistence`, persistence);
         }
 
+        if(fallBackPersist) {
+            logger.debug(`[${vsName}] found the following persistence`, persistence);
+        }
+
         return fullConfig;
     }
 

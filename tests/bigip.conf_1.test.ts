@@ -34,13 +34,12 @@ describe('explode bigip.conf tests', function() {
 
         let output = '';
         output += '################################################\n';
-        output += `### *** project - corkscrew *** ###`;
-        output += `### tmos extractor output`;
-        output += `### Section 1: apps`;
-        output += `### Section 2: conversion logs (error/info/debug)`;
-        output += `### Section 3: configMultiLevelObjects (not object values yet)`;
-        output += `### Section 5: configSingleLevelObjects (another way to search config)`;
-        output += `### Section 2: apps`;
+        output += `### *** project - corkscrew *** ###\n`;
+        output += `### tmos extractor output\n`;
+        output += `### Section 1: apps\n`;
+        output += `### Section 2: conversion logs (error/info/debug)\n`;
+        output += `### Section 3: configMultiLevelObjects (not object values yet)\n`;
+        output += `### Section 4: configSingleLevelObjects (another way to search config)\n`;
         output += `###  ${dateT1}\n###  ${dateT2}\n###  ${dateT3}\n`;
         output += '################################################\n';
         
