@@ -1,11 +1,36 @@
-# Solutions Engineering Template Repository
-A template repository that contains all required files (LICENSE, SUPPORT, CONTRIBUTING, etc) as outlined in the org standards.  
+# project-corkscrew
 
-
-The sections below are recommended in your project's README.md file. 
 
 ## Overview
-Provide a short overview of the project.
+The intention for this project/rpm is to provide a common tool to extract tmos applications.
+
+
+### TMOS application feature exclusions
+
+*** need to rething the following since a big part of the tool could help with support and just regular migrations ***
+For migration purposes, especially to another platform, like mBIP the following features are being ignored:
+(? = will consider if needed)
+- Virtual Server Properties
+    - HTTP Proxy Connect Profile
+    - FTP Profile
+    - RTSP Profile
+    - SOCKS Profile
+    - Stream Profile?
+    - XML Profile?
+    - MQTT
+    - SMPTS Profile
+    - POP3 Profile
+    - Client LDAP Profile
+    - Server LDAP Profile
+    - Service Profile
+    - SMTP Profile?
+    - WebSocket Profile
+    - IMAP Profile
+    - SplitSession Client Profile
+    - ...
+
+
+
 
 ## Getting Started
 Provide a quick example of how to use your code.  This should provide the user with a launch point to quickly see what the project can offer them. 

@@ -1,0 +1,7 @@
+ltm rule /Common/CK_pool2_rule {
+  ### test rule for corkscrew
+
+when HTTP_REQUEST {
+    # no pool references
+}
+}

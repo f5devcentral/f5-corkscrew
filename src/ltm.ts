@@ -3,9 +3,10 @@
 
 
 import * as _ from 'lodash';
-import { add, forEach } from 'lodash';
+import { EOL } from 'os'
+// import { add, forEach } from 'lodash';
 // import { lodas} from 'lodash'
-import { object } from 'lodash/fp/object';
+import { object as _obj } from 'lodash/fp/object';
 
 
 
@@ -38,11 +39,14 @@ export class LTMconfig {
     // public apps = [];
     // public apps2 = [];
     private tmosVersionReg = /#TMSH-VERSION: (\d.+)\n/;
+    /**
+     * if match, returns object name in [1] object value in [2]
+     */
     private parentNameValueRegex = /([ \w\-\/.]+) {([\s\S]+?\n| )}/;
     // private regex1 = /[ \w\-\/.]+{([\s\S]+?)\n}\n/g;
     // private regFull = /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) [ \w\-\/.]+({.*}\n|{[\s\S]+?\n}\n)/g;
     // private regexNoCG = /[ \w\-\/.]+{[\s\S]+?\n}\n/g;
-    // private regexSingleline = /^[\w\-\/.]+[\w\-\/. ]+{ }$/gm;  // single-line empty objects
+    private regexSingleline = '(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom)';
 
     //commented/multi-line regex
     private regexTmosParentObjects = multilineRegExp([
@@ -51,8 +55,9 @@ export class LTMconfig {
         // include any child object definitions and object name
         /[ \w\-\/.]+/,
         // capture single line data or everything till "\n}\n"
-        /({.*}\n|{[\s\S]+?\n}\n)/   
-        //look at adding a look forward to capture the last "}" right before the next parent item name
+        /({.*}\n|{[\s\S]+?\n}\n)/,
+        // look forward to capture the last "}" before the next parent item name
+        /(?=(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom))/   
     ], 'g');
 
     /**
@@ -111,7 +116,7 @@ export class LTMconfig {
 
             apps.push({name: key, config: `${key} {${value}}`});
 
-            const vsConfig = this.getVsConfig(value);
+            const vsConfig = this.getVsConfig(key, value);
 
 
             // /**
@@ -143,7 +148,8 @@ export class LTMconfig {
             // });
             // const ttmp = addConfig.join();
             // value.concat(ttmp);
-            // apps2.push({name: key, config: `${key} {${value}}`});
+            apps2.push({name: key, config: vsConfig});
+
             const f = 2;
         }
         return apps2;
@@ -165,7 +171,12 @@ export class LTMconfig {
         }
     }
 
-    private getVsConfig(vsName: string) {
+    /**
+     * scans vs config, and discovers child configs
+     * @param vsName virtual server name
+     * @param vsConfig virtual server tmos config body 
+     */
+    private getVsConfig(vsName: string, vsConfig: string) {
         /**
          * take in vs config body
          * extract: 
@@ -177,10 +188,84 @@ export class LTMconfig {
          *  - fallback-persistence
          *  - policies
          */
+
+        /**
+         * get pool, but not snat pool...
+         */
+        const poolRegex = /(?<!source-address-translation {\n\s+)pool (.+?)\n/;
+        const profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
+        const rulesRegex = /rules {([\s\S]+?)\n    }\n/;
+        const snatRegex = /source-address-translation {([\s\S]+?)\n    }\n/;
+        const ltpPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
+        const persistRegex = /persist {([\s\S]+?)\n    }\n/;
+
+        const pool = vsConfig.match(poolRegex);
+        const profiles = vsConfig.match(profilesRegex);
+        const rules = vsConfig.match(rulesRegex);
+        const snat = vsConfig.match(snatRegex);
+        const ltPolicies = vsConfig.match(ltpPoliciesRegex);
+        const persistence = vsConfig.match(persistRegex);
+
+        let fullConfig = `${vsName} {${vsConfig}}`
+        if(pool) {
+            fullConfig += '\n';
+            const x = this.digPoolConfig(pool[1]);
+            fullConfig += x;
+            fullConfig += '\n';
+        }
+        // const e = 0;
+        return fullConfig;
+    }
+
+    /**
+     * get full pool config and supporting node/monitor configs
+     * @param poolName 
+     */
+    private digPoolConfig(poolName: string) {
+        // lookup pool config using name
+            // get pool config
+            // extract nodes?
+            // extract monitors
+        const membersRegex = /members {([\s\S]+?)\n    }\n/;
+        const nodesFromMembersRegex = /(\/\w+\/.+?)(?=:)/g;
+        const monitorRegex = /monitor {([\s\S]+?)\n    }\n/;
+        let config = '';
+        config += '\n';
+        this.configAsSingleLevelArray.forEach((el: string) => {
+            if(el.startsWith(`ltm pool ${poolName}`)) {
+                // config.concat(el);
+                config += el;
+                let members = el.match(membersRegex);
+                let monitors = el.match(monitorRegex);
+                if(members && members[1]){
+                    // dig node information from members
+                    const nodeNames = members[1].match(nodesFromMembersRegex);
+                    nodeNames.forEach( name => {
+                        this.configAsSingleLevelArray.forEach((el: string) => {
+                            if (el.startsWith(`ltm node ${name}`)) {
+                                config += '\n';
+                                config += el;
+                            }
+                        })
+                    })
+                    // config += '*** pool member nodes here ***'
+                }
+                if(monitors) {
+                    //dig monitor configs like pool members above
+                }
+            }
+        });
+        return config;
     }
 }
 
 
+
+/**
+ * https://stackoverflow.com/questions/40603913/search-recursively-for-value-in-object-by-property-name/40604103
+ * @param object to search
+ * @param key to find
+ */
 function findVal(object, key) {
     let value;
     Object.keys(object).some(function(k) {
@@ -216,6 +301,10 @@ const nestedObjValue = (fields, value) => {
     const reducer = (acc, item, index, arr) => ({ [item]: index + 1 < arr.length ? acc : value });
     return fields.reduceRight(reducer, {});
 };
+
+
+
+
 
 /**
  * standardize line endings to linux

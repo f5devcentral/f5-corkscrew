@@ -1,0 +1,43 @@
+ltm rule /Common/CK_pool_rule {
+  ### test rule for corkscrew
+
+  # 
+
+when HTTP_REQUEST {
+
+  # pool reference by variable declaration
+  set html-pool web1Pool
+  
+  if { [HTTP::path] ends_with "*.css" }{
+
+    # regular pool refernce
+    pool css_pool
+
+  } elseif { [HTTP::path] ends_with "*.jpg" }{
+    
+    # pool member refernce
+    pool jpg.pool member 10.10.10.1 80
+
+  } elseif { [HTTP::path] ends_with "*.js" }{
+    
+    # another pool reference with special characters
+    pool js.io_t80_pool 
+
+  } elseif { [HTTP::path] ends_with "*.xx" }{
+    
+    # pool reference not in tmos config
+    pool missing_pool
+    
+  } elseif { [HTTP::path] ends_with "*.txt" }{
+    
+    # node reference
+    node 10.10.10.1 80
+
+  } else {
+    
+    # pool referenced by variable
+    pool $html-pool
+
+  }
+}
+}
