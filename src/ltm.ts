@@ -38,8 +38,6 @@ export class LTMconfig {
     public configMultiLevelObjects: goodBigipObj = {};
     public tmosVersion: number;
 
-    // public apps = [];
-    // public apps2 = [];
     private tmosVersionReg = /#TMSH-VERSION: (\d.+)\n/;
     /**
      * if match, returns object name in [1] object value in [2]
@@ -109,7 +107,11 @@ export class LTMconfig {
         });
     }
 
-    apps() {
+    /**
+     * extracts individual apps
+     * @return [{ name: <appName>, config: <appConfig> }]
+     */
+    public apps() {
         /**
          * loop through list of viruals
          *  build config for each
@@ -118,12 +120,8 @@ export class LTMconfig {
         let apps = [];
         const i = this.configMultiLevelObjects.ltm.virtual;
         for (const [key, value] of Object.entries(i)) {
-
             const vsConfig = this.getVsConfig(key, value);
-
             apps.push({name: key, config: vsConfig});
-
-            const f = 2;
         }
         return apps;
     }
@@ -151,20 +149,9 @@ export class LTMconfig {
      * @param vsConfig virtual server tmos config body 
      */
     private getVsConfig(vsName: string, vsConfig: string) {
-        /**
-         * take in vs config body
-         * extract: 
-         *  - profiles
-         *  - pool
-         *  - rules
-         *  - soure-address-translation
-         *  - persist
-         *  - fallback-persistence
-         *  - policies
-         */
 
         /**
-         * get pool, but not snat pool...
+         * following regex will get pool, but not snat pool...
          */
         const poolRegex = /(?<!source-address-translation {\n\s+)pool (.+?)\n/;
         const profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
@@ -172,6 +159,7 @@ export class LTMconfig {
         const snatRegex = /source-address-translation {([\s\S]+?)\n    }\n/;
         const ltpPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
         const persistRegex = /persist {([\s\S]+?)\n    }\n/;
+        const fallBackPersistRegex = /fallback-persistence (\/\w+.+?)\n/;
 
         logger.info(`digging vs config for ${vsName}`);
 
@@ -181,20 +169,21 @@ export class LTMconfig {
         const snat = vsConfig.match(snatRegex);
         const ltPolicies = vsConfig.match(ltpPoliciesRegex);
         const persistence = vsConfig.match(persistRegex);
+        const fallBackPersist = vsConfig.match(fallBackPersistRegex);
 
         let fullConfig = `${vsName} {${vsConfig}}`
-        if(pool) {
-            // fullConfig += '\n';
-            const x = this.digPoolConfig(pool[1]);
-            fullConfig += x;
-            fullConfig += '\n';
+        if(pool && pool[1]) {
+            fullConfig += this.digPoolConfig(pool[1]);
+            logger.debug(`[${vsName}] found the following pools`, pool);
         }
 
-        if(profiles){
+        if(profiles && profiles[1]){
+            fullConfig += this.digProfileConfigs(profiles[1])
             logger.debug(`[${vsName}] found the following profiles`, profiles);
         }
 
-        if(rules) {
+        if(rules && rules[1]) {
+            fullConfig += this.digRuleConfigs(rules[1])
             logger.debug(`[${vsName}] found the following rules`, rules);
         }
 
@@ -264,10 +253,58 @@ export class LTMconfig {
                     if(defaultMonitors){
                         logger.debug(`${poolName} references ${defaultMonitors} system default monitors, compare previous arrays for details`)
                     }
+                    if(monitorNameConfigs){
+                        config += monitorNameConfigs.join('');
+                    }
                 }
             }
         });
         return config;
+    }
+
+    private digProfileConfigs(profilesList: string) {
+        // regex profiles list to individual profiles
+        const profileNamesRegex = /(\/[\w\-\/.]+)/g;
+        const profileNames = profilesList.match(profileNamesRegex);
+        logger.debug(`profile references found: `, profileNames);
+        // eslint-disable-next-line prefer-const
+        let configList = [];
+        profileNames.forEach( name => {
+            this.configAsSingleLevelArray.forEach((el: string) => {
+                if(el.match(`ltm profile (.+?) ${name} `)) {
+                    configList.push(el);
+                }
+            })
+        })
+        const defaultProfiles = profileNames.length - configList.length;
+        if(defaultProfiles){
+            logger.debug(`Found ${defaultProfiles} system default profiles, compare previous arrays for details`)
+        }
+        return configList.join('');
+    }
+
+    /**
+     * 
+     * @param rulesList raw irules regex from vs dig
+     */
+    private digRuleConfigs(rulesList: string) {
+        const ruleNamesRegex = /(\/[\w\-\/.]+)/g;
+        const ruleNames = rulesList.match(ruleNamesRegex);
+        logger.debug(`rule references found: `, ruleNames);
+        // eslint-disable-next-line prefer-const
+        let ruleList = [];
+        ruleNames.forEach( name => {
+            this.configAsSingleLevelArray.forEach((el:string) => {
+                if(el.startsWith(`ltm rule ${name}`)) {
+                    ruleList.push(el);
+                }
+            })
+        })
+        const defaultRules = ruleNames.length - ruleList.length;
+        if(defaultRules) {
+            logger.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`)
+        }
+        return ruleList.join('');
     }
 }
 

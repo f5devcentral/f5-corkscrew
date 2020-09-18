@@ -34,19 +34,37 @@ describe('explode bigip.conf tests', function() {
 
         let output = '';
         output += '################################################\n';
-        output += `###  ${dateT1}\n`;
-        output += `###  ${dateT2}\n`;
-        output += `###  ${dateT3}\n`;
+        output += `### *** project - corkscrew *** ###`;
+        output += `### tmos extractor output`;
+        output += `### Section 1: apps`;
+        output += `### Section 2: conversion logs (error/info/debug)`;
+        output += `### Section 3: configMultiLevelObjects (not object values yet)`;
+        output += `### Section 5: configSingleLevelObjects (another way to search config)`;
+        output += `### Section 2: apps`;
+        output += `###  ${dateT1}\n###  ${dateT2}\n###  ${dateT3}\n`;
         output += '################################################\n';
-
+        
         apps.forEach( el => {
             output += '\n################################################\n';
             output += el.config;
             output += '\n################################################\n';
         })
-
+        
+        output += '\n\n';
+        output += '#######################################\n';
+        output += '### conversion log ####################\n';
         output += devCloud.logs();
-        fs.writeFileSync(path.join(__dirname, "./test.tcl"), output);
+        
+        output += '\n\n';
+        output += '#######################################\n';
+        output += '### configMultiLevelObjects ###########\n';
+        output += JSON.stringify(devCloud.configMultiLevelObjects, undefined, 2);
+        
+        output += '\n\n';
+        output += '#######################################\n';
+        output += '### configSingleLevelObjects ##########\n';
+        output += JSON.stringify(devCloud.configSingleLevelObjects, undefined, 2);
+        fs.writeFileSync(path.join(__dirname, "./devCloud01_conversionOutput.txt"), output);
 
         assert.deepStrictEqual(y, devCloud01);
     });

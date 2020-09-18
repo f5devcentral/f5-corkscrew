@@ -32,7 +32,9 @@ For migration purposes, especially to another platform, like mBIP the following 
 
 ### output
 
-theoretical full output of initiation of class should produce the following
+theoretical full output of initiation of class should produce the following in an api form
+
+> check the test output files for other example outputs [\tests\devCloud01_conversionOutput.txt](.\tests\devCloud01_conversionOutput.txt)
 
 ```json
 {
