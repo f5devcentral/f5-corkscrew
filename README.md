@@ -30,6 +30,50 @@ For migration purposes, especially to another platform, like mBIP the following 
     - ...
 
 
+### output
+
+theoretical full output of initiation of class should produce the following
+
+```json
+{
+    "id": "<task-id-uuid>",
+    "date": "<date-time>",
+    "config": {
+        "rawConfig": "<original-bigip.conf-as-string>",
+        "apps": [{
+            "name": "<app-name=>VSname>",
+            "config": "<full-tmos-app-config>",
+            "map": "<map-of-vs-to-destinations-for-dashboards>"
+        }]
+    },
+    "stats": {
+        "processTime": "<total-processing-duration-in-ms>",
+        "sourceTmosVersion": "<ex. 15.1.0.1>",
+        "totalTmosObjects": "<total number of tmos objects extracted from config",
+        "ltm": {
+            "virtuals": "<number of virtuals detected>",
+            "pools": "<number of pools detected",
+            "profiles": "<number of profiles detected (client/server/ssl, tcp, udp, http, ...)>",
+            "irules": "<number of irules detected>",
+            "snatPools": "<number of snat pools detected>",
+            "localTrafficPolicies": "<number of local traffic policies>"
+        },
+        "apm": {
+            "accessProfiles": "<number of access profiles>",
+            "accessPolicies": "<number of access policies>"
+        }
+    },
+    "logs": "<logs about config processing>"
+}
+```
+
+```log
+tmos version detected: 15.1.0.1
+parse function
+number of tmos objects detected: 62
+number of 
+```
+
 
 
 ## Getting Started

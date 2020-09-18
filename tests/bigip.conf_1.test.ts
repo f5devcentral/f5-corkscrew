@@ -14,28 +14,41 @@ const tParty = fs.readFileSync(path.join(__dirname, "../artifacts/ben_tParty_9.1
 const devLTM = fs.readFileSync(path.join(__dirname, "../artifacts/ben_devLTM_9.14.2020.conf"), "utf-8");
 const raqa = fs.readFileSync(path.join(__dirname, "../artifacts/sldcvcmpltmraqaexth01_9.15.2020_bigip.conf"), "utf-8");
 
-describe('bigip.conf tests', function() {
+describe('explode bigip.conf tests', function() {
 
     it(`create config object and return raw config`, async function() {
         const devCloud = new LTMconfig(devCloud01);
         const y = devCloud.bigipConf;
         // const z = x.rev();
         
-        const devLTMc = new LTMconfig(devLTM);
-        const tPartyC = new LTMconfig(tParty);
-        const raqaC = new LTMconfig(raqa);
+        // const devLTMc = new LTMconfig(devLTM);
+        // const tPartyC = new LTMconfig(tParty);
+        // const raqaC = new LTMconfig(raqa);
 
         const apps = devCloud.apps();
 
-        let flatApps = '';
-        apps.forEach( el => {
-            flatApps += '\n################################################\n';
-            flatApps += el.config;
-            flatApps += '\n################################################\n';
-        })
-        fs.writeFileSync(path.join(__dirname, "./test.tcl"), flatApps);
+        const dateTime = new Date();
+        const dateT1 = dateTime.toISOString();
+        const dateT2 = dateTime.toLocaleString();
+        const dateT3 = dateTime.toUTCString();
 
-        // assert.deepStrictEqual(y, devCloud01);
+        let output = '';
+        output += '################################################\n';
+        output += `###  ${dateT1}\n`;
+        output += `###  ${dateT2}\n`;
+        output += `###  ${dateT3}\n`;
+        output += '################################################\n';
+
+        apps.forEach( el => {
+            output += '\n################################################\n';
+            output += el.config;
+            output += '\n################################################\n';
+        })
+
+        output += devCloud.logs();
+        fs.writeFileSync(path.join(__dirname, "./test.tcl"), output);
+
+        assert.deepStrictEqual(y, devCloud01);
     });
 
     // it(`get virtuals from iRule - no virtuals`, async function() {

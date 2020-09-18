@@ -8,6 +8,8 @@ import { EOL } from 'os'
 // import { lodas} from 'lodash'
 import { object as _obj } from 'lodash/fp/object';
 
+import logger from './logger';
+
 
 
 interface bigipObj {
@@ -68,8 +70,15 @@ export class LTMconfig {
         config = standardizeLineReturns(config);    
         this.bigipConf = config; // assign orginal config for later use
         this.tmosVersion = this.getTMOSversion(config);  // get tmos version
+        logger.info(`Recieved bigip.conf, version: ${this.tmosVersion}`)
         this.parse(config);
-        console.log('log');
+    }
+
+    /**
+     * Get processing logs
+     */
+    public logs() {
+        return logger.getLogs();
     }
 
     
@@ -88,14 +97,13 @@ export class LTMconfig {
             if (name && name.length === 3) {
                 this.configSingleLevelObjects[name[1]] = name[2];
 
-                // this.configArrayOfSingleLevelObjects.push
                 this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]})
 
                 // split extracted name element by spaces
                 const names = name[1].split(' ');
                 // create new nested objects with each of the names, assigning value on inner-most
                 const newObj = nestedObjValue(names, name[2]);
-                // merge new object with existing object
+                // merge new object with existing object ***lodash***
                 this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj)
             }
         });
@@ -108,51 +116,16 @@ export class LTMconfig {
          */
         // eslint-disable-next-line prefer-const
         let apps = [];
-        let apps2 = [];
         const i = this.configMultiLevelObjects.ltm.virtual;
         for (const [key, value] of Object.entries(i)) {
-            // x = _.merge(x, {name: k, config: `${k} {${v}}`});
-            const appRefs = /\/\w+\/[/\w.-]+/mg
-
-            apps.push({name: key, config: `${key} {${value}}`});
 
             const vsConfig = this.getVsConfig(key, value);
 
-
-            // /**
-            //  * find all the referece to other config objects in the VS config
-            //  * ex. /Common/app1_tcp443_pool
-            //  */
-            // const appConfigLines = value.match(appRefs);
-
-            // /**
-            //  * loop thorugh list and extract supporting config
-            //  */
-            // let addConfig = [];
-            // appConfigLines.forEach(el => {
-            //     /**
-            //      * build new regex
-            //      * run regex against full config
-            //      * filter responses?
-            //      * 
-            //      */
-            //     const one = findVal(this.configMultiLevelObjects, el)
-            //     // addConfig.push()
-            //     const fasdf = 4;
-            //     this.configArrayOfSingleLevelObjects.forEach(el2 => {
-
-            //         if (el2.name.includes(el)) {
-            //             addConfig.push(el2.config);
-            //         }
-            //     });
-            // });
-            // const ttmp = addConfig.join();
-            // value.concat(ttmp);
-            apps2.push({name: key, config: vsConfig});
+            apps.push({name: key, config: vsConfig});
 
             const f = 2;
         }
-        return apps2;
+        return apps;
     }
 
     /**
@@ -166,8 +139,9 @@ export class LTMconfig {
             //found tmos version
             return parseFloat(version[1]);
         } else {
-            // tmos version not detected -> meaning this probably isn't a bigip.conf
-            throw new Error('tmos version not detected -> meaning this probably is not a bigip.conf')
+            const msg = 'tmos version not detected -> meaning this probably is not a bigip.conf'
+            logger.error(msg)
+            throw new Error(msg)
         }
     }
 
@@ -199,6 +173,8 @@ export class LTMconfig {
         const ltpPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
         const persistRegex = /persist {([\s\S]+?)\n    }\n/;
 
+        logger.info(`digging vs config for ${vsName}`);
+
         const pool = vsConfig.match(poolRegex);
         const profiles = vsConfig.match(profilesRegex);
         const rules = vsConfig.match(rulesRegex);
@@ -208,12 +184,32 @@ export class LTMconfig {
 
         let fullConfig = `${vsName} {${vsConfig}}`
         if(pool) {
-            fullConfig += '\n';
+            // fullConfig += '\n';
             const x = this.digPoolConfig(pool[1]);
             fullConfig += x;
             fullConfig += '\n';
         }
-        // const e = 0;
+
+        if(profiles){
+            logger.debug(`[${vsName}] found the following profiles`, profiles);
+        }
+
+        if(rules) {
+            logger.debug(`[${vsName}] found the following rules`, rules);
+        }
+
+        if(snat) {
+            logger.debug(`[${vsName}] found the following rules`, snat);
+        }
+
+        if(ltPolicies) {
+            logger.debug(`[${vsName}] found the following ltPolices`, ltPolicies);
+        }
+    
+        if(persistence) {
+            logger.debug(`[${vsName}] found the following persistence`, persistence);
+        }
+
         return fullConfig;
     }
 
@@ -222,36 +218,52 @@ export class LTMconfig {
      * @param poolName 
      */
     private digPoolConfig(poolName: string) {
-        // lookup pool config using name
-            // get pool config
-            // extract nodes?
-            // extract monitors
+
         const membersRegex = /members {([\s\S]+?)\n    }\n/;
         const nodesFromMembersRegex = /(\/\w+\/.+?)(?=:)/g;
-        const monitorRegex = /monitor {([\s\S]+?)\n    }\n/;
-        let config = '';
-        config += '\n';
+        const monitorRegex = /monitor (\/\w+.+?)\n/;
+
+        logger.debug(`digging pool config for ${poolName}`);
+
+        let config = '\n';
         this.configAsSingleLevelArray.forEach((el: string) => {
             if(el.startsWith(`ltm pool ${poolName}`)) {
                 // config.concat(el);
                 config += el;
-                let members = el.match(membersRegex);
-                let monitors = el.match(monitorRegex);
+                const members = el.match(membersRegex);
+                const monitors = el.match(monitorRegex);
                 if(members && members[1]){
                     // dig node information from members
                     const nodeNames = members[1].match(nodesFromMembersRegex);
+                    logger.debug(`Pool ${poolName} members found:`, nodeNames);
                     nodeNames.forEach( name => {
                         this.configAsSingleLevelArray.forEach((el: string) => {
                             if (el.startsWith(`ltm node ${name}`)) {
-                                config += '\n';
+                                // config += '\n';
                                 config += el;
                             }
                         })
                     })
-                    // config += '*** pool member nodes here ***'
                 }
-                if(monitors) {
+                if(monitors && monitors[1]) {
                     //dig monitor configs like pool members above
+                    const monitorNames = monitors[1].split(/ and /);
+                    logger.debug('pool monitor references found:', monitorNames);
+                    // eslint-disable-next-line prefer-const
+                    let monitorNameConfigs = [];
+                    monitorNames.forEach( name => {
+                        this.configAsSingleLevelArray.forEach((el: string) => {
+                            if(el.match(`ltm monitor (.+?) ${name} `)) {
+                                // console.log('matched monitor', el);
+                                monitorNameConfigs.push(el);
+                            }
+                        })
+                    })
+                    logger.debug('pool monitor configs found:', monitorNameConfigs);
+                    const defaultMonitors = monitorNames.length - monitorNameConfigs.length
+                    if(defaultMonitors){
+                        logger.debug(`${poolName} references ${defaultMonitors} system default monitors, compare previous arrays for details`)
+                    }
                 }
             }
         });
