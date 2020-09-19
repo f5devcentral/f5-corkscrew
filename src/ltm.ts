@@ -3,11 +3,14 @@
 
 
 import * as _ from 'lodash';
-import { EOL } from 'os'
+// import { EOL } from 'os'
 // import { add, forEach } from 'lodash';
 // import { lodas} from 'lodash'
-import { object as _obj } from 'lodash/fp/object';
+// import { object as _obj } from 'lodash/fp/object';
 
+import { RegExTree, TmosRegExTree } from './regex'
+// import regexTree from './regex'
+// import TmosRegExTree from './regex';
 import logger from './logger';
 
 
@@ -24,13 +27,17 @@ export class LTMconfig {
     public bigipConf: string;
     /**
      * simple array of each bigip.conf parent object
+     * (ex. "ltm node /Common/192.168.1.20 { address 192.168.1.20 }")
      */
     public configAsSingleLevelArray: string[];
     /**
      * object form of bigip.conf
      *  key = full object name, value = body
      */
-    public configSingleLevelObjects: bigipObj = {};  // item name as key, item body as value
+    public configSingleLevelObjects: bigipObj = {};
+    /**
+     * 
+     */
     public configArrayOfSingleLevelObjects = [];
     /**
      * nested objects - consolidated parant object keys like ltm/apm/sys/...
@@ -38,27 +45,8 @@ export class LTMconfig {
     public configMultiLevelObjects: goodBigipObj = {};
     public tmosVersion: number;
 
-    private tmosVersionReg = /#TMSH-VERSION: (\d.+)\n/;
-    /**
-     * if match, returns object name in [1] object value in [2]
-     */
-    private parentNameValueRegex = /([ \w\-\/.]+) {([\s\S]+?\n| )}/;
-    // private regex1 = /[ \w\-\/.]+{([\s\S]+?)\n}\n/g;
-    // private regFull = /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) [ \w\-\/.]+({.*}\n|{[\s\S]+?\n}\n)/g;
-    // private regexNoCG = /[ \w\-\/.]+{[\s\S]+?\n}\n/g;
-    private regexSingleline = '(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom)';
+    private rx: TmosRegExTree;
 
-    //commented/multi-line regex
-    private regexTmosParentObjects = multilineRegExp([
-        // parent level object beginnings with trailing space
-        /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,  
-        // include any child object definitions and object name
-        /[ \w\-\/.]+/,
-        // capture single line data or everything till "\n}\n"
-        /({.*}\n|{[\s\S]+?\n}\n)/,
-        // look forward to capture the last "}" before the next parent item name
-        /(?=(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom))/   
-    ], 'g');
 
     /**
      * 
@@ -67,7 +55,10 @@ export class LTMconfig {
     constructor(config: string) {
         config = standardizeLineReturns(config);    
         this.bigipConf = config; // assign orginal config for later use
-        this.tmosVersion = this.getTMOSversion(config);  // get tmos version
+        const rex = new RegExTree();  // instantiate regex tree
+        this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg);  // get tmos version
+        // this.rx = rex.get();  // get regex tree
+        this.rx = rex.get(this.tmosVersion)
         logger.info(`Recieved bigip.conf, version: ${this.tmosVersion}`)
         this.parse(config);
     }
@@ -86,11 +77,12 @@ export class LTMconfig {
      * @param config bigip.conf
      */
     private parse(config: string) {
+
         // parse the major config pieces
-        this.configAsSingleLevelArray = [...config.match(this.regexTmosParentObjects)];
+        this.configAsSingleLevelArray = [...config.match(this.rx.parentObjects)];
 
         this.configAsSingleLevelArray.forEach(el => {
-            const name = el.match(this.parentNameValueRegex);
+            const name = el.match(this.rx.parentNameValue);
 
             if (name && name.length === 3) {
                 this.configSingleLevelObjects[name[1]] = name[2];
@@ -103,13 +95,23 @@ export class LTMconfig {
                 const newObj = nestedObjValue(names, name[2]);
                 // merge new object with existing object ***lodash***
                 this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj)
+
+                /**
+                 * todo:  look into exploding each config piece to json-ify the entire config...
+                 *  - this seems like it could be the same process used for parent objects
+                 *      - extract each object
+                 *      - split object names on spaces for nested object names
+                 *      - assign values as needed
+                 *      - items with out objects, get key: value assign at that object level
+                 */
             }
         });
     }
 
+
     /**
      * extracts individual apps
-     * @return [{ name: <appName>, config: <appConfig> }]
+     * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
     public apps() {
         /**
@@ -121,9 +123,31 @@ export class LTMconfig {
         const i = this.configMultiLevelObjects.ltm.virtual;
         for (const [key, value] of Object.entries(i)) {
             const vsConfig = this.getVsConfig(key, value);
+
+            // const map = this.mapApp(vsConfig);
+
             apps.push({name: key, config: vsConfig});
         }
+
         return apps;
+    }
+    
+    
+    /**
+     * add on app map
+     * @param apps [{ name: <appName>, config: <appConfig> }]
+     */
+    private mapApp(apps: TmosApp[]) {
+        // loop through list of apps and extract connection maps
+        apps.forEach( el => {
+
+            // detect pool reference
+
+            // detect rule references
+
+            // detect ltp references
+            
+        })
     }
 
     /**
@@ -131,8 +155,8 @@ export class LTMconfig {
      * ex.  #TMSH-VERSION: 15.1.0.4
      * @param config bigip.conf config file as string
      */
-    private getTMOSversion(config: string) {
-        const version = config.match(this.tmosVersionReg);
+    private getTMOSversion(config: string, regex: RegExp) {
+        const version = config.match(regex);
         if(version) {
             //found tmos version
             return parseFloat(version[1]);
@@ -150,28 +174,18 @@ export class LTMconfig {
      */
     private getVsConfig(vsName: string, vsConfig: string) {
 
-        /**
-         * following regex will get pool, but not snat pool...
-         */
-        const poolRegex = /(?<!source-address-translation {\n\s+)pool (.+?)\n/;
-        const profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
-        const rulesRegex = /rules {([\s\S]+?)\n    }\n/;
-        const snatRegex = /source-address-translation {([\s\S]+?)\n    }\n/;
-        const ltpPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
-        const persistRegex = /persist {([\s\S]+?)\n    }\n/;
-        const fallBackPersistRegex = /fallback-persistence (\/\w+.+?)\n/;
-
         logger.info(`digging vs config for ${vsName}`);
 
-        const pool = vsConfig.match(poolRegex);
-        const profiles = vsConfig.match(profilesRegex);
-        const rules = vsConfig.match(rulesRegex);
-        const snat = vsConfig.match(snatRegex);
-        const ltPolicies = vsConfig.match(ltpPoliciesRegex);
-        const persistence = vsConfig.match(persistRegex);
-        const fallBackPersist = vsConfig.match(fallBackPersistRegex);
+        const pool = vsConfig.match(this.rx.vs.pool);
+        const profiles = vsConfig.match(this.rx.vs.profiles);
+        const rules = vsConfig.match(this.rx.vs.rules);
+        const snat = vsConfig.match(this.rx.vs.snat);
+        const ltPolicies = vsConfig.match(this.rx.vs.ltpPolicies);
+        const persistence = vsConfig.match(this.rx.vs.persist);
+        const fallBackPersist = vsConfig.match(this.rx.vs.fbPersist);
 
         let fullConfig = `${vsName} {${vsConfig}}`
+
         if(pool && pool[1]) {
             fullConfig += this.digPoolConfig(pool[1]);
             logger.debug(`[${vsName}] found the following pools`, pool);
@@ -220,15 +234,18 @@ export class LTMconfig {
 
         let config = '\n';
         this.configAsSingleLevelArray.forEach((el: string) => {
+
             if(el.startsWith(`ltm pool ${poolName}`)) {
-                // config.concat(el);
                 config += el;
                 const members = el.match(membersRegex);
                 const monitors = el.match(monitorRegex);
+
                 if(members && members[1]){
+
                     // dig node information from members
                     const nodeNames = members[1].match(nodesFromMembersRegex);
                     logger.debug(`Pool ${poolName} members found:`, nodeNames);
+
                     nodeNames.forEach( name => {
                         this.configAsSingleLevelArray.forEach((el: string) => {
                             if (el.startsWith(`ltm node ${name}`)) {
@@ -238,10 +255,13 @@ export class LTMconfig {
                         })
                     })
                 }
+
                 if(monitors && monitors[1]) {
+
                     //dig monitor configs like pool members above
                     const monitorNames = monitors[1].split(/ and /);
                     logger.debug('pool monitor references found:', monitorNames);
+                    
                     // eslint-disable-next-line prefer-const
                     let monitorNameConfigs = [];
                     monitorNames.forEach( name => {
@@ -252,11 +272,14 @@ export class LTMconfig {
                             }
                         })
                     })
+                    
                     logger.debug('pool monitor configs found:', monitorNameConfigs);
                     const defaultMonitors = monitorNames.length - monitorNameConfigs.length
+                    
                     if(defaultMonitors){
                         logger.debug(`${poolName} references ${defaultMonitors} system default monitors, compare previous arrays for details`)
                     }
+                    
                     if(monitorNameConfigs){
                         config += monitorNameConfigs.join('');
                     }
@@ -267,10 +290,12 @@ export class LTMconfig {
     }
 
     private digProfileConfigs(profilesList: string) {
+
         // regex profiles list to individual profiles
         const profileNamesRegex = /(\/[\w\-\/.]+)/g;
         const profileNames = profilesList.match(profileNamesRegex);
         logger.debug(`profile references found: `, profileNames);
+        
         // eslint-disable-next-line prefer-const
         let configList = [];
         profileNames.forEach( name => {
@@ -280,6 +305,7 @@ export class LTMconfig {
                 }
             })
         })
+        
         const defaultProfiles = profileNames.length - configList.length;
         if(defaultProfiles){
             logger.debug(`Found ${defaultProfiles} system default profiles, compare previous arrays for details`)
@@ -292,9 +318,11 @@ export class LTMconfig {
      * @param rulesList raw irules regex from vs dig
      */
     private digRuleConfigs(rulesList: string) {
+
         const ruleNamesRegex = /(\/[\w\-\/.]+)/g;
         const ruleNames = rulesList.match(ruleNamesRegex);
         logger.debug(`rule references found: `, ruleNames);
+
         // eslint-disable-next-line prefer-const
         let ruleList = [];
         ruleNames.forEach( name => {
@@ -304,6 +332,7 @@ export class LTMconfig {
                 }
             })
         })
+
         const defaultRules = ruleNames.length - ruleList.length;
         if(defaultRules) {
             logger.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`)
@@ -334,14 +363,6 @@ function findVal(object, key) {
     return value;
 }
 
-/**
- * used to produce final regex from multiline/commented regex
- * @param regs regex pieces in array
- * @param opts regex options (g/m/s/i/y/u/s)
- */
-function multilineRegExp(regs, opts: string) {
-    return new RegExp(regs.map(reg => reg.source).join(''), opts);
-}
 
 
 /**
@@ -354,9 +375,6 @@ const nestedObjValue = (fields, value) => {
     const reducer = (acc, item, index, arr) => ({ [item]: index + 1 < arr.length ? acc : value });
     return fields.reduceRight(reducer, {});
 };
-
-
-
 
 
 /**
@@ -392,4 +410,10 @@ type goodBigipObj = {
     },
     apm?: any;
     net?: any;
+}
+
+type TmosApp = {
+    name: string,
+    config: string,
+    map?: string
 }
