@@ -43,7 +43,7 @@ export class LTMconfig {
      * nested objects - consolidated parant object keys like ltm/apm/sys/...
      */
     public configMultiLevelObjects: goodBigipObj = {};
-    public tmosVersion: number;
+    public tmosVersion: string;
 
     private rx: TmosRegExTree;
 
@@ -155,11 +155,11 @@ export class LTMconfig {
      * ex.  #TMSH-VERSION: 15.1.0.4
      * @param config bigip.conf config file as string
      */
-    private getTMOSversion(config: string, regex: RegExp) {
+    private getTMOSversion(config: string, regex: RegExp): string {
         const version = config.match(regex);
         if(version) {
             //found tmos version
-            return parseFloat(version[1]);
+            return version[1];
         } else {
             const msg = 'tmos version not detected -> meaning this probably is not a bigip.conf'
             logger.error(msg)

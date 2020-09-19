@@ -2,6 +2,8 @@
 
 // import logger grom './logger'
 
+import logger from "./logger";
+
 /**
  * This file servers as the central place for all regex's, we'll call it a regex tree
  * 
@@ -82,8 +84,28 @@ export class RegExTree {
         
     }
 
-    get(tmosVersion?: number): TmosRegExTree {
-        const x = tmosVersion;
+    /**
+     * Return updated base regex tree depending on version config differences
+     * 
+     * @param tmosVersion
+     */
+    get(tmosVersion?: string): TmosRegExTree {
+        const x = removerNumberDecimals(tmosVersion);
+
+        /**
+         * the following is just examples of how to expand the regex tree for different versions :)
+         */
+
+        // full tmos version without decimals
+        if(x > 19000) {
+            logger.error('>v19.0.0.0 tmos detected - this should never happen!!!')
+            // this.regexTree.vs.fbPersist = /new-fallBackPersist-regex/;
+            // this.regexTree.vs.pool = /new-pool-regex/;
+        }
+        if(x < 12000){
+            logger.error('<v12.0.0.0 tmos detected - have not tested this yet!!!')
+            // other regex tree changes specific to v12.0.0.0
+        }
         return this.regexTree;
     }
 
@@ -112,6 +134,10 @@ export type TmosRegExTree = {
         persist: RegExp,
         fbPersist: RegExp
     }
+}
+
+function removerNumberDecimals(ver: string) {
+    return parseInt(ver.replace(/\./g, ''));
 }
 
 // const regexTree = new RegExTree();
