@@ -27,7 +27,7 @@ export class RegExTree {
     /**
      * extracts tmos version at beginning of bigip.conf
      */
-    public tmosVersionReg = /#TMSH-VERSION: (\d.+)\n/;
+    public tmosVersionReg = /#TMSH-VERSION: (\d.+)/;
 
     /**
      * if match, returns object name in [1] object value in [2]
@@ -52,8 +52,9 @@ export class RegExTree {
     ], 'g');
 
     /**
-     * following regex will get pool, but not snat pool from vs config
+     * vs detail regexs
      */
+    //following regex will get pool, but not snat pool from vs config
     private poolRegex = /(?<!source-address-translation {\n\s+)pool (.+?)\n/;
     private profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
     private rulesRegex = /rules {([\s\S]+?)\n    }\n/;
@@ -61,6 +62,23 @@ export class RegExTree {
     private ltPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
     private persistRegex = /persist {([\s\S]+?)\n    }\n/;
     private fallBackPersistRegex = /fallback-persistence (\/\w+.+?)\n/;
+    private destination = /destination (\/\w+\/[\w+\.\-]+:\d+)/;
+
+    /**
+     * pool detail regexs
+     */
+    private poolMembersRegex = /members {([\s\S]+?)\n    }\n/;
+    private poolNodesFromMembersRegex = /(\/\w+\/.+?)(?=:)/g;
+    private poolMonitorsRegex = /monitor (\/\w+.+?)\n/;
+
+    /**
+     * profiles
+     */
+    private profileNamesRegex = /(\/[\w\-\/.]+)/g;
+    private snatNameRegex = /pool (\/[\w\-\/.]+)/;
+    private ruleNamesRegex = /(\/[\w\-\/.]+)/g;
+    private ltpNamesRegex = /(\/[\w\-\/.]+)/g;
+    private persistNameRegex = /(\/[\w\-\/.]+)/;
 
     /**
      * base regex tree for extracting tmos config items
@@ -69,19 +87,39 @@ export class RegExTree {
         parentObjects: this.parentObjectsRegex,
         parentNameValue: this.parentNameValueRegex,
         vs: {
-            pool: this.poolRegex,
-            profiles: this.profilesRegex,
-            rules: this.rulesRegex,
-            snat: this.snatRegex,
-            ltpPolicies: this.ltPoliciesRegex,
-            persist: this.persistRegex,
-            fbPersist: this.fallBackPersistRegex
+            pool: {
+                obj: this.poolRegex,
+                members: this.poolMembersRegex,
+                nodesFromMembers: this.poolNodesFromMembersRegex,
+                monitors: this.poolMonitorsRegex
+            },
+            profiles: {
+                obj: this.profilesRegex,
+                names: this.profileNamesRegex
+            },
+            rules: {
+                obj: this.rulesRegex,
+                names: this.ruleNamesRegex
+            },
+            snat: {
+                obj: this.snatRegex,
+                name: this.snatNameRegex
+            },
+            ltPolicies: {
+                obj: this.ltPoliciesRegex,
+                names: this.ltpNamesRegex
+            },
+            persist: {
+                obj: this.persistRegex,
+                name: this.persistNameRegex
+            },
+            fbPersist: this.fallBackPersistRegex,
+            destination: this.destination
         }
     }
 
     constructor() {
-        // take tmos version number, return regex tree with version specific tweaks
-        
+        // commend to keep TS error away...
     }
 
     /**
@@ -90,17 +128,18 @@ export class RegExTree {
      * @param tmosVersion
      */
     get(tmosVersion?: string): TmosRegExTree {
-        const x = removerNumberDecimals(tmosVersion);
+        const x = removeVersionDecimals(tmosVersion);
 
         /**
          * the following is just examples of how to expand the regex tree for different versions :)
+         *  this should change a little as this matures and the regex madness gets cleaned up
          */
 
         // full tmos version without decimals
         if(x > 19000) {
             logger.error('>v19.0.0.0 tmos detected - this should never happen!!!')
-            // this.regexTree.vs.fbPersist = /new-fallBackPersist-regex/;
-            // this.regexTree.vs.pool = /new-pool-regex/;
+            this.regexTree.vs.fbPersist = /new-fallBackPersist-regex/;
+            this.regexTree.vs.pool.obj = /new-pool-regex/;
         }
         if(x < 12000){
             logger.error('<v12.0.0.0 tmos detected - have not tested this yet!!!')
@@ -126,17 +165,42 @@ export type TmosRegExTree = {
     parentObjects: RegExp,
     parentNameValue: RegExp,
     vs: {
-        pool: RegExp,
-        profiles: RegExp,
-        rules: RegExp,
-        snat: RegExp,
-        ltpPolicies: RegExp,
-        persist: RegExp,
-        fbPersist: RegExp
+        pool: {
+            obj: RegExp,
+            members: RegExp,
+            nodesFromMembers: RegExp,
+            monitors: RegExp
+        },
+        profiles: {
+            obj: RegExp,
+            names: RegExp
+        },
+        rules: {
+            obj: RegExp,
+            names: RegExp
+        },
+        snat: {
+            obj: RegExp,
+            name: RegExp
+        },
+        ltPolicies: {
+            obj: RegExp,
+            names: RegExp
+        },
+        persist: {
+            obj: RegExp,
+            name: RegExp
+        },
+        fbPersist: RegExp,
+        destination: RegExp
     }
 }
 
-function removerNumberDecimals(ver: string) {
+/**
+ * returns full number without decimals so it can be compared
+ * @param ver tmos version in full x.x.x.x format
+ */
+function removeVersionDecimals(ver: string): number {
     return parseInt(ver.replace(/\./g, ''));
 }
 

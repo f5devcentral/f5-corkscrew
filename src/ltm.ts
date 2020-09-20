@@ -176,48 +176,120 @@ export class LTMconfig {
 
         logger.info(`digging vs config for ${vsName}`);
 
-        const pool = vsConfig.match(this.rx.vs.pool);
-        const profiles = vsConfig.match(this.rx.vs.profiles);
-        const rules = vsConfig.match(this.rx.vs.rules);
-        const snat = vsConfig.match(this.rx.vs.snat);
-        const ltPolicies = vsConfig.match(this.rx.vs.ltpPolicies);
-        const persistence = vsConfig.match(this.rx.vs.persist);
-        const fallBackPersist = vsConfig.match(this.rx.vs.fbPersist);
+        const rx = this.rx.vs; // get needed rx tree
 
+        const pool = vsConfig.match(rx.pool.obj);
+        const profiles = vsConfig.match(rx.profiles.obj);
+        const rules = vsConfig.match(rx.rules.obj);
+        const snat = vsConfig.match(rx.snat.obj);
+        const ltPolicies = vsConfig.match(rx.ltPolicies.obj);
+        const persistence = vsConfig.match(rx.persist.obj);
+        const fallBackPersist = vsConfig.match(rx.fbPersist);
+
+        //  exploring more efficient ways of regexing stuff
+        // const rulesReg = /rules {([\s\S]+?)\n    }\n/gm;
+        // const rulesReg2 = /rules {\s+(\/\w+\/[\w+\.\-]+)/gm;
+        // const rules2 = vsConfig.matchAll(rulesReg2);
+
+        const destination = vsConfig.match(rx.destination);
+
+        // base vsMap config object
+        const vsMap: AppMap = {
+            vsName,
+            destination: ''
+        };
+
+        // add destination to vsMap object
+        if (destination && destination[1]) {
+            vsMap.destination = destination[1];
+
+        }
         let fullConfig = `${vsName} {${vsConfig}}`
 
         if(pool && pool[1]) {
             fullConfig += this.digPoolConfig(pool[1]);
-            logger.debug(`[${vsName}] found the following pools`, pool);
+            logger.debug(`[${vsName}] found the following pool`, pool[1]);
         }
 
         if(profiles && profiles[1]){
             fullConfig += this.digProfileConfigs(profiles[1])
-            logger.debug(`[${vsName}] found the following profiles`, profiles);
+            logger.debug(`[${vsName}] found the following profiles`, profiles[1]);
         }
 
         if(rules && rules[1]) {
             fullConfig += this.digRuleConfigs(rules[1])
-            logger.debug(`[${vsName}] found the following rules`, rules);
+            logger.debug(`[${vsName}] found the following rules`, rules[1]);
         }
 
-        if(snat) {
-            logger.debug(`[${vsName}] found the following rules`, snat);
+        if(snat && snat[1]) {
+            fullConfig += this.digSnatConfig(snat[1])
+            logger.debug(`[${vsName}] found snat configuration:`, snat[1])
         }
 
-        if(ltPolicies) {
-            logger.debug(`[${vsName}] found the following ltPolices`, ltPolicies);
+        if(ltPolicies && ltPolicies[1]) {
+            fullConfig += this.digLtPolicyConfig(ltPolicies[1])
+            logger.debug(`[${vsName}] found the following ltPolices\n`, ltPolicies[1]);
         }
     
-        if(persistence) {
-            logger.debug(`[${vsName}] found the following persistence`, persistence);
+        if(persistence && persistence[1]) {
+            fullConfig += this.digPersistConfig(persistence[1])
+            logger.debug(`[${vsName}] found the following persistence\n`, persistence[1]);
         }
-
-        if(fallBackPersist) {
-            logger.debug(`[${vsName}] found the following persistence`, persistence);
+        
+        if(fallBackPersist && fallBackPersist[1]) {
+            fullConfig += this.digFbPersistConfig(fallBackPersist[1])
+            logger.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
         }
 
         return fullConfig;
+    }
+
+    private digSnatConfig(snat: string) {
+        let config = ''
+        if (snat.includes('pool')) {
+            // ltm snatpool <name>
+            const snatName = snat.match(this.rx.vs.snat.name);
+            this.configAsSingleLevelArray.forEach(( el: string) => {
+                if(el.startsWith(`ltm snatpool ${snatName[1]}`)){
+                    config += el;
+                    // logger.debug(`[${vsName}] snat pool config \n`, el);
+                }
+            })
+        }
+        return config;
+    }
+
+
+    /**
+     * get fall back persistence config
+     * @param fbPersist vs fallback-persistence
+     */
+    private digFbPersistConfig(fbPersist: string) {
+
+        let config = '';
+        // const persistName = persist.match(this.rx.vs.persist.name);
+        this.configAsSingleLevelArray.forEach((el: string) => {
+            if(el.match(`ltm persistence (.+?) ${fbPersist} `)) {
+                config += el;
+            }
+        })
+        return config;
+    }
+
+    /**
+     * get persistence config
+     * @param persistence vs persistence referecne
+     */
+    private digPersistConfig(persist: string) {
+
+        let config = '';
+        const persistName = persist.match(this.rx.vs.persist.name);
+        this.configAsSingleLevelArray.forEach((el: string) => {
+            if(el.match(`ltm persistence (.+?) ${persistName[1]} `)) {
+                config += el;
+            }
+        })
+        return config;
     }
 
     /**
@@ -226,30 +298,28 @@ export class LTMconfig {
      */
     private digPoolConfig(poolName: string) {
 
-        const membersRegex = /members {([\s\S]+?)\n    }\n/;
-        const nodesFromMembersRegex = /(\/\w+\/.+?)(?=:)/g;
-        const monitorRegex = /monitor (\/\w+.+?)\n/;
-
         logger.debug(`digging pool config for ${poolName}`);
+
+        const rx = this.rx.vs.pool; // get needed rx sub-tree
 
         let config = '\n';
         this.configAsSingleLevelArray.forEach((el: string) => {
 
             if(el.startsWith(`ltm pool ${poolName}`)) {
+
                 config += el;
-                const members = el.match(membersRegex);
-                const monitors = el.match(monitorRegex);
+                const members = el.match(rx.members);
+                const monitors = el.match(rx.monitors);
 
                 if(members && members[1]){
 
                     // dig node information from members
-                    const nodeNames = members[1].match(nodesFromMembersRegex);
+                    const nodeNames = members[1].match(rx.nodesFromMembers);
                     logger.debug(`Pool ${poolName} members found:`, nodeNames);
 
                     nodeNames.forEach( name => {
                         this.configAsSingleLevelArray.forEach((el: string) => {
                             if (el.startsWith(`ltm node ${name}`)) {
-                                // config += '\n';
                                 config += el;
                             }
                         })
@@ -267,7 +337,6 @@ export class LTMconfig {
                     monitorNames.forEach( name => {
                         this.configAsSingleLevelArray.forEach((el: string) => {
                             if(el.match(`ltm monitor (.+?) ${name} `)) {
-                                // console.log('matched monitor', el);
                                 monitorNameConfigs.push(el);
                             }
                         })
@@ -292,9 +361,25 @@ export class LTMconfig {
     private digProfileConfigs(profilesList: string) {
 
         // regex profiles list to individual profiles
-        const profileNamesRegex = /(\/[\w\-\/.]+)/g;
-        const profileNames = profilesList.match(profileNamesRegex);
+        const rx = this.rx.vs.profiles;
+        const profileNames = profilesList.match(rx.names);
         logger.debug(`profile references found: `, profileNames);
+
+        // #####################################################
+        //      Looking into another way to search the tree
+        // this method uses findVal to recrusively search the json tree
+        // it will return the value for the specified key, but we also
+        //  need to know what the full parent object key,
+        //  to be able to trace back what kind of profile it was 
+        //      (since different profile types can have the same name 
+        //      and the profile type is not specified in the vs definition)
+        const ray1 = profileNames.forEach( el => {
+            const y = findVal(this.configMultiLevelObjects.ltm.profile, el)
+            if(y) {
+                const x = 5;
+            }
+        })
+        // ######################################################
         
         // eslint-disable-next-line prefer-const
         let configList = [];
@@ -319,8 +404,8 @@ export class LTMconfig {
      */
     private digRuleConfigs(rulesList: string) {
 
-        const ruleNamesRegex = /(\/[\w\-\/.]+)/g;
-        const ruleNames = rulesList.match(ruleNamesRegex);
+        // const rx = this.rx.vs.rules
+        const ruleNames = rulesList.match(this.rx.vs.rules.names);
         logger.debug(`rule references found: `, ruleNames);
 
         // eslint-disable-next-line prefer-const
@@ -339,12 +424,40 @@ export class LTMconfig {
         }
         return ruleList.join('');
     }
+
+
+    /**
+     * loops through vs ltp list and returns full ltp configs
+     * @param ltPolicys vs ltp config
+     */
+    private digLtPolicyConfig(ltPolicys: string) {
+
+        // regex local traffic list to individual profiles
+        const rx = this.rx.vs.ltPolicies;
+        const ltPolicyNames = ltPolicys.match(rx.names);
+        logger.debug(`profile references found: `, ltPolicyNames);
+
+        // eslint-disable-next-line prefer-const
+        let configList = [];
+        ltPolicyNames.forEach( name => {
+            this.configAsSingleLevelArray.forEach((el: string) => {
+                if(el.startsWith(`ltm policy ${name} `)) {
+                    configList.push(el);
+                }
+            })
+        })
+
+        return configList.join('');
+    }
 }
 
 
 
 /**
  * https://stackoverflow.com/questions/40603913/search-recursively-for-value-in-object-by-property-name/40604103
+ * 
+ * if we go the lodash route, this can be replaces with _.get
+ * 
  * @param object to search
  * @param key to find
  */
@@ -356,10 +469,16 @@ function findVal(object, key) {
             return true;
         }
         if (object[k] && typeof object[k] === 'object') {
+            const x = k;
+            const y = object[k];
+            const z = key;
             value = findVal(object[k], key);
             return value !== undefined;
         }
     });
+    // if(value){
+    //     return value;
+    // }
     return value;
 }
 
@@ -416,4 +535,12 @@ type TmosApp = {
     name: string,
     config: string,
     map?: string
+}
+
+type AppMap = {
+    vsName: string,
+    destination: string,
+    pool?: string[],
+    irule?: string[],
+    ltPolicy?: string[]
 }
