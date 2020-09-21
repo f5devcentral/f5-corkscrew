@@ -12,7 +12,7 @@
     "url": "git+https://github.com/f5devcentral/project-corkscrew.git"
   },
   "scripts": {
-    "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'tests/**/*.{js,ts,tsx}'",
+    "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'src/tests/**/*.{js,ts,tsx}'",
     "test": "nyc mocha -r ts-node/register \"tests/**/*.test.ts\"",
     "build-code-docs": "typedoc --out code_docs src",
     "build-package": "tsc"
@@ -49,7 +49,10 @@
     "parser": "@typescript-eslint/parser",
     "extends": [
       "plugin:@typescript-eslint/recommended"
-    ]
+    ],
+    "rules": {
+      "no-unused-vars": "off"
+    }
   },
   "mocha": {
     "timeout": 10000

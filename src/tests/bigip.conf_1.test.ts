@@ -6,18 +6,18 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { LTMconfig } from '../src/ltm';
+import { BigipConfig } from '../ltm';
 
 
-const devCloud01 = fs.readFileSync(path.join(__dirname, "../artifacts/devCloud01_9.17.2020.conf"), "utf-8");
-const tParty = fs.readFileSync(path.join(__dirname, "../artifacts/ben_tParty_9.14.2020.conf"), "utf-8");
-const devLTM = fs.readFileSync(path.join(__dirname, "../artifacts/ben_devLTM_9.14.2020.conf"), "utf-8");
-const raqa = fs.readFileSync(path.join(__dirname, "../artifacts/sldcvcmpltmraqaexth01_9.15.2020_bigip.conf"), "utf-8");
+const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_9.17.2020.conf"), "utf-8");
+// const tParty = fs.readFileSync(path.join(__dirname, "./artifacts/ben_tParty_9.14.2020.conf"), "utf-8");
+// const devLTM = fs.readFileSync(path.join(__dirname, "./artifacts/ben_devLTM_9.14.2020.conf"), "utf-8");
+// const raqa = fs.readFileSync(path.join(__dirname, "./artifacts/sldcvcmpltmraqaexth01_9.15.2020_bigip.conf"), "utf-8");
 
 describe('explode bigip.conf tests', function() {
 
     it(`create config object and return raw config`, async function() {
-        const devCloud = new LTMconfig(devCloud01);
+        const devCloud = new BigipConfig(devCloud01);
         const y = devCloud.bigipConf;
         // const z = x.rev();
         
@@ -34,12 +34,12 @@ describe('explode bigip.conf tests', function() {
 
         let output = '';
         output += '################################################\n';
-        output += `### *** project - corkscrew *** ###\n`;
-        output += `### tmos extractor output\n`;
-        output += `### Section 1: apps\n`;
-        output += `### Section 2: conversion logs (error/info/debug)\n`;
-        output += `### Section 3: configMultiLevelObjects (not object values yet)\n`;
-        output += `### Section 4: configSingleLevelObjects (another way to search config)\n`;
+        output += `###  *** project - corkscrew *** ###\n`;
+        output += `###  tmos extractor output\n`;
+        output += `###  Section 1: apps\n`;
+        output += `###  Section 2: conversion logs (error/info/debug)\n`;
+        output += `###  Section 3: configMultiLevelObjects (not object values yet)\n`;
+        output += `###  Section 4: configSingleLevelObjects (another way to search config)\n`;
         output += `###  ${dateT1}\n###  ${dateT2}\n###  ${dateT3}\n`;
         output += '################################################\n';
         

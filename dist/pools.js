@@ -72,7 +72,7 @@ function poolsInRule(rule, existingPools) {
      */
     if (existingPools && newPools) {
         // existing pool list detected
-        newPools = newPools.map(el => {
+        newPools = newPools.filter(el => {
             if (existingPools.includes(el[0])) {
                 return el;
             }

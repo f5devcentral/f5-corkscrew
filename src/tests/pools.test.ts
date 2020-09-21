@@ -8,11 +8,11 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { poolsInLTP, poolsInRule } from '../src/pools';
+import { poolsInLTP, poolsInRule } from '../pools';
 
 
-const iRuleWithPools = fs.readFileSync(path.join(__dirname, "../artifacts/pools.irule"), "utf-8");
-const iRuleNoRef = fs.readFileSync(path.join(__dirname, "../artifacts/pools_noRef.irule"), "utf-8");
+const iRuleWithPools = fs.readFileSync(path.join(__dirname, "./artifacts/pools.irule"), "utf-8");
+const iRuleNoRef = fs.readFileSync(path.join(__dirname, "./artifacts/pools_noRef.irule"), "utf-8");
 
 describe('pool reference tests', function() {
 
@@ -61,7 +61,7 @@ describe('pool reference tests', function() {
     
     it(`get pools from Local Traffic Policy (LTP)`, async function() {
 
-        const LTPwithPools = fs.readFileSync(path.join(__dirname, "../artifacts/pools_LTP.tcl"), "utf-8");
+        const LTPwithPools = fs.readFileSync(path.join(__dirname, "./artifacts/pools_LTP.tcl"), "utf-8");
         
         const pools = poolsInLTP(LTPwithPools);
 
