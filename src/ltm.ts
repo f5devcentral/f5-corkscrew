@@ -2,15 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
-import * as _ from 'lodash';
-// import { EOL } from 'os'
-// import { add, forEach } from 'lodash';
-// import { lodas} from 'lodash'
-// import { object as _obj } from 'lodash/fp/object';
-
+// import * as _ from 'lodash';
+import object from 'lodash/fp/object';
 import { RegExTree, TmosRegExTree } from './regex'
-// import regexTree from './regex'
-// import TmosRegExTree from './regex';
 import logger from './logger';
 
 
@@ -27,7 +21,7 @@ export class BigipConfig {
     public bigipConf: string;
     /**
      * simple array of each bigip.conf parent object
-     * (ex. "ltm node /Common/192.168.1.20 { address 192.168.1.20 }")
+     * (ex. "[ltm node /Common/192.168.1.20 { address 192.168.1.20 }, ...]")
      */
     public configAsSingleLevelArray: string[];
     /**
@@ -36,21 +30,21 @@ export class BigipConfig {
      */
     public configSingleLevelObjects: bigipObj = {};
     /**
-     * 
+     *  tmos configuration as a single level object
+     * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
      */
     public configArrayOfSingleLevelObjects = [];
     /**
-     * nested objects - consolidated parant object keys like ltm/apm/sys/...
+     * tmos config as nested json objects 
+     * - consolidated parant object keys like ltm/apm/sys/...
      */
     public configMultiLevelObjects: goodBigipObj = {};
     public tmosVersion: string;
-
     private rx: TmosRegExTree;
-
 
     /**
      * 
-     * @param config bigip.conf as string
+     * @param config full bigip.conf as string
      */
     constructor(config: string) {
         config = standardizeLineReturns(config);    
@@ -59,7 +53,7 @@ export class BigipConfig {
         this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg);  // get tmos version
         // this.rx = rex.get();  // get regex tree
         this.rx = rex.get(this.tmosVersion)
-        logger.info(`Recieved bigip.conf, version: ${this.tmosVersion}`)
+        logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
         this.parse(config);
     }
 
@@ -87,14 +81,23 @@ export class BigipConfig {
             if (name && name.length === 3) {
                 this.configSingleLevelObjects[name[1]] = name[2];
 
-                this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]})
+                this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]});
 
+                // ###################################################
+                /**
+                 * the folling is used to json-ify the tmos config it is the main reason for
+                 *  lodash, which takes the project size from <100k (with no deps) to >80MB
+                 *  with a ton of dependencies
+                 *      was able to just import the object function, we'll see how that works
+                 * https://www.blazemeter.com/blog/the-correct-way-to-import-lodash-libraries-a-benchmark
+                 */
                 // split extracted name element by spaces
                 const names = name[1].split(' ');
                 // create new nested objects with each of the names, assigning value on inner-most
                 const newObj = nestedObjValue(names, name[2]);
                 // merge new object with existing object ***lodash***
-                this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj)
+                // this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj);
+                this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
 
                 /**
                  * todo:  look into exploding each config piece to json-ify the entire config...
@@ -104,6 +107,7 @@ export class BigipConfig {
                  *      - assign values as needed
                  *      - items with out objects, get key: value assign at that object level
                  */
+                // ######################################################
             }
         });
     }
@@ -120,12 +124,14 @@ export class BigipConfig {
          */
         // eslint-disable-next-line prefer-const
         let apps = [];
+
+        this.configArrayOfSingleLevelObjects
+
+        // #################################################
+        // old method utilizing json tree - removed cause of lodash bloat
         const i = this.configMultiLevelObjects.ltm.virtual;
         for (const [key, value] of Object.entries(i)) {
             const vsConfig = this.getVsConfig(key, value);
-
-            // const map = this.mapApp(vsConfig);
-
             apps.push({name: key, config: vsConfig});
         }
 
@@ -133,22 +139,6 @@ export class BigipConfig {
     }
     
     
-    // /**
-    //  * add on app map
-    //  * @param apps [{ name: <appName>, config: <appConfig> }]
-    //  */
-    // private mapApp(app: TmosApp[]) {
-    //     // loop through list of apps and extract connection maps
-    //     app.forEach( el => {
-
-    //         // detect pool reference
-
-    //         // detect rule references
-
-    //         // detect ltp references
-            
-    //     })
-    // }
 
     /**
      * extract tmos config version from first line
@@ -185,12 +175,6 @@ export class BigipConfig {
         const ltPolicies = vsConfig.match(rx.ltPolicies.obj);
         const persistence = vsConfig.match(rx.persist.obj);
         const fallBackPersist = vsConfig.match(rx.fbPersist);
-
-        //  exploring more efficient ways of regexing stuff
-        // const rulesReg = /rules {([\s\S]+?)\n    }\n/gm;
-        // const rulesReg2 = /rules {\s+(\/\w+\/[\w+\.\-]+)/gm;
-        // const rules2 = vsConfig.matchAll(rulesReg2);
-
         const destination = vsConfig.match(rx.destination);
 
         // base vsMap config object
@@ -210,53 +194,57 @@ export class BigipConfig {
             const x = this.digPoolConfig(pool[1]);
             fullConfig += x.config;
             vsMap.pool = x.map;
-            logger.debug(`[${vsName}] found the following pool\n`, pool[1]);
+            logger.debug(`[${vsName}] found the following pool`, pool[1]);
         }
 
         if(profiles && profiles[1]){
             fullConfig += this.digProfileConfigs(profiles[1])
-            logger.debug(`[${vsName}] found the following profiles\n`, profiles[1]);
+            logger.debug(`[${vsName}] found the following profiles`, profiles[1]);
         }
 
         if(rules && rules[1]) {
             // add irule connection destination mapping
             fullConfig += this.digRuleConfigs(rules[1])
-            logger.debug(`[${vsName}] found the following rules\n`, rules[1]);
+            logger.debug(`[${vsName}] found the following rules`, rules[1]);
         }
 
         if(snat && snat[1]) {
             fullConfig += this.digSnatConfig(snat[1])
-            logger.debug(`[${vsName}] found snat configuration\n`, snat[1])
+            logger.debug(`[${vsName}] found snat configuration`, snat[1])
         }
 
         if(ltPolicies && ltPolicies[1]) {
             // add ltp destination mapping
             fullConfig += this.digLtPolicyConfig(ltPolicies[1])
-            logger.debug(`[${vsName}] found the following ltPolices\n`, ltPolicies[1]);
+            logger.debug(`[${vsName}] found the following ltPolices`, ltPolicies[1]);
         }
     
         if(persistence && persistence[1]) {
             fullConfig += this.digPersistConfig(persistence[1])
-            logger.debug(`[${vsName}] found the following persistence\n`, persistence[1]);
+            logger.debug(`[${vsName}] found the following persistence`, persistence[1]);
         }
         
         if(fallBackPersist && fallBackPersist[1]) {
             fullConfig += this.digFbPersistConfig(fallBackPersist[1])
-            logger.debug(`[${vsName}] found the following persistence\n`, fallBackPersist[1]);
+            logger.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
         }
 
         return fullConfig;
     }
 
+
+    /**
+     * analyzes vs snat config, returns full snat configuration if pool reference
+     * @param snat vs snat reference as string
+     */
     private digSnatConfig(snat: string) {
         let config = ''
         if (snat.includes('pool')) {
-            // ltm snatpool <name>
             const snatName = snat.match(this.rx.vs.snat.name);
             this.configAsSingleLevelArray.forEach(( el: string) => {
                 if(el.startsWith(`ltm snatpool ${snatName[1]}`)){
                     config += el;
-                    // logger.debug(`[${vsName}] snat pool config \n`, el);
+                    logger.debug(`adding snat pool config `, el);
                 }
             })
         }
