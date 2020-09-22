@@ -29,12 +29,15 @@ For migration purposes, especially to another platform, like mBIP the following 
     - SplitSession Client Profile
     - ...
 
+### test file output
 
-### output
+This includes most of the different pieces all in a single text file for example.  This is way easier to read all the text output without being serialized for JSON structure.
 
-theoretical full output of initiation of class should produce the following in an api form
+> latest test output file [devCloud01_conversionOutput.txt](./devCloud01_conversionOutput.txt)
 
-> check the test output files for other example outputs [\tests\devCloud01_conversionOutput.txt](.\tests\devCloud01_conversionOutput.txt)
+### JSON output
+
+theoretical full json output should produce the following in an api form
 
 ```json
 {
@@ -68,15 +71,6 @@ theoretical full output of initiation of class should produce the following in a
     "logs": "<logs about config processing>"
 }
 ```
-
-```log
-tmos version detected: 15.1.0.1
-parse function
-number of tmos objects detected: 62
-number of 
-```
-
-
 
 ## Getting Started
 Provide a quick example of how to use your code.  This should provide the user with a launch point to quickly see what the project can offer them. 
