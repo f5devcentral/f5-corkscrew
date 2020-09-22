@@ -9,7 +9,7 @@ export declare class BigipConfig {
     bigipConf: string;
     /**
      * simple array of each bigip.conf parent object
-     * (ex. "ltm node /Common/192.168.1.20 { address 192.168.1.20 }")
+     * (ex. "[ltm node /Common/192.168.1.20 { address 192.168.1.20 }, ...]")
      */
     configAsSingleLevelArray: string[];
     /**
@@ -18,18 +18,20 @@ export declare class BigipConfig {
      */
     configSingleLevelObjects: bigipObj;
     /**
-     *
+     *  tmos configuration as a single level object
+     * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
      */
     configArrayOfSingleLevelObjects: any[];
     /**
-     * nested objects - consolidated parant object keys like ltm/apm/sys/...
+     * tmos config as nested json objects
+     * - consolidated parant object keys like ltm/apm/sys/...
      */
     configMultiLevelObjects: goodBigipObj;
     tmosVersion: string;
     private rx;
     /**
      *
-     * @param config bigip.conf as string
+     * @param config full bigip.conf as string
      */
     constructor(config: string);
     /**
@@ -58,6 +60,10 @@ export declare class BigipConfig {
      * @param vsConfig virtual server tmos config body
      */
     private getVsConfig;
+    /**
+     * analyzes vs snat config, returns full snat configuration if pool reference
+     * @param snat vs snat reference as string
+     */
     private digSnatConfig;
     /**
      * get fall back persistence config
