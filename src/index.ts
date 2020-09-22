@@ -1,12 +1,17 @@
 'use strict';
 
 
-import { BigipConfig } from './ltm';
-import { poolsInLTP, poolsInRule } from './pools';
+import * as _BigipConfig from './ltm';
+
+export const bigipConfig = _BigipConfig;
 
 
-module.exports = {
-    BigipConfig,
-    poolsInLTP,
-    poolsInRule
-}
+
+// import { BigipConfig } from './ltm';
+// import { poolsInLTP, poolsInRule } from './pools';
+
+// module.exports = {
+//     BigipConfig,
+//     poolsInLTP,
+//     poolsInRule
+// }
