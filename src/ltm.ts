@@ -7,6 +7,8 @@ import object from 'lodash/fp/object';
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
 
+import { poolsInRule } from './pools';
+
 
 
 interface bigipObj {
@@ -212,7 +214,7 @@ export class BigipConfig {
         if(pool && pool[1]) {
             const x = this.digPoolConfig(pool[1]);
             fullConfig += x.config;
-            vsMap.pool = x.map;
+            vsMap.pools = x.map;
             logger.debug(`[${vsName}] found the following pool`, pool[1]);
         }
 
@@ -223,6 +225,7 @@ export class BigipConfig {
 
         if(rules && rules[1]) {
             // add irule connection destination mapping
+
             fullConfig += this.digRuleConfigs(rules[1])
             logger.debug(`[${vsName}] found the following rules`, rules[1]);
         }
@@ -439,9 +442,16 @@ export class BigipConfig {
         // eslint-disable-next-line prefer-const
         let ruleList = [];
         ruleNames.forEach( name => {
+            // search config, return matches
             this.configAsSingleLevelArray.forEach((el:string) => {
                 if(el.startsWith(`ltm rule ${name}`)) {
                     ruleList.push(el);
+                    const x = el;
+                    // call irule pool extractor function
+                    const y = poolsInRule(el);
+                    if(y) {
+                        logger.info('***Dev*** pools in irule: ', el);
+                    }
                 }
             })
         })
@@ -567,8 +577,16 @@ type goodBigipObj = {
 
 type AppMap = {
     vsName: string,
-    vsDest: string,
-    pool?: string[],
-    irule?: string[],
-    ltPolicy?: string[]
+    vsDest?: string,
+    pools?: string[],
+    irule?: {
+        pools?: string[],
+        virtuals?: string[],
+        nodes?: string[]
+    },
+    ltPolicy?: {
+        pools?: string[],
+        virtuals?: string[],
+        nodes?: string[]
+    }
 }

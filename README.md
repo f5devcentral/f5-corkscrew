@@ -2,7 +2,7 @@
 
 # project-corkscrew
 
----
+<p>&nbsp;</p>
 
 ## Overview
 
@@ -12,29 +12,68 @@ The intent is to change the project name to "f5-corkscrew" as it matures and pot
 
 check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Architecture
 
+<p>&nbsp;</p>
+
+### TypeScript and JSDOC
+
 The whole thing is written in TypeScript and heavigly documented with JSDoc.  If you use vscode with this setup, you will see all the jsdoc information as you hover over different variables and functions.  
+
+<p>&nbsp;</p>
+
+### BigipConfig class
 
 Right now, the main piece is the BigipConfig class in the ltm.ts file.  This class is what takes in the bigip.conf at initiation.  From there different functions can be called to get different information
 
+<p>&nbsp;</p>
+
+### Logger class
+
 the logger class is a simple logger implementation that collect all the logs througout processing and provides a way to return them as part of the response back.  This is mainly to provide some feedback into what is happening without having to straight to debugging node directly.
+
+<p>&nbsp;</p>
+
+### Regex class
 
 The regex class provides a way to structure the different regexs needed to parse the different pieces of information.  I feel that the json tree is not only a good way to hold and access all the regex's, but also an easy way to update pieces of the tree depending on tmos configuration variances of different code versions.  In short, if pools are reference differently in v17, a flag that updates that single regex can easily be configured with mininmal impact to everything else.
 
+<p>&nbsp;</p>
+
+### a fully jsonified config
+
+I have the idea that the TMOS config loosely represents a json structure.  The parent tmos objects look like names json objects and everything else can end up being a regular object attribute as a "key": "value" pair.
+
+If you check out the output of the `configMultiLevelObjects` class var, you will see a browsable json tree of the parent objects.  What this could mean, is that the entire config could be jsonified, then searched for the needed data without the need for breaking things down with the regex tree.  This could make data search and extraction very quick and efficient.  The main downside to that, is that it is going to reguire some good js/json foo to be able to search and extract the necessary information.  I feel like we are halfway there...
+
+<p>&nbsp;</p>
+
+### Mocha tests
+
 the test file `bigip.conf_1.test.ts` abuses the mocha testing suite to run the code as I have been developing. It's my intent to move more in the direction of test driven development, but I need to think and discuss with others about different approches I have been looking at.
 
-We load a config from a file
+<p>&nbsp;</p>
+
+### Example
+
+We load a config from a file or get it through some other means, like api POST...
 ```js
 const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_9.17.2020.conf"), "utf-8");
 ```
+<p>&nbsp;</p>
 
 Then we create and initialize the class as follows:
 ```js
 const devCloud = new BigipConfig(devCloud01);
 ```
+
+<p>&nbsp;</p>
 
 The .apps() function returns an array of objects like:
 ```json
@@ -45,7 +84,11 @@ The .apps() function returns an array of objects like:
 }]
 ```
 
+<p>&nbsp;</p>
+
 The .logs() function returns a log of the extraction process
+
+<p>&nbsp;</p>
 
 The top of the main class also describes some of the different ways I have the the initial breakdown of the parent objects.  These are public definitions on the class which can be access directly: `const x = devCloud.configMultiLevelObjects`
 
@@ -73,7 +116,11 @@ The top of the main class also describes some of the different ways I have the t
     public configMultiLevelObjects: goodBigipObj = {};
 ```
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## test file output
 
@@ -81,7 +128,11 @@ This includes most of the different pieces all in a single text file for example
 
 > latest test output file [devCloud01_conversionOutput.txt](./devCloud01_conversionOutput.txt)
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## JSON output
 
@@ -120,43 +171,79 @@ theoretical full json output should produce the following in an api form
 }
 ```
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Getting Started
 Provide a quick example of how to use your code.  This should provide the user with a launch point to quickly see what the project can offer them. 
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Installation
 Outline the requirements and steps to install this project. 
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Usage
 Outline how the user can use your project and the various features the project offers. 
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Development
 Outline any requirements to setup a development environment if someone would like to contribute.  You may also link to another file for this information. 
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Support
 For support, please open a GitHub issue.  Note, the code in this repository is community supported and is not supported by F5 Networks.  For a complete list of supported projects please reference [SUPPORT.md](support.md).
 
+<p>&nbsp;</p>
+
 ---
+
+<p>&nbsp;</p>
 
 ## Community Code of Conduct
 Please refer to the [F5 DevCentral Community Code of Conduct](code_of_conduct.md).
 
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
 
 ## License
 [Apache License 2.0](LICENSE)
 
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
 ## Copyright
 Copyright 2014-2020 F5 Networks Inc.
 
+<p>&nbsp;</p>
 
 ### F5 Networks Contributor License Agreement
 

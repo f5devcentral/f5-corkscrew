@@ -9,7 +9,7 @@ import * as path from 'path';
 import { BigipConfig } from '../ltm';
 
 
-const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_9.17.2020.conf"), "utf-8");
+const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_9.23.2020.conf"), "utf-8");
 // const tParty = fs.readFileSync(path.join(__dirname, "./artifacts/ben_tParty_9.14.2020.conf"), "utf-8");
 // const devLTM = fs.readFileSync(path.join(__dirname, "./artifacts/ben_devLTM_9.14.2020.conf"), "utf-8");
 // const raqa = fs.readFileSync(path.join(__dirname, "./artifacts/sldcvcmpltmraqaexth01_9.15.2020_bigip.conf"), "utf-8");
