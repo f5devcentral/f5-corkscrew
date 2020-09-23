@@ -27,6 +27,7 @@ export class BigipConfig {
     /**
      * object form of bigip.conf
      *  key = full object name, value = body
+     * *** this one doesn't seem to be useful at all...
      */
     public configSingleLevelObjects: bigipObj = {};
     /**
@@ -125,7 +126,7 @@ export class BigipConfig {
         // eslint-disable-next-line prefer-const
         let apps = [];
 
-        this.configArrayOfSingleLevelObjects
+        // this.configArrayOfSingleLevelObjects
 
         // #################################################
         // old method utilizing json tree - removed cause of lodash bloat
@@ -188,7 +189,7 @@ export class BigipConfig {
             vsMap.vsDest = destination[1];
 
         }
-        let fullConfig = `${vsName} {${vsConfig}}`
+        let fullConfig = `ltm virtual ${vsName} {${vsConfig}}`
 
         if(pool && pool[1]) {
             const x = this.digPoolConfig(pool[1]);
@@ -244,7 +245,7 @@ export class BigipConfig {
             this.configAsSingleLevelArray.forEach(( el: string) => {
                 if(el.startsWith(`ltm snatpool ${snatName[1]}`)){
                     config += el;
-                    logger.debug(`adding snat pool config `, el);
+                    logger.debug(`adding snat pool config\n`, el);
                 }
             })
         }
@@ -355,7 +356,7 @@ export class BigipConfig {
                     const defaultMonitors = monitorNames.length - monitorNameConfigs.length
                     
                     if(defaultMonitors){
-                        logger.debug(`${poolName} references ${defaultMonitors} system default monitors, compare previous arrays for details`)
+                        logger.debug(`[${poolName}] references ${defaultMonitors} system default monitors, compare previous arrays for details`)
                     }
                     
                     if(monitorNameConfigs){
