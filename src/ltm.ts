@@ -100,6 +100,24 @@ export class BigipConfig {
                 this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
 
                 /**
+                 * if we go down the path of turning the entire config into a json tree 
+                 *  (which seems like the most flexible path), then we will need a function to
+                 *  search for "key" (object(profile) name), and return an array of matches, including
+                 *  the path to object, and it's value.
+                 * 
+                 * This is needed since, for example, monitors are referenced on the pool only by name,
+                 *  but thier object has a subtype definition like "http" or "tcp" or "https". So,
+                 *  there is a need to do a recursive multi level search starting at "ltm monitor" or ltm.monitor
+                 *  and search within the objects there for the monitor name, the returned path will tell
+                 *  the monitor type.  We will need to verify object types since different type objects
+                 *  can have the same name, but vs refence doesn't tell us type.
+                 * 
+                 * Should be able to use an example function from the article below and modify as needed
+                 * 
+                 * https://stackoverflow.com/questions/43636000/javascript-find-path-to-object-reference-in-nested-object
+                 */
+
+                /**
                  * todo:  look into exploding each config piece to json-ify the entire config...
                  *  - this seems like it could be the same process used for parent objects
                  *      - extract each object
