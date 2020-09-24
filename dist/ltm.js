@@ -10,6 +10,7 @@ exports.BigipConfig = void 0;
 const object_1 = __importDefault(require("lodash/fp/object"));
 const regex_1 = require("./regex");
 const logger_1 = __importDefault(require("./logger"));
+const pools_1 = require("./pools");
 /**
  * Class to consume bigip.conf
  *
@@ -23,6 +24,7 @@ class BigipConfig {
         /**
          * object form of bigip.conf
          *  key = full object name, value = body
+         * *** this one doesn't seem to be useful at all...
          */
         this.configSingleLevelObjects = {};
         /**
@@ -78,6 +80,23 @@ class BigipConfig {
                 // this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj);
                 this.configMultiLevelObjects = object_1.default.merge(this.configMultiLevelObjects, newObj);
                 /**
+                 * if we go down the path of turning the entire config into a json tree
+                 *  (which seems like the most flexible path), then we will need a function to
+                 *  search for "key" (object(profile) name), and return an array of matches, including
+                 *  the path to object, and it's value.
+                 *
+                 * This is needed since, for example, monitors are referenced on the pool only by name,
+                 *  but thier object has a subtype definition like "http" or "tcp" or "https". So,
+                 *  there is a need to do a recursive multi level search starting at "ltm monitor" or ltm.monitor
+                 *  and search within the objects there for the monitor name, the returned path will tell
+                 *  the monitor type.  We will need to verify object types since different type objects
+                 *  can have the same name, but vs refence doesn't tell us type.
+                 *
+                 * Should be able to use an example function from the article below and modify as needed
+                 *
+                 * https://stackoverflow.com/questions/43636000/javascript-find-path-to-object-reference-in-nested-object
+                 */
+                /**
                  * todo:  look into exploding each config piece to json-ify the entire config...
                  *  - this seems like it could be the same process used for parent objects
                  *      - extract each object
@@ -100,7 +119,7 @@ class BigipConfig {
          */
         // eslint-disable-next-line prefer-const
         let apps = [];
-        this.configArrayOfSingleLevelObjects;
+        // this.configArrayOfSingleLevelObjects
         // #################################################
         // old method utilizing json tree - removed cause of lodash bloat
         const i = this.configMultiLevelObjects.ltm.virtual;
@@ -152,11 +171,11 @@ class BigipConfig {
         if (destination && destination[1]) {
             vsMap.vsDest = destination[1];
         }
-        let fullConfig = `${vsName} {${vsConfig}}`;
+        let fullConfig = `ltm virtual ${vsName} {${vsConfig}}`;
         if (pool && pool[1]) {
             const x = this.digPoolConfig(pool[1]);
             fullConfig += x.config;
-            vsMap.pool = x.map;
+            vsMap.pools = x.map;
             logger_1.default.debug(`[${vsName}] found the following pool`, pool[1]);
         }
         if (profiles && profiles[1]) {
@@ -198,7 +217,7 @@ class BigipConfig {
             this.configAsSingleLevelArray.forEach((el) => {
                 if (el.startsWith(`ltm snatpool ${snatName[1]}`)) {
                     config += el;
-                    logger_1.default.debug(`adding snat pool config `, el);
+                    logger_1.default.debug(`adding snat pool config\n`, el);
                 }
             });
         }
@@ -287,7 +306,7 @@ class BigipConfig {
                     logger_1.default.debug('pool monitor configs found:', monitorNameConfigs);
                     const defaultMonitors = monitorNames.length - monitorNameConfigs.length;
                     if (defaultMonitors) {
-                        logger_1.default.debug(`${poolName} references ${defaultMonitors} system default monitors, compare previous arrays for details`);
+                        logger_1.default.debug(`[${poolName}] references ${defaultMonitors} system default monitors, compare previous arrays for details`);
                     }
                     if (monitorNameConfigs) {
                         config += monitorNameConfigs.join('');
@@ -343,9 +362,16 @@ class BigipConfig {
         // eslint-disable-next-line prefer-const
         let ruleList = [];
         ruleNames.forEach(name => {
+            // search config, return matches
             this.configAsSingleLevelArray.forEach((el) => {
                 if (el.startsWith(`ltm rule ${name}`)) {
                     ruleList.push(el);
+                    const x = el;
+                    // call irule pool extractor function
+                    const y = pools_1.poolsInRule(el);
+                    if (y) {
+                        logger_1.default.info('***Dev*** pools in irule: ', el);
+                    }
                 }
             });
         });

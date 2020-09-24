@@ -15,6 +15,7 @@ export declare class BigipConfig {
     /**
      * object form of bigip.conf
      *  key = full object name, value = body
+     * *** this one doesn't seem to be useful at all...
      */
     configSingleLevelObjects: bigipObj;
     /**
