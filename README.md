@@ -12,6 +12,72 @@ The intent is to change the project name to "f5-corkscrew" as it matures and pot
 
 check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 
+### Configuration objects supported in the parsing
+
+- virtual servers and following associated/references profiles/objects:
+    - persistence profile (including fall-back persistence)
+    - pool
+    - irules (not recursive at this time)
+    - snat pool
+    - local traffic policies (LTPs)
+    - pool monitors
+    - main stream profiles including http, tcp, clien/server-ssl profiles
+
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
+## Tasks/Ideas
+
+- Deeper app parsing
+    - looking into digging/crawling the partitions for all configs
+    - expand the discovery of pools referenced in irules, local traffic policies
+        - this also includes references to other virtual servers and nodes
+        - return this information in the app maps
+    - what other things need to be added to the parsing?
+        - oneConnect profiles?
+
+- Command line interface
+    - this should provide a good way to just download the rpm, issue a command and get parsed apps
+    - could be big with support and/or hard core command liners
+
+- Exploring the idea of fully jsonifying the entire config
+    - I belive this would provide the most flexible and scalable way to consume and search the config in totallity
+    - all parititions and even the bigip_base.conf could all be added to the same tree to provide a single place to search for eveything config related (at least for migrations)
+    - the struggle is needing to create a function that will search the tree for an object key and return an array of matches including path and value
+    - this will allow us to further filter results as needed
+        - This approach seems to accomodate different profile types with the same name
+    - I also think this method will accomodate possible configuration nameing changes with different versions
+        - we should be able to just search for path paramters after the key is found to find the right object type
+    - this should also remove the need for the regex tree, or at least reduce it to a minimal size
+    - 9.25.2020 - did find out that tmos will not allow conflicting names across the different profile/monitor types
+        - this should make searching for an object eaiser
+
+- thinking about how to expand the current input method of the main ltm class
+    - it currently takes a bigip.conf at initiation, but should probably take an array of tmso files (ex. ['bigip.conf', 'bigip_base.conf', 'partitionConf', ...])
+    - all files will be parsed into the json tree for a more complete search
+    - So, it's nice to be able to feed it a single file and explode that in the vscode extension or just for simple work, but probably also need to include some logic to consume a UCS/qkvew, and maybe even an scf
+        - in that case we are gonna need functions to unpack each method
+
+- a "sanitize" function to remove sensitive information and change IPs/names so configs can be shared as part of the process
+
+
+<p>&nbsp;</p>
+
+---
+
+<p>&nbsp;</p>
+
+## Exclusions
+
+The following items are excluded from application extraction since the main goal of this is for transitioning to AS3
+- certificates
+    - not only are these sensitive, but also probably need to be create and associated with the AS3 declaration as part of the automation process
+- system settings?
+- APM/ASM policies - for now...  maybe whatever APM config is in the config files
+
 <p>&nbsp;</p>
 
 ---

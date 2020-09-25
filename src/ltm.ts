@@ -6,14 +6,11 @@
 import object from 'lodash/fp/object';
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
-
 import { poolsInRule } from './pools';
+import { pathValueFromKey } from './utils/objects'
+import { AppMap, BigipConfObj, BigipObj } from './models'
 
 
-
-interface bigipObj {
-    [key: string]: unknown
-}
 
 /**
  * Class to consume bigip.conf
@@ -31,7 +28,7 @@ export class BigipConfig {
      *  key = full object name, value = body
      * *** this one doesn't seem to be useful at all...
      */
-    public configSingleLevelObjects: bigipObj = {};
+    public configSingleLevelObjects: BigipObj = {};
     /**
      *  tmos configuration as a single level object
      * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
@@ -41,7 +38,7 @@ export class BigipConfig {
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
      */
-    public configMultiLevelObjects: goodBigipObj = {};
+    public configMultiLevelObjects: BigipConfObj = {};
     public tmosVersion: string;
     private rx: TmosRegExTree;
 
@@ -209,7 +206,7 @@ export class BigipConfig {
             vsMap.vsDest = destination[1];
 
         }
-        let fullConfig = `ltm virtual ${vsName} {${vsConfig}}`
+        let fullConfig = `ltm virtual ${vsName} {${vsConfig}}\n`
 
         if(pool && pool[1]) {
             const x = this.digPoolConfig(pool[1]);
@@ -260,7 +257,7 @@ export class BigipConfig {
      * @param snat vs snat reference as string
      */
     private digSnatConfig(snat: string) {
-        let config = ''
+        let config = '';
         if (snat.includes('pool')) {
             const snatName = snat.match(this.rx.vs.snat.name);
             this.configAsSingleLevelArray.forEach(( el: string) => {
@@ -362,15 +359,25 @@ export class BigipConfig {
                     //dig monitor configs like pool members above
                     const monitorNames = monitors[1].split(/ and /);
                     logger.debug('pool monitor references found:', monitorNames);
-                    
+
                     // eslint-disable-next-line prefer-const
-                    let monitorNameConfigs = [];
+                    const monitorNameConfigs = [];
                     monitorNames.forEach( name => {
-                        this.configAsSingleLevelArray.forEach((el: string) => {
-                            if(el.match(`ltm monitor (.+?) ${name} `)) {
-                                monitorNameConfigs.push(el);
-                            }
-                        })
+
+                        // new way look for key in .ltm.monitor
+                        const pv = pathValueFromKey(this.configMultiLevelObjects.ltm.monitor, name)
+                        if(pv){
+                            // rebuild tmos object
+                            monitorNameConfigs.push(`ltm monitor ${pv.path} ${name} {${pv.value}}\n`);
+                        }
+
+                        // // original way, by looping through entire config
+                        // this.configAsSingleLevelArray.forEach((el: string) => {
+                        //     if(el.match(`ltm monitor (.+?) ${name} `)) {
+                        //         monitorNameConfigs.push(el);
+                        //         // foundName = name;
+                        //     }
+                        // })
                     })
                     
                     logger.debug('pool monitor configs found:', monitorNameConfigs);
@@ -446,7 +453,7 @@ export class BigipConfig {
             this.configAsSingleLevelArray.forEach((el:string) => {
                 if(el.startsWith(`ltm rule ${name}`)) {
                     ruleList.push(el);
-                    const x = el;
+                    // const x = el;
                     // call irule pool extractor function
                     const y = poolsInRule(el);
                     if(y) {
@@ -555,38 +562,3 @@ function standardizeLineReturns (config: string){
 
 
 
-type goodBigipObj = {
-    ltm?: {
-        virtual?: string;
-        pool?: string;
-        node?: any;
-        monitor?: any;
-        profile?: any;
-        rule?: any;
-        persistence?: any;
-    },
-    apm?: any;
-    net?: any;
-}
-
-// type TmosApp = {
-//     name: string,
-//     config: string,
-//     map?: string
-// }
-
-type AppMap = {
-    vsName: string,
-    vsDest?: string,
-    pools?: string[],
-    irule?: {
-        pools?: string[],
-        virtuals?: string[],
-        nodes?: string[]
-    },
-    ltPolicy?: {
-        pools?: string[],
-        virtuals?: string[],
-        nodes?: string[]
-    }
-}

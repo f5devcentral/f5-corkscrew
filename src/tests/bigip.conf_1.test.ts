@@ -63,6 +63,7 @@ describe('explode bigip.conf tests', function() {
         output += '#######################################\n';
         output += '### configSingleLevelObjects ##########\n';
         output += JSON.stringify(devCloud.configSingleLevelObjects, undefined, 2);
+        
         fs.writeFileSync(path.join(__dirname, "./devCloud01_conversionOutput.txt"), output);
 
         assert.deepStrictEqual(y, devCloud01);
