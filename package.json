@@ -58,7 +58,7 @@
     "timeout": 10000
   },
   "dependencies": {
-    "@types/lodash": "^4.14.161",
-    "lodash": "^4.17.20"
+    "@types/deepmerge": "^2.2.0",
+    "deepmerge": "^4.2.2"
   }
 }

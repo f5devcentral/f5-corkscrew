@@ -3,12 +3,14 @@
 
 
 // import * as _ from 'lodash';
-import object from 'lodash/fp/object';
+// import object from 'lodash/fp/object';
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
 import { poolsInRule } from './pools';
-import { pathValueFromKey } from './utils/objects'
+import { pathValueFromKey, tmosChildToObj } from './utils/objects'
 import { AppMap, BigipConfObj, BigipObj } from './models'
+
+import { deepMergeObj } from './utils/objects'
 
 
 
@@ -39,6 +41,7 @@ export class BigipConfig {
      * - consolidated parant object keys like ltm/apm/sys/...
      */
     public configMultiLevelObjects: BigipConfObj = {};
+    // public configMultiLevelObjects2: BigipConfObj = {};
     public tmosVersion: string;
     private rx: TmosRegExTree;
 
@@ -53,8 +56,8 @@ export class BigipConfig {
         this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg);  // get tmos version
         // this.rx = rex.get();  // get regex tree
         this.rx = rex.get(this.tmosVersion)
-        logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
         this.parse(config);
+        logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
     }
 
     /**
@@ -97,7 +100,27 @@ export class BigipConfig {
                 const newObj = nestedObjValue(names, name[2]);
                 // merge new object with existing object ***lodash***
                 // this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj);
-                this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
+                // this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
+
+
+                // send newObj value to tmosChildToObj
+                const rrr = tmosChildToObj(name[2])
+
+                // *** try 1 below ***
+                // // const newObj2 = newObj;
+                // for (const [key, value] of Object.entries(newObj)) {
+                //     // const crawldObj = tmosChildToObj(value);
+                //     const y = value;
+                //     // const btb = crawldObj;
+                //     // merge crawldObj back into this.configMultiLevelObjects.ltm.virtual
+                // }
+                
+                
+                this.configMultiLevelObjects = deepMergeObj([this.configMultiLevelObjects, newObj]);
+
+
+
+
 
                 /**
                  * if we go down the path of turning the entire config into a json tree 
@@ -498,34 +521,7 @@ export class BigipConfig {
 
 
 
-/**
- * https://stackoverflow.com/questions/40603913/search-recursively-for-value-in-object-by-property-name/40604103
- * 
- * if we go the lodash route, this can be replaces with _.get
- * 
- * @param object to search
- * @param key to find
- */
-// function findVal(object, key) {
-//     let value;
-//     Object.keys(object).some(function(k) {
-//         if (k === key) {
-//             value = object[k];
-//             return true;
-//         }
-//         if (object[k] && typeof object[k] === 'object') {
-//             // const x = k;
-//             // const y = object[k];
-//             // const z = key;
-//             value = findVal(object[k], key);
-//             return value !== undefined;
-//         }
-//     });
-//     // if(value){
-//     //     return value;
-//     // }
-//     return value;
-// }
+
 
 
 

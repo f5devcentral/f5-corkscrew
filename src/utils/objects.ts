@@ -2,34 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-
-// import lodash from 'lodash-es';
-// import deepdash from 'deepdash-es';
+import deepmerge from 'deepmerge'
 
 import logger from "../logger";
 import { BigipConfObj } from "../models";
 
-
-// const _ldd = deepdash(lodash);
-
-// import deepDs from 'deepdash-es/standalone';
-
-
-
-// const testObj2 = {
-//     obj1: {
-//         obj2: {
-//             data1: 213,
-//             data2: "1231",
-//             obj3: {
-//                 data: "milf"
-//             }
-//         }
-//     },
-//     obj4: {
-//         description: "toto"
-//     }
-// };
 
 type RetObj = {
     path?: string,
@@ -39,8 +16,86 @@ type RetObj = {
 
 
 /**
+ * provides deep merge of multi-level objects
+ *  subsequent items in list overwrite conflicting entries
+ * @param objs list of objects to merge
+ */
+export function deepMergeObj(objs: unknown[]) {
+    return deepmerge.all(objs)
+}
+
+/**
+ * 
+ * @param cfg child config to parse
+ * @param obj used to iterate
+ */
+export function tmosChildToObj (cfg: string, obj?) {
+
+    /**
+     * input tmos parent object body
+     *  (ex. ltm virtual { <...everything_here...> })
+     * 
+     * 1. capture single line 'key': 'value' pairs
+     *      (ex 'destination /Common/192.168.1.51:8443')
+     * 2. capture lists
+     *      (ex )
+     * 
+     */     
+
+    obj = obj ? obj : {};
+    
+    const childObjectsRegex = /([ \w\-.]+) {([\s\S]+?)\n    }\n/g
+    const childObjects = cfg.match(childObjectsRegex);
+    
+    /**
+     * loop through each of the objects
+     *  remove the match, check if "{}" in match
+     *  If bracket, re-iterate tmosChildtoObj to convert to child object
+     *  if no brackets, split each new line
+     *      split each new line
+     *          if two elements in array, set key/value pair
+     *          if >2 el in array, set value as array
+     */
+    
+    
+    // parsing child objects and removing
+    if (childObjects) {
+        childObjects.forEach(el => {
+            if(el.includes('{')) {
+                const found = 'anotherObject'
+            }
+        });
+    }
+    
+    
+    const singleLineKVpairsRegex = /([\w-]+) ([\/\w.:-]+)/g
+    const childKVpair = cfg.match(singleLineKVpairsRegex);
+
+    if (childKVpair) {
+        childKVpair.forEach(el2 => {
+
+            // remove the items we are taking out of the config
+            cfg.replace(el2, '') 
+            const [key, val] = el2.split(' ');
+            // const nnn = val;
+            obj[key] = val;
+        });
+    }
+
+    if(cfg.match(/\s/g)) {
+        return obj;
+    } else {
+        tmosChildToObj(cfg, obj);
+    }
+
+    // split on lines
+    
+}
+
+
+/**
  * searches object for key
- * *** need to retype the object input
+ * 
  * @param obj to search
  * @param key to find
  * @param return [{ path: string, key: string, value: string }]
@@ -99,6 +154,57 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
     }
     
 }
+
+
+/**
+ * search object for nested value, return path to value
+ * 
+ * Initial goal for this is to find all the final children
+ *  values that have not been coverted to json
+ * if they include a line return "\n", crawl them till they
+ *  are converted to json
+ * 
+ * Other than irules/datagroups, everything shouldn't have a LR
+ * 
+ * @param obj 
+ * @param val 
+ */
+export function getPathFromValue(obj: any, val: string) {
+    // asdf
+}
+
+
+/**
+ * *** Gets value by key, don't really need this since 
+ *  we should be using pathValueFromKey
+ * 
+ * https://stackoverflow.com/questions/40603913/search-recursively-for-value-in-object-by-property-name/40604103
+ * 
+ * if we go the lodash route, this can be replaces with _.get
+ * 
+ * @param object to search
+ * @param key to find
+ */
+// function findVal(object, key) {
+//     let value;
+//     Object.keys(object).some(function(k) {
+//         if (k === key) {
+//             value = object[k];
+//             return true;
+//         }
+//         if (object[k] && typeof object[k] === 'object') {
+//             // const x = k;
+//             // const y = object[k];
+//             // const z = key;
+//             value = findVal(object[k], key);
+//             return value !== undefined;
+//         }
+//     });
+//     // if(value){
+//     //     return value;
+//     // }
+//     return value;
+// }
 
 
 export function key1() {
