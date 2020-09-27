@@ -67,11 +67,61 @@ export function tmosChildToObj (cfg: string, obj?) {
             const name = blncd.pre;
             const name2 = name.split(/\n/).pop().trim();
             const body = blncd.body;
-    
-            const rebuiltObj = `${name2} {${body}}`
-            cfg = cfg.replace(rebuiltObj, '');
+
+            /**
+             * does body include:
+             *  if {} = means it's another object
+             * 
+             */
+
+            const xx = body.trim().includes('\n');
+
+            if (body.includes('{') || body === ' ') {
+                
+                //  it's a nested object, put in body for next round
+                const rebuiltObj = `${name2} {${body}}`
+                cfg = cfg.replace(rebuiltObj, '');
+                obj[name2] = body;
+
+            } else if (body.trim().includes('\n')) {
+                
+                //regex single-line key-value pairs
+                const singleLineKVpairsRegex = /([\w-]+) (.+)/g
+                const childKVpair = cfg.match(singleLineKVpairsRegex);
+                if (childKVpair) {
+                    childKVpair.forEach(el2 => {
+                        // remove items as we convert them
+                        cfg = cfg.replace(el2, '') 
+                        const [key, val] = el2.split(' ');
+                        obj[key] = val;
+                    });
+                }
+
+
+                // // split on line returns
+                // const body2 = body.split('\n');
+                // // check each line for spaces
+                // body2.forEach(el => {
+                //     const line = el.split(' ');
+                //     if (line.length > 1) {
+                //     }
+                // });
+            } else if (body.trim().includes(' ')) {
+                
+                const keyVal = body.split(' ')
+                obj[keyVal[0]] = keyVal[1];
+                cfg = cfg.replace(body, '');
+
+            } else {
+                // no line returns, split on spaces return array
+                const arr1 = body.trim().split(' ')
+                obj[name2] = arr1;
+                const rebuiltObj = `${name2} {${body}}`
+                cfg = cfg.replace(rebuiltObj, '');
+            }
+            
             // const cfg2 = cfg;
-            obj[name2] = body;
+            
         }
     }
     
@@ -116,6 +166,16 @@ export function tmosChildToObj (cfg: string, obj?) {
         });
     }
 
+    // /**
+    //  * down here, we didn't detect any objects "{}",
+    //  *  nor single line key: value pair (name<space>value)
+    //  * it must be a list, so lets see what kind of list it is
+    //  */
+
+    // if (cfg.trim().includes('\n')) {
+    //     //
+    // }
+
     // split on lines
     const regex = new RegExp(/\S/);     // any non-white space characters
     if (regex.test(cfg)){
@@ -125,6 +185,13 @@ export function tmosChildToObj (cfg: string, obj?) {
     return obj;
 }
 
+
+/**
+ * this will overwrite existing data
+ * @param obj 
+ * @param path 
+ * @param value 
+ */
 export function setNestedKey (obj: any, path: string[], value: any){
 
     /**
@@ -146,13 +213,20 @@ export function setNestedKey (obj: any, path: string[], value: any){
  * @param obj to search
  * @param return array of path steps
  */
-export function getPathOfValue (vtf: string, obj: any) {
+export function getPathOfValue (vtf: string | RegExp, obj: any) {
 
     /**
      * https://stackoverflow.com/questions/53543303/find-a-full-object-path-to-a-given-value-with-javascript
      */
 
-    const regex = new RegExp(`${vtf}`)
+    // function maybeMatch(reg, str) {
+    //     var m = str.match(reg);
+    //     return m ? m[0] : null;
+    // }
+
+    // if (vtf instanceof RegExp) vtf = maybeMatch(vtf, str); 
+
+    const regex = new RegExp(vtf)
     return find(obj);
 
     function find(obj, item?) {
@@ -207,6 +281,8 @@ export function deepGet (path: string[], obj: any) {
 
 /**
  * searches object for key
+ * 
+ * *** todo: update path to be array, not dot(.) notation
  * 
  * @param obj to search
  * @param key to find

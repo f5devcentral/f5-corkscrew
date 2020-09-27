@@ -11,8 +11,8 @@ export type BigipObj = {
  */
 export type BigipConfObj = {
     ltm?: {
-        virtual?: string;
-        pool?: string;
+        virtual?: unknown;
+        pool?: unknown;
         node?: unknown;
         monitor?: unknown;
         profile?: unknown;
