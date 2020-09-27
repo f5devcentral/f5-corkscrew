@@ -7,10 +7,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BigipConfig = void 0;
 // import * as _ from 'lodash';
-const object_1 = __importDefault(require("lodash/fp/object"));
+// import object from 'lodash/fp/object';
 const regex_1 = require("./regex");
 const logger_1 = __importDefault(require("./logger"));
 const pools_1 = require("./pools");
+const objects_1 = require("./utils/objects");
+const objects_2 = require("./utils/objects");
 /**
  * Class to consume bigip.conf
  *
@@ -37,14 +39,16 @@ class BigipConfig {
          * - consolidated parant object keys like ltm/apm/sys/...
          */
         this.configMultiLevelObjects = {};
+        this.configFullObject = {};
         config = standardizeLineReturns(config);
         this.bigipConf = config; // assign orginal config for later use
         const rex = new regex_1.RegExTree(); // instantiate regex tree
         this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg); // get tmos version
         // this.rx = rex.get();  // get regex tree
         this.rx = rex.get(this.tmosVersion);
-        logger_1.default.info(`Recieved bigip.conf of version: ${this.tmosVersion}`);
         this.parse(config);
+        this.parse2();
+        logger_1.default.info(`Recieved bigip.conf of version: ${this.tmosVersion}`);
     }
     /**
      * Get processing logs
@@ -78,7 +82,21 @@ class BigipConfig {
                 const newObj = nestedObjValue(names, name[2]);
                 // merge new object with existing object ***lodash***
                 // this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj);
-                this.configMultiLevelObjects = object_1.default.merge(this.configMultiLevelObjects, newObj);
+                // this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
+                /**
+                 * original version that produced a multi-level object tree for parent items ONLY
+                 */
+                this.configMultiLevelObjects = objects_2.deepMergeObj([this.configMultiLevelObjects, newObj]);
+                // send newObj value to tmosChildToObj
+                // const rrr = tmosChildToObj(name[2])
+                // *** try 1 below ***
+                // // const newObj2 = newObj;
+                // for (const [key, value] of Object.entries(newObj)) {
+                //     // const crawldObj = tmosChildToObj(value);
+                //     const y = value;
+                //     // const btb = crawldObj;
+                //     // merge crawldObj back into this.configMultiLevelObjects.ltm.virtual
+                // }
                 /**
                  * if we go down the path of turning the entire config into a json tree
                  *  (which seems like the most flexible path), then we will need a function to
@@ -106,7 +124,44 @@ class BigipConfig {
                  */
                 // ######################################################
             }
+            /**
+             * second try to fully jsonify config
+             *  this method will be a bit slower, but should be easier to code
+             *
+             * So, instead of crawling the tree from top to bottom, iterating each child,
+             *  converting from text to json, creating the entire tree in one pass,
+             *  which I consider the true iterative approach.
+             *
+             * This approach will take the same tree we had before (step 1) and search it
+             *  for string values with line returns, probably any white space,
+             *  when found, parse the value and try to convert it to json
+             *  - use the find value return path function
+             *  - convert
+             *  - repeat
+             */
         });
+    }
+    parse2() {
+        // copy over our base tree so we don't mess with existing functionality
+        this.configFullObject = this.configMultiLevelObjects;
+        // this.configFullObject = Object.assign(this.configFullObject, this.configMultiLevelObjects);
+        // const rrr = findPathOfValue('string-to-find', this.configFullObject.ltm.virtual);
+        // const uuu = getPathOfValue2('\n', this.configFullObject);
+        // const testPath = 'apm.epsec.epsec-package./Common/epsec-1.0.0-892.0.iso';
+        // const testPath2 = ['apm','epsec','epsec-package','/Common/epsec-1.0.0-892.0.iso'];
+        let pathToConvert = ['x'];
+        while (pathToConvert) {
+            // if (pathToConvert) {
+            // search values for line return
+            pathToConvert = objects_1.getPathOfValue('\n', this.configFullObject);
+            const body = objects_1.deepGet(pathToConvert, this.configFullObject);
+            const childBodyAsObj = objects_1.tmosChildToObj(body);
+            objects_1.setNestedKey(this.configFullObject, pathToConvert, childBodyAsObj);
+            // const obj = {a: {b:{c:'initial'}}}
+            // const uuu = setNestedKey(obj, ['a', 'b', 'c'], 'changed-value')
+            // const rrr = uuu;
+            const ddd = body;
+        }
     }
     /**
      * extracts individual apps
@@ -171,7 +226,7 @@ class BigipConfig {
         if (destination && destination[1]) {
             vsMap.vsDest = destination[1];
         }
-        let fullConfig = `ltm virtual ${vsName} {${vsConfig}}`;
+        let fullConfig = `ltm virtual ${vsName} {${vsConfig}}\n`;
         if (pool && pool[1]) {
             const x = this.digPoolConfig(pool[1]);
             fullConfig += x.config;
@@ -295,13 +350,21 @@ class BigipConfig {
                     const monitorNames = monitors[1].split(/ and /);
                     logger_1.default.debug('pool monitor references found:', monitorNames);
                     // eslint-disable-next-line prefer-const
-                    let monitorNameConfigs = [];
+                    const monitorNameConfigs = [];
                     monitorNames.forEach(name => {
-                        this.configAsSingleLevelArray.forEach((el) => {
-                            if (el.match(`ltm monitor (.+?) ${name} `)) {
-                                monitorNameConfigs.push(el);
-                            }
-                        });
+                        // new way look for key in .ltm.monitor
+                        const pv = objects_1.pathValueFromKey(this.configMultiLevelObjects.ltm.monitor, name);
+                        if (pv) {
+                            // rebuild tmos object
+                            monitorNameConfigs.push(`ltm monitor ${pv.path} ${name} {${pv.value}}\n`);
+                        }
+                        // // original way, by looping through entire config
+                        // this.configAsSingleLevelArray.forEach((el: string) => {
+                        //     if(el.match(`ltm monitor (.+?) ${name} `)) {
+                        //         monitorNameConfigs.push(el);
+                        //         // foundName = name;
+                        //     }
+                        // })
                     });
                     logger_1.default.debug('pool monitor configs found:', monitorNameConfigs);
                     const defaultMonitors = monitorNames.length - monitorNameConfigs.length;
@@ -366,7 +429,7 @@ class BigipConfig {
             this.configAsSingleLevelArray.forEach((el) => {
                 if (el.startsWith(`ltm rule ${name}`)) {
                     ruleList.push(el);
-                    const x = el;
+                    // const x = el;
                     // call irule pool extractor function
                     const y = pools_1.poolsInRule(el);
                     if (y) {
@@ -404,34 +467,6 @@ class BigipConfig {
 }
 exports.BigipConfig = BigipConfig;
 /**
- * https://stackoverflow.com/questions/40603913/search-recursively-for-value-in-object-by-property-name/40604103
- *
- * if we go the lodash route, this can be replaces with _.get
- *
- * @param object to search
- * @param key to find
- */
-// function findVal(object, key) {
-//     let value;
-//     Object.keys(object).some(function(k) {
-//         if (k === key) {
-//             value = object[k];
-//             return true;
-//         }
-//         if (object[k] && typeof object[k] === 'object') {
-//             // const x = k;
-//             // const y = object[k];
-//             // const z = key;
-//             value = findVal(object[k], key);
-//             return value !== undefined;
-//         }
-//     });
-//     // if(value){
-//     //     return value;
-//     // }
-//     return value;
-// }
-/**
  * builds multi-level nested objects with data
  * https://stackoverflow.com/questions/5484673/javascript-how-to-dynamically-create-nested-objects-using-object-names-given-by
  * @param fields array of nested object params
@@ -451,4 +486,11 @@ function standardizeLineReturns(config) {
     const regex = /(\r\n|\r)/g;
     return config.replace(regex, "\n");
 }
+/**
+ * Reverse string
+ * @param str string to reverse
+ */
+// function reverse(str: string){
+//     return [...str].reverse().join('');
+//   }
 //# sourceMappingURL=ltm.js.map

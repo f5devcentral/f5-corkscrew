@@ -7,7 +7,7 @@
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
 import { poolsInRule } from './pools';
-import { pathValueFromKey, tmosChildToObj } from './utils/objects'
+import { deepGet, getPathOfValue, pathValueFromKey, setNestedKey, tmosChildToObj } from './utils/objects'
 import { AppMap, BigipConfObj, BigipObj } from './models'
 
 import { deepMergeObj } from './utils/objects'
@@ -41,7 +41,7 @@ export class BigipConfig {
      * - consolidated parant object keys like ltm/apm/sys/...
      */
     public configMultiLevelObjects: BigipConfObj = {};
-    // public configMultiLevelObjects2: BigipConfObj = {};
+    public configFullObject: BigipConfObj = {};
     public tmosVersion: string;
     private rx: TmosRegExTree;
 
@@ -57,6 +57,7 @@ export class BigipConfig {
         // this.rx = rex.get();  // get regex tree
         this.rx = rex.get(this.tmosVersion)
         this.parse(config);
+        this.parse2();
         logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
     }
 
@@ -102,9 +103,14 @@ export class BigipConfig {
                 // this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj);
                 // this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
 
+                /**
+                 * original version that produced a multi-level object tree for parent items ONLY
+                 */
+                this.configMultiLevelObjects = deepMergeObj([this.configMultiLevelObjects, newObj]);
+
 
                 // send newObj value to tmosChildToObj
-                const rrr = tmosChildToObj(name[2])
+                // const rrr = tmosChildToObj(name[2])
 
                 // *** try 1 below ***
                 // // const newObj2 = newObj;
@@ -116,12 +122,6 @@ export class BigipConfig {
                 // }
                 
                 
-                this.configMultiLevelObjects = deepMergeObj([this.configMultiLevelObjects, newObj]);
-
-
-
-
-
                 /**
                  * if we go down the path of turning the entire config into a json tree 
                  *  (which seems like the most flexible path), then we will need a function to
@@ -150,7 +150,62 @@ export class BigipConfig {
                  */
                 // ######################################################
             }
+
+            /**
+             * second try to fully jsonify config
+             *  this method will be a bit slower, but should be easier to code
+             * 
+             * So, instead of crawling the tree from top to bottom, iterating each child,
+             *  converting from text to json, creating the entire tree in one pass,
+             *  which I consider the true iterative approach.
+             * 
+             * This approach will take the same tree we had before (step 1) and search it
+             *  for string values with line returns, probably any white space,
+             *  when found, parse the value and try to convert it to json
+             *  - use the find value return path function
+             *  - convert
+             *  - repeat
+             */
         });
+    }
+
+    private parse2() {
+
+        // copy over our base tree so we don't mess with existing functionality
+        this.configFullObject = this.configMultiLevelObjects;
+        // this.configFullObject = Object.assign(this.configFullObject, this.configMultiLevelObjects);
+
+        // const rrr = findPathOfValue('string-to-find', this.configFullObject.ltm.virtual);
+        // const uuu = getPathOfValue2('\n', this.configFullObject);
+        
+        // const testPath = 'apm.epsec.epsec-package./Common/epsec-1.0.0-892.0.iso';
+        // const testPath2 = ['apm','epsec','epsec-package','/Common/epsec-1.0.0-892.0.iso'];
+        
+        let pathToConvert = ['x']
+        while(pathToConvert) {
+        // if (pathToConvert) {
+
+            // search values for line return
+            pathToConvert = getPathOfValue('\n', this.configFullObject);
+            
+            const body = deepGet(pathToConvert, this.configFullObject);
+
+            const childBodyAsObj = tmosChildToObj(body);
+
+            setNestedKey(
+                this.configFullObject,
+                pathToConvert,
+                childBodyAsObj
+            );
+
+            // const obj = {a: {b:{c:'initial'}}}
+            // const uuu = setNestedKey(obj, ['a', 'b', 'c'], 'changed-value')
+            // const rrr = uuu;
+
+            const ddd = body;
+
+        }
+        
     }
 
 

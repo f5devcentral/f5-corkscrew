@@ -1,6 +1,4 @@
-interface bigipObj {
-    [key: string]: unknown;
-}
+import { BigipConfObj, BigipObj } from './models';
 /**
  * Class to consume bigip.conf
  *
@@ -17,7 +15,7 @@ export declare class BigipConfig {
      *  key = full object name, value = body
      * *** this one doesn't seem to be useful at all...
      */
-    configSingleLevelObjects: bigipObj;
+    configSingleLevelObjects: BigipObj;
     /**
      *  tmos configuration as a single level object
      * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
@@ -27,7 +25,8 @@ export declare class BigipConfig {
      * tmos config as nested json objects
      * - consolidated parant object keys like ltm/apm/sys/...
      */
-    configMultiLevelObjects: goodBigipObj;
+    configMultiLevelObjects: BigipConfObj;
+    configFullObject: BigipConfObj;
     tmosVersion: string;
     private rx;
     /**
@@ -44,6 +43,7 @@ export declare class BigipConfig {
      * @param config bigip.conf as string
      */
     private parse;
+    private parse2;
     /**
      * extracts individual apps
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
@@ -97,17 +97,3 @@ export declare class BigipConfig {
  * Reverse string
  * @param str string to reverse
  */
-declare type goodBigipObj = {
-    ltm?: {
-        virtual?: string;
-        pool?: string;
-        node?: any;
-        monitor?: any;
-        profile?: any;
-        rule?: any;
-        persistence?: any;
-    };
-    apm?: any;
-    net?: any;
-};
-export {};
