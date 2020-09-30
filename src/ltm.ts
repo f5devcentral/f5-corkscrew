@@ -57,7 +57,7 @@ export class BigipConfig {
         // this.rx = rex.get();  // get regex tree
         this.rx = rex.get(this.tmosVersion)
         this.parse(config);
-        this.parse2();
+        // this.parse2();
         logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
     }
 
