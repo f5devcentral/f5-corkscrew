@@ -47,7 +47,7 @@ class BigipConfig {
         // this.rx = rex.get();  // get regex tree
         this.rx = rex.get(this.tmosVersion);
         this.parse(config);
-        this.parse2();
+        // this.parse2();
         logger_1.default.info(`Recieved bigip.conf of version: ${this.tmosVersion}`);
     }
     /**
@@ -80,23 +80,10 @@ class BigipConfig {
                 const names = name[1].split(' ');
                 // create new nested objects with each of the names, assigning value on inner-most
                 const newObj = nestedObjValue(names, name[2]);
-                // merge new object with existing object ***lodash***
-                // this.configMultiLevelObjects = _.merge(this.configMultiLevelObjects, newObj);
-                // this.configMultiLevelObjects = object.merge(this.configMultiLevelObjects, newObj);
                 /**
                  * original version that produced a multi-level object tree for parent items ONLY
                  */
                 this.configMultiLevelObjects = objects_2.deepMergeObj([this.configMultiLevelObjects, newObj]);
-                // send newObj value to tmosChildToObj
-                // const rrr = tmosChildToObj(name[2])
-                // *** try 1 below ***
-                // // const newObj2 = newObj;
-                // for (const [key, value] of Object.entries(newObj)) {
-                //     // const crawldObj = tmosChildToObj(value);
-                //     const y = value;
-                //     // const btb = crawldObj;
-                //     // merge crawldObj back into this.configMultiLevelObjects.ltm.virtual
-                // }
                 /**
                  * if we go down the path of turning the entire config into a json tree
                  *  (which seems like the most flexible path), then we will need a function to
@@ -153,10 +140,10 @@ class BigipConfig {
         while (pathToConvert) {
             // if (pathToConvert) {
             // search values for line return
-            pathToConvert = objects_1.getPathOfValue('\n', this.configFullObject);
-            const body = objects_1.deepGet(pathToConvert, this.configFullObject);
+            pathToConvert = objects_1.getPathOfValue('\n', this.configFullObject.ltm.virtual);
+            const body = objects_1.deepGet(pathToConvert, this.configFullObject.ltm.virtual);
             const childBodyAsObj = objects_1.tmosChildToObj(body);
-            objects_1.setNestedKey(this.configFullObject, pathToConvert, childBodyAsObj);
+            objects_1.setNestedKey(this.configFullObject.ltm.virtual, pathToConvert, childBodyAsObj);
             // const obj = {a: {b:{c:'initial'}}}
             // const uuu = setNestedKey(obj, ['a', 'b', 'c'], 'changed-value')
             // const rrr = uuu;

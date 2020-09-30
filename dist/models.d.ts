@@ -6,8 +6,8 @@ export declare type BigipObj = {
  */
 export declare type BigipConfObj = {
     ltm?: {
-        virtual?: string;
-        pool?: string;
+        virtual?: unknown;
+        pool?: unknown;
         node?: unknown;
         monitor?: unknown;
         profile?: unknown;

@@ -16,6 +16,12 @@ export declare function deepMergeObj(objs: unknown[]): unknown;
  * @param obj used to iterate
  */
 export declare function tmosChildToObj(cfg: string, obj?: any): any;
+/**
+ * this will overwrite existing data
+ * @param obj
+ * @param path
+ * @param value
+ */
 export declare function setNestedKey(obj: any, path: string[], value: any): any;
 /**
  * deep search object for value using regex
@@ -23,7 +29,7 @@ export declare function setNestedKey(obj: any, path: string[], value: any): any;
  * @param obj to search
  * @param return array of path steps
  */
-export declare function getPathOfValue(vtf: string, obj: any): any;
+export declare function getPathOfValue(vtf: string | RegExp, obj: any): any;
 /**
  * gets value by deep path in array form
  *  (ex. ['ltm','monitor','http'])
@@ -36,6 +42,8 @@ export declare function getPathOfValue(vtf: string, obj: any): any;
 export declare function deepGet(path: string[], obj: any): any;
 /**
  * searches object for key
+ *
+ * *** todo: update path to be array, not dot(.) notation
  *
  * @param obj to search
  * @param key to find
