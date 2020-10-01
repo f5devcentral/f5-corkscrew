@@ -7,6 +7,9 @@
   "homepage": "https://github.com/f5devcentral/project-corkscrew#readme",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "corkscrew": "./dist/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/f5devcentral/project-corkscrew.git"
@@ -14,8 +17,9 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'src/tests/**/*.{js,ts,tsx}'",
     "test": "nyc mocha -r ts-node/register \"tests/**/*.test.ts\"",
+    "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "build-code-docs": "typedoc --out code_docs src",
-    "build-package": "tsc"
+    "build-package": "tsc -p ."
   },
   "devDependencies": {
     "@types/assert": "^1.5.2",
@@ -59,7 +63,10 @@
   },
   "dependencies": {
     "@types/deepmerge": "^2.2.0",
+    "@types/yargs": "^15.0.7",
     "balanced-match": "^1.0.0",
-    "deepmerge": "^4.2.2"
+    "deepmerge": "^4.2.2",
+    "uuid": "^8.3.0",
+    "yargs": "^16.0.3"
   }
 }
