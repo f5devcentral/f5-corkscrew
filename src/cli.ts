@@ -2,8 +2,10 @@
 
 'use strict';
 
+// import { fstat } from 'fs';
 // import { argv } from 'process';
 import yargs from 'yargs';
+import * as fs from 'fs';
 
 // yargs
 // .command('explode', 'explode bigip.conf to apps', {
@@ -15,8 +17,21 @@ import yargs from 'yargs';
 //     }
 // })
 
-function explode(text: unknown) {
-    console.log(text);
+function explode(filePath: string) {
+    console.log('incoming param (file):', filePath);
+    try {
+        const x = fs.readFileSync(filePath, 'utf-8');
+        const y = x;
+        console.log(y);
+    } catch (e) {
+        console.log(e);
+    }
+    // fs.readFileSync(filePath, 'utf8', function (err, data) {
+    //     if (err) {
+    //       return console.log(err);
+    //     }
+    //     console.log(data);
+    //   });
 }
 
 yargs

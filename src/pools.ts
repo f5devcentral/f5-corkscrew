@@ -79,6 +79,9 @@ export function poolsInRule (rule: string, existingPools?: string[]): string[] |
     /**
      * if a list of pools was provided as input, return only items contained in pool list
      * 
+     * This may not be necessary since tmos won't let you associate an irule that reference
+     *  a pool that doesn't exist.  You can create it, but not assign it to a virtual
+     * 
      */
     if(existingPools && newPools) {
         // existing pool list detected
