@@ -12,3 +12,5 @@ deployment_info.json
 .nyc_output/
 # Temp Files
 tmp_*
+# npm link for global cli command
+*AppDataRoamingnpm

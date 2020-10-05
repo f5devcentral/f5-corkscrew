@@ -2,10 +2,10 @@
 
 'use strict';
 
-// import { fstat } from 'fs';
-// import { argv } from 'process';
-import yargs from 'yargs';
+import bigipConfig from './ltm'
+import yargs, { Argv } from 'yargs';
 import * as fs from 'fs';
+import path from 'path';
 
 // yargs
 // .command('explode', 'explode bigip.conf to apps', {
@@ -17,21 +17,45 @@ import * as fs from 'fs';
 //     }
 // })
 
-function explode(filePath: string) {
+function explode(filePath: string | any) {
     console.log('incoming param (file):', filePath);
-    try {
-        const x = fs.readFileSync(filePath, 'utf-8');
-        const y = x;
-        console.log(y);
-    } catch (e) {
-        console.log(e);
+
+    // part input to usable pieces
+    filePath = path.parse(filePath);
+    // console.log(filePath);
+
+    /**
+     * logic check for future inputs
+     */
+    if (filePath.ext === '.conf') {
+
+        console.log('got .conf file - proceeding')
+
+    } else if (filePath.ext === '.ucs') {
+        
+        return console.log('got a ucs archive - not supported yet')
+
+    } else if (filePath.ext === '.qkview') {
+        
+        return console.log('got a qkview - not supported yet')
+
+    } else {
+        
+        return console.error(`file type of ${filePath.ext}, not supported (only .conf at this time)`)
+
     }
-    // fs.readFileSync(filePath, 'utf8', function (err, data) {
-    //     if (err) {
-    //       return console.log(err);
-    //     }
-    //     console.log(data);
-    //   });
+    
+
+    try {
+        // try to read file contents
+        const x = fs.readFileSync(path.join(filePath.dir, filePath.base), 'utf-8');
+        // try to parse file as bigip.conf
+        const bConfig = new bigipConfig(x);
+        // return extracted apps
+        return console.log(bConfig.apps());
+    } catch (e) {
+        return console.log(e.message);
+    }
 }
 
 yargs
@@ -40,7 +64,10 @@ yargs
     .positional('file', {
         describe: 'bigip.conf to explode'
     });
-}, argv => explode(argv.file))
+}, (argv: any) => {
+    console.log(argv.file);
+    explode(argv.file)
+})
 // .command()
 .demandCommand(1, 'A command is required')
 .wrap(120)

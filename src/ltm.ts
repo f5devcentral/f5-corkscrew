@@ -18,7 +18,7 @@ import { deepMergeObj } from './utils/objects'
  * Class to consume bigip.conf
  * 
  */
-export class BigipConfig {
+export default class BigipConfig {
     public bigipConf: string;
     /**
      * simple array of each bigip.conf parent object

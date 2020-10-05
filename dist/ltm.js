@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BigipConfig = void 0;
 // import * as _ from 'lodash';
 // import object from 'lodash/fp/object';
 const regex_1 = require("./regex");
@@ -452,7 +451,7 @@ class BigipConfig {
         return configList.join('');
     }
 }
-exports.BigipConfig = BigipConfig;
+exports.default = BigipConfig;
 /**
  * builds multi-level nested objects with data
  * https://stackoverflow.com/questions/5484673/javascript-how-to-dynamically-create-nested-objects-using-object-names-given-by

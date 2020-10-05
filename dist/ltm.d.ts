@@ -3,7 +3,7 @@ import { BigipConfObj, BigipObj } from './models';
  * Class to consume bigip.conf
  *
  */
-export declare class BigipConfig {
+export default class BigipConfig {
     bigipConf: string;
     /**
      * simple array of each bigip.conf parent object
