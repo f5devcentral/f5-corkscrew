@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use strict';
 
@@ -18,7 +19,7 @@ import path from 'path';
 // })
 
 function explode(filePath: string | any) {
-    console.log('incoming param (file):', filePath);
+    // console.log('incoming param (file):', filePath);
 
     // part input to usable pieces
     filePath = path.parse(filePath);
@@ -29,7 +30,7 @@ function explode(filePath: string | any) {
      */
     if (filePath.ext === '.conf') {
 
-        console.log('got .conf file - proceeding')
+        // console.log('got .conf file - proceeding')
 
     } else if (filePath.ext === '.ucs') {
         
@@ -52,7 +53,8 @@ function explode(filePath: string | any) {
         // try to parse file as bigip.conf
         const bConfig = new bigipConfig(x);
         // return extracted apps
-        return console.log(bConfig.apps());
+        const v = JSON.stringify(bConfig.explode());
+        return console.log(v);
     } catch (e) {
         return console.log(e.message);
     }
@@ -65,7 +67,7 @@ yargs
         describe: 'bigip.conf to explode'
     });
 }, (argv: any) => {
-    console.log(argv.file);
+    // console.log(argv.file);
     explode(argv.file)
 })
 // .command()

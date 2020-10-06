@@ -29,11 +29,37 @@ export default class BigipConfig {
     configFullObject: BigipConfObj;
     tmosVersion: string;
     private rx;
+    parseTime: number;
+    appTime: number;
+    private objCount;
+    private stats;
     /**
      *
      * @param config full bigip.conf as string
      */
     constructor(config: string);
+    /**
+     * returns all details from processing
+     *
+     * -
+     */
+    explode(): {
+        id: string;
+        dateTime: Date;
+        config: {
+            sources: string[];
+            apps: any[];
+        };
+        stats: {
+            parseTime: number;
+            appTime: number;
+            packTime: number;
+            totalProcessingTime: number;
+            sourceTmosVersion: string;
+            objCount: number;
+        };
+        logs: string;
+    };
     /**
      * Get processing logs
      */
@@ -43,6 +69,9 @@ export default class BigipConfig {
      * @param config bigip.conf as string
      */
     private parse;
+    /**
+     * **DEV**  working to fully jsonify the entire config
+     */
     private parse2;
     /**
      * extracts individual apps

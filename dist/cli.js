@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use strict';
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37,7 +38,7 @@ const path_1 = __importDefault(require("path"));
 //     }
 // })
 function explode(filePath) {
-    console.log('incoming param (file):', filePath);
+    // console.log('incoming param (file):', filePath);
     // part input to usable pieces
     filePath = path_1.default.parse(filePath);
     // console.log(filePath);
@@ -45,7 +46,7 @@ function explode(filePath) {
      * logic check for future inputs
      */
     if (filePath.ext === '.conf') {
-        console.log('got .conf file - proceeding');
+        // console.log('got .conf file - proceeding')
     }
     else if (filePath.ext === '.ucs') {
         return console.log('got a ucs archive - not supported yet');
@@ -62,7 +63,8 @@ function explode(filePath) {
         // try to parse file as bigip.conf
         const bConfig = new ltm_1.default(x);
         // return extracted apps
-        return console.log(bConfig.apps());
+        const v = JSON.stringify(bConfig.explode());
+        return console.log(v);
     }
     catch (e) {
         return console.log(e.message);
@@ -75,7 +77,7 @@ yargs_1.default
         describe: 'bigip.conf to explode'
     });
 }, (argv) => {
-    console.log(argv.file);
+    // console.log(argv.file);
     explode(argv.file);
 })
     // .command()

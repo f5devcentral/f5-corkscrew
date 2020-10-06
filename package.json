@@ -2,7 +2,7 @@
   "name": "project-corkscrew",
   "description": "extracting tmos config",
   "author": "",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "homepage": "https://github.com/f5devcentral/project-corkscrew#readme",
   "main": "dist/index.js",
@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "@types/deepmerge": "^2.2.0",
+    "@types/uuid": "^8.3.0",
     "@types/yargs": "^15.0.7",
     "balanced-match": "^1.0.0",
     "deepmerge": "^4.2.2",

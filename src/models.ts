@@ -6,6 +6,32 @@ export type BigipObj = {
     [key: string]: unknown
 }
 
+
+/**
+ * stats object type for object counts
+ */
+export type Stats = {
+    parseTime?: number,
+    appTime?: number,
+    packTime?: number,
+    sourceTmosVersion?: string,
+    objectCount?: number,
+    objects?: {
+        objectCount?: number,
+        virtuals?: number,
+        profiles?: number,
+        pools?: number,
+        irules?: number,
+        monitors?: number,
+        nodes?: number,
+        ltps?: number,
+        snats?: number,
+        apmProfiles?: number,
+        apmPolicies?: number,
+        asmPolicies?: number
+    }
+}
+
 /**
  * object type that represends bigip.conf as multi-level json tree
  */
@@ -43,9 +69,9 @@ export type AppMap = {
 }
 
 
-// type TmosApp = {
-//     name: string,
-//     config: string,
-//     map?: string
-// }
+export type TmosApp = {
+    name: string,
+    config: string,
+    map?: string
+}
 

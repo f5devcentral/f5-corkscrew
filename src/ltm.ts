@@ -7,11 +7,13 @@
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
 import { poolsInRule } from './pools';
+
 import { deepGet, getPathOfValue, pathValueFromKey, setNestedKey, tmosChildToObj } from './utils/objects'
-import { AppMap, BigipConfObj, BigipObj } from './models'
+import { AppMap, BigipConfObj, BigipObj, Stats } from './models'
 
 import { deepMergeObj } from './utils/objects'
 
+import { v4 as uuidv4 } from 'uuid';
 
 
 /**
@@ -44,21 +46,61 @@ export default class BigipConfig {
     public configFullObject: BigipConfObj = {};
     public tmosVersion: string;
     private rx: TmosRegExTree;
+    public parseTime: number;
+    public appTime: number;
+    private objCount: number;
+    private stats: Stats | undefined;
 
     /**
      * 
      * @param config full bigip.conf as string
      */
     constructor(config: string) {
-        config = standardizeLineReturns(config);    
+
+        config = standardizeLineReturns(config);
         this.bigipConf = config; // assign orginal config for later use
         const rex = new RegExTree();  // instantiate regex tree
         this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg);  // get tmos version
-        // this.rx = rex.get();  // get regex tree
-        this.rx = rex.get(this.tmosVersion)
-        this.parse(config);
-        // this.parse2();
         logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
+        
+        // assign regex tree for particular version
+        this.rx = rex.get(this.tmosVersion)
+        // this.parse(config);
+
+    }
+
+    /**
+     * returns all details from processing
+     * 
+     * - 
+     */
+    public explode () {
+        this.parse(this.bigipConf); // parse config files
+        const apps = this.apps();   // extract apps
+        const startTime = process.hrtime.bigint();  // start pack timer
+        const id = uuidv4();        // generat uuid
+        const dateTime = new Date();    // generate date/time
+        const logs = this.logs();   // get all the processing logs
+        // capture pack time
+        const packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+
+        return {
+            id,
+            dateTime,
+            config: {
+                sources: [ 'bigip.conf', 'bigip_base.conf', 'partition?'],
+                apps
+            },
+            stats: {
+                parseTime: this.parseTime,
+                appTime: this.appTime,
+                packTime,
+                totalProcessingTime: this.parseTime + this.appTime + packTime,
+                sourceTmosVersion: this.tmosVersion,
+                objCount: this.objCount
+            },
+            logs
+        }
     }
 
     /**
@@ -75,86 +117,49 @@ export default class BigipConfig {
      * @param config bigip.conf as string
      */
     private parse(config: string) {
-
+        const startTime = process.hrtime.bigint();
+        logger.debug('Begining to parse configs')
         // parse the major config pieces
         this.configAsSingleLevelArray = [...config.match(this.rx.parentObjects)];
+        // const configAsSingleLevelArray = [...config.match(this.rx.parentObjects)];
+        logger.debug('configAsSingleLevelArray complete')
 
+        // lines in config?
+        this.objCount = this.configAsSingleLevelArray.length
+        this.stats = nestedObjValue(['objectCount'], this.objCount);
+        logger.debug(`detected ${this.stats.objectCount} parent objects`)
+
+        
+        logger.debug(`creating more detailed arrays/objects for deeper inspection`)
         this.configAsSingleLevelArray.forEach(el => {
             const name = el.match(this.rx.parentNameValue);
 
             if (name && name.length === 3) {
-                this.configSingleLevelObjects[name[1]] = name[2];
 
-                this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]});
+                // this.configSingleLevelObjects[name[1]] = name[2];
 
-                // ###################################################
-                /**
-                 * the folling is used to json-ify the tmos config it is the main reason for
-                 *  lodash, which takes the project size from <100k (with no deps) to >80MB
-                 *  with a ton of dependencies
-                 *      was able to just import the object function, we'll see how that works
-                 * https://www.blazemeter.com/blog/the-correct-way-to-import-lodash-libraries-a-benchmark
-                 */
+                // this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]});
+
                 // split extracted name element by spaces
                 const names = name[1].split(' ');
                 // create new nested objects with each of the names, assigning value on inner-most
                 const newObj = nestedObjValue(names, name[2]);
 
-
                 /**
                  * original version that produced a multi-level object tree for parent items ONLY
                  */
                 this.configMultiLevelObjects = deepMergeObj([this.configMultiLevelObjects, newObj]);
-
-
-                /**
-                 * if we go down the path of turning the entire config into a json tree 
-                 *  (which seems like the most flexible path), then we will need a function to
-                 *  search for "key" (object(profile) name), and return an array of matches, including
-                 *  the path to object, and it's value.
-                 * 
-                 * This is needed since, for example, monitors are referenced on the pool only by name,
-                 *  but thier object has a subtype definition like "http" or "tcp" or "https". So,
-                 *  there is a need to do a recursive multi level search starting at "ltm monitor" or ltm.monitor
-                 *  and search within the objects there for the monitor name, the returned path will tell
-                 *  the monitor type.  We will need to verify object types since different type objects
-                 *  can have the same name, but vs refence doesn't tell us type.
-                 * 
-                 * Should be able to use an example function from the article below and modify as needed
-                 * 
-                 * https://stackoverflow.com/questions/43636000/javascript-find-path-to-object-reference-in-nested-object
-                 */
-
-                /**
-                 * todo:  look into exploding each config piece to json-ify the entire config...
-                 *  - this seems like it could be the same process used for parent objects
-                 *      - extract each object
-                 *      - split object names on spaces for nested object names
-                 *      - assign values as needed
-                 *      - items with out objects, get key: value assign at that object level
-                 */
-                // ######################################################
             }
-
-            /**
-             * second try to fully jsonify config
-             *  this method will be a bit slower, but should be easier to code
-             * 
-             * So, instead of crawling the tree from top to bottom, iterating each child,
-             *  converting from text to json, creating the entire tree in one pass,
-             *  which I consider the true iterative approach.
-             * 
-             * This approach will take the same tree we had before (step 1) and search it
-             *  for string values with line returns, probably any white space,
-             *  when found, parse the value and try to convert it to json
-             *  - use the find value return path function
-             *  - convert
-             *  - repeat
-             */
         });
+
+        this.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000; // convert microseconds to miliseconds
     }
 
+    /**
+     * **DEV**  working to fully jsonify the entire config
+     */
     private parse2() {
+
 
         // copy over our base tree so we don't mess with existing functionality
         this.configFullObject = this.configMultiLevelObjects;
@@ -187,7 +192,7 @@ export default class BigipConfig {
             // const uuu = setNestedKey(obj, ['a', 'b', 'c'], 'changed-value')
             // const rrr = uuu;
 
-            const ddd = body;
+            // const ddd = body;
 
         }
         
@@ -203,6 +208,9 @@ export default class BigipConfig {
          * loop through list of viruals
          *  build config for each
          */
+
+        const startTime = process.hrtime.bigint();
+
         // eslint-disable-next-line prefer-const
         let apps = [];
 
@@ -213,9 +221,12 @@ export default class BigipConfig {
         const i = this.configMultiLevelObjects.ltm.virtual;
         for (const [key, value] of Object.entries(i)) {
             const vsConfig = this.getVsConfig(key, value);
-            apps.push({name: key, config: vsConfig});
+            const x = JSON.stringify({name: key, config: vsConfig});
+            const y = JSON.parse(x);
+            apps.push(y);
         }
 
+        this.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
         return apps;
     }
     
