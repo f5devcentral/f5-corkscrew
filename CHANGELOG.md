@@ -10,11 +10,31 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [0.1.1] - (9-24-2020)
+## [0.2.0] - (10-8-2020)
+
+### Added
+- Processing stats
+    - config parsing time (how long it took to break down the config files)
+    - app extraction time (how long it took to gather all app configurations)
+    - explode function package time (how long it took to package everything up)
+    - config file line count
+    - config file byte count
+    - total parent object count
+    - ltm object counts for (vs, pool, profile, policy, persistence, node, monitor, irule, and snatPools)
+- support for fqdn pool members and nodes
+- Option to only parse configs, get list of applications and choose which apps to get configuration for
 
 ### Modified
-- adjusted "getVsConfig" function to include "ltm virtual" at the beginning of each virtual server name
-    - this completes the object and show allow for apps to be import to other f5s
+- vsConfig app parsing logic to not fail if object is not found (reduces chances of catastrophic processing failure)
+- reworked ininital config parsing logic and removed unnecessary processin and objects
+- reworked app extrction process to utilize more efficient methods 
+    - now uses json tree
+    - drastically reduced app extraction time
+- removed full application extraction from initial parsing so they can be called independantly
+    - This is for big configs where it can take a while to extract all applications
+    - The user can pick which apps to get extracted applications for
+
+> NOTE:  currently able to fully process a 6MB config file with almost 300vs, 223k lines, and over 13k tmos objects in about 20 seconds
 
 ### Pending/In-Progress...
 - finish regular pool member mapping
@@ -22,6 +42,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
     - add support for other virtual servers?
 - implement pool discovery/mapping functions for LTPs
     - add support for virtual servers and nodes
+
+---
+
+## [0.1.1] - (9-24-2020)
+
+### Modified
+- adjusted "getVsConfig" function to include "ltm virtual" at the beginning of each virtual server name
+    - this completes the object and show allow for apps to be import to other f5s
 
 ---
 

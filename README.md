@@ -10,6 +10,8 @@ The intention for this project/rpm is to provide a common tool to extract tmos a
 
 The intent is to change the project name to "f5-corkscrew" as it matures and potentially gets released to NPM.
 
+> NOTE:  As of 10.8.2020 this project is able to fully process a 6MB config file with almost 300vs, 223k lines, and over 13k tmos objects in about 20 seconds.  If you are trying this in the early stages, remember to give bigger configs time to process.
+
 check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 
 ### Configuration objects supported in the parsing
@@ -112,7 +114,7 @@ The regex class provides a way to structure the different regexs needed to parse
 
 <p>&nbsp;</p>
 
-### a fully jsonified config
+### A fully `jsonified` config
 
 I have the idea that the TMOS config loosely represents a json structure.  The parent tmos objects look like names json objects and everything else can end up being a regular object attribute as a "key": "value" pair.
 
@@ -160,22 +162,6 @@ The top of the main class also describes some of the different ways I have the t
 
 ```js
     /**
-     * simple array of each bigip.conf parent object
-     * (ex. "[ltm node /Common/192.168.1.20 { address 192.168.1.20 }, ...]")
-     */
-    public configAsSingleLevelArray: string[];
-    /**
-     * object form of bigip.conf
-     *  key = full object name, value = body
-     * *** this one doesn't seem to be useful at all...
-     */
-    public configSingleLevelObjects: bigipObj = {};
-    /**
-     *  tmos configuration as a single level object
-     * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
-     */
-    public configArrayOfSingleLevelObjects = [];
-    /**
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
      */
@@ -188,9 +174,11 @@ The top of the main class also describes some of the different ways I have the t
 
 <p>&nbsp;</p>
 
-## test file output
+## Test file output
 
 This includes most of the different pieces all in a single text file for example.  This is way easier to read all the text output without being serialized for JSON structure.
+
+Updated as of 10.8.2020
 
 > latest test output file [devCloud01_conversionOutput.txt](./devCloud01_conversionOutput.txt)
 
@@ -237,6 +225,8 @@ theoretical full json output should produce the following in an api form
 }
 ```
 
+
+
 <p>&nbsp;</p>
 
 ---
@@ -244,7 +234,8 @@ theoretical full json output should produce the following in an api form
 <p>&nbsp;</p>
 
 ## Getting Started
-Provide a quick example of how to use your code.  This should provide the user with a launch point to quickly see what the project can offer them. 
+
+Please see Install and Usage below
 
 <p>&nbsp;</p>
 
@@ -253,7 +244,44 @@ Provide a quick example of how to use your code.  This should provide the user w
 <p>&nbsp;</p>
 
 ## Installation
-Outline the requirements and steps to install this project. 
+
+Aside from trying to incorporat this rpm into another nodejs project (not recommneded in this early stage), there is the command line utility.
+
+Corkscrew comes with a simple command line utility.  This utility takes in a bigip.conf and produces the output of the "explode" function, which pretty much runs through all current functionality.  This output is in json formate and is intented to be parsed with tools like "jq"
+
+### To get the command line utility
+
+1. Make sure you have node installed with NPM
+
+    ```bash
+    ted@thanos:~$ node --version && npm --version
+    v10.19.0
+    6.13.4
+    ```
+
+2. Run the following command to download the rpm
+
+        `npm install -g https://github.com/f5devcentral/project-corkscrew.git`
+
+3. Run `corkscrew` to confirm installation status
+
+    ```bash
+    ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ node --version
+    v10.19.0
+    ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ npm --version
+    6.13.4
+    ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ corkscrew
+    cli.js <command>
+
+    Commands:
+    cli.js explode <file>  explode bigip.conf to apps
+
+    Options:
+    --help     Show help                                                                                         [boolean]
+    --version  Show version number                                                                               [boolean]
+
+    A command is required
+    ```
 
 <p>&nbsp;</p>
 
@@ -262,7 +290,95 @@ Outline the requirements and steps to install this project.
 <p>&nbsp;</p>
 
 ## Usage
-Outline how the user can use your project and the various features the project offers. 
+
+The npm install should link the corkscrew cli scrit with global search paths, so it should be able to be called from anywhere node/npm knows about
+
+### Basic -> Run corkscrew command to process bigip.conf
+
+example:  `corkscrew explode <./path/to/bigip.conf>`
+
+> NOTE:  It is highly recommended to utilize a tool like "jq" to be able to parse the output as needed
+
+> NOTE:  It is also recommended to pipe the ouput of the explode command to a file so parsing/processing happens once.
+
+### Recommendd -> corkscrew output to file and processed with jq
+
+https://shapeshed.com/jq-json/
+
+Execute corkscrew and pipe the results to a file 
+
+```bash
+ted@thanos:/tests$ echo demo.json >> demo.json
+```
+
+How to list app names (vs)
+
+```bash
+ted@thanos:/tests$ echo demo.json | jq .config.apps[].name
+"/Common/app1_t80_vs"
+"/Common/app1_t443_vs"
+"/Common/app2_t80_vs"
+"/Common/app2_t443_vs"
+"/Common/app3_t8443_vs"
+"/Common/app4_t80_vs"
+"/Common/forwarder_net_0.0.0.0"
+```
+
+Get app by array number
+
+```bash
+ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ cat demo.json | jq .config.apps[2]
+{
+  "name": "/Common/app2_t80_vs",
+  "config": "ltm virtual /Common/app2_t80_vs {\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.2.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n}\n"
+}
+```
+
+How to list keys of the parent object
+
+```bash
+ted@thanos:/tests$ echo demo.json | jq keys
+[
+  "config",
+  "dateTime",
+  "id",
+  "logs",
+  "stats"
+]
+```
+
+How to show the details of a nested object
+
+```bash
+ted@thanos:/tests$ echo demo.json | jq .stats
+{
+  "configBytes": 57711,
+  "lineCount": 1125,
+  "objectCount": 153,
+  "objects": {
+    "virtuals": 7,
+    "profiles": 6,
+    "policies": 2,
+    "pools": 7,
+    "irules": 5,
+    "monitors": 6,
+    "nodes": 10,
+    "snatPools": 1
+  },
+  "parseTime": 5.4783,
+  "appTime": 6.7522,
+  "packTime": 1.39
+}
+```
+
+Examples on how to fetch individual json object details
+```bash
+ted@thanos:/tests$ echo demo.json | jq .id
+"3a07cc36-781c-4183-8fb8-4858a5bab6a7"
+ted@thanos:/tests$ echo demo.json | jq .dateTime
+"2020-10-08T18:43:29.732Z"
+```
+
 
 <p>&nbsp;</p>
 
@@ -271,7 +387,14 @@ Outline how the user can use your project and the various features the project o
 <p>&nbsp;</p>
 
 ## Development
-Outline any requirements to setup a development environment if someone would like to contribute.  You may also link to another file for this information. 
+
+1. Fork the repo to your own account
+2. Create a branch to work on desired feature/fix
+3. submit pull request back to original repo pointing back to your updated branch
+
+At a minimum JSDoc practices should be followed to document code and function.  Heavey comments will really help the integration/merge process.
+
+Please include some sort of tests for any new features or functionality.
 
 <p>&nbsp;</p>
 
@@ -280,6 +403,7 @@ Outline any requirements to setup a development environment if someone would lik
 <p>&nbsp;</p>
 
 ## Support
+
 For support, please open a GitHub issue.  Note, the code in this repository is community supported and is not supported by F5 Networks.  For a complete list of supported projects please reference [SUPPORT.md](support.md).
 
 <p>&nbsp;</p>
