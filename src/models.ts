@@ -20,6 +20,7 @@ export type Stats = {
         objectCount?: number,
         virtuals?: number,
         profiles?: number,
+        policies?: number,
         pools?: number,
         irules?: number,
         monitors?: number,
@@ -42,8 +43,10 @@ export type BigipConfObj = {
         node?: unknown;
         monitor?: unknown;
         profile?: unknown;
+        policy?: unknown;
         rule?: unknown;
         persistence?: unknown;
+        snatpool?: unknown;
     },
     apm?: unknown;
     net?: unknown;
@@ -61,7 +64,7 @@ export type AppMap = {
         virtuals?: string[],
         nodes?: string[]
     },
-    ltPolicy?: {
+    policy?: {
         pools?: string[],
         virtuals?: string[],
         nodes?: string[]

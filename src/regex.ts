@@ -53,7 +53,7 @@ export class RegExTree {
      * vs detail regexs
      */
     //following regex will get pool, but not snat pool from vs config
-    private poolRegex = /(?<!source-address-translation {\n\s+)pool (.+?)\n/;
+    private poolRegex = /(?<!source-address-translation {\n\s+)    pool (.+?)\n/;
     private profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
     private rulesRegex = /rules {([\s\S]+?)\n    }\n/;
     private snatRegex = /source-address-translation {([\s\S]+?)\n    }\n/;

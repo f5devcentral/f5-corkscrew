@@ -23,6 +23,38 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Mocha monster config tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/monster_config.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha tmos config parsgin tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/tmosParser.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Mocha All",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [

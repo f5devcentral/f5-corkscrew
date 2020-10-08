@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 'use strict';
 
@@ -61,16 +62,11 @@ describe('Testing json object manipulation functions', function() {
                     'rule3',
                   ],
                 },
-              },
-              node: {
-                '/Common/10.10.10.1': {
-                  address: '10.10.10.1',
-                },
-              },
-            },
+              }
+            }
           }
 
-        const finalObj = deepMergeObj([obj1, obj2, obj3])
+        const finalObj = deepMergeObj(obj1, obj2)
         assert.deepStrictEqual(expected, finalObj);
     })
 

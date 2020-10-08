@@ -15,14 +15,25 @@ type RetObj = {
     value?: string
 }
 
+/**
+ * builds multi-level nested objects with data
+ * https://stackoverflow.com/questions/5484673/javascript-how-to-dynamically-create-nested-objects-using-object-names-given-by
+ * @param fields array of nested object params
+ * @param value value of the inner most object param value
+ */
+export const nestedObjValue = (fields, value) => {
+    const reducer = (acc, item, index, arr) => ({ [item]: index + 1 < arr.length ? acc : value });
+    return fields.reduceRight(reducer, {});
+};
+
 
 /**
  * provides deep merge of multi-level objects
  *  subsequent items in list overwrite conflicting entries
  * @param objs list of objects to merge
  */
-export function deepMergeObj(objs: unknown[]) {
-    return deepmerge.all(objs)
+export function deepMergeObj(target: unknown, source: unknown, ) {
+    return deepmerge(target, source, {clone: false})
 }
 
 /**
@@ -183,6 +194,39 @@ export function tmosChildToObj (cfg: string, obj?) {
         logger.error('parsing child object original config:', startingCfg);
     }
     return obj;
+}
+
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+  
+/**
+ * Deep merge two objects.
+ * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+ * @param target
+ * @param ...sources
+ */
+export function simpleMergeDeep(target, ...sources) {
+if (!sources.length) return target;
+const source = sources.shift();
+
+if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+    if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        simpleMergeDeep(target[key], source[key]);
+    } else {
+        Object.assign(target, { [key]: source[key] });
+    }
+    }
+}
+
+return simpleMergeDeep(target, ...sources);
 }
 
 
