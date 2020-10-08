@@ -11,8 +11,8 @@ export declare type Stats = {
     packTime?: number;
     sourceTmosVersion?: string;
     objectCount?: number;
+    lineCount?: number;
     objects?: {
-        objectCount?: number;
         virtuals?: number;
         profiles?: number;
         policies?: number;

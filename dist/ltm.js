@@ -5,13 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// import * as _ from 'lodash';
-// import object from 'lodash/fp/object';
 const regex_1 = require("./regex");
 const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
 const objects_2 = require("./utils/objects");
 const uuid_1 = require("uuid");
+const tmosParser_1 = require("./tmosParser");
+const objCounter_1 = require("./objCounter");
 /**
  * Class to consume bigip.conf
  *
@@ -31,6 +31,7 @@ class BigipConfig {
         this.stats = {};
         config = standardizeLineReturns(config);
         this.stats.configBytes = Buffer.byteLength(config, 'utf-8');
+        this.stats.lineCount = tmosParser_1.countLines(config);
         this.bigipConf = config; // assign orginal config for later use
         const rex = new regex_1.RegExTree(); // instantiate regex tree
         this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg); // get tmos version
@@ -67,8 +68,9 @@ class BigipConfig {
      * -
      */
     explode() {
+        var _a;
         // if config has not been parsed yet...
-        if (!this.configMultiLevelObjects.ltm.virtual) {
+        if (!((_a = this.configMultiLevelObjects.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
             this.parse(); // parse config files
         }
         const apps = this.apps(); // extract apps
@@ -77,7 +79,7 @@ class BigipConfig {
         const dateTime = new Date(); // generate date/time
         const logs = this.logs(); // get all the processing logs
         // capture pack time
-        const packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
         return {
             id,
             dateTime,
@@ -85,15 +87,7 @@ class BigipConfig {
                 sources: ['bigip.conf', 'bigip_base.conf', 'partition?'],
                 apps
             },
-            stats: {
-                configBytes: this.stats.configBytes,
-                parseTime: this.stats.parseTime,
-                appTime: this.stats.appTime,
-                packTime,
-                totalProcessingTime: this.stats.parseTime + this.stats.appTime + packTime,
-                sourceTmosVersion: this.tmosVersion,
-                objCount: this.stats.objectCount
-            },
+            stats: this.stats,
             logs
         };
     }
@@ -134,6 +128,8 @@ class BigipConfig {
                 this.configMultiLevelObjects = objects_2.deepMergeObj(this.configMultiLevelObjects, newObj);
             }
         });
+        // get ltm object counts
+        this.stats.objects = objCounter_1.countObjects(this.configMultiLevelObjects);
         this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000; // convert microseconds to miliseconds
         /**
          * update function to input config
@@ -220,7 +216,7 @@ class BigipConfig {
         const profiles = vsConfig.match(rx.profiles.obj);
         const rules = vsConfig.match(rx.rules.obj);
         const snat = vsConfig.match(rx.snat.obj);
-        const ltPolicies = vsConfig.match(rx.ltPolicies.obj);
+        const policies = vsConfig.match(rx.ltPolicies.obj);
         const persistence = vsConfig.match(rx.persist.obj);
         const fallBackPersist = vsConfig.match(rx.fbPersist);
         const destination = vsConfig.match(rx.destination);
@@ -253,10 +249,10 @@ class BigipConfig {
             fullConfig += this.digSnatConfig(snat[1]);
             logger_1.default.debug(`[${vsName}] found snat configuration`, snat[1]);
         }
-        if (ltPolicies && ltPolicies[1]) {
+        if (policies && policies[1]) {
             // add ltp destination mapping
-            fullConfig += this.digLtPolicyConfig(ltPolicies[1]);
-            logger_1.default.debug(`[${vsName}] found the following ltPolices`, ltPolicies[1]);
+            fullConfig += this.digLtPolicyConfig(policies[1]);
+            logger_1.default.debug(`[${vsName}] found the following policies`, policies[1]);
         }
         if (persistence && persistence[1]) {
             fullConfig += this.digPersistConfig(persistence[1]);
@@ -375,7 +371,7 @@ class BigipConfig {
                     logger_1.default.debug(`[${poolName}] references ${defaultMonitors} system default monitors, compare previous arrays for details`);
                 }
                 if (monitorNameConfigs) {
-                    config += monitorNameConfigs.join('');
+                    config += monitorNameConfigs.join('\n');
                 }
             }
         }
@@ -398,7 +394,7 @@ class BigipConfig {
         if (defaultProfiles) {
             logger_1.default.debug(`Found ${defaultProfiles} system default profiles, compare previous arrays for details`);
         }
-        return configList.join('');
+        return configList.join('\n');
     }
     /**
      *
@@ -421,7 +417,7 @@ class BigipConfig {
         if (defaultRules) {
             logger_1.default.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`);
         }
-        return ruleList.join('');
+        return ruleList.join('\n');
     }
     /**
      * loops through vs ltp list and returns full ltp configs
@@ -443,7 +439,7 @@ class BigipConfig {
                 logger_1.default.error(`Could not find ltPolicy named: ${name}`);
             }
         });
-        return configList.join('');
+        return configList.join('\n');
     }
 }
 exports.default = BigipConfig;

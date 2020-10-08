@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseTmosConfig = void 0;
+exports.countLines = exports.parseTmosConfig = void 0;
 const balanced_match_1 = __importDefault(require("balanced-match"));
 const objects_1 = require("./utils/objects");
 /**
@@ -97,4 +97,5 @@ exports.parseTmosConfig = parseTmosConfig;
 function countLines(config) {
     return config.split(/\r\n|\n/).length;
 }
+exports.countLines = countLines;
 //# sourceMappingURL=tmosParser.js.map

@@ -1,4 +1,4 @@
-import { BigipConfObj } from './models';
+import { BigipConfObj, Stats } from './models';
 /**
  * Class to consume bigip.conf
  *
@@ -35,15 +35,7 @@ export default class BigipConfig {
             sources: string[];
             apps: any[];
         };
-        stats: {
-            configBytes: number;
-            parseTime: number;
-            appTime: number;
-            packTime: number;
-            totalProcessingTime: number;
-            sourceTmosVersion: string;
-            objCount: number;
-        };
+        stats: Stats;
         logs: string;
     };
     /**

@@ -126,6 +126,6 @@ export function parseTmosConfig (config: string): ParseResp {
  *  - not sure how it handles line returns in health monitors and irules
  * @param config tmos config file
  */
-function countLines (config: string): number {
+export function countLines (config: string): number {
     return config.split(/\r\n|\n/).length;
 }

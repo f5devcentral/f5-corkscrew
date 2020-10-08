@@ -18,3 +18,9 @@ export declare type ParseResp = {
  * @param config tmos config as a string
  */
 export declare function parseTmosConfig(config: string): ParseResp;
+/**
+ * approximate number of lines in config
+ *  - not sure how it handles line returns in health monitors and irules
+ * @param config tmos config file
+ */
+export declare function countLines(config: string): number;
