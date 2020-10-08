@@ -1,26 +1,10 @@
-import { BigipConfObj, BigipObj } from './models';
+import { BigipConfObj } from './models';
 /**
  * Class to consume bigip.conf
  *
  */
 export default class BigipConfig {
     bigipConf: string;
-    /**
-     * simple array of each bigip.conf parent object
-     * (ex. "[ltm node /Common/192.168.1.20 { address 192.168.1.20 }, ...]")
-     */
-    configAsSingleLevelArray: string[];
-    /**
-     * object form of bigip.conf
-     *  key = full object name, value = body
-     * *** this one doesn't seem to be useful at all...
-     */
-    configSingleLevelObjects: BigipObj;
-    /**
-     *  tmos configuration as a single level object
-     * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
-     */
-    configArrayOfSingleLevelObjects: any[];
     /**
      * tmos config as nested json objects
      * - consolidated parant object keys like ltm/apm/sys/...
@@ -29,15 +13,16 @@ export default class BigipConfig {
     configFullObject: BigipConfObj;
     tmosVersion: string;
     private rx;
-    parseTime: number;
-    appTime: number;
-    private objCount;
     private stats;
     /**
      *
      * @param config full bigip.conf as string
      */
     constructor(config: string);
+    /**
+     * return list of applications
+     */
+    appList(): string[];
     /**
      * returns all details from processing
      *
@@ -51,6 +36,7 @@ export default class BigipConfig {
             apps: any[];
         };
         stats: {
+            configBytes: number;
             parseTime: number;
             appTime: number;
             packTime: number;
@@ -68,16 +54,17 @@ export default class BigipConfig {
      * parse bigip.conf into parent objects
      * @param config bigip.conf as string
      */
-    private parse;
+    parse(): number;
     /**
      * **DEV**  working to fully jsonify the entire config
      */
     private parse2;
     /**
-     * extracts individual apps
+     * extracts app(s)
+     * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
-    apps(): any[];
+    apps(app?: string): any[];
     /**
      * extract tmos config version from first line
      * ex.  #TMSH-VERSION: 15.1.0.4
@@ -89,7 +76,7 @@ export default class BigipConfig {
      * @param vsName virtual server name
      * @param vsConfig virtual server tmos config body
      */
-    private getVsConfig;
+    private digVsConfig;
     /**
      * analyzes vs snat config, returns full snat configuration if pool reference
      * @param snat vs snat reference as string

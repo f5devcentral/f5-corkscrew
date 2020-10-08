@@ -22,22 +22,6 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export default class BigipConfig {
     public bigipConf: string;
-    // /**
-    //  * simple array of each bigip.conf parent object
-    //  * (ex. "[ltm node /Common/192.168.1.20 { address 192.168.1.20 }, ...]")
-    //  */
-    // public configAsSingleLevelArray: string[];
-    // /**
-    //  * object form of bigip.conf
-    //  *  key = full object name, value = body
-    //  * *** this one doesn't seem to be useful at all...
-    //  */
-    // public configSingleLevelObjects: BigipObj = {};
-    // /**
-    //  *  tmos configuration as a single level object
-    //  * ex. [{name: 'parent object  name', config: 'parent config obj body'}]
-    //  */
-    // public configArrayOfSingleLevelObjects = [];
     /**
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
@@ -46,10 +30,7 @@ export default class BigipConfig {
     public configFullObject: BigipConfObj = {};
     public tmosVersion: string;
     private rx: TmosRegExTree;
-    public parseTime: number;
-    public appTime: number;
-    private objCount: number;
-    private stats: Stats | undefined;
+    private stats: Stats = {};
 
     /**
      * 
@@ -58,6 +39,7 @@ export default class BigipConfig {
     constructor(config: string) {
 
         config = standardizeLineReturns(config);
+        this.stats.configBytes = Buffer.byteLength(config, 'utf-8');
         this.bigipConf = config; // assign orginal config for later use
         const rex = new RegExTree();  // instantiate regex tree
         this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg);  // get tmos version
@@ -65,8 +47,6 @@ export default class BigipConfig {
         
         // assign regex tree for particular version
         this.rx = rex.get(this.tmosVersion)
-        // this.parse(config);
-        
     }
 
     /**
@@ -100,7 +80,12 @@ export default class BigipConfig {
      * - 
      */
     public explode () {
-        this.parse(); // parse config files
+
+        // if config has not been parsed yet...
+        if (!this.configMultiLevelObjects.ltm.virtual) {
+            this.parse(); // parse config files
+        }
+
         const apps = this.apps();   // extract apps
         const startTime = process.hrtime.bigint();  // start pack timer
         const id = uuidv4();        // generat uuid
@@ -117,12 +102,13 @@ export default class BigipConfig {
                 apps
             },
             stats: {
-                parseTime: this.parseTime,
-                appTime: this.appTime,
+                configBytes: this.stats.configBytes,
+                parseTime: this.stats.parseTime,
+                appTime: this.stats.appTime,
                 packTime,
-                totalProcessingTime: this.parseTime + this.appTime + packTime,
+                totalProcessingTime: this.stats.parseTime + this.stats.appTime + packTime,
                 sourceTmosVersion: this.tmosVersion,
-                objCount: this.objCount
+                objCount: this.stats.objectCount
             },
             logs
         }
@@ -150,8 +136,8 @@ export default class BigipConfig {
         logger.debug('configAsSingleLevelArray complete')
 
         // lines in config?
-        this.objCount = configAsSingleLevelArray.length
-        this.stats = nestedObjValue(['objectCount'], this.objCount);
+        this.stats.objectCount = configAsSingleLevelArray.length
+        // this.stats = nestedObjValue(['objectCount'], this.stats.objectCount);
         logger.debug(`detected ${this.stats.objectCount} parent objects`)
 
         
@@ -188,16 +174,8 @@ export default class BigipConfig {
      */
     private parse2() {
 
-
         // copy over our base tree so we don't mess with existing functionality
         this.configFullObject = this.configMultiLevelObjects;
-        // this.configFullObject = Object.assign(this.configFullObject, this.configMultiLevelObjects);
-
-        // const rrr = findPathOfValue('string-to-find', this.configFullObject.ltm.virtual);
-        // const uuu = getPathOfValue2('\n', this.configFullObject);
-        
-        // const testPath = 'apm.epsec.epsec-package./Common/epsec-1.0.0-892.0.iso';
-        // const testPath2 = ['apm','epsec','epsec-package','/Common/epsec-1.0.0-892.0.iso'];
         
         let pathToConvert = ['x']
         while(pathToConvert) {
@@ -215,51 +193,41 @@ export default class BigipConfig {
                 pathToConvert,
                 childBodyAsObj
             );
-
-            // const obj = {a: {b:{c:'initial'}}}
-            // const uuu = setNestedKey(obj, ['a', 'b', 'c'], 'changed-value')
-            // const rrr = uuu;
-
-            // const ddd = body;
-
         }
         
     }
 
 
     /**
-     * extracts individual apps
+     * extracts app(s)
+     * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
     public apps(app?: string) {
+
         /**
-         * loop through list of viruals
-         *  build config for each
+         * todo:  add support for app array to return multiple specific apps at same time.
          */
+
         const startTime = process.hrtime.bigint();
 
         if (app) {
             // extract single app config
-
             const value = this.configMultiLevelObjects.ltm.virtual[app]
 
             if (value) {
-                return [this.digVsConfig(app, value)];
-                // const v = vsConfig;
+                // dig config, then stop timmer, then return config...
+                const x = [this.digVsConfig(app, value)];
+                this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000
+                return x;
             }
 
-
-            // return [vsConfig];
         } else {
             // means we didn't get an app name, so try to dig all apps...
 
             // eslint-disable-next-line prefer-const
             let apps = [];
-    
-            // this.configArrayOfSingleLevelObjects
-    
-            // #################################################
-            // old method utilizing json tree - removed cause of lodash bloat
+
             const i = this.configMultiLevelObjects.ltm.virtual;
             for (const [key, value] of Object.entries(i)) {
                 const vsConfig = this.digVsConfig(key, value);
@@ -268,7 +236,7 @@ export default class BigipConfig {
                 apps.push(y);
             }
     
-            this.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+            this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
             return apps;
         }
     }
@@ -378,7 +346,7 @@ export default class BigipConfig {
         if (snat.includes('pool')) {
             const snatName = snat.match(this.rx.vs.snat.name);
             const x = pathValueFromKey(this.configMultiLevelObjects.ltm.snatpool, snatName[1])
-            config += `ltm snatpool ${x.key} {${x.value}}`;
+            config += `ltm snatpool ${x.key} {${x.value}}\n`;
         } else {
             // automap...
         }
@@ -395,7 +363,7 @@ export default class BigipConfig {
         let config = '';
         const x = pathValueFromKey(this.configMultiLevelObjects.ltm.persistence, fbPersist);
         if (x) {
-            config += `ltm persistence ${x.path} ${x.key} {${x.value}}`
+            config += `ltm persistence ${x.path} ${x.key} {${x.value}}\n`
         }
         return config;
     }
@@ -411,7 +379,9 @@ export default class BigipConfig {
         const persistName = persist.match(this.rx.vs.persist.name);
         if (persistName) {
             const x = pathValueFromKey(this.configMultiLevelObjects.ltm.persistence, persistName[1])
-            config += `ltm persistence ${x.path} ${x.key} {${x.value}}`
+            if (x) {
+                config += `ltm persistence ${x.path} ${x.key} {${x.value}}\n`
+            }
         }
         return config;
     }
@@ -434,7 +404,7 @@ export default class BigipConfig {
 
         if (poolConfig) {
 
-            config += `ltm pool ${poolName} {${poolConfig.value}}`;
+            config += `ltm pool ${poolName} {${poolConfig.value}}\n`;
             const members = poolConfig.value.match(rx.members);
             const monitors = poolConfig.value.match(rx.monitors);
 
@@ -459,7 +429,7 @@ export default class BigipConfig {
                         const addr = el.match(/(?<=address )[\d.]+/);
 
                         const x = pathValueFromKey(this.configMultiLevelObjects.ltm.node, name[0])
-                        config += `ltm node ${x.key} {${x.value}}`
+                        config += `ltm node ${x.key} {${x.value}}\n`
                         map.push(`${addr}:${port}`)
                     })
                 }
@@ -471,7 +441,7 @@ export default class BigipConfig {
                         const port = el.match(/(?<=:)\d+(?= )/);
 
                         const a = pathValueFromKey(this.configMultiLevelObjects.ltm.node, name[0]);
-                        config += `ltm node ${a.key} {${a.value}}`
+                        config += `ltm node ${a.key} {${a.value}}\n`
 
                         map.push(`${name}:${port}`)
                     })
@@ -489,10 +459,10 @@ export default class BigipConfig {
                 monitorNames.forEach( name => {
 
                     // new way look for key in .ltm.monitor
-                    const pv = pathValueFromKey(this.configMultiLevelObjects.ltm.monitor, name)
-                    if(pv){
+                    const x = pathValueFromKey(this.configMultiLevelObjects.ltm.monitor, name)
+                    if(x){
                         // rebuild tmos object
-                        monitorNameConfigs.push(`ltm monitor ${pv.path} ${name} {${pv.value}}\n`);
+                        monitorNameConfigs.push(`ltm monitor ${x.path} ${x.key} {${x.value}}\n`);
                     }
                 })
                 
@@ -524,7 +494,7 @@ export default class BigipConfig {
 
             const x = pathValueFromKey(this.configMultiLevelObjects.ltm.profile, name);
             if (x) {
-                configList.push(``);
+                configList.push(`ltm profile ${x.path} ${x.key} {${x.value}}\n`);
             }
 
         })
@@ -553,7 +523,7 @@ export default class BigipConfig {
             const x = pathValueFromKey(this.configMultiLevelObjects.ltm.rule, name)
 
             if (x) {
-                ruleList.push(`ltm rule ${x.key} {${x.value}}`);
+                ruleList.push(`ltm rule ${x.key} {${x.value}}\n`);
             }
         })
 
@@ -583,7 +553,7 @@ export default class BigipConfig {
             const x = pathValueFromKey(this.configMultiLevelObjects.ltm.policy, name)
 
             if (x) {
-                configList.push(`ltm policy ${x.key} {${x.value}}`)
+                configList.push(`ltm policy ${x.key} {${x.value}}\n`)
             } else {
                 logger.error(`Could not find ltPolicy named: ${name}`)
             }

@@ -11,6 +11,7 @@ export type BigipObj = {
  * stats object type for object counts
  */
 export type Stats = {
+    configBytes?: number,
     parseTime?: number,
     appTime?: number,
     packTime?: number,

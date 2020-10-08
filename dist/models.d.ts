@@ -5,6 +5,7 @@ export declare type BigipObj = {
  * stats object type for object counts
  */
 export declare type Stats = {
+    configBytes?: number;
     parseTime?: number;
     appTime?: number;
     packTime?: number;
@@ -14,6 +15,7 @@ export declare type Stats = {
         objectCount?: number;
         virtuals?: number;
         profiles?: number;
+        policies?: number;
         pools?: number;
         irules?: number;
         monitors?: number;
@@ -35,8 +37,10 @@ export declare type BigipConfObj = {
         node?: unknown;
         monitor?: unknown;
         profile?: unknown;
+        policy?: unknown;
         rule?: unknown;
         persistence?: unknown;
+        snatpool?: unknown;
     };
     apm?: unknown;
     net?: unknown;
@@ -53,7 +57,7 @@ export declare type AppMap = {
         virtuals?: string[];
         nodes?: string[];
     };
-    ltPolicy?: {
+    policy?: {
         pools?: string[];
         virtuals?: string[];
         nodes?: string[];

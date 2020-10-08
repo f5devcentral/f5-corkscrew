@@ -16,3 +16,4 @@ tmp_*
 *AppDataRoamingnpm
 # private folder for tests
 /private/
+.vscode/settings.json

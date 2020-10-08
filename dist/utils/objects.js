@@ -6,17 +6,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pathValueFromKey = exports.deepGet = exports.getPathOfValue = exports.setNestedKey = exports.tmosChildToObj = exports.deepMergeObj = void 0;
+exports.pathValueFromKey = exports.deepGet = exports.getPathOfValue = exports.setNestedKey = exports.simpleMergeDeep = exports.tmosChildToObj = exports.deepMergeObj = exports.nestedObjValue = void 0;
 const deepmerge_1 = __importDefault(require("deepmerge"));
 const logger_1 = __importDefault(require("../logger"));
 const balanced_match_1 = __importDefault(require("balanced-match"));
+/**
+ * builds multi-level nested objects with data
+ * https://stackoverflow.com/questions/5484673/javascript-how-to-dynamically-create-nested-objects-using-object-names-given-by
+ * @param fields array of nested object params
+ * @param value value of the inner most object param value
+ */
+exports.nestedObjValue = (fields, value) => {
+    const reducer = (acc, item, index, arr) => ({ [item]: index + 1 < arr.length ? acc : value });
+    return fields.reduceRight(reducer, {});
+};
 /**
  * provides deep merge of multi-level objects
  *  subsequent items in list overwrite conflicting entries
  * @param objs list of objects to merge
  */
-function deepMergeObj(objs) {
-    return deepmerge_1.default.all(objs);
+function deepMergeObj(target, source) {
+    return deepmerge_1.default(target, source, { clone: false });
 }
 exports.deepMergeObj = deepMergeObj;
 /**
@@ -155,6 +165,39 @@ function tmosChildToObj(cfg, obj) {
     return obj;
 }
 exports.tmosChildToObj = tmosChildToObj;
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+/**
+ * Deep merge two objects.
+ * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+ * @param target
+ * @param ...sources
+ */
+function simpleMergeDeep(target, ...sources) {
+    if (!sources.length)
+        return target;
+    const source = sources.shift();
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key])
+                    Object.assign(target, { [key]: {} });
+                simpleMergeDeep(target[key], source[key]);
+            }
+            else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
+    }
+    return simpleMergeDeep(target, ...sources);
+}
+exports.simpleMergeDeep = simpleMergeDeep;
 /**
  * this will overwrite existing data
  * @param obj
