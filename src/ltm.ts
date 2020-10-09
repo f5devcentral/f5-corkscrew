@@ -338,10 +338,14 @@ export default class BigipConfig {
         let config = '';
         if (snat.includes('pool')) {
             const snatName = snat.match(this.rx.vs.snat.name);
-            const x = pathValueFromKey(this.configMultiLevelObjects.ltm.snatpool, snatName[1])
-            config += `ltm snatpool ${x.key} {${x.value}}\n`;
+            if (snatName) {
+                const x = pathValueFromKey(this.configMultiLevelObjects.ltm.snatpool, snatName[1])
+                config += `ltm snatpool ${x.key} {${x.value}}\n`;
+            } else {
+                logger.error(`Detected following snat pool configuration, but did not find in config [${snat}]`)
+            }
         } else {
-            // automap...
+            logger.debug(`snat configuration detected, but no pool reference found, presume -> automap`)
         }
         return config;
     }
