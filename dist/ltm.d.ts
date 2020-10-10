@@ -1,10 +1,11 @@
 import { BigipConfObj, Stats } from './models';
+import { ConfigFiles } from './unPacker';
 /**
  * Class to consume bigip.conf
  *
  */
 export default class BigipConfig {
-    bigipConf: string;
+    configFiles: ConfigFiles;
     /**
      * tmos config as nested json objects
      * - consolidated parant object keys like ltm/apm/sys/...
@@ -18,11 +19,21 @@ export default class BigipConfig {
      *
      * @param config full bigip.conf as string
      */
-    constructor(config: string);
+    constructor();
     /**
      * return list of applications
      */
     appList(): string[];
+    /**
+     * load .conf file or files from ucs/qkview
+     *
+     * @param config array of configs as strings
+     */
+    load(file: string): Promise<number>;
+    /**
+     * new parsing fuction to work on list of files from unPacker
+     */
+    parseNew(): number;
     /**
      * returns all details from processing
      *
@@ -42,15 +53,6 @@ export default class BigipConfig {
      * Get processing logs
      */
     logs(): string;
-    /**
-     * parse bigip.conf into parent objects
-     * @param config bigip.conf as string
-     */
-    parse(): number;
-    /**
-     * **DEV**  working to fully jsonify the entire config
-     */
-    private parse2;
     /**
      * extracts app(s)
      * @param app single app string

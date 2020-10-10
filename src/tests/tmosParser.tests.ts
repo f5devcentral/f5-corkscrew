@@ -43,12 +43,5 @@ describe('tmos config parser tests', function() {
         assert.deepStrictEqual(resp.lineCount, expected.lineCount);
     });
 
-    it(`get nodes from iRule`, async function() {
-        //todo:
-    });
-
-    it(`get nodes from iRule - no nodes`, async function() {
-        //todo:
-    });
 
 });

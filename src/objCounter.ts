@@ -17,6 +17,10 @@ export type ObjStats = {
     asmPolicies?: number
 }
 
+/**
+ * counts up totals of the different LTM objects (vs, nodes, pools, ...)
+ * @param obj ltm branch of config tree
+ */
 export function countObjects (obj: BigipConfObj): ObjStats {
 
     const stats: ObjStats = {};

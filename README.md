@@ -65,6 +65,61 @@ check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 
 - a "sanitize" function to remove sensitive information and change IPs/names so configs can be shared as part of the process
 
+- an option to include the default profiles
+    - add the profiles_base.conf file to the config and the app extraction should pick up those objects
+
+- Identify advanced configurations
+    - At this time it means any advaned irule or policy that references other VIPs
+        - The thought is that this type of configuration would need to be interpreted by the user anyway
+        - The referenced vip will be available for extraction, so the user include it with any/all apps as needed
+    - I do plan to support the discovery of referenced objects in pools and policies
+
+### Performance enhancements
+
+The initial parsing of the files seems to be the heaviest operation so far:
+    - aside from the initial app config searching done through array looping and ucs/qkview searching
+
+The current performance of a 6MB config file with almost 300vs, 223k lines, and over 13k tmos objects fully processed in about 20 seconds seems pretty good for this stage.  I think it would be acceptable for full processing to take up to a couple of minutes (with bigger configurations), given appropriate feedback with status/progress bars.  This would provide the user with information that a long running process is still "processing", without just sitting blank.
+
+Furthermore, the stats being included for the different files, sizes, and processing times should provide adequate information to quickly identify what will be the next bottleneck (whether it's file size, object count, or if we can rely on VS count...?)
+
+If/when we get to the point that we do need to increase performance, I have the following thoughts:
+
+- The unpacking of UCS and kqviews
+    - This is currently handled within node, where the entire file has to be loaded into memory, decompressed and specific files extracted.
+    - This processing can be pushed to the local system by issueing local system commands to unpack the contents to a local system folder
+        - This folder can be searched for the approprate files
+        - may be easier to move the needed files to another directory so they can be quickly read recrusively (without filtering) and streamed in
+    - This would offload the memory/processing footprint of the archive back to the local system from the node process
+    - Should also be tracking file size/count at this step, so at the parsing step, we can make a decision to keep a copy of original config files or not
+        - Don't keep anything over 50Mb? -> TBD
+
+- loading of file content -> streaming
+    - Right now, the full file is loaded into memory and passed into the main class to be parsed
+        - This could be another bottleneck with big configurations (multiple/big files)
+    - instead of the current fs.readFileSync, we could look at the fs.readFileStream to stream in the contents
+
+- parsing the stream
+    - after the file is loaded, a regex is used to collect all the parent objects "ltm node {...}"
+        - this produces an array of matches, then each item in the array gets parsed into the json tree as {ltm: { node: { address: 1.1.1.1 }}}
+        - each new tree is then merged back into the main tree to combine everything into a single json object
+    - instead of pulling the entire file into memory and producing another array with all the parent objects (effectivily doubling the memory space),
+        - we should be streaming in the file, regex a single parent object, removed that object from incoming file string, convert to json, merge with main tree, regex the next piece, repeat
+        -  This should minimize memory usage as we stream/process chunks to the final json tree
+            - This would also play into the decision to store the original configs for future processing or not
+
+- Things to keep in mind as we ponder performance numbers:
+    - Nodejs memory heap is limited to 2gig
+    - The nodejs memory in vscode is further limited to 512Mb (for vscode-f5-fast integration)
+    - I don't think I've ever seen a UCS bigger than ~50Mb
+    - I don't think I've ever seen a qkview bigger than ~300Mb
+    - a 6Mb bigip.conf gets zippped (compressed) down to ~340k (this might be a corner case...)
+    - my 80k mini_ucs get's compressed to 32k
+    - I have rarely heard of any configs with more than 10k+ VS
+        - So a reasonable guestimate could assume we shouldn't see any object counts over 100k
+
+> My point here is that we have a general idea of how big the configs can get and that we are not looking to support 100k Virtual servers and 1m+ objects, or file sizes pushing several hundred Mb or even Gb.  This tells me that we should be able to accomplish the goals envisioned with the project without any red flags or big unknowns that could push the architecture or development path in a completely different direction (custom C/rust parser engine kinda stuff)
+
 
 <p>&nbsp;</p>
 
@@ -104,13 +159,18 @@ Right now, the main piece is the BigipConfig class in the ltm.ts file.  This cla
 
 ### Logger class
 
-the logger class is a simple logger implementation that collect all the logs througout processing and provides a way to return them as part of the response back.  This is mainly to provide some feedback into what is happening without having to straight to debugging node directly.
+The logger class is a simple logger implementation that collect all the logs througout processing and provides a way to return them as part of the response back.  This is mainly to provide some feedback into what is happening without having to straight to debugging node directly.
+
+Trying not to pollute the command line with a bunch of errors, So we catch and log all errors to the logger and the logs can be returned to the user as needed
+
 
 <p>&nbsp;</p>
 
 ### Regex class
 
 The regex class provides a way to structure the different regexs needed to parse the different pieces of information.  I feel that the json tree is not only a good way to hold and access all the regex's, but also an easy way to update pieces of the tree depending on tmos configuration variances of different code versions.  In short, if pools are reference differently in v17, a flag that updates that single regex can easily be configured with mininmal impact to everything else.
+
+Some example modifications have been documented in the function
 
 <p>&nbsp;</p>
 

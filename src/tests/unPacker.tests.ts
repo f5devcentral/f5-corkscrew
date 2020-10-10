@@ -6,37 +6,61 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { parseLoad } from '../unPacker'
+import { unPacker } from '../unPacker'
 
-
-
-
-// const iRuleWithPools = fs.readFileSync(path.join(__dirname, "./artifacts/pools.irule"), "utf-8");
-// const iRuleNoRef = fs.readFileSync(path.join(__dirname, "./artifacts/pools_noRef.irule"), "utf-8");
 
 describe('instantiation unPacker', function() {
 
     it(`path to actual .conf file`, async function() {
 
-        const x = await parseLoad(path.join(__dirname, "./unPacker_test.conf"));
+        const x = await unPacker(path.join(__dirname, "./unPacker_test.conf"));
         const expected = fs.readFileSync(path.join(__dirname, "./unPacker_test.conf"), "utf-8");
 
-        // assert.strictEqual(x[0].fileName, expected, 'should return file name')
-        assert.strictEqual(x[0].content, expected, 'should return .conf contents')
+        assert.deepStrictEqual(x[0].content, expected);
     });
 
     it(`not a valid path to file`, async function() {
-        const x = await parseLoad(path.join(__dirname, "broken-file-path"));
+        // should fail to load, log error to logger, return undefined
+        const x = await unPacker(path.join(__dirname, "broken-file_path.io"));
         assert.ifError(x);
     });
     
-    it(`parse mini_ucs.tar.gz input`, async function() {
-        const x = await parseLoad(path.join(__dirname, "./mini_ucs.tar.gz"));
-        assert.strictEqual(x[0].fileName, 'config/bigip.conf', 'should return first file name')
+    it(`unpack mini_ucs.tar.gz - success`, async function() {
+        const x = await unPacker(path.join(__dirname, "./mini_ucs.tar.gz"));
+
+        const converted = [ x[0].fileName, x[2].size, x[4].fileName ];
+        const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf' ];
+        assert.deepStrictEqual(converted, expected)
     });
 
-    it(`get nodes from iRule - no nodes`, async function() {
-        //todo:
+    it(`unPack ucs - success`, async function() {
+
+        const x = await unPacker(path.join(__dirname, "./artifacts/devCloud_10.9.2020.ucs"));
+
+        // capture some key information pieces so we don't have to verify the whole thing
+        const converted = [ x[0].fileName, x[2].size, x[4].fileName ];
+        const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf' ];
+        assert.deepStrictEqual(converted, expected);
+    });
+
+    it(`unPack ucs - fail`, async function() {
+        // read ucs should fail, log error to logger, return undefined
+        const x = await unPacker(path.join(__dirname, "./artifacts/bad.ucs"));
+        assert.ifError(x);
+    });
+
+    it(`unPack qkview - success`, async function() {
+        // //todo:
+        const x = await unPacker(path.join(__dirname, "./artifacts/devCloud_10.10.2020.qkview"));
+        const converted = [ x[0].fileName, x[2].size, x[4].fileName ];
+        const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf' ];
+        assert.deepStrictEqual(converted, expected);
+    });
+
+    it(`unPack qkview - fail`, async function() {
+        // read ucs should fail, log error to logger, return undefined
+        const x = await unPacker(path.join(__dirname, "./artifacts/bad.qkview"));
+        assert.ifError(x);
     });
     
 

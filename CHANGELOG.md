@@ -10,6 +10,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.3.0] - (10-12-2020)
+
+### Added
+- Added support for ucs/qkview input
+    - This resulted in all inputs being a single file reference and letting it figure out what to do from there
+    - if single .conf, then just load and pass to parse function
+    - but if an archive is detected, it will search the archive for the needed files and return them as a list to be parsed
+
 ## [0.2.0] - (10-8-2020)
 
 ### Added
@@ -26,7 +34,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Modified
 - vsConfig app parsing logic to not fail if object is not found (reduces chances of catastrophic processing failure)
-- reworked ininital config parsing logic and removed unnecessary processin and objects
+- reworked ininital config parsing logic and removed unnecessary processing and objects
 - reworked app extrction process to utilize more efficient methods 
     - now uses json tree
     - drastically reduced app extraction time

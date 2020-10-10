@@ -1,0 +1,1212 @@
+################################################
+###  *** project - corkscrew *** ###
+###  tmos extractor output
+###  Section 1: stats
+###  Section 2: apps
+###  Section 3: conversion logs (error/info/debug)
+###  Section 4: configMultiLevelObjects (not object values yet)
+###  2020-10-10T18:08:25.171Z
+################################################
+
+################################################
+### explosion stats ##########
+### uuid: 07a33ebf-de60-4fd9-b9c8-25cbe13b65de
+### dateTime: Sat Oct 10 2020 13:08:25 GMT-0500 (Central Daylight Time)
+{
+  "objectCount": null,
+  "objects": {
+    "virtuals": 8,
+    "profiles": 6,
+    "policies": 2,
+    "pools": 8,
+    "irules": 5,
+    "monitors": 6,
+    "nodes": 11,
+    "snatPools": 1
+  },
+  "parseTime": 8.2794,
+  "appTime": 3.534701,
+  "packTime": 0.4202
+}
+################################################
+
+################################################
+ltm virtual /Common/app1_t80_vs {
+    creation-time 2020-09-17:08:50:22
+    destination /Common/192.168.1.21:80
+    ip-protocol tcp
+    last-modified-time 2020-09-17:08:51:07
+    mask 255.255.255.255
+    profiles {
+        /Common/http { }
+        /Common/tcp { }
+    }
+    rules {
+        /Common/_sys_https_redirect
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    translate-address enabled
+    translate-port enabled
+}
+
+################################################
+
+################################################
+ltm virtual /Common/app1_t443_vs {
+    destination /Common/192.168.1.21:443
+    ip-protocol tcp
+    last-modified-time 2020-09-18:10:05:54
+    mask 255.255.255.255
+    pool /Common/app1_t80_pool
+    profiles {
+        /Common/http { }
+        /Common/tcp { }
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    source-address-translation {
+        type automap
+    }
+    translate-address enabled
+    translate-port enabled
+}
+ltm pool /Common/app1_t80_pool {
+    members {
+        /Common/app1_Node1:80 {
+            address 192.168.1.22
+        }
+        /Common/app1_Node2:80 {
+            address 192.168.1.23
+        }
+    }
+    monitor /Common/http and /Common/tcp
+}
+ltm node /Common/app1_Node1 {
+    address 192.168.1.22
+}
+ltm node /Common/app1_Node2 {
+    address 192.168.1.23
+}
+
+################################################
+
+################################################
+ltm virtual /Common/app2_t80_vs {
+    creation-time 2020-09-17:08:50:22
+    destination /Common/192.168.2.21:80
+    ip-protocol tcp
+    last-modified-time 2020-09-17:08:51:07
+    mask 255.255.255.255
+    profiles {
+        /Common/http { }
+        /Common/tcp { }
+    }
+    rules {
+        /Common/_sys_https_redirect
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    translate-address enabled
+    translate-port enabled
+}
+
+################################################
+
+################################################
+ltm virtual /Common/app2_t443_vs {
+    destination /Common/192.168.2.21:443
+    ip-protocol tcp
+    last-modified-time 2020-09-18:10:05:47
+    mask 255.255.255.255
+    pool /Common/app2_t80_pool
+    profiles {
+        /Common/http { }
+        /Common/tcp { }
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    source-address-translation {
+        type automap
+    }
+    translate-address enabled
+    translate-port enabled
+}
+ltm pool /Common/app2_t80_pool {
+    load-balancing-mode least-connections-member
+    members {
+        /Common/app2_Node1:80 {
+            address 192.168.2.22
+        }
+        /Common/app2_Node2:80 {
+            address 192.168.2.23
+        }
+    }
+    monitor /Common/global_http_monitor and /Common/global_https_monitor
+}
+ltm node /Common/app2_Node1 {
+    address 192.168.2.22
+    description app2_Node1
+}
+ltm node /Common/app2_Node2 {
+    address 192.168.2.23
+    description app2_Node2
+}
+ltm monitor http /Common/global_http_monitor {
+    adaptive disabled
+    defaults-from /Common/http
+    interval 5
+    ip-dscp 0
+    recv "ok 200"
+    recv-disable none
+    send "GET /anywebsite.com\r\n"
+    time-until-up 0
+    timeout 16
+}
+
+ltm monitor https /Common/global_https_monitor {
+    adaptive disabled
+    defaults-from /Common/https
+    interval 5
+    ip-dscp 0
+    recv "201 continue"
+    recv-disable none
+    send "GET /any-secure-website.com\r\n"
+    time-until-up 0
+    timeout 16
+}
+
+################################################
+
+################################################
+ltm virtual /Common/app3_t8443_vs {
+    destination /Common/192.168.1.51:8443
+    fallback-persistence /Common/app3_srcAddr_persist
+    ip-protocol tcp
+    last-modified-time 2020-09-17:12:45:40
+    mask 255.255.255.255
+    persist {
+        /Common/app3_cookie {
+            default yes
+        }
+    }
+    policies {
+        /Common/app3_ltm_policy { }
+    }
+    pool /Common/app3_t8443_pool
+    profiles {
+        /Common/app3_clientssl {
+            context clientside
+        }
+        /Common/app3_serverssl {
+            context serverside
+        }
+        /Common/http { }
+        /Common/tcp { }
+    }
+    rules {
+        /Common/app3_rule
+        /Common/app3_rule2
+        /Common/app3_rule3
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    source-address-translation {
+        pool /Common/app3_snat_pool
+        type snat
+    }
+    translate-address enabled
+    translate-port enabled
+}
+ltm pool /Common/app3_t8443_pool {
+    load-balancing-mode least-connections-member
+    members {
+        /Common/app3_Node1:8443 {
+            address 192.168.1.52
+        }
+        /Common/app3_Node2:8443 {
+            address 192.168.1.53
+        }
+    }
+    monitor /Common/app1_tcp_half_open_quick_monitor and /Common/http_head_f5 and /Common/http2_head_f5 and /Common/http and /Common/tcp_half_open
+}
+ltm node /Common/app3_Node1 {
+    address 192.168.1.52
+}
+ltm node /Common/app3_Node2 {
+    address 192.168.1.53
+}
+ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {
+    defaults-from /Common/tcp_half_open
+    destination *:*
+    interval 1
+    time-until-up 0
+    timeout 4
+}
+ltm profile client-ssl /Common/app3_clientssl {
+    app-service none
+    cert-key-chain {
+        default {
+            cert /Common/default.crt
+            key /Common/default.key
+        }
+    }
+    defaults-from /Common/clientssl
+    inherit-ca-certkeychain true
+    inherit-certkeychain true
+}
+
+ltm profile server-ssl /Common/app3_serverssl {
+    app-service none
+    defaults-from /Common/serverssl
+}
+ltm rule /Common/app3_rule {
+#comment
+
+when HTTP_REQUEST {
+    # add more here
+}
+
+ltm rule /Common/app3_rule2 {
+#comment
+
+when HTTP_REQUEST {
+    # ben test 444
+}
+
+ltm rule /Common/app3_rule3 {
+# app3_rule3 header
+
+when SERVERSSL_DATA {
+    # got something from server
+}
+ltm snatpool /Common/app3_snat_pool {
+    members {
+        /Common/192.168.1.51
+    }
+}
+ltm policy /Common/app3_ltm_policy {
+    rules {
+        global_rule_1 { }
+    }
+    strategy /Common/first-match
+}
+ltm persistence cookie /Common/app3_cookie {
+    always-send disabled
+    app-service none
+    cookie-encryption disabled
+    cookie-name app3CustomeCookie
+    defaults-from /Common/cookie
+    encrypt-cookie-poolname disabled
+    expiration 0
+    httponly enabled
+    method insert
+    override-connection-limit disabled
+    secure enabled
+}
+ltm persistence source-addr /Common/app3_srcAddr_persist {
+    app-service none
+    defaults-from /Common/source_addr
+    hash-algorithm default
+    map-proxies enabled
+    mask none
+    match-across-pools disabled
+    match-across-services disabled
+    match-across-virtuals disabled
+    override-connection-limit disabled
+    timeout 180
+}
+
+################################################
+
+################################################
+ltm virtual /Common/app4_t80_vs {
+    description "test pool references in irule extration and ltp"
+    destination /Common/192.168.2.25:80
+    ip-protocol tcp
+    last-modified-time 2020-10-07:07:28:35
+    mask 255.255.255.255
+    policies {
+        /Common/app4_ltPolicy { }
+    }
+    pool /Common/app4_pool
+    profiles {
+        /Common/http { }
+        /Common/tcp { }
+    }
+    rules {
+        /Common/_sys_https_redirect
+        /Common/app4_pool_rule
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    translate-address enabled
+    translate-port enabled
+}
+ltm pool /Common/app4_pool {
+    members {
+        /Common/api.chucknorris.io:443 {
+            fqdn {
+                autopopulate enabled
+                name api.chucknorris.io
+            }
+        }
+    }
+}
+ltm node /Common/api.chucknorris.io {
+    fqdn {
+        address-family all
+        autopopulate enabled
+        name api.chucknorris.io
+    }
+}
+ltm rule /Common/app4_pool_rule {
+### test rule for corkscrew
+
+  # 
+
+when HTTP_REQUEST {
+
+  # pool reference by variable declaration
+  set html-pool web1Pool
+
+  if { [HTTP::path] ends_with "*.css" }{
+
+    # regular pool refernce
+    pool css_pool
+
+  } elseif { [HTTP::path] ends_with "*.jpg" }{
+
+    # pool member refernce
+    pool jpg.pool member 10.10.10.1 80
+
+  } elseif { [HTTP::path] ends_with "*.js" }{
+
+    # another pool reference with special characters
+    pool js.io_t80_pool 
+
+  } elseif { [HTTP::path] ends_with "*.xx" }{
+
+    # pool reference not in tmos config
+    ### *** seems the gui won't let you attach an irule to a vs with a pool that doesn't exist
+    #pool missing_pool
+
+  } elseif { [HTTP::path] ends_with "*.txt" }{
+
+    # node reference
+    node 10.10.10.1 80
+
+  } else {
+
+    # pool referenced by variable
+    pool $html-pool
+
+  }
+}
+ltm policy /Common/app4_ltPolicy {
+    controls { forwarding }
+    description "testing for pool extraction function"
+    requires { http }
+    rules {
+        css_pool_rule {
+            actions {
+                0 {
+                    forward
+                    select
+                    pool /Common/css_pool
+                }
+            }
+            conditions {
+                0 {
+                    http-uri
+                    scheme
+                    ends-with
+                    values { .css }
+                }
+            }
+        }
+        jpg_pool_rule {
+            actions {
+                0 {
+                    forward
+                    select
+                    pool /Common/jpg.pool
+                }
+            }
+            conditions {
+                0 {
+                    http-uri
+                    query-string
+                    ends-with
+                    values { .jpg }
+                }
+            }
+            ordinal 1
+        }
+        js_pool_rule {
+            actions {
+                0 {
+                    forward
+                    select
+                    pool /Common/js.io_t80_pool
+                }
+            }
+            conditions {
+                0 {
+                    http-uri
+                    scheme
+                    ends-with
+                    values { .js }
+                }
+            }
+            ordinal 2
+        }
+        txt_node {
+            actions {
+                0 {
+                    forward
+                    select
+                    node 10.10.10.1
+                }
+            }
+            conditions {
+                0 {
+                    http-uri
+                    scheme
+                    ends-with
+                    values { .txt }
+                }
+            }
+            ordinal 3
+        }
+    }
+    strategy /Common/first-match
+}
+
+################################################
+
+################################################
+ltm virtual /Common/forwarder_net_0.0.0.0 {
+    destination /Common/0.0.0.0:0
+    ip-forward
+    mask any
+    profiles {
+        /Common/fastl4_loose { }
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    translate-address disabled
+    translate-port disabled
+}
+ltm profile fastl4 /Common/fastl4_loose {
+    app-service none
+    loose-close enabled
+    loose-initialization enabled
+    reset-on-timeout disabled
+    syn-cookie-enable disabled
+}
+
+################################################
+
+################################################
+ltm virtual /foo/defaultsUDP_5555/serviceMain {
+    creation-time 2020-10-06:13:27:20
+    description defaultsUDP_5555
+    destination /foo/192.50.2.1:5555
+    ip-protocol udp
+    last-modified-time 2020-10-06:13:27:20
+    mask 255.255.255.255
+    persist {
+        /Common/source_addr {
+            default yes
+        }
+    }
+    pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+    profiles {
+        /Common/udp { }
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    source-address-translation {
+        type automap
+    }
+    translate-address enabled
+    translate-port enabled
+}
+ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
+    members {
+        /foo/192.50.2.2:5555 {
+            address 192.50.2.2
+            metadata {
+                source {
+                    value declaration
+                }
+            }
+        }
+    }
+    min-active-members 1
+    monitor min 1 of { /Common/gateway_icmp }
+}
+
+################################################
+
+
+#######################################
+### conversion log ####################
+[2020-10-10T18:07:58.532Z] DeBuG: 'regular date log message'
+[10/10/2020, 1:07:58 PM] DeBuG: 'toLocalString date log message'
+[Sat, 10 Oct 2020 18:07:58 GMT] DeBuG: 'to UTC date log message'
+[2020-10-10T18:07:58.730Z] DEBUG: detected file: [C:\Users\bunoo\project-corkscrew\src\tests\artifacts\devCloud_10.10.2020.qkview], size: [135755954]
+[2020-10-10T18:08:23.071Z] DEBUG: Begining to parse configs
+[2020-10-10T18:08:23.071Z] INFO: Recieved .conf file of version: 15.1.0.4
+[2020-10-10T18:08:23.071Z] DEBUG: detected undefined parent objects in this file
+[2020-10-10T18:08:23.071Z] DEBUG: creating more detailed arrays/objects for deeper inspection
+[2020-10-10T18:08:23.076Z] DEBUG: detected NaN parent objects in this file
+[2020-10-10T18:08:23.076Z] DEBUG: creating more detailed arrays/objects for deeper inspection
+[2020-10-10T18:08:23.078Z] DEBUG: detected NaN parent objects in this file
+[2020-10-10T18:08:23.078Z] DEBUG: creating more detailed arrays/objects for deeper inspection
+[2020-10-10T18:08:23.079Z] DEBUG: detected NaN parent objects in this file
+[2020-10-10T18:08:23.079Z] DEBUG: creating more detailed arrays/objects for deeper inspection
+[2020-10-10T18:08:23.079Z] DEBUG: detected NaN parent objects in this file
+[2020-10-10T18:08:23.079Z] DEBUG: creating more detailed arrays/objects for deeper inspection
+[2020-10-10T18:08:24.641Z] INFO: digging vs config for /Common/app4_t80_vs
+[2020-10-10T18:08:24.642Z] DEBUG: digging pool config for /Common/app4_pool
+[2020-10-10T18:08:24.643Z] DEBUG: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2020-10-10T18:08:24.644Z] DEBUG: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2020-10-10T18:08:24.644Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:24.644Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:24.644Z] DEBUG: [/Common/app4_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:24.644Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2020-10-10T18:08:24.644Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
+[2020-10-10T18:08:24.644Z] DEBUG: [/Common/app4_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+        /Common/app4_pool_rule
+[2020-10-10T18:08:24.644Z] DEBUG: profile references found:  [ '/Common/app4_ltPolicy' ]
+[2020-10-10T18:08:24.644Z] DEBUG: [/Common/app4_t80_vs] found the following policies 
+        /Common/app4_ltPolicy { }
+[2020-10-10T18:08:25.167Z] INFO: digging vs config for /Common/app1_t80_vs
+[2020-10-10T18:08:25.167Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:25.167Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.167Z] DEBUG: [/Common/app1_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:25.167Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2020-10-10T18:08:25.167Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
+[2020-10-10T18:08:25.167Z] DEBUG: [/Common/app1_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+[2020-10-10T18:08:25.167Z] INFO: digging vs config for /Common/app1_t443_vs
+[2020-10-10T18:08:25.167Z] DEBUG: digging pool config for /Common/app1_t80_pool
+[2020-10-10T18:08:25.167Z] DEBUG: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2020-10-10T18:08:25.168Z] DEBUG: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:25.168Z] DEBUG: pool monitor configs found: []
+[2020-10-10T18:08:25.168Z] DEBUG: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2020-10-10T18:08:25.168Z] DEBUG: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2020-10-10T18:08:25.168Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:25.168Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.168Z] DEBUG: [/Common/app1_t443_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:25.168Z] DEBUG: snat configuration detected, but no pool reference found, presume -> automap
+[2020-10-10T18:08:25.168Z] DEBUG: [/Common/app1_t443_vs] found snat configuration 
+        type automap
+[2020-10-10T18:08:25.168Z] INFO: digging vs config for /Common/app2_t80_vs
+[2020-10-10T18:08:25.168Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:25.168Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.168Z] DEBUG: [/Common/app2_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:25.168Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2020-10-10T18:08:25.168Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
+[2020-10-10T18:08:25.168Z] DEBUG: [/Common/app2_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+[2020-10-10T18:08:25.168Z] INFO: digging vs config for /Common/app2_t443_vs
+[2020-10-10T18:08:25.168Z] DEBUG: digging pool config for /Common/app2_t80_pool
+[2020-10-10T18:08:25.168Z] DEBUG: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2020-10-10T18:08:25.168Z] DEBUG: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2020-10-10T18:08:25.169Z] DEBUG: pool monitor configs found: [
+  'ltm monitor http /Common/global_http_monitor {\n' +
+    '    adaptive disabled\n' +
+    '    defaults-from /Common/http\n' +
+    '    interval 5\n' +
+    '    ip-dscp 0\n' +
+    '    recv "ok 200"\n' +
+    '    recv-disable none\n' +
+    '    send "GET /anywebsite.com\\r\\n"\n' +
+    '    time-until-up 0\n' +
+    '    timeout 16\n' +
+    '}\n',
+  'ltm monitor https /Common/global_https_monitor {\n' +
+    '    adaptive disabled\n' +
+    '    defaults-from /Common/https\n' +
+    '    interval 5\n' +
+    '    ip-dscp 0\n' +
+    '    recv "201 continue"\n' +
+    '    recv-disable none\n' +
+    '    send "GET /any-secure-website.com\\r\\n"\n' +
+    '    time-until-up 0\n' +
+    '    timeout 16\n' +
+    '}\n'
+]
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2020-10-10T18:08:25.169Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:25.169Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app2_t443_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:25.169Z] DEBUG: snat configuration detected, but no pool reference found, presume -> automap
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app2_t443_vs] found snat configuration 
+        type automap
+[2020-10-10T18:08:25.169Z] INFO: digging vs config for /Common/app3_t8443_vs
+[2020-10-10T18:08:25.169Z] DEBUG: digging pool config for /Common/app3_t8443_pool
+[2020-10-10T18:08:25.169Z] DEBUG: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2020-10-10T18:08:25.169Z] DEBUG: pool monitor references found: [
+  '/Common/app1_tcp_half_open_quick_monitor',
+  '/Common/http_head_f5',
+  '/Common/http2_head_f5',
+  '/Common/http',
+  '/Common/tcp_half_open'
+]
+[2020-10-10T18:08:25.169Z] DEBUG: pool monitor configs found: [
+  'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
+    '    defaults-from /Common/tcp_half_open\n' +
+    '    destination *:*\n' +
+    '    interval 1\n' +
+    '    time-until-up 0\n' +
+    '    timeout 4\n' +
+    '}\n'
+]
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2020-10-10T18:08:25.169Z] DEBUG: profile references found:  [
+  '/Common/app3_clientssl',
+  '/Common/app3_serverssl',
+  '/Common/http',
+  '/Common/tcp'
+]
+[2020-10-10T18:08:25.169Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app3_t8443_vs] found the following profiles 
+        /Common/app3_clientssl {
+            context clientside
+        }
+        /Common/app3_serverssl {
+            context serverside
+        }
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:25.169Z] DEBUG: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2020-10-10T18:08:25.169Z] DEBUG: [/Common/app3_t8443_vs] found the following rules 
+        /Common/app3_rule
+        /Common/app3_rule2
+        /Common/app3_rule3
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app3_t8443_vs] found snat configuration 
+        pool /Common/app3_snat_pool
+        type snat
+[2020-10-10T18:08:25.170Z] DEBUG: profile references found:  [ '/Common/app3_ltm_policy' ]
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app3_t8443_vs] found the following policies 
+        /Common/app3_ltm_policy { }
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app3_t8443_vs] found the following persistence 
+        /Common/app3_cookie {
+            default yes
+        }
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2020-10-10T18:08:25.170Z] INFO: digging vs config for /Common/app4_t80_vs
+[2020-10-10T18:08:25.170Z] DEBUG: digging pool config for /Common/app4_pool
+[2020-10-10T18:08:25.170Z] DEBUG: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2020-10-10T18:08:25.170Z] DEBUG: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2020-10-10T18:08:25.170Z] DEBUG: Found 2 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app4_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2020-10-10T18:08:25.170Z] DEBUG: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2020-10-10T18:08:25.170Z] DEBUG: Found 1 system default iRules, compare previous arrays for details
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app4_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+        /Common/app4_pool_rule
+[2020-10-10T18:08:25.170Z] DEBUG: profile references found:  [ '/Common/app4_ltPolicy' ]
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/app4_t80_vs] found the following policies 
+        /Common/app4_ltPolicy { }
+[2020-10-10T18:08:25.170Z] INFO: digging vs config for /Common/forwarder_net_0.0.0.0
+[2020-10-10T18:08:25.170Z] DEBUG: profile references found:  [ '/Common/fastl4_loose' ]
+[2020-10-10T18:08:25.170Z] DEBUG: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+        /Common/fastl4_loose { }
+[2020-10-10T18:08:25.170Z] INFO: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2020-10-10T18:08:25.170Z] DEBUG: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2020-10-10T18:08:25.170Z] DEBUG: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
+[2020-10-10T18:08:25.170Z] DEBUG: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2020-10-10T18:08:25.170Z] DEBUG: profile references found:  [ '/Common/udp' ]
+[2020-10-10T18:08:25.170Z] DEBUG: Found 1 system default profiles, compare previous arrays for details
+[2020-10-10T18:08:25.170Z] DEBUG: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
+        /Common/udp { }
+[2020-10-10T18:08:25.170Z] DEBUG: snat configuration detected, but no pool reference found, presume -> automap
+[2020-10-10T18:08:25.170Z] DEBUG: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
+        type automap
+[2020-10-10T18:08:25.170Z] DEBUG: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
+        /Common/source_addr {
+            default yes
+        }
+
+#######################################
+### configMultiLevelObjects ###########
+{
+  "analytics": {
+    "global-settings": " "
+  },
+  "apm": {
+    "aaa": {
+      "localdb": {
+        "/Common/localDB": " "
+      }
+    },
+    "epsec": {
+      "epsec-package": {
+        "/Common/epsec-1.0.0-892.0.iso": "\n    cache-path /config/filestore/files_d/Common_d/epsec_package_d/:Common:epsec-1.0.0-892.0.iso_65040_1\n    oesis-version 4.3.1158.0\n    revision 1\n    version 1.0.0-892.0\n"
+      }
+    },
+    "policy": {
+      "access-policy": {
+        "/Common/adminAuth_local_aPolicy": "\n    default-ending /Common/adminAuth_local_aPolicy_end_deny\n    items {\n        /Common/adminAuth_local_aPolicy_act_localdb_auth { }\n        /Common/adminAuth_local_aPolicy_act_logon_page { }\n        /Common/adminAuth_local_aPolicy_end_allow { }\n        /Common/adminAuth_local_aPolicy_end_deny { }\n        /Common/adminAuth_local_aPolicy_ent { }\n    }\n    start-item /Common/adminAuth_local_aPolicy_ent\n"
+      },
+      "customization-group": {
+        "/Common/adminAuth_local_aPolicy_act_logon_page_ag": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_act_logon_page_ag_65223_2\n    revision 2\n    source /Common/modern\n",
+        "/Common/adminAuth_local_aPolicy_end_deny_ag": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_end_deny_ag_65134_1\n    revision 1\n    source /Common/modern\n    type logout\n",
+        "/Common/adminAuth_local_aPolicy_eps": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_eps_65170_1\n    revision 1\n    source /Common/modern\n    type eps\n",
+        "/Common/adminAuth_local_aPolicy_errormap": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_errormap_65167_1\n    revision 1\n    source /Common/modern\n    type errormap\n",
+        "/Common/adminAuth_local_aPolicy_framework_installation": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_framework_installation_65173_1\n    revision 1\n    source /Common/modern\n    type framework-installation\n",
+        "/Common/adminAuth_local_aPolicy_general_ui": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_general_ui_65124_1\n    revision 1\n    source /Common/modern\n    type general-ui\n",
+        "/Common/adminAuth_local_aPolicy_logout": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_logout_65164_1\n    revision 1\n    source /Common/modern\n    type logout\n"
+      },
+      "customization-source": {
+        "/Common/modern": " ",
+        "/Common/standard": " "
+      },
+      "policy-item": {
+        "/Common/adminAuth_local_aPolicy_act_localdb_auth": "\n    agents {\n        /Common/adminAuth_local_aPolicy_act_localdb_auth_ag {\n            type aaa-localdb\n        }\n    }\n    caption \"LocalDB Auth\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption Successful\n            expression \"expr {[mcget {session.localdb.last.result}] == 1}\"\n            next-item /Common/adminAuth_local_aPolicy_end_allow\n        }\n        {\n            caption \"Locked User Out\"\n            expression \"expr {[mcget {session.localdb.last.result}] == 2}\"\n            next-item /Common/adminAuth_local_aPolicy_end_deny\n        }\n        {\n            caption fallback\n            next-item /Common/adminAuth_local_aPolicy_end_deny\n        }\n    }\n",
+        "/Common/adminAuth_local_aPolicy_act_logon_page": "\n    agents {\n        /Common/adminAuth_local_aPolicy_act_logon_page_ag {\n            type logon-page\n        }\n    }\n    caption \"Logon Page\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption fallback\n            next-item /Common/adminAuth_local_aPolicy_act_localdb_auth\n        }\n    }\n",
+        "/Common/adminAuth_local_aPolicy_end_allow": "\n    agents {\n        /Common/adminAuth_local_aPolicy_end_allow_ag {\n            type ending-allow\n        }\n    }\n    caption Allow\n    color 1\n    item-type ending\n",
+        "/Common/adminAuth_local_aPolicy_end_deny": "\n    agents {\n        /Common/adminAuth_local_aPolicy_end_deny_ag {\n            type ending-deny\n        }\n    }\n    caption Deny\n    color 2\n    item-type ending\n",
+        "/Common/adminAuth_local_aPolicy_ent": "\n    caption Start\n    color 1\n    rules {\n        {\n            caption fallback\n            next-item /Common/adminAuth_local_aPolicy_act_logon_page\n        }\n    }\n"
+      },
+      "agent": {
+        "aaa-localdb": {
+          "/Common/adminAuth_local_aPolicy_act_localdb_auth_ag": "\n    localdb-instance /Common/localDB\n"
+        },
+        "ending-allow": {
+          "/Common/adminAuth_local_aPolicy_end_allow_ag": " "
+        },
+        "ending-deny": {
+          "/Common/adminAuth_local_aPolicy_end_deny_ag": "\n    customization-group /Common/adminAuth_local_aPolicy_end_deny_ag\n"
+        },
+        "logon-page": {
+          "/Common/adminAuth_local_aPolicy_act_logon_page_ag": "\n    customization-group /Common/adminAuth_local_aPolicy_act_logon_page_ag\n"
+        }
+      }
+    },
+    "profile": {
+      "access": {
+        "/Common/adminAuth_local_aPolicy": "\n    accept-languages { en }\n    access-policy /Common/adminAuth_local_aPolicy\n    app-service none\n    customization-group /Common/adminAuth_local_aPolicy_logout\n    customization-key 22ac0aeb0346bcebf5e867279edf9d7b\n    default-language en\n    domain-cookie none\n    eps-group /Common/adminAuth_local_aPolicy_eps\n    errormap-group /Common/adminAuth_local_aPolicy_errormap\n    exchange-profile none\n    framework-installation-group /Common/adminAuth_local_aPolicy_framework_installation\n    general-ui-group /Common/adminAuth_local_aPolicy_general_ui\n    generation 4\n    generation-action noop\n    httponly-cookie false\n    log-settings {\n        /Common/default-log-setting\n    }\n    logout-uri-include none\n    logout-uri-timeout 5\n    modified-since-last-policy-sync true\n    named-scope none\n    persistent-cookie false\n    scope profile\n    secure-cookie true\n    sso-name none\n    type system-authentication\n    user-identity-method http\n"
+      }
+    },
+    "report": {
+      "default-report": "\n    report-name sessionReports/sessionSummary\n    user /Common/admin\n"
+    },
+    "client-packaging": {
+      "/test/client-packaging": " ",
+      "/foo/client-packaging": " "
+    },
+    "resource": {
+      "sandbox": {
+        "/test/citrix-client-package": "\n    base-uri /test/public/citrix\n    description \"Sandbox for Citrix client package files\"\n",
+        "/foo/citrix-client-package": "\n    base-uri /foo/public/citrix\n    description \"Sandbox for Citrix client package files\"\n",
+        "/foo/hosted-content": "\n    base-uri /foo/public/share\n    description \"Sandbox for static contents\"\n"
+      }
+    }
+  },
+  "auth": {
+    "apm-auth": {
+      "/Common/system-auth": "\n    profile-access /Common/adminAuth_local_aPolicy\n"
+    },
+    "radius": {
+      "/Common/system-auth": "\n    servers {\n        /Common/system_auth_name1\n    }\n"
+    },
+    "radius-server": {
+      "/Common/system_auth_name1": "\n    secret $M$mn$9uYx+bTjLD8YSGZAUEfFwHvpSDwZsL25kZxdn5NZmCI=\n    server 10.200.244.1\n"
+    },
+    "remote-user": "\n    default-role admin\n    remote-console-access tmsh\n",
+    "source": "\n    fallback true\n",
+    "partition": {
+      "Common": "\n    description \"Updated by AS3 at Thu, 17 Sep 2020 15:14:36 GMT\"\n",
+      "foo": "\n    description \"Updated by AS3 at Tue, 06 Oct 2020 18:27:20 GMT\"\n",
+      "test": " "
+    },
+    "password-policy": "\n    lockout-duration 10\n    manual-unlock-disabled true\n    policy-enforcement disabled\n"
+  },
+  "ilx": {
+    "global-settings": "\n    debug-port-blacklist { 47019 54321 60000 }\n"
+  },
+  "ltm": {
+    "default-node-monitor": "\n    rule none\n",
+    "node": {
+      "/Common/10.10.10.1": "\n    address 10.10.10.1\n",
+      "/Common/192.168.200.42": "\n    address 192.168.200.42\n",
+      "/Common/api.chucknorris.io": "\n    fqdn {\n        address-family all\n        autopopulate enabled\n        name api.chucknorris.io\n    }\n",
+      "/Common/app1_Node1": "\n    address 192.168.1.22\n",
+      "/Common/app1_Node2": "\n    address 192.168.1.23\n",
+      "/Common/app2_Node1": "\n    address 192.168.2.22\n    description app2_Node1\n",
+      "/Common/app2_Node2": "\n    address 192.168.2.23\n    description app2_Node2\n",
+      "/Common/app3_Node1": "\n    address 192.168.1.52\n",
+      "/Common/app3_Node2": "\n    address 192.168.1.53\n",
+      "/Common/app5_Node5": "\n    address 192.168.10.23\n",
+      "/foo/192.50.2.2": "\n    address 192.50.2.2\n"
+    },
+    "policy": {
+      "/Common/app3_ltm_policy": "\n    rules {\n        global_rule_1 { }\n    }\n    strategy /Common/first-match\n",
+      "/Common/app4_ltPolicy": "\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n"
+    },
+    "pool": {
+      "/Common/app1_t80_pool": "\n    members {\n        /Common/app1_Node1:80 {\n            address 192.168.1.22\n        }\n        /Common/app1_Node2:80 {\n            address 192.168.1.23\n        }\n    }\n    monitor /Common/http and /Common/tcp\n",
+      "/Common/app2_t80_pool": "\n    load-balancing-mode least-connections-member\n    members {\n        /Common/app2_Node1:80 {\n            address 192.168.2.22\n        }\n        /Common/app2_Node2:80 {\n            address 192.168.2.23\n        }\n    }\n    monitor /Common/global_http_monitor and /Common/global_https_monitor\n",
+      "/Common/app3_t8443_pool": "\n    load-balancing-mode least-connections-member\n    members {\n        /Common/app3_Node1:8443 {\n            address 192.168.1.52\n        }\n        /Common/app3_Node2:8443 {\n            address 192.168.1.53\n        }\n    }\n    monitor /Common/app1_tcp_half_open_quick_monitor and /Common/http_head_f5 and /Common/http2_head_f5 and /Common/http and /Common/tcp_half_open\n",
+      "/Common/app4_pool": "\n    members {\n        /Common/api.chucknorris.io:443 {\n            fqdn {\n                autopopulate enabled\n                name api.chucknorris.io\n            }\n        }\n    }\n",
+      "/Common/css_pool": " ",
+      "/Common/jpg.pool": " ",
+      "/Common/js.io_t80_pool": " ",
+      "/foo/defaultsUDP_5555/defaultsUDP_5555_Pool1": "\n    members {\n        /foo/192.50.2.2:5555 {\n            address 192.50.2.2\n            metadata {\n                source {\n                    value declaration\n                }\n            }\n        }\n    }\n    min-active-members 1\n    monitor min 1 of { /Common/gateway_icmp }\n"
+    },
+    "rule": {
+      "/Common/app3_rule": "\n#comment\n\nwhen HTTP_REQUEST {\n    # add more here\n",
+      "/Common/app3_rule2": "\n#comment\n\nwhen HTTP_REQUEST {\n    # ben test 444\n",
+      "/Common/app3_rule3": "\n# app3_rule3 header\n\nwhen SERVERSSL_DATA {\n    # got something from server\n",
+      "/Common/app4_pool_rule": "\n### test rule for corkscrew\n\n  # \n\nwhen HTTP_REQUEST {\n\n  # pool reference by variable declaration\n  set html-pool web1Pool\n\n  if { [HTTP::path] ends_with \"*.css\" }{\n\n    # regular pool refernce\n    pool css_pool\n\n  } elseif { [HTTP::path] ends_with \"*.jpg\" }{\n\n    # pool member refernce\n    pool jpg.pool member 10.10.10.1 80\n\n  } elseif { [HTTP::path] ends_with \"*.js\" }{\n\n    # another pool reference with special characters\n    pool js.io_t80_pool \n\n  } elseif { [HTTP::path] ends_with \"*.xx\" }{\n\n    # pool reference not in tmos config\n    ### *** seems the gui won't let you attach an irule to a vs with a pool that doesn't exist\n    #pool missing_pool\n\n  } elseif { [HTTP::path] ends_with \"*.txt\" }{\n\n    # node reference\n    node 10.10.10.1 80\n\n  } else {\n\n    # pool referenced by variable\n    pool $html-pool\n\n  }\n",
+      "/Common/app4_pool_rule2": "\n\n"
+    },
+    "snat-translation": {
+      "/Common/192.168.1.51": "\n    address 192.168.1.51\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n"
+    },
+    "snatpool": {
+      "/Common/app3_snat_pool": "\n    members {\n        /Common/192.168.1.51\n    }\n"
+    },
+    "virtual": {
+      "/Common/app1_t80_vs": "\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.1.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/app1_t443_vs": "\n    destination /Common/192.168.1.21:443\n    ip-protocol tcp\n    last-modified-time 2020-09-18:10:05:54\n    mask 255.255.255.255\n    pool /Common/app1_t80_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/app2_t80_vs": "\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.2.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/app2_t443_vs": "\n    destination /Common/192.168.2.21:443\n    ip-protocol tcp\n    last-modified-time 2020-09-18:10:05:47\n    mask 255.255.255.255\n    pool /Common/app2_t80_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/app3_t8443_vs": "\n    destination /Common/192.168.1.51:8443\n    fallback-persistence /Common/app3_srcAddr_persist\n    ip-protocol tcp\n    last-modified-time 2020-09-17:12:45:40\n    mask 255.255.255.255\n    persist {\n        /Common/app3_cookie {\n            default yes\n        }\n    }\n    policies {\n        /Common/app3_ltm_policy { }\n    }\n    pool /Common/app3_t8443_pool\n    profiles {\n        /Common/app3_clientssl {\n            context clientside\n        }\n        /Common/app3_serverssl {\n            context serverside\n        }\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/app3_rule\n        /Common/app3_rule2\n        /Common/app3_rule3\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        pool /Common/app3_snat_pool\n        type snat\n    }\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/app4_t80_vs": "\n    description \"test pool references in irule extration and ltp\"\n    destination /Common/192.168.2.25:80\n    ip-protocol tcp\n    last-modified-time 2020-10-07:07:28:35\n    mask 255.255.255.255\n    policies {\n        /Common/app4_ltPolicy { }\n    }\n    pool /Common/app4_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n        /Common/app4_pool_rule\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/forwarder_net_0.0.0.0": "\n    destination /Common/0.0.0.0:0\n    ip-forward\n    mask any\n    profiles {\n        /Common/fastl4_loose { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address disabled\n    translate-port disabled\n",
+      "/foo/defaultsUDP_5555/serviceMain": "\n    creation-time 2020-10-06:13:27:20\n    description defaultsUDP_5555\n    destination /foo/192.50.2.1:5555\n    ip-protocol udp\n    last-modified-time 2020-10-06:13:27:20\n    mask 255.255.255.255\n    persist {\n        /Common/source_addr {\n            default yes\n        }\n    }\n    pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1\n    profiles {\n        /Common/udp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n"
+    },
+    "virtual-address": {
+      "/Common/0.0.0.0": "\n    address any\n    arp disabled\n    icmp-echo disabled\n    mask any\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/192.168.1.21": "\n    address 192.168.1.21\n    arp enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/192.168.1.51": "\n    address 192.168.1.51\n    arp enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/192.168.2.21": "\n    address 192.168.2.21\n    arp enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/192.168.2.25": "\n    address 192.168.2.25\n    arp enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n"
+    },
+    "auth": {
+      "radius-server": {
+        "/Common/system_auth_name1": "\n    secret $M$mn$9uYx+bTjLD8YSGZAUEfFwHvpSDwZsL25kZxdn5NZmCI=\n    server 10.200.244.1\n"
+      }
+    },
+    "classification": {
+      "auto-update": {
+        "settings": "\n    auto-update-interval weekly\n    enabled no\n"
+      }
+    },
+    "data-group": {
+      "internal": {
+        "/Common/____appsvcs_declaration-1601897418975": "\n    description \"f5 AS3 declaration (see info in record 0)\"\n    records {\n        0 {\n            data \"date^2020-10-05T11:30:18.975Z|id^1601897415002|tenants^|blocks^1\"\n        }\n        1 {\n            data eNoNzL0OwyAMBOB38dwgm5TmZ6vatVvUoRsCS0GCEAHtEuXd6/G+O90BLtpaYYb78wEXqG7lZN9casibaK9QoXjwEuiGNE7DlQyiFvzu3jZ+Zc9SVo7sWvixFC5vreQotwfY4lbRJSSuzaZdpho1doQdmoVo7nGmUU2D+cB5/gEMbipT\n        }\n    }\n    type integer\n",
+        "/Common/____appsvcs_declaration-1601900242421": "\n    description \"f5 AS3 declaration (see info in record 0)\"\n    records {\n        0 {\n            data \"date^2020-10-05T12:17:22.421Z|id^autogen_6c3dbac3-4624-47e2-8ed7-3932d3c1d9b2|tenants^foo|blocks^1\"\n        }\n        1 {\n            data eNp1kM1uwjAQhN/F5ySynQAlN1SuSEilPbRCkbEXsOQ/2Q4XlHfvmlYUVa2PM+Odb/dKpBEpkZ6s1s+kIkmewYo3iEl7h2rbcNpQNI7ek/56T+/ACZdRV3AUo8npdb0dZvgeQ6sQjJYil1EVyWCDERnQGFUoXRAvWsJGaPf46+VLHnAihi465lGYlVIRUgIMfBC25M2MNrxhZH9PbH3MpC8IFQneG5z0m23Yos7IVP3nPFAUAeutdzr7eKvV0oZSaMEe4CZdbztA/JuOl/D3kj90036akEArLBFj9idww1y26iBkW3dz3tXdAnj9BGpRt8uWq1YytTxwhBmDwvttvCo3TGBAZn0BNKR3OXqTygIiyjOqO20hZYHEPeGU05rRms52jPds0XPedJy9k2n6BPXOoeQ=\n        }\n    }\n    type integer\n",
+        "/Common/____appsvcs_declaration-1601900272772": "\n    description \"f5 AS3 declaration (see info in record 0)\"\n    records {\n        0 {\n            data \"date^2020-10-05T12:17:52.772Z|id^1601900269131|tenants^|blocks^1\"\n        }\n        1 {\n            data eNoNzDELwyAQBeD/cnMjd4ZE4lbatVvo0E30IILGoLZLyH/vje97j3eCT641sHB/PuAGzW+c3Ztri2UXHRUqFI9BAs1IC6KeFxpJ8HsE1/lVAkvZOLHv8cdS+LL3WpLcnuCq30TXmLl1lw+ZatQ4EA44raQtGTtpZYz+wHX9AQqTKk0=\n        }\n    }\n    type integer\n",
+        "/Common/____appsvcs_declaration-1602008840967": "\n    description \"f5 AS3 declaration (see info in record 0)\"\n    records {\n        0 {\n            data \"date^2020-10-06T18:27:20.967Z|id^autogen_411122fd-f96d-45e5-9f42-5231b42fb590|tenants^foo|blocks^1\"\n        }\n        1 {\n            data eNp1UctuwjAQ/Befkyg2CTS5oXJFQirtoRWKjL0BS37Jdrig/HvXtKKoan2cGe/M7F6J0DxG0pP15pkUJIozGP4GISpnEV1UrK5qJEbnSH+9q/dguU2ISxj5pFN83eyGFt+jaO29VoKnPKogCYzXPAESk/TZC8JFCdhyZR9/vXzBA05E0UWFNHG9ljJAjICCD0I7VrV1xSpKDnfFzoVE+hyhIN45jZN+Zxt2iFMyF/8xDykygPbGWZVcuNkqYXw2NGCOcIOutw4Q/k7Hsvi75E+6+TDPmEBJNOFTciewQ0MpZWyU5dgtZdm00Jbd2LCyZQt6bNh4bLt8g8lL3N/WybzDCBpEUhdAQjibgtMxF+BBnBHdKwMxcUzcE1azuqR1WS/39Klnqx5v2i1X72SePwG436Fo\n        }\n    }\n    type integer\n",
+        "/Common/__appsvcs_update": "\n    type string\n",
+        "/Common/appsvcs/dataStore": "\n    records {\n        as3_async_records0 {\n            data eNrtWllv20gS/iuGntNK34fevM5iZjDJwnC8+zDjwOgzJkKRAkUlawT+71tNUkcUcZGZcXY1A/pBMNnd1XV89VV1S7NfP9/NKruMd7PF3YxQH7iOEYXkPeIkJmQ4pggTFxTFKWBr72Yv7mZtsYzr1i5XsIxITIlhCgumFYzB+3az7uT5erkqYxu7NU1cb8o2D3w+mEQx7sdWdbWO/aAv7boXcPnqqlu79g9xaf8Vm3VRV90Im1M8x91gquvjdbexslXbjYaYbN73n6+u7wX8fbXFalUW3rad4GxaBJ1t2ztkE1b9/rH5WPj4xhbV8fq3/dA9yO+mfiyadmPLyxDAqHXMk34Fzxo6F3hO5+Ru9m4/67puQMtF1gteruq67GQe63x/DSOw8unF+NiXWl13omD6sq6Ktm4GNQqfQ5YVWMali/3rz719sRnTmfZLBicc6Pz07ukp61SEblO7aev3sbrnhBBKU0DJyIC4iAKZxCkSlBHHaXLC9JHbrAJ4+k0dem+vYxl9W3zs8eLrqm3qcgCMbfwDjNweAO9uRjHFiGCE5S3RC6oATXMj1S/gqazYIbSTEjYRzZH1FiOutUTGM4x8IsaE5DzG8iS0sWJS5Y8J2hO0zxLaoA9mnDgUgwWdkuRIe2kRw9QFTbzycQzaRFOphJmgPUH7LKEtovTUW4qsFgRxRQKyJiWETSCCOquToWPQlpJwOTUkE7TPE9pOG4+ZFkiHZBHn1iCLhUOOBCqZU9IRdhraWGuuDZmgPUH7PKHtjfYpMYkcZxyOkVQAqkFF65yHfiM55uM4tLkQeIL2BO3z7LWNNcREi5yM0JBoR5EzXiDlHA82acW9G4U201Q/T6+9n5nd7nvL+4mw7dq+Hzyx8T7mUML7sqjiVb3JcF5QDi8e6nXbzSprb8v+qQNuj/nFkBF5702VHZYtgfx8etfBB0DSDHCfkm1KtmdKti+zLTKXKA0MsUQ8tP8YI8M0Q0qLJFLgkFRiLNuUoYb8nkLCv8q2w5Sq6osD7K8vEqRUGGwfspB/ZQZnkUmLkVYKzDAiIk2VhMeEccQi0KhPmUGM0QwTSthZmEFNYIl5hngCAuQqyXzPIFHEyXiHg6GenDYDY6o0NucRDQ6KMgF4EklBdxIixIVEh6TmworAE4lq1AxpsGBnQeH0d1I4NQL/EQrfMvjAH3vHEEaelyDELaELohaCzpWiJwkiYWk4cRr5mK++pKTIkoDzcQoLQrhmxo3Hkgk53epOxa+6l54FZzOzSQqUoCJFOgaFmGFQfTwJxtHvg21K55ySU52m5F47RgJSONMUhlpsuNFIBGhAA8FKqXG2BTuUnqA9Qfssoc0iB0WiQVEDYXNo1JBzwiOH4TXHlAoiRqHNjBHyz32IUoRMh6gp2b5bsh1dNEdNZXAcuXyog5aIIOOMQV5TYgnk3chtHNFGccqpkWfRtic4cAQjPSIugm8jw9DqEYZohD5esBhA11EzCBy69FmQBvsm0nhrs3L3mBxRB2OYP3Pz3rlHALE+OzDJguEF0XOjxElgWssjt4miGIiDiMLZWHNjEeikLPFcR+1HI4ol/p/+2ujIc5umWmw2RegiIihYzCwcQ7hkErKLWuSNDpRaZ4jokV1aF8uD4F4MsYWdmg/9+6J7/+Pt7fWF3ZPzxaeifbi4ublYbantAB2j7H9JfhPfP7TtNxN+VvC/MT64ak7mBPfkueP2lzu1X16Sl5+iu98Z9GVR0DlGq+z9NaQE6BLbhzoM0n1dfyjiILqpU1HGXp/MdHZd+EOBt4+rAcetrYJttpF4jA3v3re+t3qQdHt1PfBTs7TloT9e1Z+qn5bLGArw2KVvt8Co6qrH2/rBNvHQE8mW6wgDEBJXZi3aZpOfl/bfV3VVxU5GntjdilS23VWSTp7tRb3dIne7umiauimq91/uDjFqf6xXhzW0j3Fjq3UO8lVZxKodHLxVbTf69rAK7jc7Gh9WD4OgseR/74wLW5m5JO4D+02FuQfe6cK8r7kdJEZr9RZuLw4eh3bj2Pt+5/rXxbJoB/cDkcbtMyKZXh+BpQp/k7Mlk04/Z/f/qikgCO3jD029WQ0ybFgWVQ7XcOc3bLwP5ati7Wsw4HGLyHYAawedfwDl7mDTUXxZ2/A3W9rKQ7h3jNzkUoma2hV9FsOmxXKzfNM773Ig617j2NP3bVPEHdD2cD6J4rL+dANpuu1U8cEO+7CRp2PPPp1w9YDDm3rTwn7LnlCywHoFhA65XfjXtf/wc+wd0jd5z1t/qFkIOaec/dKv34Hxaiepc/T71/HjQM4x59c2d3JjdJgtPt7sS0cfqeOihr0ISYqEdPeLlUTyN/opIq8UowKaQCXdWFGDo42RfCpqf6Kitme7M+O+7Qnl+yXUV9DXjBtlAkPB6Yi4h87OJmuRCIqKZEzQIzdWHfSZ7K60//8duvhDHTrR/Dk79Cklp5T8bSl59NVjyHdtkI7YEYANpgIKkw6QolgYknBSeDQnieFEkrM4/APIjdHUowSfiDsukUsuII+dipg5G2MaNUNzIelf4fAvDH3+wz+4R1LxHQ7/VC6onmt2+qt9z5MNTjhEvQqIh0CQBkyihAM1xsmQ7Ojhn1AsxNQnTaR8jqRM8s9ahFhQPqdiS8rvZv8Bs5/C1w==\n        }\n    }\n    type string\n",
+        "/Common/atgTeem/datastore": "\n    type string\n",
+        "/Common/f5-appsvcs-templates/config": "\n    records {\n        config0 {\n            data eNqrVkpJzUktSU0JSc0tyEksSQ1OLSlWsopWKkktLlGKrQUAx+YL5Q==\n        }\n    }\n    type string\n",
+        "/Common/f5-appsvcs-templates/dataStore": "\n    records {\n        bigip-fast-templates0 {\n            data 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\n        }\n        examples0 {\n            data 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\n        }\n        goodFastTemplates0 {\n            data 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\n        }\n    }\n    type string\n"
+      }
+    },
+    "monitor": {
+      "dns": {
+        "/Common/dubNameTst1_monitor": "\n    accept-rcode no-error\n    adaptive disabled\n    answer-contains query-type\n    defaults-from /Common/dns\n    interval 5\n    qname query.test.com\n    qtype a\n    recv none\n    time-until-up 0\n    timeout 16\n"
+      },
+      "http": {
+        "/Common/global_http_monitor": "\n    adaptive disabled\n    defaults-from /Common/http\n    interval 5\n    ip-dscp 0\n    recv \"ok 200\"\n    recv-disable none\n    send \"GET /anywebsite.com\\r\\n\"\n    time-until-up 0\n    timeout 16\n"
+      },
+      "https": {
+        "/Common/global_https_monitor": "\n    adaptive disabled\n    defaults-from /Common/https\n    interval 5\n    ip-dscp 0\n    recv \"201 continue\"\n    recv-disable none\n    send \"GET /any-secure-website.com\\r\\n\"\n    time-until-up 0\n    timeout 16\n"
+      },
+      "tcp": {
+        "/Common/test_tcp_monitor": "\n    adaptive disabled\n    defaults-from /Common/tcp\n    interval 5\n    ip-dscp 0\n    recv \"receive a tcp string\"\n    recv-disable none\n    send \"send a tcp string\"\n    time-until-up 0\n    timeout 16\n"
+      },
+      "tcp-half-open": {
+        "/Common/app1_tcp_half_open_quick_monitor": "\n    defaults-from /Common/tcp_half_open\n    destination *:*\n    interval 1\n    time-until-up 0\n    timeout 4\n"
+      },
+      "udp": {
+        "/Common/test_udp_monitor": "\n    adaptive disabled\n    debug no\n    defaults-from /Common/udp\n    interval 5\n    recv recieve-what?\n    recv-disable none\n    send \"default send string\"\n    time-until-up 0\n    timeout 16\n"
+      }
+    },
+    "persistence": {
+      "cookie": {
+        "/Common/app3_cookie": "\n    always-send disabled\n    app-service none\n    cookie-encryption disabled\n    cookie-name app3CustomeCookie\n    defaults-from /Common/cookie\n    encrypt-cookie-poolname disabled\n    expiration 0\n    httponly enabled\n    method insert\n    override-connection-limit disabled\n    secure enabled\n"
+      },
+      "source-addr": {
+        "/Common/app3_srcAddr_persist": "\n    app-service none\n    defaults-from /Common/source_addr\n    hash-algorithm default\n    map-proxies enabled\n    mask none\n    match-across-pools disabled\n    match-across-services disabled\n    match-across-virtuals disabled\n    override-connection-limit disabled\n    timeout 180\n"
+      }
+    },
+    "profile": {
+      "client-ssl": {
+        "/Common/app2_clientssl": "\n    app-service none\n    cert-key-chain {\n        default {\n            cert /Common/default.crt\n            key /Common/default.key\n        }\n    }\n    defaults-from /Common/clientssl\n    inherit-ca-certkeychain true\n    inherit-certkeychain true\n",
+        "/Common/app3_clientssl": "\n    app-service none\n    cert-key-chain {\n        default {\n            cert /Common/default.crt\n            key /Common/default.key\n        }\n    }\n    defaults-from /Common/clientssl\n    inherit-ca-certkeychain true\n    inherit-certkeychain true\n",
+        "/Common/test1": "\n    app-service none\n    cert-key-chain {\n        default {\n            cert /Common/default.crt\n            key /Common/default.key\n        }\n    }\n    defaults-from /Common/clientssl\n    inherit-ca-certkeychain true\n    inherit-certkeychain true\n"
+      },
+      "fastl4": {
+        "/Common/fastl4_loose": "\n    app-service none\n    loose-close enabled\n    loose-initialization enabled\n    reset-on-timeout disabled\n    syn-cookie-enable disabled\n"
+      },
+      "ftp": {
+        "/Common/global_http_monitor": "\n    app-service none\n    defaults-from /Common/ftp\n"
+      },
+      "http": {
+        "/Common/dubNameTst1_profile": "\n    app-service none\n    defaults-from /Common/http\n    proxy-type reverse\n"
+      },
+      "http-compression": {
+        "/Common/dubName.Tst1_profile": "\n    app-service none\n    defaults-from /Common/httpcompression\n"
+      },
+      "server-ssl": {
+        "/Common/app3_serverssl": "\n    app-service none\n    defaults-from /Common/serverssl\n",
+        "/Common/test2": "\n    app-service none\n    defaults-from /Common/serverssl\n"
+      }
+    }
+  },
+  "net": {
+    "dns-resolver": {
+      "/Common/f5-aws-dns": "\n    forward-zones {\n        amazonaws.com {\n            nameservers {\n                8.8.8.8:53 { }\n            }\n        }\n        idservice.net {\n            nameservers {\n                8.8.8.8:53 { }\n            }\n        }\n    }\n    route-domain /Common/0\n"
+    },
+    "ipsec": {
+      "ike-daemon": {
+        "/Common/ikedaemon": "\n    log-publisher /Common/default-ipsec-log-publisher\n"
+      }
+    },
+    "interface": {
+      "1.0": "\n    media-fixed 10000T-FD\n"
+    },
+    "port-list": {
+      "/Common/_sys_self_allow_tcp_defaults": "\n    ports {\n        22 { }\n        53 { }\n        161 { }\n        443 { }\n        1029-1043 { }\n        4353 { }\n    }\n",
+      "/Common/_sys_self_allow_udp_defaults": "\n    ports {\n        53 { }\n        161 { }\n        520 { }\n        1026 { }\n        4353 { }\n    }\n"
+    },
+    "route-domain": {
+      "/Common/0": "\n    id 0\n    vlans {\n        /Common/http-tunnel\n        /Common/socks-tunnel\n        /Common/internal\n    }\n"
+    },
+    "self-allow": "\n    defaults {\n        igmp:0\n        ospf:0\n        pim:0\n        tcp:161\n        tcp:22\n        tcp:4353\n        tcp:53\n        tcp:8443\n        udp:1026\n        udp:161\n        udp:4353\n        udp:520\n        udp:53\n    }\n",
+    "stp": {
+      "/Common/cist": "\n    interfaces {\n        1.0 {\n            external-path-cost 500\n            internal-path-cost 500\n        }\n    }\n    vlans {\n        /Common/internal\n    }\n"
+    },
+    "vlan": {
+      "/Common/internal": "\n    interfaces {\n        1.0 { }\n    }\n    tag 4094\n"
+    },
+    "fdb": {
+      "tunnel": {
+        "/Common/http-tunnel": " ",
+        "/Common/socks-tunnel": " "
+      },
+      "vlan": {
+        "/Common/internal": " "
+      }
+    },
+    "tunnels": {
+      "tunnel": {
+        "/Common/http-tunnel": "\n    description \"Tunnel for http-explicit profile\"\n    profile /Common/tcp-forward\n",
+        "/Common/socks-tunnel": "\n    description \"Tunnel for socks profile\"\n    profile /Common/tcp-forward\n"
+      }
+    }
+  },
+  "pem": {
+    "global-settings": {
+      "analytics": " ",
+      "gx": " ",
+      "policy": " "
+    }
+  },
+  "security": {
+    "dos": {
+      "ipv6-ext-hdr": {
+        "/Common/dos-ipv6-ext-hdr": "\n    frame-types { auth dstopt esp frag hbh mobility route }\n"
+      },
+      "udp-portlist": {
+        "/Common/dos-udp-portlist": "\n    list-type exclude-listed-ports\n"
+      }
+    },
+    "firewall": {
+      "config-change-log": "\n    log-publisher /Common/local-db-publisher\n",
+      "config-entity-id": {
+        "/Common/uuid_entity_id": "\n    entity-id 7402404740565079421\n"
+      },
+      "port-list": {
+        "/Common/_sys_self_allow_tcp_defaults": "\n    ports {\n        22 { }\n        53 { }\n        161 { }\n        443 { }\n        1029-1043 { }\n        4353 { }\n    }\n",
+        "/Common/_sys_self_allow_udp_defaults": "\n    ports {\n        53 { }\n        161 { }\n        520 { }\n        1026 { }\n        4353 { }\n    }\n"
+      },
+      "rule-list": {
+        "/Common/_sys_self_allow_all": "\n    rules {\n        _sys_allow_all {\n            action accept\n            ip-protocol any\n        }\n    }\n",
+        "/Common/_sys_self_allow_defaults": "\n    rules {\n        _sys_allow_tcp_defaults {\n            action accept\n            ip-protocol tcp\n            destination {\n                port-lists {\n                    /Common/_sys_self_allow_tcp_defaults\n                }\n            }\n        }\n        _sys_allow_udp_defaults {\n            action accept\n            ip-protocol udp\n            destination {\n                port-lists {\n                    /Common/_sys_self_allow_udp_defaults\n                }\n            }\n        }\n        _sys_allow_ospf_defaults {\n            action accept\n            ip-protocol ospf\n        }\n        _sys_allow_pim_defaults {\n            action accept\n            ip-protocol pim\n        }\n        _sys_allow_igmp_defaults {\n            action accept\n            ip-protocol igmp\n        }\n    }\n",
+        "/Common/_sys_self_allow_management": "\n    rules {\n        _sys_allow_ssh {\n            action accept\n            ip-protocol tcp\n            destination {\n                ports {\n                    22 { }\n                }\n            }\n        }\n        _sys_allow_web {\n            action accept\n            ip-protocol tcp\n            destination {\n                ports {\n                    443 { }\n                }\n            }\n        }\n    }\n"
+      }
+    },
+    "protocol-inspection": {
+      "compliance-map": {
+        "/Common/map_10426": "\n    insp-id 10426\n    key-type int\n    value-type vector-string\n"
+      },
+      "compliance-objects": {
+        "/Common/allowed_list": "\n    insp-id 10232\n    type vector-string\n",
+        "/Common/argument_len_max": "\n    insp-id 10905\n    type int\n",
+        "/Common/command_argument_len_max": "\n    insp-id 10609\n    type int\n",
+        "/Common/command_len_max": "\n    insp-id 10609\n    type int\n",
+        "/Common/command_parameter_len_max": "\n    insp-id 10707\n    type int\n",
+        "/Common/disallowed_list": "\n    insp-id 10232\n    type vector-string\n",
+        "/Common/error_message_max": "\n    insp-id 10102\n    type int\n",
+        "/Common/file_name_max": "\n    insp-id 10102\n    type int\n",
+        "/Common/file_type_max": "\n    insp-id 10102\n    type int\n",
+        "/Common/header_name_len_max": "\n    insp-id 11223\n    type int\n",
+        "/Common/header_value_len_max": "\n    insp-id 11223\n    type int\n",
+        "/Common/method_len_max": "\n    insp-id 11223\n    type int\n",
+        "/Common/option_name_max": "\n    insp-id 10102\n    type int\n",
+        "/Common/option_value_max": "\n    insp-id 10102\n    type int\n",
+        "/Common/response_argument_len_max": "\n    insp-id 10609\n    type int\n",
+        "/Common/response_code_len_max": "\n    insp-id 10609\n    type int\n",
+        "/Common/response_parameter_len_max": "\n    insp-id 10707\n    type int\n",
+        "/Common/status_code_len_max": "\n    insp-id 11223\n    type int\n",
+        "/Common/status_len_max": "\n    insp-id 10707\n    type int\n",
+        "/Common/status_reason_len_max": "\n    insp-id 11223\n    type int\n",
+        "/Common/tag_len_max": "\n    insp-id 10905\n    type int\n",
+        "/Common/uri_len_max": "\n    insp-id 11223\n    type int\n",
+        "/Common/version_len_max": "\n    insp-id 11223\n    type int\n"
+      }
+    },
+    "scrubber": {
+      "profile": {
+        "/Common/scrubber-profile-default": "\n    advertisement-ttl 300\n"
+      }
+    },
+    "device-id": {
+      "attribute": {
+        "/Common/att01": "\n    id 1\n",
+        "/Common/att02": "\n    id 2\n",
+        "/Common/att03": "\n    id 3\n",
+        "/Common/att04": "\n    id 4\n",
+        "/Common/att05": "\n    id 5\n",
+        "/Common/att06": "\n    id 6\n",
+        "/Common/att07": "\n    id 7\n",
+        "/Common/att08": "\n    id 8\n",
+        "/Common/att09": "\n    id 9\n",
+        "/Common/att10": "\n    id 10\n",
+        "/Common/att11": "\n    id 11\n",
+        "/Common/att12": "\n    id 12\n",
+        "/Common/att13": "\n    id 13\n",
+        "/Common/att14": "\n    id 14\n",
+        "/Common/att15": "\n    id 15\n",
+        "/Common/att16": "\n    id 16\n",
+        "/Common/att17": "\n    id 17\n",
+        "/Common/att18": "\n    id 18\n",
+        "/Common/att19": "\n    id 19\n",
+        "/Common/att20": "\n    id 20\n",
+        "/Common/att21": "\n    id 21\n",
+        "/Common/att22": "\n    id 22\n",
+        "/Common/att23": "\n    id 23\n",
+        "/Common/att24": "\n    id 24\n",
+        "/Common/att25": "\n    id 25\n",
+        "/Common/att26": "\n    id 26\n",
+        "/Common/att27": "\n    id 27\n",
+        "/Common/att28": "\n    id 28\n",
+        "/Common/att29": "\n    id 29\n",
+        "/Common/att30": "\n    id 30\n",
+        "/Common/att31": "\n    id 31\n",
+        "/Common/att32": "\n    id 32\n",
+        "/Common/att33": "\n    id 33\n",
+        "/Common/att34": "\n    id 34\n",
+        "/Common/att35": "\n    id 35\n",
+        "/Common/att36": "\n    id 36\n",
+        "/Common/att37": "\n    id 37\n",
+        "/Common/att38": "\n    id 38\n",
+        "/Common/att39": "\n    id 39\n"
+      }
+    },
+    "ip-intelligence": {
+      "policy": {
+        "/Common/ip-intelligence": " "
+      }
+    },
+    "shared-objects": {
+      "port-list": {
+        "/Common/_sys_self_allow_tcp_defaults": "\n    ports {\n        22 { }\n        53 { }\n        161 { }\n        443 { }\n        1029-1043 { }\n        4353 { }\n    }\n",
+        "/Common/_sys_self_allow_udp_defaults": "\n    ports {\n        53 { }\n        161 { }\n        520 { }\n        1026 { }\n        4353 { }\n    }\n"
+      }
+    }
+  },
+  "sys": {
+    "compatibility-level": "\n    level 0\n",
+    "management-ovsdb": "\n    bfd-disabled\n    bfd-route-domain none\n    ca-cert-file none\n    cert-file none\n    cert-key-file none\n    disabled\n    flooding-type replicator\n    log-level info\n    logical-routing-type none\n    tunnel-maintenance-mode active\n",
+    "diags": {
+      "ihealth": "\n    expiration 30\n    no-ihealth false\n    options none\n    password none\n    user none\n"
+    },
+    "ecm": {
+      "cloud-provider": {
+        "/Common/aws-ec2": "\n    description \"The aws-ec2 parameters\"\n    property-template {\n        account { }\n        availability-zone {\n            valid-values { a b c d }\n        }\n        instance-type {\n            valid-values { t2.micro t2.small t2.medium m3.medium m3.large m3.xlarge m3.2xlarge c3.large c3.xlarge c3.2xlarge c3.4xlarge c3.8xlarge r3.large r3.xlarge r3.2xlarge r3.4xlarge r3.8xlarge }\n        }\n        region {\n            valid-values { us-east-1 us-west-1 us-west-2 sa-east-1 eu-west-1 eu-central-1 ap-southeast-2 ap-southeast-1 ap-northeast-1 }\n        }\n    }\n",
+        "/Common/dnet": "\n    description \"The dnet parameters\"\n",
+        "/Common/vsphere": "\n    description \"The vsphere parameters\"\n    property-template {\n        cloud-host-ip { }\n        dhcp-network-name { }\n        end-point-url { }\n        node-name { }\n    }\n"
+      }
+    },
+    "file": {
+      "ssl-key": {
+        "/Common/f5_api_com.key": "\n    cache-path /config/filestore/files_d/Common_d/certificate_key_d/:Common:f5_api_com.key_63136_1\n    passphrase $M$dw$gJ3HaeiGt0skpPsA6hli9PsO/8yo5M6FkI1CHOPiN4GgC/h5Tln6v01SC2727mtleKP9Hw/Vnwio8eOiXi4umiV+IidOxMwtZinL8WYrqX0=\n    revision 1\n    source-path file:///config/ssl/ssl.key/f5_api_com.key\n"
+      }
+    },
+    "software": {
+      "update": "\n    auto-check enabled\n    auto-phonehome disabled\n    frequency weekly\n"
+    },
+    "dns": "\n    description configured-by-dhcp\n    name-servers { 192.168.200.7 192.168.200.8 }\n    search { benlab.io }\n",
+    "folder": {
+      "/": "\n    device-group none\n    hidden false\n    inherited-devicegroup false\n    inherited-traffic-group false\n    traffic-group /Common/traffic-group-1\n",
+      "/Common": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/Drafts": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/EPSEC": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/EPSEC/Status": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/appsvcs": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/atgTeem": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/Common/f5-appsvcs-templates": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/foo": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/foo/defaultsUDP_5555": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/test": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n"
+    },
+    "global-settings": "\n    console-inactivity-timeout 1200\n    file-whitelist-path-prefix \"{/var/local/scf} {/tmp/} {/shared/} {/config/} {/usr/share/aws/} {/var/config/rest/downloads/appsvcs_update.cli}\"\n    gui-setup disabled\n    hostname devCloud01.benlab.io\n    mgmt-dhcp dhcpv6\n",
+    "httpd": "\n    auth-pam-idle-timeout 12000\n    ssl-port 8443\n",
+    "management-dhcp": {
+      "/Common/sys-mgmt-dhcp-config": "\n    request-options { subnet-mask broadcast-address routers domain-name domain-name-servers ntp-servers interface-mtu }\n"
+    },
+    "management-ip": {
+      "10.200.244.110/24": "\n    description configured-statically\n"
+    },
+    "management-route": {
+      "/Common/default": "\n    description configured-statically\n    gateway 10.200.244.1\n    network default\n"
+    },
+    "ntp": "\n    timezone US/Central\n",
+    "provision": {
+      "apm": "\n    level nominal\n",
+      "avr": "\n    level nominal\n",
+      "ltm": "\n    level nominal\n"
+    },
+    "snmp": "\n    agent-addresses { tcp6:161 udp6:161 }\n    communities {\n        /Common/comm-public {\n            community-name public\n            source default\n        }\n    }\n    disk-monitors {\n        /Common/root {\n            minspace 2000\n            path /\n        }\n        /Common/var {\n            minspace 10000\n            path /var\n        }\n    }\n    process-monitors {\n        /Common/bigd {\n            max-processes infinity\n            process bigd\n        }\n        /Common/chmand {\n            process chmand\n        }\n        /Common/httpd {\n            max-processes infinity\n            process httpd\n        }\n        /Common/mcpd {\n            process mcpd\n        }\n        /Common/sod {\n            process sod\n        }\n        /Common/tmm {\n            max-processes infinity\n            process tmm\n        }\n    }\n",
+    "dynad": {
+      "settings": "\n    development-mode false\n"
+    },
+    "fpga": {
+      "firmware-config": "\n    type standard-balanced-fpga\n"
+    },
+    "sflow": {
+      "global-settings": {
+        "http": " ",
+        "vlan": " "
+      }
+    }
+  }
+}

@@ -78,6 +78,7 @@ class RegExTree {
          * base regex tree for extracting tmos config items
          */
         this.regexTree = {
+            tmosVersion: this.tmosVersionReg,
             parentObjects: this.parentObjectsRegex,
             parentNameValue: this.parentNameValueRegex,
             vs: {

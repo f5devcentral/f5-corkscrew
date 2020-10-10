@@ -1,6 +1,15 @@
 "use strict";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -10,8 +19,8 @@ const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
 const objects_2 = require("./utils/objects");
 const uuid_1 = require("uuid");
-const tmosParser_1 = require("./tmosParser");
 const objCounter_1 = require("./objCounter");
+const unPacker_1 = require("./unPacker");
 /**
  * Class to consume bigip.conf
  *
@@ -21,7 +30,8 @@ class BigipConfig {
      *
      * @param config full bigip.conf as string
      */
-    constructor(config) {
+    constructor() {
+        // config = standardizeLineReturns(config);
         /**
          * tmos config as nested json objects
          * - consolidated parant object keys like ltm/apm/sys/...
@@ -29,15 +39,14 @@ class BigipConfig {
         this.configMultiLevelObjects = {};
         this.configFullObject = {};
         this.stats = {};
-        config = standardizeLineReturns(config);
-        this.stats.configBytes = Buffer.byteLength(config, 'utf-8');
-        this.stats.lineCount = tmosParser_1.countLines(config);
-        this.bigipConf = config; // assign orginal config for later use
-        const rex = new regex_1.RegExTree(); // instantiate regex tree
-        this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg); // get tmos version
-        logger_1.default.info(`Recieved bigip.conf of version: ${this.tmosVersion}`);
+        // this.stats.configBytes = Buffer.byteLength(config, 'utf-8');
+        // this.stats.lineCount = countLines(config);
+        // this.bigipConf = config; // assign orginal config for later use
+        // const rex = new RegExTree();  // instantiate regex tree
+        // this.tmosVersion = this.getTMOSversion(config, rex.tmosVersionReg);  // get tmos version
+        // logger.info(`Recieved bigip.conf of version: ${this.tmosVersion}`)
         // assign regex tree for particular version
-        this.rx = rex.get(this.tmosVersion);
+        // this.rx = rex.get(this.tmosVersion)
     }
     /**
      * return list of applications
@@ -45,23 +54,92 @@ class BigipConfig {
     appList() {
         return Object.keys(this.configMultiLevelObjects.ltm.virtual);
     }
-    // /**
-    //  * Add additional config files to the parser
-    //  *  - this is for bigip_base.conf and partition configs
-    //  * @param config array of configs as strings
-    //  */
-    // public addConfig (config: string[]) {
-    //     const numberOfFiles = config.length;
-    //     /**
-    //      * possibly add some logic to confirm that the additional files have the same
-    //      *  tmos version
-    //      * 
-    //      * loop through each file calling the parse function
-    //      * 
-    //      * may look into collapsing all the config files into a single string
-    //      *  to be fed into the instantiation
-    //      */
-    // }
+    /**
+     * load .conf file or files from ucs/qkview
+     *
+     * @param config array of configs as strings
+     */
+    load(file) {
+        return __awaiter(this, void 0, void 0, function* () {
+            /**
+             * setup event emitors to provide status of unPacking
+             */
+            const startTime = process.hrtime.bigint();
+            this.configFiles = yield unPacker_1.unPacker(file);
+            if (this.configFiles) {
+                // unPacker returned something so respond with processing time
+                return Number(process.hrtime.bigint() - startTime) / 1000000;
+            }
+            else {
+                // unPacker failed and returned nothing, return up the chain...
+                return;
+            }
+        });
+    }
+    /**
+     * new parsing fuction to work on list of files from unPacker
+     */
+    parseNew() {
+        const startTime = process.hrtime.bigint();
+        logger_1.default.debug('Begining to parse configs');
+        this.configFiles.forEach(el => {
+            /**
+             * for each file
+             * 1. get tmos version
+             * 2. extract parent objects to array
+             * 3. convert array to main obj
+             */
+            if (this.rx) {
+                // rex tree already assigned, lets confirm subsequent file tmos version match
+                if (this.tmosVersion === this.getTMOSversion(el.content, this.rx.tmosVersion)) {
+                    // do nothing, current file version matches existing files tmos verion
+                }
+                else {
+                    logger_1.default.error(`Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`);
+                    return;
+                }
+            }
+            else {
+                // first time through - build everything
+                const rex = new regex_1.RegExTree(); // instantiate regex tree
+                this.tmosVersion = this.getTMOSversion(el.content, rex.tmosVersionReg); // get tmos version
+                logger_1.default.info(`Recieved .conf file of version: ${this.tmosVersion}`);
+                // assign regex tree for particular version
+                this.rx = rex.get(this.tmosVersion);
+            }
+            let configAsSingleLevelArray = [];
+            try {
+                configAsSingleLevelArray = [...el.content.match(this.rx.parentObjects)];
+            }
+            catch (e) {
+                logger_1.default.error('failed to extract any parent matches from file - might be a scripts file...');
+            }
+            if (configAsSingleLevelArray) {
+                // get number of lines in config
+                const lines = configAsSingleLevelArray.length;
+                logger_1.default.debug(`detected ${this.stats.objectCount} parent objects in this file`);
+                // add to main stats
+                this.stats.objectCount += lines;
+                logger_1.default.debug(`creating more detailed arrays/objects for deeper inspection`);
+                configAsSingleLevelArray.forEach(el => {
+                    // extract object name from body
+                    const name = el.match(this.rx.parentNameValue);
+                    if (name && name.length === 3) {
+                        // split extracted name element by spaces
+                        const names = name[1].split(' ');
+                        // create new nested objects with each of the names, assigning value on inner-most
+                        const newObj = objects_1.nestedObjValue(names, name[2]);
+                        this.configMultiLevelObjects = objects_2.deepMergeObj(this.configMultiLevelObjects, newObj);
+                    }
+                });
+            }
+        });
+        // get ltm object counts
+        this.stats.objects = objCounter_1.countObjects(this.configMultiLevelObjects);
+        // end processing time, convert microseconds to miliseconds
+        this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+        return this.stats.parseTime;
+    }
     /**
      * returns all details from processing
      *
@@ -71,7 +149,7 @@ class BigipConfig {
         var _a;
         // if config has not been parsed yet...
         if (!((_a = this.configMultiLevelObjects.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
-            this.parse(); // parse config files
+            this.parseNew(); // parse config files
         }
         const apps = this.apps(); // extract apps
         const startTime = process.hrtime.bigint(); // start pack timer
@@ -84,7 +162,7 @@ class BigipConfig {
             id,
             dateTime,
             config: {
-                sources: ['bigip.conf', 'bigip_base.conf', 'partition?'],
+                sources: ['bigip.conf', 'bigip_base.conf', 'partition?', 'hook this info souce files'],
                 apps
             },
             stats: this.stats,
@@ -97,61 +175,65 @@ class BigipConfig {
     logs() {
         return logger_1.default.getLogs();
     }
-    /**
-     * parse bigip.conf into parent objects
-     * @param config bigip.conf as string
-     */
-    parse() {
-        const startTime = process.hrtime.bigint();
-        logger_1.default.debug('Begining to parse configs');
-        // parse the major config pieces
-        // this.configAsSingleLevelArray = [...config.match(this.rx.parentObjects)];
-        const configAsSingleLevelArray = [...this.bigipConf.match(this.rx.parentObjects)];
-        logger_1.default.debug('configAsSingleLevelArray complete');
-        // lines in config?
-        this.stats.objectCount = configAsSingleLevelArray.length;
-        // this.stats = nestedObjValue(['objectCount'], this.stats.objectCount);
-        logger_1.default.debug(`detected ${this.stats.objectCount} parent objects`);
-        logger_1.default.debug(`creating more detailed arrays/objects for deeper inspection`);
-        configAsSingleLevelArray.forEach(el => {
-            const name = el.match(this.rx.parentNameValue);
-            if (name && name.length === 3) {
-                // this.configSingleLevelObjects[name[1]] = name[2];
-                // this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]});
-                // split extracted name element by spaces
-                const names = name[1].split(' ');
-                // create new nested objects with each of the names, assigning value on inner-most
-                const newObj = objects_1.nestedObjValue(names, name[2]);
-                /**
-                 * original version that produced a multi-level object tree for parent items ONLY
-                 */
-                this.configMultiLevelObjects = objects_2.deepMergeObj(this.configMultiLevelObjects, newObj);
-            }
-        });
-        // get ltm object counts
-        this.stats.objects = objCounter_1.countObjects(this.configMultiLevelObjects);
-        this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000; // convert microseconds to miliseconds
-        /**
-         * update function to input config
-         */
-        return this.stats.parseTime;
-    }
-    /**
-     * **DEV**  working to fully jsonify the entire config
-     */
-    parse2() {
-        // copy over our base tree so we don't mess with existing functionality
-        this.configFullObject = this.configMultiLevelObjects;
-        let pathToConvert = ['x'];
-        while (pathToConvert) {
-            // if (pathToConvert) {
-            // search values for line return
-            pathToConvert = objects_1.getPathOfValue('\n', this.configFullObject.ltm.virtual);
-            const body = objects_1.deepGet(pathToConvert, this.configFullObject.ltm.virtual);
-            const childBodyAsObj = objects_1.tmosChildToObj(body);
-            objects_1.setNestedKey(this.configFullObject.ltm.virtual, pathToConvert, childBodyAsObj);
-        }
-    }
+    // /**
+    //  * parse bigip.conf into parent objects
+    //  * @param config bigip.conf as string
+    //  */
+    // public parse() {
+    //     const startTime = process.hrtime.bigint();
+    //     logger.debug('Begining to parse configs')
+    //     // parse the major config pieces
+    //     // this.configAsSingleLevelArray = [...config.match(this.rx.parentObjects)];
+    //     const configAsSingleLevelArray = [...this.bigipConf.match(this.rx.parentObjects)];
+    //     logger.debug('configAsSingleLevelArray complete')
+    //     // lines in config?
+    //     this.stats.objectCount = configAsSingleLevelArray.length
+    //     // this.stats = nestedObjValue(['objectCount'], this.stats.objectCount);
+    //     logger.debug(`detected ${this.stats.objectCount} parent objects`)
+    //     logger.debug(`creating more detailed arrays/objects for deeper inspection`)
+    //     configAsSingleLevelArray.forEach(el => {
+    //         const name = el.match(this.rx.parentNameValue);
+    //         if (name && name.length === 3) {
+    //             // this.configSingleLevelObjects[name[1]] = name[2];
+    //             // this.configArrayOfSingleLevelObjects.push({name: name[1], config: name[2]});
+    //             // split extracted name element by spaces
+    //             const names = name[1].split(' ');
+    //             // create new nested objects with each of the names, assigning value on inner-most
+    //             const newObj = nestedObjValue(names, name[2]);
+    //             /**
+    //              * original version that produced a multi-level object tree for parent items ONLY
+    //              */
+    //             this.configMultiLevelObjects = deepMergeObj(this.configMultiLevelObjects, newObj);
+    //         }
+    //     });
+    //     // get ltm object counts
+    //     this.stats.objects = countObjects(this.configMultiLevelObjects);
+    //     this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000; // convert microseconds to miliseconds
+    //     /**
+    //      * update function to input config 
+    //      */
+    //     return this.stats.parseTime
+    // }
+    // /**
+    //  * **DEV**  working to fully jsonify the entire config
+    //  */
+    // private parse2() {
+    //     // copy over our base tree so we don't mess with existing functionality
+    //     this.configFullObject = this.configMultiLevelObjects;
+    //     let pathToConvert = ['x']
+    //     while(pathToConvert) {
+    //     // if (pathToConvert) {
+    //         // search values for line return
+    //         pathToConvert = getPathOfValue('\n', this.configFullObject.ltm.virtual);
+    //         const body = deepGet(pathToConvert, this.configFullObject.ltm.virtual);
+    //         const childBodyAsObj = tmosChildToObj(body);
+    //         setNestedKey(
+    //             this.configFullObject.ltm.virtual,
+    //             pathToConvert,
+    //             childBodyAsObj
+    //         );
+    //     }
+    // }
     /**
      * extracts app(s)
      * @param app single app string
@@ -272,11 +354,16 @@ class BigipConfig {
         let config = '';
         if (snat.includes('pool')) {
             const snatName = snat.match(this.rx.vs.snat.name);
-            const x = objects_1.pathValueFromKey(this.configMultiLevelObjects.ltm.snatpool, snatName[1]);
-            config += `ltm snatpool ${x.key} {${x.value}}\n`;
+            if (snatName) {
+                const x = objects_1.pathValueFromKey(this.configMultiLevelObjects.ltm.snatpool, snatName[1]);
+                config += `ltm snatpool ${x.key} {${x.value}}\n`;
+            }
+            else {
+                logger_1.default.error(`Detected following snat pool configuration, but did not find in config [${snat}]`);
+            }
         }
         else {
-            // automap...
+            logger_1.default.debug(`snat configuration detected, but no pool reference found, presume -> automap`);
         }
         return config;
     }

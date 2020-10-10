@@ -8,23 +8,27 @@ import * as path from 'path';
 
 import BigipConfig from '../ltm';
 
-// const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf"), "utf-8");
-// const devCloud01 = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
-// const config = fs.readFileSync(path.join(__dirname, testFile), "utf-8");
+/**
+ * this test suite can run the ucs or qkview, either should produce the same results
+ */
 
-const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
+const testFile = path.join(__dirname, "artifacts/devCloud01_10.7.20");
+// const testFile = path.join(__dirname, "./artifacts/devCloud_10.10.2020.qkview");
 const testFileDetails = path.parse(testFile);
 // const outFile = `./${testFileDetails.name}.log`
-const outFile = `./devCloud_config.tests.log`
+const outFile = `./devCloud_ucs.tests.log`
 
-describe('explode devCloud bigip.conf tests', function() {
+describe('explode devCloud ucs tests', function() {
     
     let device;
+    let log;
     it(`instantiate class, load configs`, async function() {
         device = new BigipConfig();
         // assert.deepStrictEqual(device.bigipConf, devCloud01);
         const x = await device.load(testFile);
-        const log = device.logs();
+        if (!x) {
+            log = device.logs();
+        }
         assert.ok(x)
     });
 
@@ -45,6 +49,7 @@ describe('explode devCloud bigip.conf tests', function() {
             "/Common/app3_t8443_vs",
             "/Common/app4_t80_vs",
             "/Common/forwarder_net_0.0.0.0",
+            "/foo/defaultsUDP_5555/serviceMain"
           ];
         
         assert.deepStrictEqual(apps, expected, 'Should get list of virtual servers / apps');

@@ -75,6 +75,7 @@ export declare class RegExTree {
     private multilineRegExp;
 }
 export declare type TmosRegExTree = {
+    tmosVersion: RegExp;
     parentObjects: RegExp;
     parentNameValue: RegExp;
     vs: {

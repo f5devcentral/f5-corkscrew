@@ -55,6 +55,22 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Mocha devCloud ucs tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/devCloud_ucs.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Mocha devCloud ALL config tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [

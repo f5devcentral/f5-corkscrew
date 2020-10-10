@@ -5,7 +5,7 @@
 
 import bigipConfig from './ltm'
 import yargs, { Argv } from 'yargs';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import path from 'path';
 
 // yargs
@@ -18,42 +18,34 @@ import path from 'path';
 //     }
 // })
 
-function explode(filePath: string | any) {
+async function explode(filePath: string | any) {
     // console.log('incoming param (file):', filePath);
 
     // part input to usable pieces
     filePath = path.parse(filePath);
     // console.log(filePath);
 
-    /**
-     * logic check for future inputs
-     */
-    if (filePath.ext === '.conf') {
-
-        // console.log('got .conf file - proceeding')
-
-    } else if (filePath.ext === '.ucs') {
-        
-        return console.log('got a ucs archive - not supported yet')
-
-    } else if (filePath.ext === '.qkview') {
-        
-        return console.log('got a qkview - not supported yet')
-
-    } else {
-        
-        return console.error(`file type of ${filePath.ext}, not supported (only .conf at this time)`)
-
-    }
-    
+    const device = new bigipConfig();
 
     try {
-        // try to read file contents
-        const x = fs.readFileSync(path.join(filePath.dir, filePath.base), 'utf-8');
-        // try to parse file as bigip.conf
-        const bConfig = new bigipConfig(x);
-        // return extracted apps
-        const v = JSON.stringify(bConfig.explode());
+
+        const loadTime = await device.load(path.join(filePath.dir, filePath.base));
+        
+        if ( !loadTime ) {
+            // something went wrong, return logs
+            return console.log(device.logs());
+        }
+
+        const parseTime = await device.parseNew();
+        
+        if ( !parseTime ) {
+            // something went wrong, return logs
+            return console.log(device.logs());
+        }
+        
+        const explode = device.explode();
+        const v = JSON.stringify(explode);
+
         return console.log(v);
     } catch (e) {
         return console.log(e.message);
@@ -61,10 +53,10 @@ function explode(filePath: string | any) {
 }
 
 yargs
-.command('explode <file>', 'explode bigip.conf to apps', (yargs) => {
+.command('explode <file>', 'explode bigip config', (yargs) => {
     yargs
     .positional('file', {
-        describe: 'bigip.conf to explode'
+        describe: '.conf|ucs|kqview to explode'
     });
 }, (argv: any) => {
     // console.log(argv.file);

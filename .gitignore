@@ -17,3 +17,5 @@ tmp_*
 # private folder for tests
 /private/
 settings.json
+*.ucs
+*.qkview

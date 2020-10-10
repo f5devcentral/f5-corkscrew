@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.countObjects = void 0;
+/**
+ * counts up totals of the different LTM objects (vs, nodes, pools, ...)
+ * @param obj ltm branch of config tree
+ */
 function countObjects(obj) {
     var _a, _b, _c, _d, _e, _f, _g, _h;
     const stats = {};
