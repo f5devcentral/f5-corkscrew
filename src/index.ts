@@ -3,6 +3,16 @@
 
 import BigipConfig from './ltm';
 
+// import { 
+//     BigipConfObj,
+//     Stats,
+//     Explosion,
+//     AppMap,
+//     TmosApp,
+// } from './models'
+
+export * from './models';
+
 // export default bigipConfig = _BigipConfig;
 export default BigipConfig;
 
@@ -11,8 +21,8 @@ export default BigipConfig;
 // import { BigipConfig } from './ltm';
 // import { poolsInLTP, poolsInRule } from './pools';
 
-// module.exports = {
-//     BigipConfig,
-//     poolsInLTP,
-//     poolsInRule
-// }
+module.exports = {
+    BigipConfig,
+    // BigipConfObj,
+    // Stats,
+}

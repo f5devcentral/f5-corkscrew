@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { BigipConfObj, Stats } from './models';
+import { BigipConfObj, Explosion } from './models';
 import { ConfigFiles } from './unPacker';
 /**
  * Class to consume bigip configs -> parse apps
@@ -47,20 +47,7 @@ export default class BigipConfig extends EventEmitter {
      *
      * -
      */
-    explode(): {
-        id: string;
-        dateTime: Date;
-        config: {
-            sources: {
-                fileName: string;
-                size: number;
-            }[];
-            apps: any[];
-            base: string;
-        };
-        stats: Stats;
-        logs: string;
-    };
+    explode(): Explosion;
     /**
      * Get processing logs
      */

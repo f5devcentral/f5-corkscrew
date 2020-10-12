@@ -71,3 +71,14 @@ export declare type TmosApp = {
     config: string;
     map?: string;
 };
+export declare type Explosion = {
+    id: string;
+    dateTime: Date;
+    config: {
+        sources: any;
+        apps: any;
+        base: any;
+    };
+    stats: Stats;
+    logs: string;
+};

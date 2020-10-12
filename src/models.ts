@@ -87,3 +87,15 @@ export type TmosApp = {
     map?: string
 }
 
+export type Explosion = {
+    id: string,
+    dateTime: Date,
+    config: {
+        sources,
+        apps,
+        base
+    },
+    stats: Stats,
+    logs: string
+}
+

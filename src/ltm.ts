@@ -5,7 +5,7 @@ import { EventEmitter } from 'events';
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
 import { nestedObjValue } from './utils/objects'
-import { BigipConfObj, Stats } from './models'
+import { BigipConfObj, Explosion, Stats } from './models'
 import { deepMergeObj } from './utils/objects'
 import { v4 as uuidv4 } from 'uuid';
 // import { countLines } from './tmosParser';
@@ -186,7 +186,7 @@ export default class BigipConfig extends EventEmitter {
      */
     // todo: type the return object for explode and remove the followin disable line
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    public explode () {
+    public explode (): Explosion {
 
         // if config has not been parsed yet...
         if (!this.configObject.ltm?.virtual) {
