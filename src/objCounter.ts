@@ -30,6 +30,8 @@ export function countObjects (obj: BigipConfObj): ObjStats {
     }
 
     if(obj?.ltm?.profile) {
+        // todo: dig deeper to get a better count of actaul profile numbers
+        // currently only returns number of parent objects which represents (tcp, ssl, http, ...), not all the keys within those objects
         stats.profiles = Object.keys(obj.ltm.profile).length
     }
 
@@ -46,6 +48,7 @@ export function countObjects (obj: BigipConfObj): ObjStats {
     }
 
     if(obj?.ltm?.monitor) {
+        // todo: same as profiles above, dig deeper into each parent object for all the keys of the children
         stats.monitors = Object.keys(obj.ltm.monitor).length
     }
 

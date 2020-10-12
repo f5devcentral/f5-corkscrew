@@ -2,9 +2,9 @@
 
 
 
-export type BigipObj = {
-    [key: string]: unknown
-}
+// export type BigipObj = {
+//     [key: string]: unknown
+// }
 
 
 /**
@@ -15,9 +15,9 @@ export type Stats = {
     parseTime?: number,
     appTime?: number,
     packTime?: number,
-    sourceTmosVersion?: string,
+    // sourceTmosVersion?: string,
     objectCount?: number,
-    lineCount?: number,
+    // lineCount?: number,
     objects?: {
         virtuals?: number,
         profiles?: number,
@@ -50,7 +50,15 @@ export type BigipConfObj = {
         snatpool?: unknown;
     },
     apm?: unknown;
-    net?: unknown;
+    net?: {
+        route?: unknown;
+        "port-list"?: unknown;
+        "route-domain": string;
+        self?: string;
+        "self-allow"?: string;
+        trunk?: string;
+        vlan?: string;
+    }
 }
 
 /**
