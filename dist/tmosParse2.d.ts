@@ -11,7 +11,7 @@ export declare class Parser extends EventEmitter {
     loadParse(files: ConfigFiles): {
         parseTime: number;
         objectCount: number;
-        objects: import("./objCounter").ObjStats;
+        objects: import("./models").ObjStats;
         configObject: unknown;
     };
     /**

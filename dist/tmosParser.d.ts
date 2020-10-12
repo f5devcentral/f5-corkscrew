@@ -1,10 +1,4 @@
-export declare type ParseResp = {
-    totalObjectCount: number;
-    ltmObjectCount: number;
-    lineCount: number;
-    parseTime: number;
-    fullObj: unknown;
-};
+import { ParseResp } from './models';
 /**
  * turns tmos config file parent objects to json tree
  * *** the original parse function in the main ltm config

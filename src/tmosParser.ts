@@ -3,16 +3,11 @@
 // import { } from './utils/objects'
 
 import balanced from 'balanced-match';
+import { ParseResp } from './models';
 
 import { deepMergeObj, nestedObjValue } from './utils/objects'
 
-export type ParseResp = {
-    totalObjectCount: number,
-    ltmObjectCount: number,
-    lineCount: number,
-    parseTime: number,
-    fullObj: unknown
-}
+
 
 /**
  * turns tmos config file parent objects to json tree

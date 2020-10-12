@@ -1,21 +1,8 @@
 
 
 
-import { BigipConfObj } from './models'
+import { BigipConfObj, ObjStats } from './models'
 
-export type ObjStats = {
-    virtuals?: number,
-    profiles?: number,
-    policies?: number,
-    pools?: number,
-    irules?: number,
-    monitors?: number,
-    nodes?: number,
-    snatPools?: number,
-    apmProfiles?: number,
-    apmPolicies?: number,
-    asmPolicies?: number
-}
 
 /**
  * counts up totals of the different LTM objects (vs, nodes, pools, ...)

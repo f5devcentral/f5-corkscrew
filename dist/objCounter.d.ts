@@ -1,17 +1,4 @@
-import { BigipConfObj } from './models';
-export declare type ObjStats = {
-    virtuals?: number;
-    profiles?: number;
-    policies?: number;
-    pools?: number;
-    irules?: number;
-    monitors?: number;
-    nodes?: number;
-    snatPools?: number;
-    apmProfiles?: number;
-    apmPolicies?: number;
-    asmPolicies?: number;
-};
+import { BigipConfObj, ObjStats } from './models';
 /**
  * counts up totals of the different LTM objects (vs, nodes, pools, ...)
  * @param obj ltm branch of config tree
