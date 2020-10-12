@@ -1,2 +1,2 @@
-import * as _BigipConfig from './ltm';
-export declare const bigipConfig: typeof _BigipConfig;
+import BigipConfig from './ltm';
+export default BigipConfig;
