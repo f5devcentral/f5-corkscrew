@@ -1,9 +1,10 @@
 'use strict';
 
 
-import * as _BigipConfig from './ltm';
+import BigipConfig from './ltm';
 
-export const bigipConfig = _BigipConfig;
+// export default bigipConfig = _BigipConfig;
+export default BigipConfig;
 
 
 
