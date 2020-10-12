@@ -103,7 +103,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Mocha tmos config parsgin tests",
+            "name": "Mocha tmosParser.tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
                 "-r",
