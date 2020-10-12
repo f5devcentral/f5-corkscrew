@@ -40,7 +40,7 @@ function explode(filePath) {
                 // something went wrong, return logs
                 return console.log(device.logs());
             }
-            const parseTime = yield device.parseNew();
+            const parseTime = yield device.parse();
             if (!parseTime) {
                 // something went wrong, return logs
                 return console.log(device.logs());

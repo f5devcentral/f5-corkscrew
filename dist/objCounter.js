@@ -12,6 +12,8 @@ function countObjects(obj) {
         stats.virtuals = Object.keys(obj.ltm.virtual).length;
     }
     if ((_b = obj === null || obj === void 0 ? void 0 : obj.ltm) === null || _b === void 0 ? void 0 : _b.profile) {
+        // todo: dig deeper to get a better count of actaul profile numbers
+        // currently only returns number of parent objects which represents (tcp, ssl, http, ...), not all the keys within those objects
         stats.profiles = Object.keys(obj.ltm.profile).length;
     }
     if ((_c = obj === null || obj === void 0 ? void 0 : obj.ltm) === null || _c === void 0 ? void 0 : _c.policy) {
@@ -24,6 +26,7 @@ function countObjects(obj) {
         stats.irules = Object.keys(obj.ltm.rule).length;
     }
     if ((_f = obj === null || obj === void 0 ? void 0 : obj.ltm) === null || _f === void 0 ? void 0 : _f.monitor) {
+        // todo: same as profiles above, dig deeper into each parent object for all the keys of the children
         stats.monitors = Object.keys(obj.ltm.monitor).length;
     }
     if ((_g = obj === null || obj === void 0 ? void 0 : obj.ltm) === null || _g === void 0 ? void 0 : _g.node) {

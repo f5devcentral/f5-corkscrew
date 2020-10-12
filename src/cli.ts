@@ -4,7 +4,7 @@
 'use strict';
 
 import bigipConfig from './ltm'
-import yargs, { Argv } from 'yargs';
+import yargs from 'yargs';
 // import * as fs from 'fs';
 import path from 'path';
 
@@ -36,7 +36,7 @@ async function explode(filePath: string | any) {
             return console.log(device.logs());
         }
 
-        const parseTime = await device.parseNew();
+        const parseTime = await device.parse();
         
         if ( !parseTime ) {
             // something went wrong, return logs

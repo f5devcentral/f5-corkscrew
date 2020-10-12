@@ -17,6 +17,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
     - This resulted in all inputs being a single file reference and letting it figure out what to do from there
     - if single .conf, then just load and pass to parse function
     - but if an archive is detected, it will search the archive for the needed files and return them as a list to be parsed
+- Added events to the parse function to emit during processing
+    - These can be used to feed progress information to a status bar
+- Added base configuration information to explode function
+    - This includes vlans and SelfIPs
+
+### Modified
+- Parsing now includes bigip.conf, bigip_base.conf and any supporting /partitions/ folders+config files
+- cli now handles errors better and responses with log files if any problems occur
 
 ## [0.2.0] - (10-8-2020)
 

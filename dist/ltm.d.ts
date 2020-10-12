@@ -1,29 +1,30 @@
+/// <reference types="node" />
+import { EventEmitter } from 'events';
 import { BigipConfObj, Stats } from './models';
 import { ConfigFiles } from './unPacker';
 /**
- * Class to consume bigip.conf
+ * Class to consume bigip configs -> parse apps
  *
  */
-export default class BigipConfig {
+export default class BigipConfig extends EventEmitter {
+    /**
+     * incoming config files array
+     * ex. [{filename:'config/bigip.conf',size:12345,content:'...'},{...}]
+     */
     configFiles: ConfigFiles;
     /**
      * tmos config as nested json objects
      * - consolidated parant object keys like ltm/apm/sys/...
      */
-    configMultiLevelObjects: BigipConfObj;
+    configObject: BigipConfObj;
+    /**
+     * placeholder for future fully jsonified tmos config
+     */
     configFullObject: BigipConfObj;
     tmosVersion: string;
     private rx;
     private stats;
-    /**
-     *
-     * @param config full bigip.conf as string
-     */
     constructor();
-    /**
-     * return list of applications
-     */
-    appList(): string[];
     /**
      * load .conf file or files from ucs/qkview
      *
@@ -33,7 +34,14 @@ export default class BigipConfig {
     /**
      * new parsing fuction to work on list of files from unPacker
      */
-    parseNew(): number;
+    parse(): number;
+    /**
+     * return list of applications
+     *
+     * @return array of app names
+     * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
+     */
+    appList(): string[];
     /**
      * returns all details from processing
      *
@@ -43,8 +51,12 @@ export default class BigipConfig {
         id: string;
         dateTime: Date;
         config: {
-            sources: string[];
+            sources: {
+                fileName: string;
+                size: number;
+            }[];
             apps: any[];
+            base: string;
         };
         stats: Stats;
         logs: string;
@@ -65,45 +77,4 @@ export default class BigipConfig {
      * @param config bigip.conf config file as string
      */
     private getTMOSversion;
-    /**
-     * scans vs config, and discovers child configs
-     * @param vsName virtual server name
-     * @param vsConfig virtual server tmos config body
-     */
-    private digVsConfig;
-    /**
-     * analyzes vs snat config, returns full snat configuration if pool reference
-     * @param snat vs snat reference as string
-     */
-    private digSnatConfig;
-    /**
-     * get fall back persistence config
-     * @param fbPersist vs fallback-persistence
-     */
-    private digFbPersistConfig;
-    /**
-     * get persistence config
-     * @param persistence vs persistence referecne
-     */
-    private digPersistConfig;
-    /**
-     * get full pool config and supporting node/monitor configs
-     * @param poolName
-     */
-    private digPoolConfig;
-    private digProfileConfigs;
-    /**
-     *
-     * @param rulesList raw irules regex from vs dig
-     */
-    private digRuleConfigs;
-    /**
-     * loops through vs ltp list and returns full ltp configs
-     * @param ltPolicys vs ltp config
-     */
-    private digLtPolicyConfig;
 }
-/**
- * Reverse string
- * @param str string to reverse
- */

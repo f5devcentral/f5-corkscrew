@@ -343,6 +343,13 @@ Corkscrew comes with a simple command line utility.  This utility takes in a big
     A command is required
     ```
 
+### Getting updates
+
+Since the package is not published to NPM and it is installed directly from the repo, I'm not sure how to track any of the version information so you can easily update when a new version is released.
+
+It seems the only route at this time is to uninstall the package, make sure the directory is deleted, and re-install the packge, which should get the latest version
+
+
 <p>&nbsp;</p>
 
 ---

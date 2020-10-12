@@ -1,19 +1,5 @@
 /**
- * This file servers as the central place for all regex's, we'll call it a regex tree
- *
- * The idea here is to create a base regex object tree, based on v14/v15 code
- *  if/when any changes in config structure that require tweaks to the regex tree
- *  only those changes will need to be configured in a tree for each respective
- *  configuration deviatione (ex v16), then merged with the default/base regex tree
- *
- * Need to find a better way to do regex's across the package.  The regular "match",
- *  on string function works, but also returns the entire full match in [0], then
- *  capture groups as nested array on [1].
- *  - I know there is plenty of improvements to be made by only returning the match capture group [1]
- *  - and defining better capture groups (probably include lookarounds)
- *
- * Need to also look into if .matchAll will help.  Seems to be available in NodeJS,
- *  only in ECMA2020 TypeScript
+ * Regex Tree used for searching configs
  */
 export declare class RegExTree {
     /**

@@ -1,4 +1,17 @@
+import { AppMap, BigipConfObj } from './models';
+import { TmosRegExTree } from './regex';
 /**
- * new file to move dig config functions to
- *  but need to figure out how to pass the config objbect and regex tree
- */ 
+ * dig base config information like vlans/SelfIPs
+ * @param configTree bigip config as json tree
+ * @returns raw config objects
+ */
+export declare function digBaseConfig(configTree: BigipConfObj): string;
+/**
+ * scans vs config, and discovers child configs
+ * @param vsName virtual server name
+ * @param vsConfig virtual server tmos config body
+ */
+export declare function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree): {
+    fullConfig: string;
+    vsMap: AppMap;
+};

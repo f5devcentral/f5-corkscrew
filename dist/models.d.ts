@@ -1,6 +1,3 @@
-export declare type BigipObj = {
-    [key: string]: unknown;
-};
 /**
  * stats object type for object counts
  */
@@ -9,9 +6,7 @@ export declare type Stats = {
     parseTime?: number;
     appTime?: number;
     packTime?: number;
-    sourceTmosVersion?: string;
     objectCount?: number;
-    lineCount?: number;
     objects?: {
         virtuals?: number;
         profiles?: number;
@@ -43,7 +38,15 @@ export declare type BigipConfObj = {
         snatpool?: unknown;
     };
     apm?: unknown;
-    net?: unknown;
+    net?: {
+        route?: unknown;
+        "port-list"?: unknown;
+        "route-domain": string;
+        self?: string;
+        "self-allow"?: string;
+        trunk?: string;
+        vlan?: string;
+    };
 };
 /**
  * object type for each app map
