@@ -23,7 +23,7 @@ export default class BigipConfig extends EventEmitter {
      * incoming config files array
      * ex. [{filename:'config/bigip.conf',size:12345,content:'...'},{...}]
      */
-    public configFiles: ConfigFiles;
+    public configFiles: ConfigFiles = [];
     /**
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
@@ -33,8 +33,8 @@ export default class BigipConfig extends EventEmitter {
      * placeholder for future fully jsonified tmos config
      */
     public configFullObject: BigipConfObj = {};
-    public tmosVersion: string; // move to stats tree...
-    private rx: TmosRegExTree;
+    public tmosVersion: string | undefined; // move to stats tree...
+    private rx: TmosRegExTree | undefined;
     private stats: Stats = {
         objectCount: 0,
     };

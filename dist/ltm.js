@@ -32,6 +32,11 @@ class BigipConfig extends events_1.EventEmitter {
     constructor() {
         super();
         /**
+         * incoming config files array
+         * ex. [{filename:'config/bigip.conf',size:12345,content:'...'},{...}]
+         */
+        this.configFiles = [];
+        /**
          * tmos config as nested json objects
          * - consolidated parant object keys like ltm/apm/sys/...
          */

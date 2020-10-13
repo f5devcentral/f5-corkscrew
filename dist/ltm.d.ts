@@ -21,7 +21,7 @@ export default class BigipConfig extends EventEmitter {
      * placeholder for future fully jsonified tmos config
      */
     configFullObject: BigipConfObj;
-    tmosVersion: string;
+    tmosVersion: string | undefined;
     private rx;
     private stats;
     constructor();
