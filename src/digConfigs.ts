@@ -15,16 +15,20 @@ export function digBaseConfig (configTree: BigipConfObj): string {
 
     const confs = [];
 
-    // get vlans
-    for (const [key, value] of Object.entries(configTree.net.vlan)) {
-        confs.push(`${key} {${value}}`)
+    if(configTree?.net?.vlan) {
+        // get vlans
+        for (const [key, value] of Object.entries(configTree.net.vlan)) {
+            confs.push(`${key} {${value}}`)
+        }
     }
     
-    // get ip addresses
-    for (const [key, value] of Object.entries(configTree.net.self)) {
-        confs.push(`${key} {${value}}`)
-    }
     
+    if(configTree?.net?.self) {
+        // get ip addresses
+        for (const [key, value] of Object.entries(configTree.net.self)) {
+            confs.push(`${key} {${value}}`)
+        }
+    }
 
     return confs.join('\n');
 }

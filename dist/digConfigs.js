@@ -13,14 +13,19 @@ const objects_1 = require("./utils/objects");
  * @returns raw config objects
  */
 function digBaseConfig(configTree) {
+    var _a, _b;
     const confs = [];
-    // get vlans
-    for (const [key, value] of Object.entries(configTree.net.vlan)) {
-        confs.push(`${key} {${value}}`);
+    if ((_a = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _a === void 0 ? void 0 : _a.vlan) {
+        // get vlans
+        for (const [key, value] of Object.entries(configTree.net.vlan)) {
+            confs.push(`${key} {${value}}`);
+        }
     }
-    // get ip addresses
-    for (const [key, value] of Object.entries(configTree.net.self)) {
-        confs.push(`${key} {${value}}`);
+    if ((_b = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _b === void 0 ? void 0 : _b.self) {
+        // get ip addresses
+        for (const [key, value] of Object.entries(configTree.net.self)) {
+            confs.push(`${key} {${value}}`);
+        }
     }
     return confs.join('\n');
 }
