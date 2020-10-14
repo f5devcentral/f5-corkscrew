@@ -13,24 +13,30 @@ const objects_1 = require("./utils/objects");
  * @returns raw config objects
  */
 function digBaseConfig(configTree) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     const confs = [];
     if ((_a = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _a === void 0 ? void 0 : _a.vlan) {
         // get vlans
         for (const [key, value] of Object.entries(configTree.net.vlan)) {
-            confs.push(`${key} {${value}}`);
+            confs.push(`net vlan ${key} {${value}}`);
         }
     }
     if ((_b = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _b === void 0 ? void 0 : _b.self) {
         // get ip addresses
         for (const [key, value] of Object.entries(configTree.net.self)) {
-            confs.push(`${key} {${value}}`);
+            confs.push(`net self ${key} {${value}}`);
         }
     }
-    if ((_c = configTree === null || configTree === void 0 ? void 0 : configTree.auth) === null || _c === void 0 ? void 0 : _c.partition) {
+    if ((_c = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _c === void 0 ? void 0 : _c["route-domain"]) {
+        // get route-domains
+        for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
+            confs.push(`net route-domain ${key} {${value}}`);
+        }
+    }
+    if ((_d = configTree === null || configTree === void 0 ? void 0 : configTree.auth) === null || _d === void 0 ? void 0 : _d.partition) {
         // get partitions
         for (const [key, value] of Object.entries(configTree.auth.partition)) {
-            confs.push(`${key} {${value}}`);
+            confs.push(`auth partition ${key} {${value}}`);
         }
     }
     return confs.join('\n');

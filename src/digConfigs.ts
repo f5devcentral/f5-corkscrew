@@ -18,7 +18,7 @@ export function digBaseConfig (configTree: BigipConfObj): string {
     if(configTree?.net?.vlan) {
         // get vlans
         for (const [key, value] of Object.entries(configTree.net.vlan)) {
-            confs.push(`${key} {${value}}`)
+            confs.push(`net vlan ${key} {${value}}`)
         }
     }
     
@@ -26,14 +26,21 @@ export function digBaseConfig (configTree: BigipConfObj): string {
     if(configTree?.net?.self) {
         // get ip addresses
         for (const [key, value] of Object.entries(configTree.net.self)) {
-            confs.push(`${key} {${value}}`)
+            confs.push(`net self ${key} {${value}}`)
+        }
+    }
+
+    if(configTree?.net?.["route-domain"]) {
+        // get route-domains
+        for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
+            confs.push(`net route-domain ${key} {${value}}`)
         }
     }
 
     if(configTree?.auth?.partition) {
         // get partitions
         for (const [key, value] of Object.entries(configTree.auth.partition)) {
-            confs.push(`${key} {${value}}`)
+            confs.push(`auth partition ${key} {${value}}`)
         }
     }
 
