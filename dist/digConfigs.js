@@ -13,7 +13,7 @@ const objects_1 = require("./utils/objects");
  * @returns raw config objects
  */
 function digBaseConfig(configTree) {
-    var _a, _b;
+    var _a, _b, _c;
     const confs = [];
     if ((_a = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _a === void 0 ? void 0 : _a.vlan) {
         // get vlans
@@ -27,6 +27,12 @@ function digBaseConfig(configTree) {
             confs.push(`${key} {${value}}`);
         }
     }
+    if ((_c = configTree === null || configTree === void 0 ? void 0 : configTree.auth) === null || _c === void 0 ? void 0 : _c.partition) {
+        // get partitions
+        for (const [key, value] of Object.entries(configTree.auth.partition)) {
+            confs.push(`${key} {${value}}`);
+        }
+    }
     return confs.join('\n');
 }
 exports.digBaseConfig = digBaseConfig;
@@ -36,6 +42,15 @@ exports.digBaseConfig = digBaseConfig;
  * @param vsConfig virtual server tmos config body
  */
 function digVsConfig(vsName, vsConfig, configTree, rx) {
+    /**
+     *
+     * What do we need to map on next on the virtual servers?:
+     *  - oneConnect?
+     *  - expand the discovery of all profiles (apm and supporting)
+     *
+     * Or do we expand the irule references like pools/policies?
+     *
+     */
     logger_1.default.info(`digging vs config for ${vsName}`);
     const pool = vsConfig.match(rx.vs.pool.obj);
     const profiles = vsConfig.match(rx.vs.profiles.obj);

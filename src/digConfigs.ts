@@ -30,6 +30,15 @@ export function digBaseConfig (configTree: BigipConfObj): string {
         }
     }
 
+    if(configTree?.auth?.partition) {
+        // get partitions
+        for (const [key, value] of Object.entries(configTree.auth.partition)) {
+            confs.push(`${key} {${value}}`)
+        }
+    }
+
+
+
     return confs.join('\n');
 }
 
@@ -41,6 +50,16 @@ export function digBaseConfig (configTree: BigipConfObj): string {
  * @param vsConfig virtual server tmos config body 
  */
 export function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree) {
+
+    /**
+     * 
+     * What do we need to map on next on the virtual servers?:
+     *  - oneConnect?
+     *  - expand the discovery of all profiles (apm and supporting)
+     * 
+     * Or do we expand the irule references like pools/policies?
+     * 
+     */
 
     logger.info(`digging vs config for ${vsName}`);
 

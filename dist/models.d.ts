@@ -38,6 +38,9 @@ export declare type BigipConfObj = {
         snatpool?: unknown;
     };
     apm?: unknown;
+    auth?: {
+        partition?: unknown;
+    };
     net?: {
         route?: unknown;
         "port-list"?: unknown;
