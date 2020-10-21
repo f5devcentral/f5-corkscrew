@@ -4,6 +4,7 @@ import logger from './logger';
 import { AppMap, BigipConfObj } from './models'
 import { TmosRegExTree } from './regex';
 import { pathValueFromKey } from './utils/objects';
+import { poolsInPolicy, poolsInRule } from './pools';
 
 
 /**
@@ -332,26 +333,58 @@ function digSnatConfig(snat: string, configObject: BigipConfObj, rx: TmosRegExTr
 function digPolicyConfig(policys: string, configObject: BigipConfObj, rx: TmosRegExTree) {
 
     // regex local traffic list to individual profiles
-    // const rx = this.rx.vs.ltPolicies;
-    const ltPolicyNames = policys.match(rx.vs.ltPolicies.names);
-    logger.debug(`profile references found: `, ltPolicyNames);
-
-    // eslint-disable-next-line prefer-const
-    let configList = [];
-    ltPolicyNames.forEach( name => {
-
+    const policyNames = policys.match(rx.vs.ltPolicies.names);
+    logger.debug(`policy references found: `, policyNames);
+    
+    const configList = [];
+    
+    // get policy references from vs
+    policyNames.forEach( name => {
+        
         const x = pathValueFromKey(configObject.ltm.policy, name)
-
+        
         if (x) {
+            logger.debug(`policy found [${x.key}]`);
             configList.push(`ltm policy ${x.key} {${x.value}}\n`)
+            
+            // got through each policy and dig references (like pools)
+            const pools = poolsInPolicy(x.value)
+            
+            if (pools) {
+                pools.forEach( pool => {
+                    const cfg = pathValueFromKey(configObject.ltm.pool, pool)
+                    // if we got here there should be a pool for the reference, 
+                    // but just in case, we confirm with (if) statement
+                    if (cfg) {
+                        // push pool config to list
+                        logger.debug(`policy [${x.key}], pool found [${cfg.key}]`);
+                        configList.push(`ltm pool ${cfg.key} {${cfg.value}}`)
+                    }
+                })
+            }
+
+
         } else {
             logger.error(`Could not find ltPolicy named: ${name}`)
         }
+
     })
-    return configList.join('\n');
+
+    // removde duplicates
+    const unique = uniqueList(configList);
+    // join list with line returns to return a single config string
+    return unique.join('\n');
 }
 
 
+/**
+ * removes duplicates
+ * @param x list of strings
+ * @return list of unique strings
+ */
+export function uniqueList (x: string[]) {
+    return Array.from(new Set(x));
+}
 
 
 

@@ -4,9 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.digVsConfig = exports.digBaseConfig = void 0;
+exports.uniqueList = exports.digVsConfig = exports.digBaseConfig = void 0;
 const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
+const pools_1 = require("./pools");
 /**
  * dig base config information like vlans/SelfIPs
  * @param configTree bigip config as json tree
@@ -250,22 +251,48 @@ function digSnatConfig(snat, configObject, rx) {
  */
 function digPolicyConfig(policys, configObject, rx) {
     // regex local traffic list to individual profiles
-    // const rx = this.rx.vs.ltPolicies;
-    const ltPolicyNames = policys.match(rx.vs.ltPolicies.names);
-    logger_1.default.debug(`profile references found: `, ltPolicyNames);
-    // eslint-disable-next-line prefer-const
-    let configList = [];
-    ltPolicyNames.forEach(name => {
+    const policyNames = policys.match(rx.vs.ltPolicies.names);
+    logger_1.default.debug(`policy references found: `, policyNames);
+    const configList = [];
+    // get policy references from vs
+    policyNames.forEach(name => {
         const x = objects_1.pathValueFromKey(configObject.ltm.policy, name);
         if (x) {
+            logger_1.default.debug(`policy found [${x.key}]`);
             configList.push(`ltm policy ${x.key} {${x.value}}\n`);
+            // got through each policy and dig references (like pools)
+            const pools = pools_1.poolsInPolicy(x.value);
+            if (pools) {
+                pools.forEach(pool => {
+                    const cfg = objects_1.pathValueFromKey(configObject.ltm.pool, pool);
+                    // if we got here there should be a pool for the reference, 
+                    // but just in case, we confirm with (if) statement
+                    if (cfg) {
+                        // push pool config to list
+                        logger_1.default.debug(`policy [${x.key}], pool found [${cfg.key}]`);
+                        configList.push(`ltm pool ${cfg.key} {${cfg.value}}`);
+                    }
+                });
+            }
         }
         else {
             logger_1.default.error(`Could not find ltPolicy named: ${name}`);
         }
     });
-    return configList.join('\n');
+    // removde duplicates
+    const unique = uniqueList(configList);
+    // join list with line returns to return a single config string
+    return unique.join('\n');
 }
+/**
+ * removes duplicates
+ * @param x list of strings
+ * @return list of unique strings
+ */
+function uniqueList(x) {
+    return Array.from(new Set(x));
+}
+exports.uniqueList = uniqueList;
 /**
  * get persistence config
  * @param persistence vs persistence referecne

@@ -15,3 +15,9 @@ export declare function digVsConfig(vsName: string, vsConfig: string, configTree
     fullConfig: string;
     vsMap: AppMap;
 };
+/**
+ * removes duplicates
+ * @param x list of strings
+ * @return list of unique strings
+ */
+export declare function uniqueList(x: string[]): string[];

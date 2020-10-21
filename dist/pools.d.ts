@@ -23,4 +23,4 @@ export declare function poolsInRule(rule: string, existingPools?: string[]): str
  *
  * @param ltp tcl/tmos local traffic policy
  */
-export declare function poolsInLTP(ltp: string): string[];
+export declare function poolsInPolicy(ltp: string): string[];

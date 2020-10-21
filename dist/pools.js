@@ -5,7 +5,7 @@
  * - add support for variables in brackets ${var}
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.poolsInLTP = exports.poolsInRule = void 0;
+exports.poolsInPolicy = exports.poolsInRule = void 0;
 /**
  * discovers ltm pools from irule
  * - when a list of pools is provided, will only return discovered pool verified by list
@@ -95,7 +95,7 @@ exports.poolsInRule = poolsInRule;
  *
  * @param ltp tcl/tmos local traffic policy
  */
-function poolsInLTP(ltp) {
+function poolsInPolicy(ltp) {
     const poolReg = /\n[\s]*pool\s(.+?)\s/g;
     const rawPools = ltp.match(poolReg);
     if (!rawPools) {
@@ -108,7 +108,7 @@ function poolsInLTP(ltp) {
     });
     return newPools;
 }
-exports.poolsInLTP = poolsInLTP;
+exports.poolsInPolicy = poolsInPolicy;
 // export function poolsInAP (ap: string, pools?: string[]): string[] {
 //     console.log('called poolsInAP to get referenced ltm pools in a Access Policy (APM)');
 //     //working on getting an access policy together

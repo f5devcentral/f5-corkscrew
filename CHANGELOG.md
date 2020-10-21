@@ -10,6 +10,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.4.0] - (10-21-2020)
+
+### Added
+- Added support for extracting pools referenced by local traffic policies
+
+---
+
 ## [0.3.0] - (10-12-2020)
 
 ### Added

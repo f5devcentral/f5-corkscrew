@@ -105,7 +105,7 @@ export function poolsInRule (rule: string, existingPools?: string[]): string[] |
  * 
  * @param ltp tcl/tmos local traffic policy
  */
-export function poolsInLTP (ltp: string): string[] {
+export function poolsInPolicy (ltp: string): string[] {
 
     const poolReg = /\n[\s]*pool\s(.+?)\s/g;
 
