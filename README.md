@@ -8,9 +8,8 @@
 
 The intention for this project/rpm is to provide a common tool to extract tmos applications.  Taking a bigip.conf and extracting all it's configuration items to a form that can easily be searched and different functions performed, all with the intent of migrating the application to something like AS3.
 
-The intent is to change the project name to "f5-corkscrew" as it matures and potentially gets released to NPM.
-
-> NOTE:  As of 10.8.2020 this project is able to fully process a 6MB config file with almost 300vs, 223k lines, and over 13k tmos objects in about 20 seconds.  If you are trying this in the early stages, remember to give bigger configs time to process.
+Latest performance stats can be found here:
+[testingStats](testingStats.md)
 
 check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 

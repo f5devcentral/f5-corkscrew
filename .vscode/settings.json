@@ -8,21 +8,22 @@
     },
     // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
     "typescript.tsc.autoDetect": "off",
+    "peacock.color": "#614b46",
     "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#7f625b",
-        "activityBar.activeBorder": "#28382b",
-        "activityBar.background": "#7f625b",
+        "activityBar.activeBackground": "#026e5f",
+        "activityBar.activeBorder": "#e762fc",
+        "activityBar.background": "#026e5f",
         "activityBar.foreground": "#e7e7e7",
         "activityBar.inactiveForeground": "#e7e7e799",
-        "activityBarBadge.background": "#28382b",
-        "activityBarBadge.foreground": "#e7e7e7",
-        "statusBar.background": "#614b46",
+        "activityBarBadge.background": "#e762fc",
+        "activityBarBadge.foreground": "#15202b",
+        "statusBar.background": "#013c34",
         "statusBar.foreground": "#e7e7e7",
-        "statusBarItem.hoverBackground": "#7f625b",
-        "titleBar.activeBackground": "#614b46",
+        "statusBarItem.hoverBackground": "#026e5f",
+        "titleBar.activeBackground": "#013c34",
         "titleBar.activeForeground": "#e7e7e7",
-        "titleBar.inactiveBackground": "#614b4699",
+        "titleBar.inactiveBackground": "#013c3499",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#614b46"
+    "peacock.remoteColor": "#013c34"
 }

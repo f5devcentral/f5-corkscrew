@@ -9,13 +9,8 @@ import * as path from 'path';
 import BigipConfig from '../ltm';
 import { logOutput } from './explosionOutput';
 
-// const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf"), "utf-8");
-// const devCloud01 = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
-// const config = fs.readFileSync(path.join(__dirname, testFile), "utf-8");
-
 const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
 const testFileDetails = path.parse(testFile);
-// const outFile = `./${testFileDetails.name}.log`
 const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
 
 describe('explode devCloud bigip.conf tests', function() {

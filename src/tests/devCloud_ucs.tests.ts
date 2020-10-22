@@ -14,14 +14,9 @@ import { logOutput } from './explosionOutput';
  * this test suite can run the ucs or qkview, either should produce the same results
  */
 
-
-// const big = 'test.ucs'
-// const testFile = path.join(__dirname, '..', '..', 'private', big);
 const testFile = path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs');
-// const testFile = path.join(__dirname, "./artifacts/devCloud_10.10.2020.qkview");
-// const testFileDetails = path.parse(testFile);
-// const outFile = `./${testFileDetails.name}.log`
-const outFile = `./devCloud_ucs.tests.log`
+const testFileDetails = path.parse(testFile);
+const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
 
 describe('explode devCloud ucs tests', function() {
     
@@ -45,7 +40,7 @@ describe('explode devCloud ucs tests', function() {
         device.on('parseObject', x => parsedObjEvents.push(x) )
 
         const parseTime = device.parse();
-        const expld = device.explode();
+        // const expld = device.explode();
         assert.ok(parseTime, 'should be a number');
     });
 
@@ -83,9 +78,10 @@ describe('explode devCloud ucs tests', function() {
 
         const explode = device.explode();
 
-        // logOutput(device.con)
+        const bigLog = logOutput(device.configObject, explode);
 
-        // assert.deepStrictEqual(device.bigipConf, devCloud01);
+        fs.writeFileSync(outFile, bigLog);
+
         assert.ok(explode);
     });
 });

@@ -15,12 +15,13 @@
  */
 export type Stats = {
     configBytes?: number,
+    loadTime?: number,
     parseTime?: number,
     appTime?: number,
     packTime?: number,
-    // sourceTmosVersion?: string,
+    sourceTmosVersion?: string,
     objectCount?: number,
-    // lineCount?: number,
+    lineCount?: number,
     objects?: {
         virtuals?: number,
         profiles?: number,

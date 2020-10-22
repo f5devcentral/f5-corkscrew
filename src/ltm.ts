@@ -57,8 +57,15 @@ export default class BigipConfig extends EventEmitter {
         this.configFiles = await unPacker(file);
 
         if (this.configFiles) {
+            
+            // run through files and add up file size
+            this.stats.configBytes = this.configFiles.map(item => item.size).reduce( (total, each) => {
+                return total += each;
+            })
+            this.stats.loadTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+            
             // unPacker returned something so respond with processing time
-            return Number(process.hrtime.bigint() - startTime) / 1000000;
+            return this.stats.loadTime;
         } else {
             // unPacker failed and returned nothing back up the chain...
             return;
