@@ -14,6 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 - Added support for extracting pools referenced by local traffic policies
+- Added stats for config load time (extracting files from archives) and total config files size (extracted files)
 
 ---
 
