@@ -1,10 +1,10 @@
 {
-  "name": "project-corkscrew",
+  "name": "f5-corkscrew",
   "description": "extracting tmos config",
   "author": "",
   "version": "0.3.0",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/f5devcentral/project-corkscrew#readme",
+  "homepage": "https://github.com/f5devcentral/f5-corkscrew#readme",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/f5devcentral/project-corkscrew.git"
+    "url": "git+https://github.com/f5devcentral/f5-corkscrew.git"
   },
   "scripts": {
     "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'src/tests/**/*.{js,ts,tsx}'",
@@ -35,7 +35,7 @@
     "typescript": "^4.0.2"
   },
   "bugs": {
-    "url": "https://github.com/f5devcentral/project-corkscrew/issues"
+    "url": "https://github.com/f5devcentral/f5-corkscrew/issues"
   },
   "nyc": {
     "check-coverage": false,

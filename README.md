@@ -1,6 +1,6 @@
 
 
-# project-corkscrew
+# f5-corkscrew
 
 <p>&nbsp;</p>
 
@@ -321,16 +321,16 @@ Corkscrew comes with a simple command line utility.  This utility takes in a big
 
 2. Run the following command to download the rpm
 
-        `npm install -g https://github.com/f5devcentral/project-corkscrew.git`
+        `npm install -g https://github.com/f5devcentral/f5-corkscrew.git`
 
 3. Run `corkscrew` to confirm installation status
 
     ```bash
-    ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ node --version
+    ted@thanos:/mnt/c/Users/bunoo/f5-corkscrew/src/tests$ node --version
     v10.19.0
-    ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ npm --version
+    ted@thanos:/mnt/c/Users/bunoo/f5-corkscrew/src/tests$ npm --version
     6.13.4
-    ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ corkscrew
+    ted@thanos:/mnt/c/Users/bunoo/f5-corkscrew/src/tests$ corkscrew
     cli.js <command>
 
     Commands:
@@ -394,7 +394,7 @@ ted@thanos:/tests$ echo demo.json | jq .config.apps[].name
 Get app by array number
 
 ```bash
-ted@thanos:/mnt/c/Users/bunoo/project-corkscrew/src/tests$ cat demo.json | jq .config.apps[2]
+ted@thanos:/mnt/c/Users/bunoo/f5-corkscrew/src/tests$ cat demo.json | jq .config.apps[2]
 {
   "name": "/Common/app2_t80_vs",
   "config": "ltm virtual /Common/app2_t80_vs {\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.2.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n}\n"
