@@ -12,8 +12,8 @@ export declare function digBaseConfig(configTree: BigipConfObj): string;
  * @param vsConfig virtual server tmos config body
  */
 export declare function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree): {
-    fullConfig: string;
-    vsMap: AppMap;
+    config: string;
+    map: AppMap;
 };
 /**
  * removes duplicates

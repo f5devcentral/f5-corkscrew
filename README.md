@@ -33,39 +33,57 @@ check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 ## Tasks/Ideas
 
 - Deeper app parsing
-    - looking into digging/crawling the partitions for all configs
+    - looking into digging/crawling the partitions for all configs (complete except for "default" profile information)
     - expand the discovery of pools referenced in irules, local traffic policies
         - this also includes references to other virtual servers and nodes
         - return this information in the app maps
     - what other things need to be added to the parsing?
         - oneConnect profiles?
 
+- Object one-line output
+    - Add the ability to return apps as single line objects like `tmsh list net self one-line`
+    - There have been many times in the past where I have found that output to be incredibly useful, espcially for large configurations
+    - It may have just as much value here
+    - To accomodatet his, I would change the data structure of the app, which is currently just a string, to an array, where each item is an object that makes the total application
+        - Then as part of the output, depending on a switch `--one-line`, remove line returns from each array item, then combine the array items with line returns to provide a single string like before
+
 - Command line interface
     - this should provide a good way to just download the rpm, issue a command and get parsed apps
     - could be big with support and/or hard core command liners
+    - initial version of the command line is available as a single command that returns most of the necessary information
 
 - Exploring the idea of fully jsonifying the entire config
-    - I belive this would provide the most flexible and scalable way to consume and search the config in totallity
-    - all parititions and even the bigip_base.conf could all be added to the same tree to provide a single place to search for eveything config related (at least for migrations)
-    - the struggle is needing to create a function that will search the tree for an object key and return an array of matches including path and value
-    - this will allow us to further filter results as needed
-        - This approach seems to accomodate different profile types with the same name
+    - I belive this would provide the most flexible and scalable way to consume and search the config in totallity (became true...)
+    - all parititions and even the bigip_base.conf could all be added to the same tree to provide a single place to search for eveything config related (at least for migrations) (cone)
+    - the struggle is needing to create a function that will search the tree for an object key and return an array of matches including path and value (done)
+    - this will allow us to further filter results as needed (done)
+        - This approach seems to accomodate different profile types with the same name (done)
     - I also think this method will accomodate possible configuration nameing changes with different versions
         - we should be able to just search for path paramters after the key is found to find the right object type
     - this should also remove the need for the regex tree, or at least reduce it to a minimal size
     - 9.25.2020 - did find out that tmos will not allow conflicting names across the different profile/monitor types
         - this should make searching for an object eaiser
-
-- thinking about how to expand the current input method of the main ltm class
-    - it currently takes a bigip.conf at initiation, but should probably take an array of tmso files (ex. ['bigip.conf', 'bigip_base.conf', 'partitionConf', ...])
-    - all files will be parsed into the json tree for a more complete search
-    - So, it's nice to be able to feed it a single file and explode that in the vscode extension or just for simple work, but probably also need to include some logic to consume a UCS/qkvew, and maybe even an scf
-        - in that case we are gonna need functions to unpack each method
+    - 10.24.2020 - ended up going to the "mostly" jsonified config at this point.  
+        - Meaning just the parent objects have been converted, but the body has not
+        - Searching specific object branches for information is way faster and native to the node engine
+        - Focusing on this one data structure allow the removal of all the other ways the data was being held
+            - resulting in much more efficient memory utilization
+            - which also greatly improved performance
+        - If/when we go the route of a fully jsonified config which can have it's benefits, I think it should be a seperate tree
+            - This would allow for one to be used for raw config object extraction while the other would provide a way to search for specific object settins across the tree
+                -For example, being able to see which virtual servers have port translation enabled, or what ssl profiles have a specific "SSL Option" enabled without having to regex the body of the original config
 
 - a "sanitize" function to remove sensitive information and change IPs/names so configs can be shared as part of the process
+    - replace all certificate references with the default f5 cert?
+    - change hostname
+    - IP address randmonizer
+        - to change any and all ip addresses to randomly generated addresses or specify the range
+        - This would be done in a one-to-one mapping to not break any of the associations across the config
+    - object name obvuscator?
+    - return just the config files, like a mini_ucs?
 
 - an option to include the default profiles
-    - add the profiles_base.conf file to the config and the app extraction should pick up those objects
+    - add the profiles_base.conf file to the config and the app extraction should pick up those objects to provide a complete view of the settings
 
 - Identify advanced configurations
     - At this time it means any advaned irule or policy that references other VIPs
@@ -109,7 +127,7 @@ If/when we get to the point that we do need to increase performance, I have the 
 
 - Things to keep in mind as we ponder performance numbers:
     - Nodejs memory heap is limited to 2gig
-    - The nodejs memory in vscode is further limited to 512Mb (for vscode-f5-fast integration)
+    - The nodejs memory in vscode is further limited to 512Mb (for vscode-f5 integration)
     - I don't think I've ever seen a UCS bigger than ~50Mb
     - I don't think I've ever seen a qkview bigger than ~300Mb
     - a 6Mb bigip.conf gets zippped (compressed) down to ~340k (this might be a corner case...)
@@ -148,6 +166,8 @@ The following items are excluded from application extraction since the main goal
 
 The whole thing is written in TypeScript and heavigly documented with JSDoc.  If you use vscode with this setup, you will see all the jsdoc information as you hover over different variables and functions.  
 
+Even though this was written in TypeScript, it can be used in any node project.  This project is compiled to JS and the TS typing are there as needed
+
 <p>&nbsp;</p>
 
 ### BigipConfig class
@@ -177,7 +197,7 @@ Some example modifications have been documented in the function
 
 I have the idea that the TMOS config loosely represents a json structure.  The parent tmos objects look like names json objects and everything else can end up being a regular object attribute as a "key": "value" pair.
 
-If you check out the output of the `configMultiLevelObjects` class var, you will see a browsable json tree of the parent objects.  What this could mean, is that the entire config could be jsonified, then searched for the needed data without the need for breaking things down with the regex tree.  This could make data search and extraction very quick and efficient.  The main downside to that, is that it is going to reguire some good js/json foo to be able to search and extract the necessary information.  I feel like we are halfway there...
+If you check out the output of the `configObjects` class var, you will see a browsable json tree of the parent objects.  What this could mean, is that the entire config could be jsonified, then searched for the needed data without the need for breaking things down with the regex tree.  This could make data search and extraction very quick and efficient.  The main downside to that, is that it is going to reguire some good js/json foo to be able to search and extract the necessary information.  I feel like we are halfway there...
 
 <p>&nbsp;</p>
 
@@ -185,24 +205,26 @@ If you check out the output of the `configMultiLevelObjects` class var, you will
 
 the test file `bigip.conf_1.test.ts` abuses the mocha testing suite to run the code as I have been developing. It's my intent to move more in the direction of test driven development, but I need to think and discuss with others about different approches I have been looking at.
 
+
 <p>&nbsp;</p>
 
 ### Example
 
 We load a config from a file or get it through some other means, like api POST...
 ```js
-const devCloud01 = fs.readFileSync(path.join(__dirname, "./artifacts/devCloud01_9.17.2020.conf"), "utf-8");
+const devCloud01 = fs.readFileSync(path.join(__dirname, "artifacts", "devCloud01_9.17.2020.conf"), "utf-8");
 ```
 <p>&nbsp;</p>
 
 Then we create and initialize the class as follows:
 ```js
-const devCloud = new BigipConfig(devCloud01);
+const devCloud = new BigipConfig();
 ```
+> UPDATE:  with the parsing of archives, no data is provided at instantiation, now a .load('ucs/qkview/file/path') function is provided to load the data.  After loading, one can execute the .parse() function to parse the configs or parse will happen automatically with the .explode() function (which just returns most of the necessary data)
 
 <p>&nbsp;</p>
 
-The .apps() function returns an array of objects like:
+The .apps() function returns an array of objects if no parameter is supplied.  However, you can feed it a list of apps (vs names) for it to return configurations for
 ```json
 [{
     "name": "vs_name",
@@ -213,7 +235,7 @@ The .apps() function returns an array of objects like:
 
 <p>&nbsp;</p>
 
-The .logs() function returns a log of the extraction process
+The .logs() function returns a log of the extraction process.  It is recommended to call this to get the logs if any one of the previous functions do not return a value
 
 <p>&nbsp;</p>
 
@@ -224,7 +246,7 @@ The top of the main class also describes some of the different ways I have the t
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
      */
-    public configMultiLevelObjects: goodBigipObj = {};
+    public configObjects: goodBigipObj = {};
 ```
 
 <p>&nbsp;</p>
@@ -374,7 +396,7 @@ https://shapeshed.com/jq-json/
 Execute corkscrew and pipe the results to a file 
 
 ```bash
-ted@thanos:/tests$ echo demo.json >> demo.json
+ted@thanos:/tests$ corkscrew explode ./path/to/bigip.conf >> demo.json
 ```
 
 How to list app names (vs)
@@ -460,7 +482,7 @@ ted@thanos:/tests$ echo demo.json | jq .dateTime
 
 At a minimum JSDoc practices should be followed to document code and function.  Heavey comments will really help the integration/merge process.
 
-Please include some sort of tests for any new features or functionality.
+Please include some sort of tests for any new features or functionality.  It's really the only way to develop on this since there is no main app to run the functions
 
 <p>&nbsp;</p>
 

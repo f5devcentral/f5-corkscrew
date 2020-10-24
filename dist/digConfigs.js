@@ -69,7 +69,7 @@ function digVsConfig(vsName, vsConfig, configTree, rx) {
     const destination = vsConfig.match(rx.vs.destination);
     // base vsMap config object
     const vsMap = {
-        vsName,
+        // vsName,
         vsDest: ''
     };
     // add destination to vsMap object
@@ -80,7 +80,7 @@ function digVsConfig(vsName, vsConfig, configTree, rx) {
     if (pool && pool[1]) {
         const x = digPoolConfig(pool[1], configTree, rx);
         fullConfig += x.config;
-        vsMap.pools = x.map;
+        vsMap.pool = x.map;
         logger_1.default.debug(`[${vsName}] found the following pool`, pool[1]);
     }
     if (profiles && profiles[1]) {
@@ -109,7 +109,7 @@ function digVsConfig(vsName, vsConfig, configTree, rx) {
         fullConfig += digFbPersistConfig(fallBackPersist[1], configTree);
         logger_1.default.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
     }
-    return { fullConfig, vsMap };
+    return { config: fullConfig, map: vsMap };
 }
 exports.digVsConfig = digVsConfig;
 /**

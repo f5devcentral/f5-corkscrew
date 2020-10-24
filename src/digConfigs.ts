@@ -82,7 +82,7 @@ export function digVsConfig(vsName: string, vsConfig: string, configTree: BigipC
 
     // base vsMap config object
     const vsMap: AppMap = {
-        vsName,
+        // vsName,
         vsDest: ''
     };
 
@@ -96,7 +96,7 @@ export function digVsConfig(vsName: string, vsConfig: string, configTree: BigipC
     if(pool && pool[1]) {
         const x = digPoolConfig(pool[1], configTree, rx);
         fullConfig += x.config;
-        vsMap.pools = x.map;
+        vsMap.pool = x.map;
         logger.debug(`[${vsName}] found the following pool`, pool[1]);
     }
 
@@ -133,7 +133,7 @@ export function digVsConfig(vsName: string, vsConfig: string, configTree: BigipC
         logger.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
     }
 
-    return { fullConfig, vsMap };
+    return { config: fullConfig, map: vsMap };
     
 }
 

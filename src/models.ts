@@ -10,33 +10,6 @@
 // export { TmosRegExTree } from './regex';
 
 
-/**
- * stats object type for object counts
- */
-export type Stats = {
-    configBytes?: number,
-    loadTime?: number,
-    parseTime?: number,
-    appTime?: number,
-    packTime?: number,
-    sourceTmosVersion?: string,
-    objectCount?: number,
-    lineCount?: number,
-    objects?: {
-        virtuals?: number,
-        profiles?: number,
-        policies?: number,
-        pools?: number,
-        irules?: number,
-        monitors?: number,
-        nodes?: number,
-        ltps?: number,
-        snats?: number,
-        apmProfiles?: number,
-        apmPolicies?: number,
-        asmPolicies?: number
-    }
-}
 
 /**
  * object type that represends bigip.conf as multi-level json tree
@@ -68,16 +41,50 @@ export type BigipConfObj = {
     }
 }
 
+
+
+
+/**
+ * main explosion output
+ * 
+ */
+export type Explosion = {
+    id: string,
+    dateTime: Date,
+    config: {
+        sources: ConfigFiles[],
+        apps: TmosApp[],
+        base: string
+    },
+    stats: Stats,
+    logs: string
+}
+
+/**
+ * array item of returned "apps"
+ */
+export type TmosApp = {
+    name: string,
+    config: string,
+    map?: AppMap
+}
+
 /**
  * object type for each app map
+ * - child of explosion
  */
 export type AppMap = {
-    vsName: string,
-    vsDest?: string,
-    pools?: string[],
+    // vsName: string,
+    // the virtual server clients connect to
+    vsDest: string,
+    // default pool members (ip:port)
+    pool?: string[],
     irule?: {
+        // pools referenced (extracted members) in irule
         pools?: string[],
+        //  do we care about virtuals referencing other virtuals?  advanced-out-of-scope?
         virtuals?: string[],
+        // probably bad practice, but doable...
         nodes?: string[]
     },
     policy?: {
@@ -87,24 +94,41 @@ export type AppMap = {
     }
 }
 
-
-export type TmosApp = {
-    name: string,
-    config: string,
-    map?: string
+/**
+ * stats object type for object counts
+ * - child of explosion
+ */
+export type Stats = {
+    configBytes?: number,
+    loadTime?: number,
+    parseTime?: number,
+    appTime?: number,
+    packTime?: number,
+    sourceTmosVersion?: string,
+    objectCount?: number,
+    lineCount?: number,
+    objects?: ObjStats
 }
 
-export type Explosion = {
-    id: string,
-    dateTime: Date,
-    config: {
-        sources,
-        apps,
-        base
-    },
-    stats: Stats,
-    logs: string
+export type ObjStats = {
+    virtuals?: number,
+    profiles?: number,
+    policies?: number,
+    pools?: number,
+    irules?: number,
+    monitors?: number,
+    nodes?: number,
+    snatPools?: number,
+    apmProfiles?: number,
+    apmPolicies?: number,
+    asmPolicies?: number
 }
+
+
+
+
+
+
 
 export type TmosRegExTree = {
     tmosVersion: RegExp,
@@ -142,19 +166,7 @@ export type TmosRegExTree = {
     }
 }
 
-export type ObjStats = {
-    virtuals?: number,
-    profiles?: number,
-    policies?: number,
-    pools?: number,
-    irules?: number,
-    monitors?: number,
-    nodes?: number,
-    snatPools?: number,
-    apmProfiles?: number,
-    apmPolicies?: number,
-    asmPolicies?: number
-}
+
 
 
 export type ParseResp = {
@@ -171,6 +183,6 @@ export type ParseResp = {
 export type ConfigFiles = {
     fileName: string,
     size: number,
-    content: string
-}[]
+    content?: string
+}
 

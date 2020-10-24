@@ -16,6 +16,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added support for extracting pools referenced by local traffic policies
 - Added stats for config load time (extracting files from archives) and total config files size (extracted files)
 
+### Modified
+- Cleaned up app array to not have so much nested information
+
 ---
 
 ## [0.3.0] - (10-12-2020)

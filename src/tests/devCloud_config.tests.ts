@@ -11,7 +11,8 @@ import { logOutput } from './explosionOutput';
 
 const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
 const testFileDetails = path.parse(testFile);
-const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
+const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`);
+console.log('outFile', outFile);
 
 describe('explode devCloud bigip.conf tests', function() {
     
@@ -35,6 +36,8 @@ describe('explode devCloud bigip.conf tests', function() {
 
         const parseTime = device.parse();
         const expld = device.explode();
+
+        fs.writeFileSync(`${outFile}.json`, JSON.stringify(expld, undefined, 4));
         assert.ok(parseTime, 'should be a number');
     });
 

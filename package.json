@@ -1,7 +1,7 @@
 {
   "name": "f5-corkscrew",
   "description": "extracting tmos config",
-  "author": "",
+  "author": "F5DevCentral",
   "version": "0.4.0",
   "license": "Apache-2.0",
   "homepage": "https://github.com/f5devcentral/f5-corkscrew#readme",

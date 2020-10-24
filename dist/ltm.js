@@ -242,7 +242,9 @@ class BigipConfig extends events_1.EventEmitter {
             const i = this.configObject.ltm.virtual;
             for (const [key, value] of Object.entries(i)) {
                 const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
-                const x = JSON.stringify({ name: key, config: vsConfig });
+                // the stringify/parse is only here to get cli output working with jq
+                // probably a better way/spot to do that.
+                const x = JSON.stringify({ name: key, config: vsConfig.config, map: vsConfig.map });
                 const y = JSON.parse(x);
                 apps.push(y);
             }

@@ -1,31 +1,4 @@
 /**
- * stats object type for object counts
- */
-export declare type Stats = {
-    configBytes?: number;
-    loadTime?: number;
-    parseTime?: number;
-    appTime?: number;
-    packTime?: number;
-    sourceTmosVersion?: string;
-    objectCount?: number;
-    lineCount?: number;
-    objects?: {
-        virtuals?: number;
-        profiles?: number;
-        policies?: number;
-        pools?: number;
-        irules?: number;
-        monitors?: number;
-        nodes?: number;
-        ltps?: number;
-        snats?: number;
-        apmProfiles?: number;
-        apmPolicies?: number;
-        asmPolicies?: number;
-    };
-};
-/**
  * object type that represends bigip.conf as multi-level json tree
  */
 export declare type BigipConfObj = {
@@ -55,12 +28,35 @@ export declare type BigipConfObj = {
     };
 };
 /**
+ * main explosion output
+ *
+ */
+export declare type Explosion = {
+    id: string;
+    dateTime: Date;
+    config: {
+        sources: ConfigFiles[];
+        apps: TmosApp[];
+        base: string;
+    };
+    stats: Stats;
+    logs: string;
+};
+/**
+ * array item of returned "apps"
+ */
+export declare type TmosApp = {
+    name: string;
+    config: string;
+    map?: AppMap;
+};
+/**
  * object type for each app map
+ * - child of explosion
  */
 export declare type AppMap = {
-    vsName: string;
-    vsDest?: string;
-    pools?: string[];
+    vsDest: string;
+    pool?: string[];
     irule?: {
         pools?: string[];
         virtuals?: string[];
@@ -72,21 +68,33 @@ export declare type AppMap = {
         nodes?: string[];
     };
 };
-export declare type TmosApp = {
-    name: string;
-    config: string;
-    map?: string;
+/**
+ * stats object type for object counts
+ * - child of explosion
+ */
+export declare type Stats = {
+    configBytes?: number;
+    loadTime?: number;
+    parseTime?: number;
+    appTime?: number;
+    packTime?: number;
+    sourceTmosVersion?: string;
+    objectCount?: number;
+    lineCount?: number;
+    objects?: ObjStats;
 };
-export declare type Explosion = {
-    id: string;
-    dateTime: Date;
-    config: {
-        sources: any;
-        apps: any;
-        base: any;
-    };
-    stats: Stats;
-    logs: string;
+export declare type ObjStats = {
+    virtuals?: number;
+    profiles?: number;
+    policies?: number;
+    pools?: number;
+    irules?: number;
+    monitors?: number;
+    nodes?: number;
+    snatPools?: number;
+    apmProfiles?: number;
+    apmPolicies?: number;
+    asmPolicies?: number;
 };
 export declare type TmosRegExTree = {
     tmosVersion: RegExp;
@@ -123,19 +131,6 @@ export declare type TmosRegExTree = {
         destination: RegExp;
     };
 };
-export declare type ObjStats = {
-    virtuals?: number;
-    profiles?: number;
-    policies?: number;
-    pools?: number;
-    irules?: number;
-    monitors?: number;
-    nodes?: number;
-    snatPools?: number;
-    apmProfiles?: number;
-    apmPolicies?: number;
-    asmPolicies?: number;
-};
 export declare type ParseResp = {
     totalObjectCount: number;
     ltmObjectCount: number;
@@ -149,5 +144,5 @@ export declare type ParseResp = {
 export declare type ConfigFiles = {
     fileName: string;
     size: number;
-    content: string;
-}[];
+    content?: string;
+};

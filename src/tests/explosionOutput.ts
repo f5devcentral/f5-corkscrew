@@ -26,9 +26,9 @@ export function logOutput (configObject: BigipConfObj, explosion: Explosion): st
         output += '\n################################################\n';
         output += `#### app name: ${el.name}\n`;
         output += `#### app map: `;
-        output += JSON.stringify(el.config.vsMap, undefined, 4);
+        output += JSON.stringify(el.map, undefined, 4);
         output += `\n####\n`;
-        output += el.config.fullConfig;
+        output += el.config;
         output += '\n################################################\n';
     })
     

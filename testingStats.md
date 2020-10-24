@@ -5,8 +5,34 @@ This page is a collection of stats outputs from conversions of varios sizes.
 
 Times are in mili-seconds
 
+- `objectCount` is total parent object count extracted from configs (ex. "ltm node { ... }")
+- `configBytes` is total number of bytes from all config files that were selected for config extraction
+- `loadTime` is the time it took for the .conf/ucs/qkview to be located, unpacked and config files extracted
+    - This is the heaviest operation by far since some archives can reach hundreds of Mbs
+- `parseTime` is the time it took to convert the config files to a structure we can search for config objects
+- `appTime` is the time it took to extract all applications from the config objects in the parse time
+- `packTime` is the time it took to gather all the details from a "full" output
+
 ```json
 [
+{
+    "objectCount": 251,
+    "configBytes": 74664,
+    "loadTime": 3455.2001,
+    "objects": {
+        "virtuals": 8,
+        "profiles": 6,
+        "policies": 2,
+        "pools": 8,
+        "irules": 5,
+        "monitors": 6,
+        "nodes": 11,
+        "snatPools": 1
+    },
+    "parseTime": 19.6916,
+    "appTime": 5.7523,
+    "packTime": 0.5622
+},
 {
     "objectCount": 145,
     "objects": {
