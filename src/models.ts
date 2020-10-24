@@ -54,10 +54,10 @@ export type Explosion = {
     config: {
         sources: ConfigFiles[],
         apps: TmosApp[],
-        base: string
+        base: string[]
     },
     stats: Stats,
-    logs: string
+    logs: string[]
 }
 
 /**
@@ -65,7 +65,7 @@ export type Explosion = {
  */
 export type TmosApp = {
     name: string,
-    config: string,
+    configs: string[],
     map?: AppMap
 }
 
@@ -76,12 +76,12 @@ export type TmosApp = {
 export type AppMap = {
     // vsName: string,
     // the virtual server clients connect to
-    vsDest: string,
+    vsDest?: string,
     // default pool members (ip:port)
     pool?: string[],
     irule?: {
         // pools referenced (extracted members) in irule
-        pools?: string[],
+        pools?: string[] | string[][],
         //  do we care about virtuals referencing other virtuals?  advanced-out-of-scope?
         virtuals?: string[],
         // probably bad practice, but doable...

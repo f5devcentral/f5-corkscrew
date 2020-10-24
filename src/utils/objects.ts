@@ -9,6 +9,61 @@ import { BigipConfObj } from "../models";
 
 import balanced from 'balanced-match';
 
+
+/**
+ * recursively removes empty value/objects/arrays
+ * @param obj 
+ */
+export function cleanObject (obj: any) {
+
+    // This needs to be fully tested to confirm full functionality,
+    //   but this helped accmoplish what I needed at this time
+
+    cleanEmpty(obj);
+    clearEmpties(obj);
+
+    // following is also a way to remove empty values from stuff
+    //  but can be process intensive
+    function removeUndefined (json) {
+        return JSON.parse(JSON.stringify(json))
+    }
+}
+
+
+/**
+ * recursively removes empty values from objects/arrays
+ * @param obj 
+ */
+function cleanEmpty(obj: any) {
+    if (Array.isArray(obj)) {
+        return obj
+            .map(v => (v && typeof v === 'object') ? cleanEmpty(v) : v)
+            .filter(v => !(v == null));
+    } else {
+        return Object.entries(obj)
+            .map(([k, v]) => [k, v && typeof v === 'object' ? cleanEmpty(v) : v])
+            .reduce((a, [k, v]) => (v == null ? a : (a[k] = v, a)), {});
+    }
+}
+
+/**
+ * recursively removes empty objects
+ * @param obj
+ */
+function clearEmpties(obj) {
+    for (const k in obj) {
+        if (!obj[k] || typeof obj[k] !== "object") {
+            continue // If null or not an object, skip to the next iteration
+        }
+
+        // The property is an object
+        clearEmpties(obj[k]); // <-- Make a recursive call on the nested object
+        if (Object.keys(obj[k]).length === 0) {
+            delete obj[k]; // The object had no properties, so delete that property
+        }
+    }
+}
+
 type RetObj = {
     path?: string,
     key?: string,
@@ -32,8 +87,8 @@ export const nestedObjValue = (fields, value) => {
  *  subsequent items in list overwrite conflicting entries
  * @param objs list of objects to merge
  */
-export function deepMergeObj(target: unknown, source: unknown, ) {
-    return deepmerge(target, source, {clone: false})
+export function deepMergeObj(target: unknown, source: unknown,) {
+    return deepmerge(target, source, { clone: false })
 }
 
 /**
@@ -41,7 +96,7 @@ export function deepMergeObj(target: unknown, source: unknown, ) {
  * @param cfg child config to parse
  * @param obj used to iterate
  */
-export function tmosChildToObj (cfg: string, obj?) {
+export function tmosChildToObj(cfg: string, obj?) {
 
     /**
      * input tmos parent object body
@@ -52,13 +107,13 @@ export function tmosChildToObj (cfg: string, obj?) {
      * 2. capture lists
      *      (ex )
      * 
-     */     
+     */
 
     // used for iteration in the future
     obj = obj ? obj : {};
 
     const startingCfg = cfg;
-    
+
     /**
      * loop through each of the objects
      *  remove the match, check if "{}" in match
@@ -70,10 +125,10 @@ export function tmosChildToObj (cfg: string, obj?) {
      */
 
     // while this part of the config has brackets...
-    while(/{/.test(cfg)){
-        
+    while (/{/.test(cfg)) {
+
         const blncd = balanced('{', '}', cfg);
-        if(blncd) {
+        if (blncd) {
             // get line up to first '{'
             const name = blncd.pre;
             const name2 = name.split(/\n/).pop().trim();
@@ -88,21 +143,21 @@ export function tmosChildToObj (cfg: string, obj?) {
             const xx = body.trim().includes('\n');
 
             if (body.includes('{') || body === ' ') {
-                
+
                 //  it's a nested object, put in body for next round
                 const rebuiltObj = `${name2} {${body}}`
                 cfg = cfg.replace(rebuiltObj, '');
                 obj[name2] = body;
 
             } else if (body.trim().includes('\n')) {
-                
+
                 //regex single-line key-value pairs
                 const singleLineKVpairsRegex = /([\w-]+) (.+)/g
                 const childKVpair = cfg.match(singleLineKVpairsRegex);
                 if (childKVpair) {
                     childKVpair.forEach(el2 => {
                         // remove items as we convert them
-                        cfg = cfg.replace(el2, '') 
+                        cfg = cfg.replace(el2, '')
                         const [key, val] = el2.split(' ');
                         obj[key] = val;
                     });
@@ -118,7 +173,7 @@ export function tmosChildToObj (cfg: string, obj?) {
                 //     }
                 // });
             } else if (body.trim().includes(' ')) {
-                
+
                 const keyVal = body.split(' ')
                 obj[keyVal[0]] = keyVal[1];
                 cfg = cfg.replace(body, '');
@@ -130,12 +185,12 @@ export function tmosChildToObj (cfg: string, obj?) {
                 const rebuiltObj = `${name2} {${body}}`
                 cfg = cfg.replace(rebuiltObj, '');
             }
-            
+
             // const cfg2 = cfg;
-            
+
         }
     }
-    
+
 
 
     // const childObjectsRegex = /([\w\-.]+) {\n([\s\S]+?)\n    }/
@@ -143,7 +198,7 @@ export function tmosChildToObj (cfg: string, obj?) {
     // // parsing child objects and removing
     // if (childObjects && childObjects.length === 3) {
     //     childObjects.forEach(el => {
-            
+
     //         // if(el.includes('{')) {
     //         //     // const objName = el.match(/\s([\w\-.]+) {/)[1]
     //         //     //     const objBody = el.match(/\s([ \w\-.]+) {\n([\s\S]+?)\n    }/)
@@ -155,7 +210,7 @@ export function tmosChildToObj (cfg: string, obj?) {
     //         obj[childObjects[1]] = childObjects[2]
     //     });
     // }
-    
+
     // const childObjectsSLRegex = /[\/ \w\-.]+ {(.+?)}/g
     // const childObjectsSL = cfg.match(childObjectsSLRegex);
     // if(childObjectsSL) {
@@ -165,13 +220,13 @@ export function tmosChildToObj (cfg: string, obj?) {
     //         obj[objName] = ''
     //     })
     // }
-    
+
     const singleLineKVpairsRegex = /([\w-]+) (.+)/g
     const childKVpair = cfg.match(singleLineKVpairsRegex);
     if (childKVpair) {
         childKVpair.forEach(el2 => {
             // remove items as we convert them
-            cfg = cfg.replace(el2, '') 
+            cfg = cfg.replace(el2, '')
             const [key, val] = el2.split(' ');
             obj[key] = val;
         });
@@ -189,7 +244,7 @@ export function tmosChildToObj (cfg: string, obj?) {
 
     // split on lines
     const regex = new RegExp(/\S/);     // any non-white space characters
-    if (regex.test(cfg)){
+    if (regex.test(cfg)) {
         logger.error('parsing child object has leftover config:', cfg)
         logger.error('parsing child object original config:', startingCfg);
     }
@@ -204,7 +259,7 @@ export function tmosChildToObj (cfg: string, obj?) {
 function isObject(item) {
     return (item && typeof item === 'object' && !Array.isArray(item));
 }
-  
+
 /**
  * Deep merge two objects.
  * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
@@ -212,21 +267,21 @@ function isObject(item) {
  * @param ...sources
  */
 export function simpleMergeDeep(target, ...sources) {
-if (!sources.length) return target;
-const source = sources.shift();
+    if (!sources.length) return target;
+    const source = sources.shift();
 
-if (isObject(target) && isObject(source)) {
-    for (const key in source) {
-    if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, { [key]: {} });
-        simpleMergeDeep(target[key], source[key]);
-    } else {
-        Object.assign(target, { [key]: source[key] });
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key]) Object.assign(target, { [key]: {} });
+                simpleMergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
     }
-    }
-}
 
-return simpleMergeDeep(target, ...sources);
+    return simpleMergeDeep(target, ...sources);
 }
 
 
@@ -236,7 +291,7 @@ return simpleMergeDeep(target, ...sources);
  * @param path 
  * @param value 
  */
-export function setNestedKey (obj: any, path: string[], value: any){
+export function setNestedKey(obj: any, path: string[], value: any) {
 
     /**
      * https://stackoverflow.com/questions/18936915/dynamically-set-property-of-nested-object
@@ -257,7 +312,7 @@ export function setNestedKey (obj: any, path: string[], value: any){
  * @param obj to search
  * @param return array of path steps
  */
-export function getPathOfValue (vtf: string | RegExp, obj: any) {
+export function getPathOfValue(vtf: string | RegExp, obj: any) {
 
     /**
      * https://stackoverflow.com/questions/53543303/find-a-full-object-path-to-a-given-value-with-javascript
@@ -274,14 +329,14 @@ export function getPathOfValue (vtf: string | RegExp, obj: any) {
     return find(obj);
 
     function find(obj, item?) {
-        for(const key in obj) {
-            if(obj[key] && typeof obj[key] === "object") {
+        for (const key in obj) {
+            if (obj[key] && typeof obj[key] === "object") {
                 const result = find(obj[key], item);
-                if(result) {
+                if (result) {
                     result.unshift(key);
                     return result;
                 }
-            } else if(regex.test(obj[key])) {
+            } else if (regex.test(obj[key])) {
                 return [key];
             }
         }
@@ -298,7 +353,7 @@ export function getPathOfValue (vtf: string | RegExp, obj: any) {
  * @param path to fetch value
  * @param obj containing path/value to get
  */
-export function deepGet (path: string[], obj: any) {
+export function deepGet(path: string[], obj: any) {
 
     /**
      * this seems to be the best way to GET a value (by far)
@@ -311,13 +366,13 @@ export function deepGet (path: string[], obj: any) {
 
     function index(obj, is, value?) {
         if (typeof is == 'string')
-            return index(obj,is.split('.'), value);
-        else if (is.length==1 && value!==undefined)
+            return index(obj, is.split('.'), value);
+        else if (is.length == 1 && value !== undefined)
             return obj[is[0]] = value;
-        else if (is.length==0)
+        else if (is.length == 0)
             return obj;
-        else 
-            return index(obj[is[0]],is.slice(1), value);
+        else
+            return index(obj[is[0]], is.slice(1), value);
     }
 }
 
@@ -333,7 +388,7 @@ export function deepGet (path: string[], obj: any) {
  * @param return [{ path: string, key: string, value: string }]
  */
 export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
-    
+
     const results: RetObj[] = [];
 
     const objType = typeof obj;
@@ -341,7 +396,7 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
         logger.error(`findValueFromKey function expected object, got: ${objType}`);
         return;
     }
-    
+
     /**
      * iterate through json tree looking for key match
      */
@@ -364,11 +419,11 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
          * append path as we iterate
          */
         path = `${path ? path + "." : ""}`;
-        
+
         for (const k in obj) {
             if (obj.hasOwnProperty(k)) {
                 if (obj[k] && typeof obj[k] === "object") {
-                    findKey( obj[k], key, `${path}${k}` );
+                    findKey(obj[k], key, `${path}${k}`);
                 }
             }
         }
@@ -382,9 +437,9 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
         return results[0];
     } else {
         logger.error(`pathValueFromKey found more than one match, returning first, full list: ${results}`)
-        return results[0]; 
+        return results[0];
     }
-    
+
 }
 
 
@@ -502,7 +557,7 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
 //  * https://stackoverflow.com/questions/25403781/how-to-get-the-path-from-javascript-object-from-key-and-value
 //  */
 // export function findPath1(): void {
-    
+
 //     const testObj = { a: [1, 2, { o: 5 }, 7], b: [0, [{ bb: [0, "str"] }]] };
 
 //     function findPath(a, obj) {
@@ -636,7 +691,7 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
 //     const answer = [1, 'children', 0, 'children', 0, 'id'];
 
 //     const aaa = findPath(foundName, treeData);
-    
+
 //     if (aaa) {
 //         console.log(aaa);
 //         const bbb = aaa;
@@ -659,7 +714,7 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
 //                 const one = o[k] === a;
 //                 const two = o[k] === a || o[k]
 //                 const three = typeof o[k] === 'object';
-            
+
 //                 return o[k] === a || o[k] && typeof o[k] === 'object' && iter(o[k], result);
 //             });
 //         }
@@ -667,7 +722,7 @@ export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
 
 //         const xxxA =  iter(obj, []) && result
 //         const xxxB = xxxA || undefined;
-        
+
 //         return xxxB;
 //     }
 // }

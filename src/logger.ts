@@ -80,8 +80,8 @@ import { inspect } from "util";
     /**
      * returns logs as string
      */
-    public getLogs(): string {
-        return this._journal.join('\n');
+    public getLogs(): string[] {
+        return this._journal;
     }
 
     private init(){

@@ -233,7 +233,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * Get processing logs
      */
-    public logs(): string {
+    public logs(): string[] {
         return logger.getLogs();
     }
 
@@ -273,7 +273,7 @@ export default class BigipConfig extends EventEmitter {
                 const vsConfig = digVsConfig(key, value, this.configObject, this.rx);
                 // the stringify/parse is only here to get cli output working with jq
                 // probably a better way/spot to do that.
-                const x = JSON.stringify({name: key, config: vsConfig.config, map: vsConfig.map});
+                const x = JSON.stringify({name: key, configs: vsConfig.config, map: vsConfig.map});
                 const y = JSON.parse(x);
                 apps.push(y);
             }

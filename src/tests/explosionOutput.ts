@@ -28,14 +28,14 @@ export function logOutput (configObject: BigipConfObj, explosion: Explosion): st
         output += `#### app map: `;
         output += JSON.stringify(el.map, undefined, 4);
         output += `\n####\n`;
-        output += el.config;
+        output += el.configs.join('\n');
         output += '\n################################################\n';
     })
     
     output += '\n\n';
     output += '#######################################\n';
     output += '### conversion log ####################\n';
-    output += explosion.logs;
+    output += explosion.logs.join('\n');
     
     output += '\n\n';
     output += '#######################################\n';
