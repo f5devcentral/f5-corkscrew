@@ -20,10 +20,10 @@ const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
 const objects_2 = require("./utils/objects");
 const uuid_1 = require("uuid");
-// import { countLines } from './tmosParser';
 const objCounter_1 = require("./objCounter");
 const unPacker_1 = require("./unPacker");
 const digConfigs_1 = require("./digConfigs");
+const path_1 = __importDefault(require("path"));
 /**
  * Class to consume bigip configs -> parse apps
  *
@@ -56,10 +56,9 @@ class BigipConfig extends events_1.EventEmitter {
      */
     load(file) {
         return __awaiter(this, void 0, void 0, function* () {
-            /**
-             * setup event emitors to provide status of unPacking
-             */
             const startTime = process.hrtime.bigint();
+            // capture incoming file type
+            this.inputFileType = path_1.default.parse(file).ext;
             this.configFiles = yield unPacker_1.unPacker(file);
             if (this.configFiles) {
                 // run through files and add up file size
@@ -158,6 +157,10 @@ class BigipConfig extends events_1.EventEmitter {
         });
         // get ltm object counts
         this.stats.objects = objCounter_1.countObjects(this.configObject);
+        // assign souceTmosVersion to stats object also
+        this.stats.sourceTmosVersion = this.tmosVersion;
+        // get hostname to show in vscode extension view
+        this.hostname = digConfigs_1.getHostname(this.configObject);
         // end processing time, convert microseconds to miliseconds
         this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
         return this.stats.parseTime;
@@ -184,30 +187,31 @@ class BigipConfig extends events_1.EventEmitter {
         if (!((_a = this.configObject.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
             this.parse(); // parse config files
         }
-        const apps = this.apps(); // extract apps
+        const apps = this.apps(); // extract apps before parse timer...
         const startTime = process.hrtime.bigint(); // start pack timer
-        const id = uuid_1.v4(); // generat uuid
-        const dateTime = new Date(); // generate date/time
-        const logs = this.logs(); // get all the processing logs
         // map out the config body/contents
         const sources = this.configFiles.map(x => {
             return { fileName: x.fileName, size: x.size };
         });
         // collect base information like vlans/IPs
         const base = digConfigs_1.digBaseConfig(this.configObject);
-        // capture pack time
-        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-        return {
-            id,
-            dateTime,
+        // build return object
+        const retObj = {
+            id: uuid_1.v4(),
+            dateTime: new Date(),
+            hostname: this.hostname,
+            inputFileType: this.inputFileType,
             config: {
                 sources,
                 apps,
                 base
             },
             stats: this.stats,
-            logs
+            logs: this.logs() // get all the processing logs
         };
+        // capture pack time
+        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+        return retObj;
     }
     /**
      * Get processing logs
@@ -244,7 +248,7 @@ class BigipConfig extends events_1.EventEmitter {
                 const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
                 // the stringify/parse is only here to get cli output working with jq
                 // probably a better way/spot to do that.
-                const x = JSON.stringify({ name: key, config: vsConfig.config, map: vsConfig.map });
+                const x = JSON.stringify({ name: key, configs: vsConfig.config, map: vsConfig.map });
                 const y = JSON.parse(x);
                 apps.push(y);
             }

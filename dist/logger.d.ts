@@ -26,7 +26,7 @@ declare class Log {
     /**
      * returns logs as string
      */
-    getLogs(): string;
+    getLogs(): string[];
     private init;
     private stringify;
 }

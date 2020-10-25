@@ -63,13 +63,13 @@ class Log {
     write(label, ...messageParts) {
         const message = messageParts.map(this.stringify).join(' ');
         const dateTime = new Date().toISOString();
-        this._journal.push(`[${dateTime}] ${label}: ${message}`);
+        this._journal.push(`[${dateTime}] [${label}]: ${message}`);
     }
     /**
      * returns logs as string
      */
     getLogs() {
-        return this._journal.join('\n');
+        return this._journal;
     }
     init() {
         const label = 'DeBuG';

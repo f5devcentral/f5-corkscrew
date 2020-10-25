@@ -74,7 +74,7 @@ import { inspect } from "util";
     write(label: string, ...messageParts: unknown[]): void {
         const message = messageParts.map(this.stringify).join(' ');
         const dateTime = new Date().toISOString();
-        this._journal.push(`[${dateTime}] ${label}: ${message}`);
+        this._journal.push(`[${dateTime}] [${label}]: ${message}`);
     }
 
     /**

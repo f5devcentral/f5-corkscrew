@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uniqueList = exports.digVsConfig = exports.digBaseConfig = void 0;
+exports.getHostname = exports.uniqueList = exports.digVsConfig = exports.digBaseConfig = void 0;
 const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
 const pools_1 = require("./pools");
@@ -40,7 +40,8 @@ function digBaseConfig(configTree) {
             confs.push(`auth partition ${key} {${value}}`);
         }
     }
-    return confs.join('\n');
+    // return confs.join('\n');
+    return confs;
 }
 exports.digBaseConfig = digBaseConfig;
 /**
@@ -68,48 +69,63 @@ function digVsConfig(vsName, vsConfig, configTree, rx) {
     const fallBackPersist = vsConfig.match(rx.vs.fbPersist);
     const destination = vsConfig.match(rx.vs.destination);
     // base vsMap config object
-    const vsMap = {
+    const map = {
         // vsName,
         vsDest: ''
     };
     // add destination to vsMap object
     if (destination && destination[1]) {
-        vsMap.vsDest = destination[1];
+        map.vsDest = destination[1];
     }
-    let fullConfig = `ltm virtual ${vsName} {${vsConfig}}\n`;
+    let config = [];
+    config.push(`ltm virtual ${vsName} {${vsConfig}}`);
     if (pool && pool[1]) {
         const x = digPoolConfig(pool[1], configTree, rx);
-        fullConfig += x.config;
-        vsMap.pool = x.map;
+        config.push(...x.config);
+        map.pool = x.map;
         logger_1.default.debug(`[${vsName}] found the following pool`, pool[1]);
     }
     if (profiles && profiles[1]) {
-        fullConfig += digProfileConfigs(profiles[1], configTree, rx);
+        const x = digProfileConfigs(profiles[1], configTree, rx);
+        config.push(...x.config);
         logger_1.default.debug(`[${vsName}] found the following profiles`, profiles[1]);
     }
     if (rules && rules[1]) {
         // add irule connection destination mapping
-        fullConfig += digRuleConfigs(rules[1], configTree, rx);
+        const x = digRuleConfigs(rules[1], configTree, rx);
+        config.push(...x.config);
+        if (x.map) {
+            map.irule = x.map;
+        }
         logger_1.default.debug(`[${vsName}] found the following rules`, rules[1]);
     }
     if (snat && snat[1]) {
-        fullConfig += digSnatConfig(snat[1], configTree, rx);
+        const x = digSnatConfig(snat[1], configTree, rx);
+        config.push(...x.config);
         logger_1.default.debug(`[${vsName}] found snat configuration`, snat[1]);
     }
     if (policies && policies[1]) {
         // add ltp destination mapping
-        fullConfig += digPolicyConfig(policies[1], configTree, rx);
+        const x = digPolicyConfig(policies[1], configTree, rx);
+        config.push(...x.config);
         logger_1.default.debug(`[${vsName}] found the following policies`, policies[1]);
     }
     if (persistence && persistence[1]) {
-        fullConfig += digPersistConfig(persistence[1], configTree, rx);
+        const x = digPersistConfig(persistence[1], configTree, rx);
+        config.push(...x.config);
         logger_1.default.debug(`[${vsName}] found the following persistence`, persistence[1]);
     }
     if (fallBackPersist && fallBackPersist[1]) {
-        fullConfig += digFbPersistConfig(fallBackPersist[1], configTree);
+        const x = digFbPersistConfig(fallBackPersist[1], configTree);
+        config.push(...x.config);
         logger_1.default.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
     }
-    return { config: fullConfig, map: vsMap };
+    // remove any duplicate entries
+    config = uniqueList(config);
+    // removed empty values and objects
+    objects_1.cleanObject(config);
+    objects_1.cleanObject(map);
+    return { config, map };
 }
 exports.digVsConfig = digVsConfig;
 /**
@@ -119,11 +135,11 @@ exports.digVsConfig = digVsConfig;
 function digPoolConfig(poolName, configObject, rx) {
     logger_1.default.debug(`digging pool config for ${poolName}`);
     // const rx = this.rx.vs.pool; // get needed rx sub-tree
-    let config = '';
+    const config = [];
     const map = [];
     const poolConfig = objects_1.pathValueFromKey(configObject.ltm.pool, poolName);
     if (poolConfig) {
-        config += `ltm pool ${poolName} {${poolConfig.value}}\n`;
+        config.push(`ltm pool ${poolName} {${poolConfig.value}}`);
         const members = poolConfig.value.match(rx.vs.pool.members);
         const monitors = poolConfig.value.match(rx.vs.pool.monitors);
         if (members && members[1]) {
@@ -141,7 +157,7 @@ function digPoolConfig(poolName, configObject, rx) {
                     const port = el.match(/(?<=:)\d+(?= )/);
                     const addr = el.match(/(?<=address )[\d.]+/);
                     const x = objects_1.pathValueFromKey(configObject.ltm.node, name[0]);
-                    config += `ltm node ${x.key} {${x.value}}\n`;
+                    config.push(`ltm node ${x.key} {${x.value}}`);
                     map.push(`${addr}:${port}`);
                 });
             }
@@ -151,7 +167,7 @@ function digPoolConfig(poolName, configObject, rx) {
                     const name = el.match(/(\/[\w\-\/.]+)/);
                     const port = el.match(/(?<=:)\d+(?= )/);
                     const a = objects_1.pathValueFromKey(configObject.ltm.node, name[0]);
-                    config += `ltm node ${a.key} {${a.value}}\n`;
+                    config.push(`ltm node ${a.key} {${a.value}}`);
                     map.push(`${name}:${port}`);
                 });
             }
@@ -167,7 +183,7 @@ function digPoolConfig(poolName, configObject, rx) {
                 const x = objects_1.pathValueFromKey(configObject.ltm.monitor, name);
                 if (x) {
                     // rebuild tmos object
-                    monitorNameConfigs.push(`ltm monitor ${x.path} ${x.key} {${x.value}}\n`);
+                    monitorNameConfigs.push(`ltm monitor ${x.path} ${x.key} {${x.value}}`);
                 }
             });
             logger_1.default.debug('pool monitor configs found:', monitorNameConfigs);
@@ -176,7 +192,8 @@ function digPoolConfig(poolName, configObject, rx) {
                 logger_1.default.debug(`[${poolName}] references ${defaultMonitors} system default monitors, compare previous arrays for details`);
             }
             if (monitorNameConfigs) {
-                config += monitorNameConfigs.join('\n');
+                // monitorNameConfigs.join('\n');
+                config.push(...monitorNameConfigs);
             }
         }
     }
@@ -184,57 +201,94 @@ function digPoolConfig(poolName, configObject, rx) {
 }
 function digProfileConfigs(profilesList, configObject, rx) {
     // regex profiles list to individual profiles
-    // const rx = this.rx.vs.profiles;
     const profileNames = profilesList.match(rx.vs.profiles.names);
     logger_1.default.debug(`profile references found: `, profileNames);
     // eslint-disable-next-line prefer-const
-    let configList = [];
+    const config = [];
+    const map = [];
     profileNames.forEach(name => {
         const x = objects_1.pathValueFromKey(configObject.ltm.profile, name);
         if (x) {
-            configList.push(`ltm profile ${x.path} ${x.key} {${x.value}}\n`);
+            config.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
         }
     });
-    const defaultProfiles = profileNames.length - configList.length;
+    const defaultProfiles = profileNames.length - config.length;
     if (defaultProfiles) {
         logger_1.default.debug(`Found ${defaultProfiles} system default profiles, compare previous arrays for details`);
     }
-    return configList.join('\n');
+    // return config.join('\n');
+    return { config, map };
 }
 /**
  *
  * @param rulesList raw irules regex from vs dig
  */
 function digRuleConfigs(rulesList, configObject, rx) {
-    // const rx = this.rx.vs.rules
     const ruleNames = rulesList.match(rx.vs.rules.names);
     logger_1.default.debug(`rule references found: `, ruleNames);
-    // eslint-disable-next-line prefer-const
-    let ruleList = [];
+    // list of rules on the vs
+    const config = [];
+    // final config object
+    const obj = {
+        config: []
+    };
+    const map = {};
     ruleNames.forEach(name => {
         // search config, return matches
         const x = objects_1.pathValueFromKey(configObject.ltm.rule, name);
         if (x) {
-            ruleList.push(`ltm rule ${x.key} {${x.value}}\n`);
+            config.push(`ltm rule ${x.key} {${x.value}}`);
+            const iRulePools = pools_1.poolsInRule(x.value);
+            if (iRulePools) {
+                // for each pool reference found, get config
+                iRulePools.forEach(el => {
+                    // if no "/", this is a "/Common/" partition rule
+                    if (/\//.test(el[0])) {
+                        // found slash, so has parition prefix
+                        const poolC = digPoolConfig(el[0], configObject, rx);
+                        if (poolC) {
+                            obj.config.push(poolC.config[0]);
+                            // deepMergeObj(obj, { map: { pools: poolC.map }})
+                            map.pools = poolC.map;
+                        }
+                    }
+                    else {
+                        // no slash, so adding commond partition prefix
+                        const poolC = digPoolConfig(`/Common/${el[0]}`, configObject, rx);
+                        if (poolC) {
+                            obj.config.push(poolC.config[0]);
+                            // deepMergeObj(obj, { map: { pools: poolC.map }})
+                            map.pools = poolC.map;
+                        }
+                    }
+                });
+                // add pools to map
+                map.pools = iRulePools;
+            }
+            // todo: add node mapping
         }
     });
-    const defaultRules = ruleNames.length - ruleList.length;
+    const defaultRules = ruleNames.length - config.length;
     if (defaultRules) {
         logger_1.default.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`);
     }
-    return ruleList.join('\n');
+    // Object.assign(obj, map);
+    // push additional config objects back now that we have logged about default rules
+    config.push(...obj.config);
+    return { config, map };
 }
 /**
  * analyzes vs snat config, returns full snat configuration if pool reference
  * @param snat vs snat reference as string
  */
 function digSnatConfig(snat, configObject, rx) {
-    let config = '';
+    const config = [];
+    const map = [];
     if (snat.includes('pool')) {
         const snatName = snat.match(rx.vs.snat.name);
         if (snatName) {
             const x = objects_1.pathValueFromKey(configObject.ltm.snatpool, snatName[1]);
-            config += `ltm snatpool ${x.key} {${x.value}}\n`;
+            config.push(`ltm snatpool ${x.key} {${x.value}}`);
         }
         else {
             logger_1.default.error(`Detected following snat pool configuration, but did not find in config [${snat}]`);
@@ -243,7 +297,7 @@ function digSnatConfig(snat, configObject, rx) {
     else {
         logger_1.default.debug(`snat configuration detected, but no pool reference found, presume -> automap`);
     }
-    return config;
+    return { config, map };
 }
 /**
  * loops through vs ltp list and returns full ltp configs
@@ -253,13 +307,14 @@ function digPolicyConfig(policys, configObject, rx) {
     // regex local traffic list to individual profiles
     const policyNames = policys.match(rx.vs.ltPolicies.names);
     logger_1.default.debug(`policy references found: `, policyNames);
-    const configList = [];
+    const config = [];
+    const map = [];
     // get policy references from vs
     policyNames.forEach(name => {
         const x = objects_1.pathValueFromKey(configObject.ltm.policy, name);
         if (x) {
             logger_1.default.debug(`policy found [${x.key}]`);
-            configList.push(`ltm policy ${x.key} {${x.value}}\n`);
+            config.push(`ltm policy ${x.key} {${x.value}}`);
             // got through each policy and dig references (like pools)
             const pools = pools_1.poolsInPolicy(x.value);
             if (pools) {
@@ -270,7 +325,7 @@ function digPolicyConfig(policys, configObject, rx) {
                     if (cfg) {
                         // push pool config to list
                         logger_1.default.debug(`policy [${x.key}], pool found [${cfg.key}]`);
-                        configList.push(`ltm pool ${cfg.key} {${cfg.value}}`);
+                        config.push(`ltm pool ${cfg.key} {${cfg.value}}`);
                     }
                 });
             }
@@ -280,9 +335,10 @@ function digPolicyConfig(policys, configObject, rx) {
         }
     });
     // removde duplicates
-    const unique = uniqueList(configList);
+    // const unique = uniqueList(config);
     // join list with line returns to return a single config string
-    return unique.join('\n');
+    // return unique.join('\n');
+    return { config, map };
 }
 /**
  * removes duplicates
@@ -298,26 +354,43 @@ exports.uniqueList = uniqueList;
  * @param persistence vs persistence referecne
  */
 function digPersistConfig(persist, configObject, rx) {
-    let config = '';
+    const config = [];
+    const map = [];
     const persistName = persist.match(rx.vs.persist.name);
     if (persistName) {
         const x = objects_1.pathValueFromKey(configObject.ltm.persistence, persistName[1]);
         if (x) {
-            config += `ltm persistence ${x.path} ${x.key} {${x.value}}\n`;
+            config.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
         }
     }
-    return config;
+    return { config, map };
 }
 /**
  * get fall back persistence config
  * @param fbPersist vs fallback-persistence
  */
 function digFbPersistConfig(fbPersist, configObject) {
-    let config = '';
+    const config = [];
+    const map = [];
     const x = objects_1.pathValueFromKey(configObject.ltm.persistence, fbPersist);
     if (x) {
-        config += `ltm persistence ${x.path} ${x.key} {${x.value}}\n`;
+        config.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
     }
-    return config;
+    return { config, map };
 }
+/**
+ * get hostname from json config tree (if present)
+ * @param configObject to search for hostname
+ */
+function getHostname(configObject) {
+    var _a;
+    if ((_a = configObject === null || configObject === void 0 ? void 0 : configObject.sys) === null || _a === void 0 ? void 0 : _a['global-settings']) {
+        const hostname = configObject.sys["global-settings"].match(/hostname ([\w-.]+)\s/);
+        if (hostname && hostname[1]) {
+            // return just capture group
+            return hostname[1];
+        }
+    }
+}
+exports.getHostname = getHostname;
 //# sourceMappingURL=digConfigs.js.map

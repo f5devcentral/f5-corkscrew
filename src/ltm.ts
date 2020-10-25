@@ -8,10 +8,10 @@ import { nestedObjValue } from './utils/objects'
 import { BigipConfObj, Explosion, Stats } from './models'
 import { deepMergeObj } from './utils/objects'
 import { v4 as uuidv4 } from 'uuid';
-// import { countLines } from './tmosParser';
 import { countObjects } from './objCounter';
 import { ConfigFiles, unPacker } from './unPacker'
-import { digBaseConfig, digVsConfig } from './digConfigs';
+import { digBaseConfig, digVsConfig, getHostname } from './digConfigs';
+import path from 'path';
 
 
 /**
@@ -34,6 +34,8 @@ export default class BigipConfig extends EventEmitter {
      */
     public configFullObject: BigipConfObj = {};
     public tmosVersion: string | undefined; // move to stats tree...
+    public hostname: string | undefined;
+    public inputFileType: string;
     private rx: TmosRegExTree | undefined;
     private stats: Stats = {
         objectCount: 0,
@@ -50,10 +52,11 @@ export default class BigipConfig extends EventEmitter {
      */
     public async load (file: string): Promise<number> {
 
-        /**
-         * setup event emitors to provide status of unPacking
-         */
         const startTime = process.hrtime.bigint();
+
+        // capture incoming file type
+        this.inputFileType = path.parse(file).ext;
+
         this.configFiles = await unPacker(file);
 
         if (this.configFiles) {
@@ -126,6 +129,7 @@ export default class BigipConfig extends EventEmitter {
                 logger.error('failed to extract any parent matches from file - might be a scripts file...');
             }
 
+
             if (configArray) {
 
                 // get number of lines in config
@@ -170,6 +174,12 @@ export default class BigipConfig extends EventEmitter {
         // get ltm object counts
         this.stats.objects = countObjects(this.configObject);
 
+        // assign souceTmosVersion to stats object also
+        this.stats.sourceTmosVersion = this.tmosVersion
+
+        // get hostname to show in vscode extension view
+        this.hostname = getHostname(this.configObject);
+
         // end processing time, convert microseconds to miliseconds
         this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000; 
 
@@ -200,12 +210,10 @@ export default class BigipConfig extends EventEmitter {
             this.parse(); // parse config files
         }
 
-        const apps = this.apps();   // extract apps
+        const apps = this.apps();   // extract apps before parse timer...
+
         const startTime = process.hrtime.bigint();  // start pack timer
-        const id = uuidv4();        // generat uuid
-        const dateTime = new Date();    // generate date/time
-        const logs = this.logs();   // get all the processing logs
-        
+         
         // map out the config body/contents
         const sources = this.configFiles.map( x => {
             return { fileName: x.fileName, size: x.size }
@@ -214,20 +222,25 @@ export default class BigipConfig extends EventEmitter {
         // collect base information like vlans/IPs
         const base = digBaseConfig(this.configObject)
 
-        // capture pack time
-        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-
-        return {
-            id,
-            dateTime,
-            config: {
-                sources,
+        // build return object
+        const retObj = {
+            id: uuidv4(),                           // generat uuid,
+            dateTime: new Date(),                   // generate date/time
+            hostname: this.hostname,
+            inputFileType: this.inputFileType,      // add input file type
+            config: {                       
+                sources,    
                 apps,
                 base
             },
-            stats: this.stats,
-            logs
+            stats: this.stats,                      // add stats object
+            logs: this.logs()                       // get all the processing logs
         }
+
+        // capture pack time
+        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+
+        return retObj
     }
 
     /**

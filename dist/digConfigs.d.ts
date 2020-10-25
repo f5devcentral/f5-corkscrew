@@ -5,14 +5,14 @@ import { TmosRegExTree } from './regex';
  * @param configTree bigip config as json tree
  * @returns raw config objects
  */
-export declare function digBaseConfig(configTree: BigipConfObj): string;
+export declare function digBaseConfig(configTree: BigipConfObj): any[];
 /**
  * scans vs config, and discovers child configs
  * @param vsName virtual server name
  * @param vsConfig virtual server tmos config body
  */
 export declare function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree): {
-    config: string;
+    config: any[];
     map: AppMap;
 };
 /**
@@ -21,3 +21,8 @@ export declare function digVsConfig(vsName: string, vsConfig: string, configTree
  * @return list of unique strings
  */
 export declare function uniqueList(x: string[]): string[];
+/**
+ * get hostname from json config tree (if present)
+ * @param configObject to search for hostname
+ */
+export declare function getHostname(configObject: BigipConfObj): string;

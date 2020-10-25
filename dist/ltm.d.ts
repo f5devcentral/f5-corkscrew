@@ -22,6 +22,8 @@ export default class BigipConfig extends EventEmitter {
      */
     configFullObject: BigipConfObj;
     tmosVersion: string | undefined;
+    hostname: string | undefined;
+    inputFileType: string;
     private rx;
     private stats;
     constructor();
@@ -51,7 +53,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * Get processing logs
      */
-    logs(): string;
+    logs(): string[];
     /**
      * extracts app(s)
      * @param app single app string

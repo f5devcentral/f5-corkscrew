@@ -1,16 +1,5 @@
 
 
-
-
-// export type BigipObj = {
-//     [key: string]: unknown
-// }
-
-// export { ConfigFiles } from './unPacker';
-// export { TmosRegExTree } from './regex';
-
-
-
 /**
  * object type that represends bigip.conf as multi-level json tree
  */
@@ -38,6 +27,9 @@ export type BigipConfObj = {
         "self-allow"?: string;
         trunk?: string;
         vlan?: string;
+    },
+    sys?: {
+        "global-settings"?: string;
     }
 }
 
@@ -51,6 +43,7 @@ export type BigipConfObj = {
 export type Explosion = {
     id: string,
     dateTime: Date,
+    inputFileType: string,
     config: {
         sources: ConfigFiles[],
         apps: TmosApp[],
@@ -74,7 +67,6 @@ export type TmosApp = {
  * - child of explosion
  */
 export type AppMap = {
-    // vsName: string,
     // the virtual server clients connect to
     vsDest?: string,
     // default pool members (ip:port)
@@ -106,10 +98,14 @@ export type Stats = {
     packTime?: number,
     sourceTmosVersion?: string,
     objectCount?: number,
-    lineCount?: number,
+    // lineCount?: number,
     objects?: ObjStats
 }
 
+/**
+ * ltm object stats
+ *  - child of stats - child of explosion
+ */
 export type ObjStats = {
     virtuals?: number,
     profiles?: number,

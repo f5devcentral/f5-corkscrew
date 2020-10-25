@@ -506,7 +506,21 @@ function digFbPersistConfig(fbPersist: string, configObject: BigipConfObj) {
 
 
 
+/**
+ * get hostname from json config tree (if present)
+ * @param configObject to search for hostname
+ */
+export function getHostname (configObject: BigipConfObj): string {
 
+    if (configObject?.sys?.['global-settings']) {
 
+        const hostname = configObject.sys["global-settings"].match(/hostname ([\w-.]+)\s/)
+
+        if (hostname && hostname[1]) {
+            // return just capture group
+            return hostname[1];
+        }
+    }
+}
 
 

@@ -26,6 +26,9 @@ export declare type BigipConfObj = {
         trunk?: string;
         vlan?: string;
     };
+    sys?: {
+        "global-settings"?: string;
+    };
 };
 /**
  * main explosion output
@@ -34,20 +37,21 @@ export declare type BigipConfObj = {
 export declare type Explosion = {
     id: string;
     dateTime: Date;
+    inputFileType: string;
     config: {
         sources: ConfigFiles[];
         apps: TmosApp[];
-        base: string;
+        base: string[];
     };
     stats: Stats;
-    logs: string;
+    logs: string[];
 };
 /**
  * array item of returned "apps"
  */
 export declare type TmosApp = {
     name: string;
-    config: string;
+    configs: string[];
     map?: AppMap;
 };
 /**
@@ -55,10 +59,10 @@ export declare type TmosApp = {
  * - child of explosion
  */
 export declare type AppMap = {
-    vsDest: string;
+    vsDest?: string;
     pool?: string[];
     irule?: {
-        pools?: string[];
+        pools?: string[] | string[][];
         virtuals?: string[];
         nodes?: string[];
     };
@@ -80,9 +84,12 @@ export declare type Stats = {
     packTime?: number;
     sourceTmosVersion?: string;
     objectCount?: number;
-    lineCount?: number;
     objects?: ObjStats;
 };
+/**
+ * ltm object stats
+ *  - child of stats - child of explosion
+ */
 export declare type ObjStats = {
     virtuals?: number;
     profiles?: number;

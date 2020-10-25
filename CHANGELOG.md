@@ -13,11 +13,23 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.4.0] - (10-21-2020)
 
 ### Added
-- Added support for extracting pools referenced by local traffic policies
+- Added support for extracting pools referenced by local traffic policies and irules
+    - Including application maps for those destinations
 - Added stats for config load time (extracting files from archives) and total config files size (extracted files)
+- Added hostname, source file type and source tmos version to collected details and ouput in explosion
+    - These are just informatory details what will be utilized for visibility while working in the vscode extension
 
 ### Modified
 - Cleaned up app array to not have so much nested information
+- Changed config storage in object to array of individual objects instead of one big string
+    - This will provide better flexibility in the future, along with being able to provide:
+        - config objects as a singe-line
+        - application specific object counts
+        - **object deduplication**
+- Also changed logs from single string to array for easier access and better stats
+    - Now have quick easy view of how many logs are generated after an extraction
+- Adjuststed log message to bracket log level [DEBUG]
+    - This seems to work better with vscode log highlighting
 
 ---
 
