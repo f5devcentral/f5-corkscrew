@@ -43,6 +43,7 @@ export type BigipConfObj = {
 export type Explosion = {
     id: string,
     dateTime: Date,
+    hostname?: string,
     inputFileType: string,
     config: {
         sources: ConfigFiles[],
