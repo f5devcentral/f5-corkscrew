@@ -4,6 +4,8 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+        
         {
             "type": "node",
             "request": "launch",
@@ -132,5 +134,21 @@
             "internalConsoleOptions": "neverOpen",
             "protocol": "inspector",
         }
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha vs_stats tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/vs_stats.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
     ]
 }
