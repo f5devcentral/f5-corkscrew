@@ -133,7 +133,7 @@
             ],
             "internalConsoleOptions": "neverOpen",
             "protocol": "inspector",
-        }
+        },
         {
             "type": "node",
             "request": "launch",
