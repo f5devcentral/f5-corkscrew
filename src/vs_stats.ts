@@ -1,6 +1,5 @@
 export function parseVS( cmdout: string ): Map<string, unknown> {
-    
-    
+     
     const obj = {}
 
     const res = cmdout.split("Ltm::").slice(1);
@@ -13,9 +12,8 @@ export function parseVS( cmdout: string ): Map<string, unknown> {
         result['cpu_usage_ratio']= mapListDic1(line.slice(37,40), ' ');
         obj[vs_name]=result;
     }
-    console.log("sergio")
     console.log(obj)    
- return
+ return obj;
 }
 
 function mapListDic(myArray: Array<string>) {
