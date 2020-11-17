@@ -1,4 +1,6 @@
-export function parseVS( cmdout: string ): Map<string, unknown> {
+import { boolean } from "yargs";
+
+export function parseVS( cmdout: string) {
      
     const obj = {}
 
@@ -10,9 +12,11 @@ export function parseVS( cmdout: string ): Map<string, unknown> {
         const result={}
         result['status']=mapListDic(line.slice(3,10));
         result['cpu_usage_ratio']= mapListDic1(line.slice(37,40), ' ');
+        result['syn cookies']= mapListDic1(line.slice(25,34), ' ');
+        result['traffic']= mapListDic1(line.slice(12,23), ' ',true);
         obj[vs_name]=result;
     }
-    console.log(obj)    
+    // console.log(obj)    
  return obj;
 }
 
@@ -22,17 +26,29 @@ function mapListDic(myArray: Array<string>) {
         obj[value.split(':')[0].trim()]=value.split(':')[1].trim();
         //console.log(myMap)
     }
-    console.log(obj)
+    // console.log(obj)
     return obj
     }
-function mapListDic1(myArray: Array<string>, separator) {
+function mapListDic1(myArray: Array<string>, separator, traffic=false) {
     const myMap = {};
+    const obj1 ={}
     for (let value of myArray) {
         value = value.trim().replace(/\s\s+/g, ' ');
         const ls = value.split(separator);
-        console.log(ls[ls.length-1])
-        console.log(ls.slice(0,ls.length-1).join(" "));
-        myMap[ls.slice(0,ls.length-1).join(" ")]=ls[ls.length-1];
+        if (traffic == true) {
+          const namekey=ls.slice(0,ls.length-3).join(" ")
+          myMap[namekey] = {
+                "ClientSide":ls[ls.length-3],
+                "Ephemeral" :ls[ls.length-2],
+                "General":ls[ls.length-1]
+            }
+          //console.log(obj1)
+        }
+        else {
+            myMap[ls.slice(0,ls.length-1).join(" ")]=ls[ls.length-1];
+        }
     }
+    // console.log(myMap)
     return myMap
     }    
+
