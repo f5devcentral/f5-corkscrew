@@ -10,6 +10,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.5.0] - (01-18-2021)
+
+### Modified
+- Updated explosion output to include source config file contents.  
+
+---
+
 ## [0.4.0] - (10-21-2020)
 
 ### Added

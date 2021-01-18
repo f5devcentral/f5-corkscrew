@@ -23,6 +23,22 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Mocha pools tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/pools.test.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Mocha monster config tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
@@ -127,7 +143,7 @@
                 "--timeout",
                 "999999",
                 "--colors",
-                "${workspaceFolder}/src/tests/**/*.test.ts",
+                "${workspaceFolder}/src/tests/ALL.tests.ts",
             ],
             "internalConsoleOptions": "neverOpen",
             "protocol": "inspector",

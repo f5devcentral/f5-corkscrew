@@ -19,7 +19,17 @@ export type ConfigFiles = {
   */
 export async function unPacker (input: string):Promise<ConfigFiles> {
 
-    // part input to usable pieces
+    /**
+     * look at streaming specific files from the archive without having to load the entire thing into memory
+     * 
+     * https://github.com/mafintosh/tar-fs
+     * https://github.com/mafintosh/gunzip-maybe
+     * https://github.com/mafintosh/tar-stream
+     * https://github.com/npm/node-tar#readme
+     * 
+     */
+
+    // parse input to usable pieces
     const filePath = path.parse(input);
 
     /**

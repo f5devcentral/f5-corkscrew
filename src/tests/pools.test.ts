@@ -8,7 +8,7 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { poolsInLTP, poolsInRule } from '../pools';
+import { poolsInPolicy, poolsInRule } from '../pools';
 
 
 const iRuleWithPools = fs.readFileSync(path.join(__dirname, "./artifacts/pools.irule"), "utf-8");
@@ -63,7 +63,7 @@ describe('pool reference tests', function() {
 
         const LTPwithPools = fs.readFileSync(path.join(__dirname, "./artifacts/pools_LTP.tcl"), "utf-8");
         
-        const pools = poolsInLTP(LTPwithPools);
+        const pools = poolsInPolicy(LTPwithPools);
 
         const expected = ["css_pool","jpg.pool","js.io_t80_pool"];
 

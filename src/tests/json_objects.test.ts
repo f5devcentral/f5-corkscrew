@@ -3,12 +3,12 @@
 'use strict';
 
 import assert from 'assert';
-import balanced from 'balanced-match';
+// import balanced from 'balanced-match';
 // import { assert } from 'console';
 
-import { deepMergeObj, setNestedKey, tmosChildToObj, getPathOfValue, deepGet, pathValueFromKey } from '../utils/objects'
+import { deepMergeObj, setNestedKey, getPathOfValue, deepGet, pathValueFromKey } from '../utils/objects'
 
-import { simpleVSbody_asJson, simpleVStmosBody, vsApp3 } from './json_objects_data'
+// import { simpleVSbody_asJson, simpleVStmosBody, vsApp3 } from './json_objects_data'
 
 
 describe('Testing json object manipulation functions', function() {

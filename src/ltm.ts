@@ -214,10 +214,10 @@ export default class BigipConfig extends EventEmitter {
 
         const startTime = process.hrtime.bigint();  // start pack timer
          
-        // map out the config body/contents
-        const sources = this.configFiles.map( x => {
-            return { fileName: x.fileName, size: x.size }
-        })
+        // // map out the config body/contents
+        // const sources = this.configFiles.map( x => {
+        //     return { fileName: x.fileName, size: x.size }
+        // })
 
         // collect base information like vlans/IPs
         const base = digBaseConfig(this.configObject)
@@ -229,7 +229,7 @@ export default class BigipConfig extends EventEmitter {
             hostname: this.hostname,
             inputFileType: this.inputFileType,      // add input file type
             config: {                       
-                sources,    
+                sources: this.configFiles,    
                 apps,
                 base
             },
