@@ -1,7 +1,7 @@
 'use strict';
 
 
-import BigipConfig from './ltm';
+export * from './ltm';
 
 // import { 
 //     BigipConfObj,
@@ -17,15 +17,15 @@ export { ConfigFiles } from './unPacker'
 export { TmosRegExTree } from './regex'
 
 // export default bigipConfig = _BigipConfig;
-export default BigipConfig;
+// export default BigipConfig;
 
 
 
 // import { BigipConfig } from './ltm';
 // import { poolsInLTP, poolsInRule } from './pools';
 
-module.exports = {
-    BigipConfig,
-    // BigipConfObj,
-    // Stats,
-}
+// module.exports = {
+//     BigipConfig,
+//     // BigipConfObj,
+//     // Stats,
+// }
