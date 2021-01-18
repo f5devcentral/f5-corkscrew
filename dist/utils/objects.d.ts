@@ -35,7 +35,7 @@ export declare function simpleMergeDeep(target: unknown, ...sources: any): unkno
  * @param path
  * @param value
  */
-export declare function setNestedKey(obj: unknown, path: string[], value: string): unknown;
+export declare function setNestedKey(obj: unknown, path: string[], value: unknown): unknown;
 /**
  * deep search object for value using regex
  * @param vtf value to find (regex capable)

@@ -42,7 +42,16 @@ const decompress_1 = __importDefault(require("decompress"));
  */
 function unPacker(input) {
     return __awaiter(this, void 0, void 0, function* () {
-        // part input to usable pieces
+        /**
+         * look at streaming specific files from the archive without having to load the entire thing into memory
+         *
+         * https://github.com/mafintosh/tar-fs
+         * https://github.com/mafintosh/gunzip-maybe
+         * https://github.com/mafintosh/tar-stream
+         * https://github.com/npm/node-tar#readme
+         *
+         */
+        // parse input to usable pieces
         const filePath = path_1.default.parse(input);
         /**
          * what kind of file we workin with?
