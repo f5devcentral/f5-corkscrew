@@ -49,7 +49,7 @@ export default class BigipConfig extends EventEmitter {
      *
      * -
      */
-    explode(): Explosion;
+    explode(): Promise<Explosion>;
     /**
      * Get processing logs
      */
@@ -59,7 +59,7 @@ export default class BigipConfig extends EventEmitter {
      * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
-    apps(app?: string): any[];
+    apps(app?: string): Promise<any[]>;
     /**
      * extract tmos config version from first line
      * ex.  #TMSH-VERSION: 15.1.0.4

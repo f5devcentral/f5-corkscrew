@@ -65,9 +65,9 @@ describe('explode devCloud ucs tests', function() {
         assert.deepStrictEqual(apps, expected, 'Should get list of virtual servers / apps');
     });
 
-    it(`get app config by name`, function() {
+    it(`get app config by name`, async function() {
 
-        const app = device.apps('/Common/app4_t80_vs');
+        const app = await device.apps('/Common/app4_t80_vs');
         const expected = [
             "ltm virtual /Common/app4_t80_vs {\n    description \"test pool references in irule extration and ltp\"\n    destination /Common/192.168.2.25:80\n    ip-protocol tcp\n    last-modified-time 2020-10-07:07:28:35\n    mask 255.255.255.255\n    policies {\n        /Common/app4_ltPolicy { }\n    }\n    pool /Common/app4_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n        /Common/app4_pool_rule\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n}",
             "ltm pool /Common/app4_pool {\n    members {\n        /Common/api.chucknorris.io:443 {\n            fqdn {\n                autopopulate enabled\n                name api.chucknorris.io\n            }\n        }\n    }\n}",
@@ -87,7 +87,13 @@ describe('explode devCloud ucs tests', function() {
 
     it(`explode config output`, async function() {
 
-        const explode = device.explode();
+        const explode = await device.explode()
+        .then( exp => {
+            return exp
+        })
+        .catch( err => {
+            debugger;
+        });
 
         const bigLog = logOutput(device.configObject, explode);
 

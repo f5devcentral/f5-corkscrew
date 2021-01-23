@@ -183,35 +183,37 @@ class BigipConfig extends events_1.EventEmitter {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     explode() {
         var _a;
-        // if config has not been parsed yet...
-        if (!((_a = this.configObject.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
-            this.parse(); // parse config files
-        }
-        const apps = this.apps(); // extract apps before parse timer...
-        const startTime = process.hrtime.bigint(); // start pack timer
-        // // map out the config body/contents
-        // const sources = this.configFiles.map( x => {
-        //     return { fileName: x.fileName, size: x.size }
-        // })
-        // collect base information like vlans/IPs
-        const base = digConfigs_1.digBaseConfig(this.configObject);
-        // build return object
-        const retObj = {
-            id: uuid_1.v4(),
-            dateTime: new Date(),
-            hostname: this.hostname,
-            inputFileType: this.inputFileType,
-            config: {
-                sources: this.configFiles,
-                apps,
-                base
-            },
-            stats: this.stats,
-            logs: this.logs() // get all the processing logs
-        };
-        // capture pack time
-        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-        return retObj;
+        return __awaiter(this, void 0, void 0, function* () {
+            // if config has not been parsed yet...
+            if (!((_a = this.configObject.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
+                this.parse(); // parse config files
+            }
+            const apps = yield this.apps(); // extract apps before parse timer...
+            const startTime = process.hrtime.bigint(); // start pack timer
+            // // map out the config body/contents
+            // const sources = this.configFiles.map( x => {
+            //     return { fileName: x.fileName, size: x.size }
+            // })
+            // collect base information like vlans/IPs
+            const base = digConfigs_1.digBaseConfig(this.configObject);
+            // build return object
+            const retObj = {
+                id: uuid_1.v4(),
+                dateTime: new Date(),
+                hostname: this.hostname,
+                inputFileType: this.inputFileType,
+                config: {
+                    sources: this.configFiles,
+                    apps,
+                    base
+                },
+                stats: this.stats,
+                logs: this.logs() // get all the processing logs
+            };
+            // capture pack time
+            this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+            return retObj;
+        });
     }
     /**
      * Get processing logs
@@ -225,37 +227,41 @@ class BigipConfig extends events_1.EventEmitter {
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
     apps(app) {
-        /**
-         * todo:  add support for app array to return multiple specific apps at same time.
-         */
-        const startTime = process.hrtime.bigint();
-        if (app) {
-            // extract single app config
-            const value = this.configObject.ltm.virtual[app];
-            this.emit('extractApp', 'app');
-            if (value) {
-                // dig config, then stop timmer, then return config...
-                const x = [digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
+        return __awaiter(this, void 0, void 0, function* () {
+            /**
+             * todo:  add support for app array to return multiple specific apps at same time.
+             */
+            const startTime = process.hrtime.bigint();
+            if (app) {
+                // extract single app config
+                const value = this.configObject.ltm.virtual[app];
+                this.emit('extractApp', 'app');
+                if (value) {
+                    // dig config, then stop timmer, then return config...
+                    const x = [digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
+                    this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+                    return x;
+                }
+            }
+            else {
+                // means we didn't get an app name, so try to dig all apps...
+                const apps = [];
+                const i = this.configObject.ltm.virtual;
+                for (const [key, value] of Object.entries(i)) {
+                    const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
+                    // event about extracted app
+                    this.emit('extractApp', {
+                        app: key,
+                        time: Number(process.hrtime.bigint() - startTime) / 1000000
+                    });
+                    // setTimeout( () => { }, 500);
+                    yield new Promise(r => setTimeout(r, 200)); // pause...
+                    apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
+                }
                 this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-                return x;
+                return apps;
             }
-        }
-        else {
-            // means we didn't get an app name, so try to dig all apps...
-            const apps = [];
-            const i = this.configObject.ltm.virtual;
-            for (const [key, value] of Object.entries(i)) {
-                const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
-                // event about extracted app
-                this.emit('extractApp', {
-                    app: i,
-                    time: Number(process.hrtime.bigint() - startTime) / 1000000
-                });
-                apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
-            }
-            this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-            return apps;
-        }
+        });
     }
     /**
      * extract tmos config version from first line

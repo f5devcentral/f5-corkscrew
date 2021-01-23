@@ -192,7 +192,7 @@ export default class BigipConfig extends EventEmitter {
      * @return array of app names
      * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
      */
-    public appList (): string[] {
+    appList (): string[] {
         return Object.keys(this.configObject.ltm.virtual);
     }
 
@@ -203,14 +203,14 @@ export default class BigipConfig extends EventEmitter {
      */
     // todo: type the return object for explode and remove the followin disable line
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    public explode (): Explosion {
+    async explode (): Promise<Explosion> {
 
         // if config has not been parsed yet...
         if (!this.configObject.ltm?.virtual) {
             this.parse(); // parse config files
         }
 
-        const apps = this.apps();   // extract apps before parse timer...
+        const apps = await this.apps();   // extract apps before parse timer...
 
         const startTime = process.hrtime.bigint();  // start pack timer
          
@@ -256,7 +256,7 @@ export default class BigipConfig extends EventEmitter {
      * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
-    public apps(app?: string) {
+    async apps(app?: string) {
 
         /**
          * todo:  add support for app array to return multiple specific apps at same time.
@@ -291,7 +291,8 @@ export default class BigipConfig extends EventEmitter {
                     app: key,
                     time: Number(process.hrtime.bigint() - startTime) / 1000000
                 })
-
+                // setTimeout( () => { }, 500);
+                await new Promise(r => setTimeout(r, 200)); // pause...
                 apps.push({name: key, configs: vsConfig.config, map: vsConfig.map});
             }
     
