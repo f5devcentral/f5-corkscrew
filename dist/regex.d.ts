@@ -7,7 +7,11 @@ export declare class RegExTree {
      */
     tmosVersionReg: RegExp;
     /**
+     * captures name and body from single tmos object
      * if match, returns object name in [1] object value in [2]
+     * 1/23/2021 - now includes capture groups
+     *  - name = tmos object name
+     *  - body = tmos object body
      */
     private parentNameValueRegex;
     /**

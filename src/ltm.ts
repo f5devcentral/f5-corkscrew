@@ -145,15 +145,15 @@ export default class BigipConfig extends EventEmitter {
                     
                     // extract object name from body
                     const name = el.match(this.rx.parentNameValue);
-                    
-                    // create parsing details obj for emitter
-                    const parsingObj = {
-                        parsing: name[1],              // current obj name
-                        num: index + 1,             // obj #
-                        of: configArray.length      // total # of objs
-                    }
 
-                    if (name && name.length === 3) {
+                    if (name && name[2] ) {
+
+                        // create parsing details obj for emitter
+                        const parsingObj = {
+                            parsing: name[1],              // current obj name
+                            num: index + 1,             // obj #
+                            of: configArray.length      // total # of objs
+                        }
 
                         this.emit('parseObject', parsingObj )
         

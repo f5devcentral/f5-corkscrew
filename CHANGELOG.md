@@ -10,6 +10,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.5.1] - (01-23-2021)
+
+### Modified
+- fixed a bug where ending brackets were missing on iRules
+
+---
+
 ## [0.5.0] - (01-18-2021)
 
 ### Modified

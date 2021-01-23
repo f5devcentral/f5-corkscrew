@@ -135,13 +135,13 @@ class BigipConfig extends events_1.EventEmitter {
                 configArray.forEach((el, index) => {
                     // extract object name from body
                     const name = el.match(this.rx.parentNameValue);
-                    // create parsing details obj for emitter
-                    const parsingObj = {
-                        parsing: name[1],
-                        num: index + 1,
-                        of: configArray.length // total # of objs
-                    };
-                    if (name && name.length === 3) {
+                    if (name && name[2]) {
+                        // create parsing details obj for emitter
+                        const parsingObj = {
+                            parsing: name[1],
+                            num: index + 1,
+                            of: configArray.length // total # of objs
+                        };
                         this.emit('parseObject', parsingObj);
                         // split extracted name element by spaces
                         const names = name[1].split(' ');
