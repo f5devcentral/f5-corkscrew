@@ -288,7 +288,7 @@ export default class BigipConfig extends EventEmitter {
 
                 // event about extracted app
                 this.emit('extractApp', {
-                    app: i,
+                    app: key,
                     time: Number(process.hrtime.bigint() - startTime) / 1000000
                 })
 

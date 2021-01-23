@@ -13,6 +13,9 @@ const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
 const testFileDetails = path.parse(testFile);
 const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`);
 console.log('outFile', outFile);
+const parsedFileEvents = []
+const parsedObjEvents = []
+const extractAppEvents = []
 
 describe('explode devCloud bigip.conf tests', function() {
     
@@ -29,16 +32,48 @@ describe('explode devCloud bigip.conf tests', function() {
     });
 
     it(`parse configs, get parseTime`, function() {
-        const parsedFileEvents = []
-        const parsedObjEvents = []
         device.on('parseFile', x => parsedFileEvents.push(x) )
         device.on('parseObject', x => parsedObjEvents.push(x) )
+        device.on('extractApp', x => extractAppEvents.push(x) )
 
         const parseTime = device.parse();
         const expld = device.explode();
 
         fs.writeFileSync(`${outFile}.json`, JSON.stringify(expld, undefined, 4));
         assert.ok(parseTime, 'should be a number');
+    });
+
+    it(`check parseFile event`, function() {
+
+        // confirm event object structure
+        assert.ok(parsedFileEvents[0].num, 'should have a "num" param')
+        assert.ok(parsedFileEvents[0].of, 'should have a "of" param')
+        assert.ok(parsedFileEvents[0].parsing, 'should have a "parsing" param')
+        assert.ok(typeof parsedFileEvents[0].num === "number", '"num" param should be a number')
+        assert.ok(typeof parsedFileEvents[0].of === "number", '"of" param should be a number')
+        assert.ok(typeof parsedFileEvents[0].parsing === "string", '"parsing" param should be a string')
+    });
+
+    
+    it(`check parseObject event`, function() {
+
+        assert.ok(parsedObjEvents[0].num, 'should have a "num" param')
+        assert.ok(parsedObjEvents[0].of, 'should have a "of" param')
+        assert.ok(parsedObjEvents[0].parsing, 'should have a "parsing" param')
+        assert.ok(typeof parsedObjEvents[0].num === "number", '"num" param should be a number')
+        assert.ok(typeof parsedObjEvents[0].of === "number", '"of" param should be a number')
+        assert.ok(typeof parsedObjEvents[0].parsing === "string", '"parsing" param should be a string')
+
+    });
+
+
+
+    it(`check extractApp event`, function() {
+
+        assert.ok(extractAppEvents[0].app, 'should have a "app" param')
+        assert.ok(extractAppEvents[0].time, 'should have a "time" param')
+        assert.ok(typeof extractAppEvents[0].app === "string", '"app" param should be a string')
+        assert.ok(typeof extractAppEvents[0].time === "number", '"time" param should be a number')
     });
 
     it(`list apps`, function() {
