@@ -12,8 +12,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.5.1] - (01-23-2021)
 
+### Added
+- Configured events for each application extraction
+
 ### Modified
 - fixed a bug where ending brackets were missing on iRules
+- changed and removed some logic that was consuming large amount of resources causing some "explosions" to fail
+    - this was mainly affecting usage through the vscode extension since it has less resources
 
 ---
 

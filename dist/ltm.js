@@ -232,6 +232,7 @@ class BigipConfig extends events_1.EventEmitter {
         if (app) {
             // extract single app config
             const value = this.configObject.ltm.virtual[app];
+            this.emit('extractApp', 'app');
             if (value) {
                 // dig config, then stop timmer, then return config...
                 const x = [digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
@@ -241,16 +242,16 @@ class BigipConfig extends events_1.EventEmitter {
         }
         else {
             // means we didn't get an app name, so try to dig all apps...
-            // eslint-disable-next-line prefer-const
-            let apps = [];
+            const apps = [];
             const i = this.configObject.ltm.virtual;
             for (const [key, value] of Object.entries(i)) {
                 const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
-                // the stringify/parse is only here to get cli output working with jq
-                // probably a better way/spot to do that.
-                const x = JSON.stringify({ name: key, configs: vsConfig.config, map: vsConfig.map });
-                const y = JSON.parse(x);
-                apps.push(y);
+                // event about extracted app
+                this.emit('extractApp', {
+                    app: i,
+                    time: Number(process.hrtime.bigint() - startTime) / 1000000
+                });
+                apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
             }
             this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
             return apps;
