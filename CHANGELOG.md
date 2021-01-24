@@ -10,7 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [0.5.1] - (01-24-2021)
+## [0.6.0] - (01-24-2021)
 
 ### Added
 - Configured events for each application extraction
