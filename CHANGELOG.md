@@ -10,7 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [0.5.1] - (01-23-2021)
+## [0.5.1] - (01-24-2021)
 
 ### Added
 - Configured events for each application extraction
@@ -18,7 +18,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Modified
 - fixed a bug where ending brackets were missing on iRules
 - changed and removed some logic that was consuming large amount of resources causing some "explosions" to fail
-    - this was mainly affecting usage through the vscode extension since it has less resources
+    - this was mainly affecting usage through the vscode extension since it has less memory allocated
+    - removed unecessary json.stringify/parse calls
+- removed logic that was searching irules for pools referenced via variable
+    - this was also causing application extraction failures
+- converted most of the core functions to async
+    - this will allow internal errors to surface and caugth
 
 ---
 
