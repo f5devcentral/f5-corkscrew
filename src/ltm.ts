@@ -50,7 +50,7 @@ export default class BigipConfig extends EventEmitter {
      *  
      * @param config array of configs as strings
      */
-    public async load (file: string): Promise<number> {
+    async load (file: string): Promise<number> {
 
         const startTime = process.hrtime.bigint();
 
@@ -78,7 +78,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * new parsing fuction to work on list of files from unPacker
      */
-    public parse(): number {
+    async parse(): Promise<number> {
         const startTime = process.hrtime.bigint();
         logger.debug('Begining to parse configs')
 
@@ -207,18 +207,13 @@ export default class BigipConfig extends EventEmitter {
 
         // if config has not been parsed yet...
         if (!this.configObject.ltm?.virtual) {
-            this.parse(); // parse config files
+            await this.parse(); // parse config files
         }
 
         const apps = await this.apps();   // extract apps before parse timer...
 
         const startTime = process.hrtime.bigint();  // start pack timer
          
-        // // map out the config body/contents
-        // const sources = this.configFiles.map( x => {
-        //     return { fileName: x.fileName, size: x.size }
-        // })
-
         // collect base information like vlans/IPs
         const base = digBaseConfig(this.configObject)
 
@@ -234,7 +229,7 @@ export default class BigipConfig extends EventEmitter {
                 base
             },
             stats: this.stats,                      // add stats object
-            logs: this.logs()                       // get all the processing logs
+            logs: await this.logs()                 // get all the processing logs
         }
 
         // capture pack time
@@ -246,7 +241,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * Get processing logs
      */
-    public logs(): string[] {
+    async logs(): Promise<string[]> {
         return logger.getLogs();
     }
 
@@ -292,7 +287,7 @@ export default class BigipConfig extends EventEmitter {
                     time: Number(process.hrtime.bigint() - startTime) / 1000000
                 })
                 // setTimeout( () => { }, 500);
-                await new Promise(r => setTimeout(r, 200)); // pause...
+                // await new Promise(r => setTimeout(r, 200)); // pause...
                 apps.push({name: key, configs: vsConfig.config, map: vsConfig.map});
             }
     

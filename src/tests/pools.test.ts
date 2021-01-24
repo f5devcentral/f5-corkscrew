@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-
+// /* eslint-disable @typescript-eslint/no-empty-function */
 
 'use strict';
 
@@ -11,8 +9,8 @@ import * as path from 'path';
 import { poolsInPolicy, poolsInRule } from '../pools';
 
 
-const iRuleWithPools = fs.readFileSync(path.join(__dirname, "./artifacts/pools.irule"), "utf-8");
-const iRuleNoRef = fs.readFileSync(path.join(__dirname, "./artifacts/pools_noRef.irule"), "utf-8");
+const iRuleWithPools = fs.readFileSync(path.join(__dirname, 'artifacts', 'pools.irule'), "utf-8");
+const iRuleNoRef = fs.readFileSync(path.join(__dirname, 'artifacts', 'pools_noRef.irule'), "utf-8");
 
 describe('pool reference tests', function() {
 
@@ -34,14 +32,14 @@ describe('pool reference tests', function() {
     
 
     it(`get pools from irule`, async function() {
-        
+
         const pools = poolsInRule(iRuleWithPools);
         
-        const expected = [["css_pool"],["jpg.pool","member","10.10.10.1","80"],["js.io_t80_pool"],["missing_pool"],["web1Pool"]];
+        const expected = [["css_pool"],["jpg.pool","member","10.10.10.1","80"],["js.io_t80_pool"],["missing_pool"]];
         
         assert.deepStrictEqual(pools, expected);
     });
-    
+
     it(`get pools from irule - no pools`, async function() {
         
         const pools = poolsInRule(iRuleNoRef);
@@ -54,7 +52,7 @@ describe('pool reference tests', function() {
         
         const pools = poolsInRule(iRuleWithPools, existingPools);
 
-        const expected = [["css_pool"],["jpg.pool","member","10.10.10.1","80"],["js.io_t80_pool"],["web1Pool"]];
+        const expected = [["css_pool"],["jpg.pool","member","10.10.10.1","80"],["js.io_t80_pool"]];
 
         assert.deepStrictEqual(pools, expected);
     });

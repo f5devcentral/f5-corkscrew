@@ -348,11 +348,9 @@ function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: TmosR
                     }
                 })
 
-
                 // add pools to map
                 map.pools = iRulePools;
             }
-
             // todo: add node mapping
         }
     })

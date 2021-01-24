@@ -36,7 +36,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * new parsing fuction to work on list of files from unPacker
      */
-    parse(): number;
+    parse(): Promise<number>;
     /**
      * return list of applications
      *
@@ -53,7 +53,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * Get processing logs
      */
-    logs(): string[];
+    logs(): Promise<string[]>;
     /**
      * extracts app(s)
      * @param app single app string
