@@ -36,7 +36,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * new parsing fuction to work on list of files from unPacker
      */
-    parse(): number;
+    parse(): Promise<number>;
     /**
      * return list of applications
      *
@@ -49,17 +49,17 @@ export default class BigipConfig extends EventEmitter {
      *
      * -
      */
-    explode(): Explosion;
+    explode(): Promise<Explosion>;
     /**
      * Get processing logs
      */
-    logs(): string[];
+    logs(): Promise<string[]>;
     /**
      * extracts app(s)
      * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
-    apps(app?: string): any[];
+    apps(app?: string): Promise<any[]>;
     /**
      * extract tmos config version from first line
      * ex.  #TMSH-VERSION: 15.1.0.4

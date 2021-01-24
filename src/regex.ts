@@ -31,9 +31,13 @@ export class RegExTree {
     public tmosVersionReg = /#TMSH-VERSION: (\d.+)/;
 
     /**
+     * captures name and body from single tmos object
      * if match, returns object name in [1] object value in [2]
+     * 1/23/2021 - now includes capture groups
+     *  - name = tmos object name
+     *  - body = tmos object body
      */
-    private parentNameValueRegex = /([ \w\-\/.]+) {([\s\S]+?\n| )}/;
+    private parentNameValueRegex = /^(?<name>[ \w\-\/.]+) {(?<body>([\s\S]+| ))}(\n)$/;
 
     /**
      * Parent tmos object regex

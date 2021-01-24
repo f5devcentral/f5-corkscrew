@@ -50,7 +50,7 @@ export default class BigipConfig extends EventEmitter {
      *  
      * @param config array of configs as strings
      */
-    public async load (file: string): Promise<number> {
+    async load (file: string): Promise<number> {
 
         const startTime = process.hrtime.bigint();
 
@@ -78,7 +78,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * new parsing fuction to work on list of files from unPacker
      */
-    public parse(): number {
+    async parse(): Promise<number> {
         const startTime = process.hrtime.bigint();
         logger.debug('Begining to parse configs')
 
@@ -145,15 +145,15 @@ export default class BigipConfig extends EventEmitter {
                     
                     // extract object name from body
                     const name = el.match(this.rx.parentNameValue);
-                    
-                    // create parsing details obj for emitter
-                    const parsingObj = {
-                        parsing: name[1],              // current obj name
-                        num: index + 1,             // obj #
-                        of: configArray.length      // total # of objs
-                    }
 
-                    if (name && name.length === 3) {
+                    if (name && name[2] ) {
+
+                        // create parsing details obj for emitter
+                        const parsingObj = {
+                            parsing: name[1],              // current obj name
+                            num: index + 1,             // obj #
+                            of: configArray.length      // total # of objs
+                        }
 
                         this.emit('parseObject', parsingObj )
         
@@ -192,7 +192,7 @@ export default class BigipConfig extends EventEmitter {
      * @return array of app names
      * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
      */
-    public appList (): string[] {
+    appList (): string[] {
         return Object.keys(this.configObject.ltm.virtual);
     }
 
@@ -203,22 +203,17 @@ export default class BigipConfig extends EventEmitter {
      */
     // todo: type the return object for explode and remove the followin disable line
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    public explode (): Explosion {
+    async explode (): Promise<Explosion> {
 
         // if config has not been parsed yet...
         if (!this.configObject.ltm?.virtual) {
-            this.parse(); // parse config files
+            await this.parse(); // parse config files
         }
 
-        const apps = this.apps();   // extract apps before parse timer...
+        const apps = await this.apps();   // extract apps before parse timer...
 
         const startTime = process.hrtime.bigint();  // start pack timer
          
-        // // map out the config body/contents
-        // const sources = this.configFiles.map( x => {
-        //     return { fileName: x.fileName, size: x.size }
-        // })
-
         // collect base information like vlans/IPs
         const base = digBaseConfig(this.configObject)
 
@@ -234,7 +229,7 @@ export default class BigipConfig extends EventEmitter {
                 base
             },
             stats: this.stats,                      // add stats object
-            logs: this.logs()                       // get all the processing logs
+            logs: await this.logs()                 // get all the processing logs
         }
 
         // capture pack time
@@ -246,7 +241,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * Get processing logs
      */
-    public logs(): string[] {
+    async logs(): Promise<string[]> {
         return logger.getLogs();
     }
 
@@ -256,7 +251,7 @@ export default class BigipConfig extends EventEmitter {
      * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
-    public apps(app?: string) {
+    async apps(app?: string) {
 
         /**
          * todo:  add support for app array to return multiple specific apps at same time.
@@ -268,6 +263,8 @@ export default class BigipConfig extends EventEmitter {
             // extract single app config
             const value = this.configObject.ltm.virtual[app]
 
+            this.emit('extractApp', 'app' )
+
             if (value) {
                 // dig config, then stop timmer, then return config...
                 const x = [digVsConfig(app, value, this.configObject, this.rx)];
@@ -278,17 +275,20 @@ export default class BigipConfig extends EventEmitter {
         } else {
             // means we didn't get an app name, so try to dig all apps...
 
-            // eslint-disable-next-line prefer-const
-            let apps = [];
+            const apps = [];
 
             const i = this.configObject.ltm.virtual;
             for (const [key, value] of Object.entries(i)) {
                 const vsConfig = digVsConfig(key, value, this.configObject, this.rx);
-                // the stringify/parse is only here to get cli output working with jq
-                // probably a better way/spot to do that.
-                const x = JSON.stringify({name: key, configs: vsConfig.config, map: vsConfig.map});
-                const y = JSON.parse(x);
-                apps.push(y);
+
+                // event about extracted app
+                this.emit('extractApp', {
+                    app: key,
+                    time: Number(process.hrtime.bigint() - startTime) / 1000000
+                })
+                // setTimeout( () => { }, 500);
+                // await new Promise(r => setTimeout(r, 200)); // pause...
+                apps.push({name: key, configs: vsConfig.config, map: vsConfig.map});
             }
     
             this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;

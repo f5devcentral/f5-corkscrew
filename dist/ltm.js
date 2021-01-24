@@ -79,91 +79,93 @@ class BigipConfig extends events_1.EventEmitter {
      * new parsing fuction to work on list of files from unPacker
      */
     parse() {
-        const startTime = process.hrtime.bigint();
-        logger_1.default.debug('Begining to parse configs');
-        this.configFiles.forEach((el, index) => {
-            /**
-             * for each file
-             * 1. get tmos version
-             * 2. extract parent objects to array
-             * 3. convert array to main obj
-             */
-            // create parsing details obj for emitter
-            const parsingFile = {
-                parsing: el.fileName,
-                num: index + 1,
-                of: this.configFiles.length // total # of files
-            };
-            this.emit('parseFile', parsingFile);
-            if (this.rx) {
-                // rex tree already assigned, lets confirm subsequent file tmos version match
-                if (this.tmosVersion === this.getTMOSversion(el.content, this.rx.tmosVersion)) {
-                    // do nothing, current file version matches existing files tmos verion
-                }
-                else {
-                    logger_1.default.error(`Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`);
-                    return;
-                }
-            }
-            else {
-                // first time through - build everything
-                const rex = new regex_1.RegExTree(); // instantiate regex tree
-                this.tmosVersion = this.getTMOSversion(el.content, rex.tmosVersionReg); // get tmos version
-                logger_1.default.info(`Recieved .conf file of version: ${this.tmosVersion}`);
-                // assign regex tree for particular version
-                this.rx = rex.get(this.tmosVersion);
-            }
-            let configArray = [];
-            try {
-                // try to parse the config into an array
-                //  this is probably the heaviest processing line in the entire app
-                //     - aside from unpacking/searching the ucs/qkviews, which can be done in other ways
-                // I have ideas on how we can create a better parser that would stream in the config, line by line, detect object chunks, pull them off and push them to an array
-                configArray = [...el.content.match(this.rx.parentObjects)];
-            }
-            catch (e) {
-                logger_1.default.error('failed to extract any parent matches from file - might be a scripts file...');
-            }
-            if (configArray) {
-                // get number of lines in config
-                // this seems to be fairly accurate when compareing config lines from other tools
-                // const objectCount = configArray.length;
-                // logger.debug(`detected ${this.stats.objectCount} parent objects in this file`)
-                // add object count to main stats
-                this.stats.objectCount += configArray.length;
-                logger_1.default.debug(`creating more detailed arrays/objects for deeper inspection`);
-                configArray.forEach((el, index) => {
-                    // extract object name from body
-                    const name = el.match(this.rx.parentNameValue);
-                    // create parsing details obj for emitter
-                    const parsingObj = {
-                        parsing: name[1],
-                        num: index + 1,
-                        of: configArray.length // total # of objs
-                    };
-                    if (name && name.length === 3) {
-                        this.emit('parseObject', parsingObj);
-                        // split extracted name element by spaces
-                        const names = name[1].split(' ');
-                        // create new nested objects with each of the names, assigning value on inner-most
-                        const newObj = objects_1.nestedObjValue(names, name[2]);
-                        this.configObject = objects_2.deepMergeObj(this.configObject, newObj);
+        return __awaiter(this, void 0, void 0, function* () {
+            const startTime = process.hrtime.bigint();
+            logger_1.default.debug('Begining to parse configs');
+            this.configFiles.forEach((el, index) => {
+                /**
+                 * for each file
+                 * 1. get tmos version
+                 * 2. extract parent objects to array
+                 * 3. convert array to main obj
+                 */
+                // create parsing details obj for emitter
+                const parsingFile = {
+                    parsing: el.fileName,
+                    num: index + 1,
+                    of: this.configFiles.length // total # of files
+                };
+                this.emit('parseFile', parsingFile);
+                if (this.rx) {
+                    // rex tree already assigned, lets confirm subsequent file tmos version match
+                    if (this.tmosVersion === this.getTMOSversion(el.content, this.rx.tmosVersion)) {
+                        // do nothing, current file version matches existing files tmos verion
                     }
                     else {
-                        logger_1.default.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el);
+                        logger_1.default.error(`Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`);
+                        return;
                     }
-                });
-            }
+                }
+                else {
+                    // first time through - build everything
+                    const rex = new regex_1.RegExTree(); // instantiate regex tree
+                    this.tmosVersion = this.getTMOSversion(el.content, rex.tmosVersionReg); // get tmos version
+                    logger_1.default.info(`Recieved .conf file of version: ${this.tmosVersion}`);
+                    // assign regex tree for particular version
+                    this.rx = rex.get(this.tmosVersion);
+                }
+                let configArray = [];
+                try {
+                    // try to parse the config into an array
+                    //  this is probably the heaviest processing line in the entire app
+                    //     - aside from unpacking/searching the ucs/qkviews, which can be done in other ways
+                    // I have ideas on how we can create a better parser that would stream in the config, line by line, detect object chunks, pull them off and push them to an array
+                    configArray = [...el.content.match(this.rx.parentObjects)];
+                }
+                catch (e) {
+                    logger_1.default.error('failed to extract any parent matches from file - might be a scripts file...');
+                }
+                if (configArray) {
+                    // get number of lines in config
+                    // this seems to be fairly accurate when compareing config lines from other tools
+                    // const objectCount = configArray.length;
+                    // logger.debug(`detected ${this.stats.objectCount} parent objects in this file`)
+                    // add object count to main stats
+                    this.stats.objectCount += configArray.length;
+                    logger_1.default.debug(`creating more detailed arrays/objects for deeper inspection`);
+                    configArray.forEach((el, index) => {
+                        // extract object name from body
+                        const name = el.match(this.rx.parentNameValue);
+                        if (name && name[2]) {
+                            // create parsing details obj for emitter
+                            const parsingObj = {
+                                parsing: name[1],
+                                num: index + 1,
+                                of: configArray.length // total # of objs
+                            };
+                            this.emit('parseObject', parsingObj);
+                            // split extracted name element by spaces
+                            const names = name[1].split(' ');
+                            // create new nested objects with each of the names, assigning value on inner-most
+                            const newObj = objects_1.nestedObjValue(names, name[2]);
+                            this.configObject = objects_2.deepMergeObj(this.configObject, newObj);
+                        }
+                        else {
+                            logger_1.default.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el);
+                        }
+                    });
+                }
+            });
+            // get ltm object counts
+            this.stats.objects = objCounter_1.countObjects(this.configObject);
+            // assign souceTmosVersion to stats object also
+            this.stats.sourceTmosVersion = this.tmosVersion;
+            // get hostname to show in vscode extension view
+            this.hostname = digConfigs_1.getHostname(this.configObject);
+            // end processing time, convert microseconds to miliseconds
+            this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+            return this.stats.parseTime;
         });
-        // get ltm object counts
-        this.stats.objects = objCounter_1.countObjects(this.configObject);
-        // assign souceTmosVersion to stats object also
-        this.stats.sourceTmosVersion = this.tmosVersion;
-        // get hostname to show in vscode extension view
-        this.hostname = digConfigs_1.getHostname(this.configObject);
-        // end processing time, convert microseconds to miliseconds
-        this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-        return this.stats.parseTime;
     }
     /**
      * return list of applications
@@ -183,41 +185,41 @@ class BigipConfig extends events_1.EventEmitter {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     explode() {
         var _a;
-        // if config has not been parsed yet...
-        if (!((_a = this.configObject.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
-            this.parse(); // parse config files
-        }
-        const apps = this.apps(); // extract apps before parse timer...
-        const startTime = process.hrtime.bigint(); // start pack timer
-        // // map out the config body/contents
-        // const sources = this.configFiles.map( x => {
-        //     return { fileName: x.fileName, size: x.size }
-        // })
-        // collect base information like vlans/IPs
-        const base = digConfigs_1.digBaseConfig(this.configObject);
-        // build return object
-        const retObj = {
-            id: uuid_1.v4(),
-            dateTime: new Date(),
-            hostname: this.hostname,
-            inputFileType: this.inputFileType,
-            config: {
-                sources: this.configFiles,
-                apps,
-                base
-            },
-            stats: this.stats,
-            logs: this.logs() // get all the processing logs
-        };
-        // capture pack time
-        this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-        return retObj;
+        return __awaiter(this, void 0, void 0, function* () {
+            // if config has not been parsed yet...
+            if (!((_a = this.configObject.ltm) === null || _a === void 0 ? void 0 : _a.virtual)) {
+                yield this.parse(); // parse config files
+            }
+            const apps = yield this.apps(); // extract apps before parse timer...
+            const startTime = process.hrtime.bigint(); // start pack timer
+            // collect base information like vlans/IPs
+            const base = digConfigs_1.digBaseConfig(this.configObject);
+            // build return object
+            const retObj = {
+                id: uuid_1.v4(),
+                dateTime: new Date(),
+                hostname: this.hostname,
+                inputFileType: this.inputFileType,
+                config: {
+                    sources: this.configFiles,
+                    apps,
+                    base
+                },
+                stats: this.stats,
+                logs: yield this.logs() // get all the processing logs
+            };
+            // capture pack time
+            this.stats.packTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+            return retObj;
+        });
     }
     /**
      * Get processing logs
      */
     logs() {
-        return logger_1.default.getLogs();
+        return __awaiter(this, void 0, void 0, function* () {
+            return logger_1.default.getLogs();
+        });
     }
     /**
      * extracts app(s)
@@ -225,36 +227,41 @@ class BigipConfig extends events_1.EventEmitter {
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
     apps(app) {
-        /**
-         * todo:  add support for app array to return multiple specific apps at same time.
-         */
-        const startTime = process.hrtime.bigint();
-        if (app) {
-            // extract single app config
-            const value = this.configObject.ltm.virtual[app];
-            if (value) {
-                // dig config, then stop timmer, then return config...
-                const x = [digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
+        return __awaiter(this, void 0, void 0, function* () {
+            /**
+             * todo:  add support for app array to return multiple specific apps at same time.
+             */
+            const startTime = process.hrtime.bigint();
+            if (app) {
+                // extract single app config
+                const value = this.configObject.ltm.virtual[app];
+                this.emit('extractApp', 'app');
+                if (value) {
+                    // dig config, then stop timmer, then return config...
+                    const x = [digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
+                    this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+                    return x;
+                }
+            }
+            else {
+                // means we didn't get an app name, so try to dig all apps...
+                const apps = [];
+                const i = this.configObject.ltm.virtual;
+                for (const [key, value] of Object.entries(i)) {
+                    const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
+                    // event about extracted app
+                    this.emit('extractApp', {
+                        app: key,
+                        time: Number(process.hrtime.bigint() - startTime) / 1000000
+                    });
+                    // setTimeout( () => { }, 500);
+                    // await new Promise(r => setTimeout(r, 200)); // pause...
+                    apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
+                }
                 this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-                return x;
+                return apps;
             }
-        }
-        else {
-            // means we didn't get an app name, so try to dig all apps...
-            // eslint-disable-next-line prefer-const
-            let apps = [];
-            const i = this.configObject.ltm.virtual;
-            for (const [key, value] of Object.entries(i)) {
-                const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
-                // the stringify/parse is only here to get cli output working with jq
-                // probably a better way/spot to do that.
-                const x = JSON.stringify({ name: key, configs: vsConfig.config, map: vsConfig.map });
-                const y = JSON.parse(x);
-                apps.push(y);
-            }
-            this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-            return apps;
-        }
+        });
     }
     /**
      * extract tmos config version from first line
