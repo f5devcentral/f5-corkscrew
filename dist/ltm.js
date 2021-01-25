@@ -59,8 +59,8 @@ class BigipConfig extends events_1.EventEmitter {
             const startTime = process.hrtime.bigint();
             // capture incoming file type
             this.inputFileType = path_1.default.parse(file).ext;
-            this.configFiles = yield unPacker_1.unPacker(file);
-            if (this.configFiles) {
+            return yield unPacker_1.unPacker(file).then(files => {
+                this.configFiles = files;
                 // run through files and add up file size
                 this.stats.configBytes = this.configFiles.map(item => item.size).reduce((total, each) => {
                     return total += each;
@@ -68,11 +68,7 @@ class BigipConfig extends events_1.EventEmitter {
                 this.stats.loadTime = Number(process.hrtime.bigint() - startTime) / 1000000;
                 // unPacker returned something so respond with processing time
                 return this.stats.loadTime;
-            }
-            else {
-                // unPacker failed and returned nothing back up the chain...
-                return;
-            }
+            });
         });
     }
     /**
@@ -102,8 +98,9 @@ class BigipConfig extends events_1.EventEmitter {
                         // do nothing, current file version matches existing files tmos verion
                     }
                     else {
-                        logger_1.default.error(`Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`);
-                        return;
+                        const err = `Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`;
+                        logger_1.default.error(err);
+                        throw new Error(err);
                     }
                 }
                 else {
@@ -174,7 +171,10 @@ class BigipConfig extends events_1.EventEmitter {
      * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
      */
     appList() {
-        return Object.keys(this.configObject.ltm.virtual);
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            return Object.keys((_a = this.configObject.ltm) === null || _a === void 0 ? void 0 : _a.virtual);
+        });
     }
     /**
      * returns all details from processing
@@ -193,7 +193,7 @@ class BigipConfig extends events_1.EventEmitter {
             const apps = yield this.apps(); // extract apps before parse timer...
             const startTime = process.hrtime.bigint(); // start pack timer
             // collect base information like vlans/IPs
-            const base = digConfigs_1.digBaseConfig(this.configObject);
+            const base = yield digConfigs_1.digBaseConfig(this.configObject);
             // build return object
             const retObj = {
                 id: uuid_1.v4(),
@@ -238,7 +238,7 @@ class BigipConfig extends events_1.EventEmitter {
                 this.emit('extractApp', 'app');
                 if (value) {
                     // dig config, then stop timmer, then return config...
-                    const x = [digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
+                    const x = [yield digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
                     this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
                     return x;
                 }
@@ -248,7 +248,7 @@ class BigipConfig extends events_1.EventEmitter {
                 const apps = [];
                 const i = this.configObject.ltm.virtual;
                 for (const [key, value] of Object.entries(i)) {
-                    const vsConfig = digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
+                    const vsConfig = yield digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
                     // event about extracted app
                     this.emit('extractApp', {
                         app: key,

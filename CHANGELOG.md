@@ -10,6 +10,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.7.0] - (01-25-2021)
+
+### Modified
+- More work to make functions async and throw appropriate errors
+    - Mainly around the unPacker function responsible for detecting and unpacking ucs/qkviews
+
+---
+
 ## [0.6.0] - (01-24-2021)
 
 ### Added

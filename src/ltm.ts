@@ -57,10 +57,10 @@ export default class BigipConfig extends EventEmitter {
         // capture incoming file type
         this.inputFileType = path.parse(file).ext;
 
-        this.configFiles = await unPacker(file);
+        return await unPacker(file).then( files => {
 
-        if (this.configFiles) {
-            
+            this.configFiles = files;
+
             // run through files and add up file size
             this.stats.configBytes = this.configFiles.map(item => item.size).reduce( (total, each) => {
                 return total += each;
@@ -69,10 +69,7 @@ export default class BigipConfig extends EventEmitter {
             
             // unPacker returned something so respond with processing time
             return this.stats.loadTime;
-        } else {
-            // unPacker failed and returned nothing back up the chain...
-            return;
-        }
+        })
     }
 
     /**
@@ -104,8 +101,9 @@ export default class BigipConfig extends EventEmitter {
                 if (this.tmosVersion === this.getTMOSversion(el.content, this.rx.tmosVersion)) {
                     // do nothing, current file version matches existing files tmos verion
                 } else {
-                    logger.error(`Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`)
-                    return
+                    const err = `Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`;
+                    logger.error(err)
+                    throw new Error(err);
                 }
             } else {
                 
@@ -192,8 +190,8 @@ export default class BigipConfig extends EventEmitter {
      * @return array of app names
      * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
      */
-    appList (): string[] {
-        return Object.keys(this.configObject.ltm.virtual);
+    async appList (): Promise<string[]> {
+        return Object.keys(this.configObject.ltm?.virtual);
     }
 
     /**
@@ -215,7 +213,7 @@ export default class BigipConfig extends EventEmitter {
         const startTime = process.hrtime.bigint();  // start pack timer
          
         // collect base information like vlans/IPs
-        const base = digBaseConfig(this.configObject)
+        const base = await digBaseConfig(this.configObject)
 
         // build return object
         const retObj = {
@@ -267,7 +265,7 @@ export default class BigipConfig extends EventEmitter {
 
             if (value) {
                 // dig config, then stop timmer, then return config...
-                const x = [digVsConfig(app, value, this.configObject, this.rx)];
+                const x = [await digVsConfig(app, value, this.configObject, this.rx)];
                 this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000
                 return x;
             }
@@ -279,7 +277,7 @@ export default class BigipConfig extends EventEmitter {
 
             const i = this.configObject.ltm.virtual;
             for (const [key, value] of Object.entries(i)) {
-                const vsConfig = digVsConfig(key, value, this.configObject, this.rx);
+                const vsConfig = await digVsConfig(key, value, this.configObject, this.rx);
 
                 // event about extracted app
                 this.emit('extractApp', {

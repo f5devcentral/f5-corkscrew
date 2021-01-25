@@ -43,7 +43,7 @@ export default class BigipConfig extends EventEmitter {
      * @return array of app names
      * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
      */
-    appList(): string[];
+    appList(): Promise<string[]>;
     /**
      * returns all details from processing
      *

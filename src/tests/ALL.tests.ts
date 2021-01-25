@@ -18,11 +18,14 @@
 // import fs from 'fs';
 // import { TMP_DIR } from '../src/constants'
 
+require('./json_objects.test')
+
 require('./unPacker.tests')
-require('./tmosParser.tests')
+
+// require('./tmosParser.tests')    // development only, not in use
+
 require('./pools.test')
 
-require('./json_objects.test')
 
 require('./devCloud_config.tests')
 require('./devCloud_ucs.tests')

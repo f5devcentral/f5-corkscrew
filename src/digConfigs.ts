@@ -12,7 +12,7 @@ import { poolsInPolicy, poolsInRule } from './pools';
  * @param configTree bigip config as json tree
  * @returns raw config objects
  */
-export function digBaseConfig (configTree: BigipConfObj) {
+export async function digBaseConfig (configTree: BigipConfObj) {
 
     const confs = [];
 
@@ -44,7 +44,6 @@ export function digBaseConfig (configTree: BigipConfObj) {
             confs.push(`auth partition ${key} {${value}}`)
         }
     }
-    // return confs.join('\n');
     return confs;
 }
 
@@ -55,7 +54,7 @@ export function digBaseConfig (configTree: BigipConfObj) {
  * @param vsName virtual server name
  * @param vsConfig virtual server tmos config body 
  */
-export function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree) {
+export async function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree) {
 
     /**
      * 
@@ -174,6 +173,8 @@ function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: TmosReg
         const monitors = poolConfig.value.match(rx.vs.pool.monitors);
 
         if(members && members[1]){
+
+            // TODO:  move all these regex's to the rx tree
 
             // dig node information from members
             const nodeNames = members[1].match(rx.vs.pool.nodesFromMembers);
