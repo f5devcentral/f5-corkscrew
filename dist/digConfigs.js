@@ -1,5 +1,14 @@
 "use strict";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,33 +24,34 @@ const pools_1 = require("./pools");
  */
 function digBaseConfig(configTree) {
     var _a, _b, _c, _d;
-    const confs = [];
-    if ((_a = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _a === void 0 ? void 0 : _a.vlan) {
-        // get vlans
-        for (const [key, value] of Object.entries(configTree.net.vlan)) {
-            confs.push(`net vlan ${key} {${value}}`);
+    return __awaiter(this, void 0, void 0, function* () {
+        const confs = [];
+        if ((_a = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _a === void 0 ? void 0 : _a.vlan) {
+            // get vlans
+            for (const [key, value] of Object.entries(configTree.net.vlan)) {
+                confs.push(`net vlan ${key} {${value}}`);
+            }
         }
-    }
-    if ((_b = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _b === void 0 ? void 0 : _b.self) {
-        // get ip addresses
-        for (const [key, value] of Object.entries(configTree.net.self)) {
-            confs.push(`net self ${key} {${value}}`);
+        if ((_b = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _b === void 0 ? void 0 : _b.self) {
+            // get ip addresses
+            for (const [key, value] of Object.entries(configTree.net.self)) {
+                confs.push(`net self ${key} {${value}}`);
+            }
         }
-    }
-    if ((_c = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _c === void 0 ? void 0 : _c["route-domain"]) {
-        // get route-domains
-        for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
-            confs.push(`net route-domain ${key} {${value}}`);
+        if ((_c = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _c === void 0 ? void 0 : _c["route-domain"]) {
+            // get route-domains
+            for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
+                confs.push(`net route-domain ${key} {${value}}`);
+            }
         }
-    }
-    if ((_d = configTree === null || configTree === void 0 ? void 0 : configTree.auth) === null || _d === void 0 ? void 0 : _d.partition) {
-        // get partitions
-        for (const [key, value] of Object.entries(configTree.auth.partition)) {
-            confs.push(`auth partition ${key} {${value}}`);
+        if ((_d = configTree === null || configTree === void 0 ? void 0 : configTree.auth) === null || _d === void 0 ? void 0 : _d.partition) {
+            // get partitions
+            for (const [key, value] of Object.entries(configTree.auth.partition)) {
+                confs.push(`auth partition ${key} {${value}}`);
+            }
         }
-    }
-    // return confs.join('\n');
-    return confs;
+        return confs;
+    });
 }
 exports.digBaseConfig = digBaseConfig;
 /**
@@ -50,82 +60,84 @@ exports.digBaseConfig = digBaseConfig;
  * @param vsConfig virtual server tmos config body
  */
 function digVsConfig(vsName, vsConfig, configTree, rx) {
-    /**
-     *
-     * What do we need to map on next on the virtual servers?:
-     *  - oneConnect?
-     *  - expand the discovery of all profiles (apm and supporting)
-     *
-     * Or do we expand the irule references like pools/policies?
-     *
-     */
-    logger_1.default.info(`digging vs config for ${vsName}`);
-    const pool = vsConfig.match(rx.vs.pool.obj);
-    const profiles = vsConfig.match(rx.vs.profiles.obj);
-    const rules = vsConfig.match(rx.vs.rules.obj);
-    const snat = vsConfig.match(rx.vs.snat.obj);
-    const policies = vsConfig.match(rx.vs.ltPolicies.obj);
-    const persistence = vsConfig.match(rx.vs.persist.obj);
-    const fallBackPersist = vsConfig.match(rx.vs.fbPersist);
-    const destination = vsConfig.match(rx.vs.destination);
-    // base vsMap config object
-    const map = {
-        // vsName,
-        vsDest: ''
-    };
-    // add destination to vsMap object
-    if (destination && destination[1]) {
-        map.vsDest = destination[1];
-    }
-    let config = [];
-    config.push(`ltm virtual ${vsName} {${vsConfig}}`);
-    if (pool && pool[1]) {
-        const x = digPoolConfig(pool[1], configTree, rx);
-        config.push(...x.config);
-        map.pool = x.map;
-        logger_1.default.debug(`[${vsName}] found the following pool`, pool[1]);
-    }
-    if (profiles && profiles[1]) {
-        const x = digProfileConfigs(profiles[1], configTree, rx);
-        config.push(...x.config);
-        logger_1.default.debug(`[${vsName}] found the following profiles`, profiles[1]);
-    }
-    if (rules && rules[1]) {
-        // add irule connection destination mapping
-        const x = digRuleConfigs(rules[1], configTree, rx);
-        config.push(...x.config);
-        if (x.map) {
-            map.irule = x.map;
+    return __awaiter(this, void 0, void 0, function* () {
+        /**
+         *
+         * What do we need to map on next on the virtual servers?:
+         *  - oneConnect?
+         *  - expand the discovery of all profiles (apm and supporting)
+         *
+         * Or do we expand the irule references like pools/policies?
+         *
+         */
+        logger_1.default.info(`digging vs config for ${vsName}`);
+        const pool = vsConfig.match(rx.vs.pool.obj);
+        const profiles = vsConfig.match(rx.vs.profiles.obj);
+        const rules = vsConfig.match(rx.vs.rules.obj);
+        const snat = vsConfig.match(rx.vs.snat.obj);
+        const policies = vsConfig.match(rx.vs.ltPolicies.obj);
+        const persistence = vsConfig.match(rx.vs.persist.obj);
+        const fallBackPersist = vsConfig.match(rx.vs.fbPersist);
+        const destination = vsConfig.match(rx.vs.destination);
+        // base vsMap config object
+        const map = {
+            // vsName,
+            vsDest: ''
+        };
+        // add destination to vsMap object
+        if (destination && destination[1]) {
+            map.vsDest = destination[1];
         }
-        logger_1.default.debug(`[${vsName}] found the following rules`, rules[1]);
-    }
-    if (snat && snat[1]) {
-        const x = digSnatConfig(snat[1], configTree, rx);
-        config.push(...x.config);
-        logger_1.default.debug(`[${vsName}] found snat configuration`, snat[1]);
-    }
-    if (policies && policies[1]) {
-        // add ltp destination mapping
-        const x = digPolicyConfig(policies[1], configTree, rx);
-        config.push(...x.config);
-        logger_1.default.debug(`[${vsName}] found the following policies`, policies[1]);
-    }
-    if (persistence && persistence[1]) {
-        const x = digPersistConfig(persistence[1], configTree, rx);
-        config.push(...x.config);
-        logger_1.default.debug(`[${vsName}] found the following persistence`, persistence[1]);
-    }
-    if (fallBackPersist && fallBackPersist[1]) {
-        const x = digFbPersistConfig(fallBackPersist[1], configTree);
-        config.push(...x.config);
-        logger_1.default.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
-    }
-    // remove any duplicate entries
-    config = uniqueList(config);
-    // removed empty values and objects
-    objects_1.cleanObject(config);
-    objects_1.cleanObject(map);
-    return { config, map };
+        let config = [];
+        config.push(`ltm virtual ${vsName} {${vsConfig}}`);
+        if (pool && pool[1]) {
+            const x = digPoolConfig(pool[1], configTree, rx);
+            config.push(...x.config);
+            map.pool = x.map;
+            logger_1.default.debug(`[${vsName}] found the following pool`, pool[1]);
+        }
+        if (profiles && profiles[1]) {
+            const x = digProfileConfigs(profiles[1], configTree, rx);
+            config.push(...x.config);
+            logger_1.default.debug(`[${vsName}] found the following profiles`, profiles[1]);
+        }
+        if (rules && rules[1]) {
+            // add irule connection destination mapping
+            const x = digRuleConfigs(rules[1], configTree, rx);
+            config.push(...x.config);
+            if (x.map) {
+                map.irule = x.map;
+            }
+            logger_1.default.debug(`[${vsName}] found the following rules`, rules[1]);
+        }
+        if (snat && snat[1]) {
+            const x = digSnatConfig(snat[1], configTree, rx);
+            config.push(...x.config);
+            logger_1.default.debug(`[${vsName}] found snat configuration`, snat[1]);
+        }
+        if (policies && policies[1]) {
+            // add ltp destination mapping
+            const x = digPolicyConfig(policies[1], configTree, rx);
+            config.push(...x.config);
+            logger_1.default.debug(`[${vsName}] found the following policies`, policies[1]);
+        }
+        if (persistence && persistence[1]) {
+            const x = digPersistConfig(persistence[1], configTree, rx);
+            config.push(...x.config);
+            logger_1.default.debug(`[${vsName}] found the following persistence`, persistence[1]);
+        }
+        if (fallBackPersist && fallBackPersist[1]) {
+            const x = digFbPersistConfig(fallBackPersist[1], configTree);
+            config.push(...x.config);
+            logger_1.default.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
+        }
+        // remove any duplicate entries
+        config = uniqueList(config);
+        // removed empty values and objects
+        objects_1.cleanObject(config);
+        objects_1.cleanObject(map);
+        return { config, map };
+    });
 }
 exports.digVsConfig = digVsConfig;
 /**
@@ -143,6 +155,7 @@ function digPoolConfig(poolName, configObject, rx) {
         const members = poolConfig.value.match(rx.vs.pool.members);
         const monitors = poolConfig.value.match(rx.vs.pool.monitors);
         if (members && members[1]) {
+            // TODO:  move all these regex's to the rx tree
             // dig node information from members
             const nodeNames = members[1].match(rx.vs.pool.nodesFromMembers);
             // const nodeAddresses = members[1].match(rx.n)

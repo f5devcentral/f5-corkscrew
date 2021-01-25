@@ -1,4 +1,11 @@
-"use strict";
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
+'use strict';
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -62,25 +69,17 @@ function unPacker(input) {
                 const size = fs.statSync(path_1.default.join(filePath.dir, filePath.base)).size;
                 // try to read file contents
                 const content = fs.readFileSync(path_1.default.join(filePath.dir, filePath.base), 'utf-8');
-                // const fileName  = path.join(filePath.base, filePath.ext);
                 logger_1.default.debug(`got .conf file [${input}], size [${size}]`);
                 return [{ fileName: filePath.base, size, content }];
             }
             catch (e) {
                 logger_1.default.error('not able to read file', e.message);
-                return;
-                // Promise.reject(`not able to read file => ${e.message}`);
+                throw new Error(`not able to read file => ${e.message}`);
             }
         }
         else if (filePath.ext === '.gz' || filePath.ext === '.ucs' || filePath.ext === '.qkview') {
-            try {
-                const size = fs.statSync(path_1.default.join(filePath.dir, filePath.base)).size;
-                logger_1.default.debug(`detected file: [${input}], size: [${size}]`);
-            }
-            catch (e) {
-                logger_1.default.error(`file ${input}, is not readable: ${e.messge}`);
-                return;
-            }
+            const size = fs.statSync(path_1.default.join(filePath.dir, filePath.base)).size;
+            logger_1.default.debug(`detected file: [${input}], size: [${size}]`);
             return yield decompress_1.default(input, {
                 filter: file => archiveFileFilter(file)
             })
@@ -93,8 +92,7 @@ function unPacker(input) {
         else {
             const msg = `file type of "${filePath.ext}", not supported, try (.conf|.ucs|.kqview|.gz)`;
             logger_1.default.error(msg);
-            // Promise.reject(new Error(msg));
-            return;
+            throw new Error(`not able to read file => ${msg}`);
         }
     });
 }

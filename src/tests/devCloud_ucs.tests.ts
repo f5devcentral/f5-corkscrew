@@ -19,7 +19,7 @@ const testFileDetails = path.parse(testFile);
 const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
 console.log('outFile', outFile);
 
-describe('explode devCloud ucs tests', function() {
+describe('explode devCloud ucs tests', async function() {
     
     let device;
     let log;
@@ -47,9 +47,9 @@ describe('explode devCloud ucs tests', function() {
         assert.ok(parseTime, 'should be a number');
     });
 
-    it(`list apps`, function() {
+    it(`list apps`, async function() {
 
-        const apps = device.appList();
+        const apps = await device.appList();
 
         const expected = [
             "/Common/app1_t80_vs",

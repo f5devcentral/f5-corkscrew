@@ -18,7 +18,7 @@ const parsedFileEvents = []
 const parsedObjEvents = []
 const extractAppEvents = []
 
-describe('explode devCloud bigip.conf tests', function() {
+describe('explode devCloud bigip.conf tests', async function() {
     
     let device;
     let log;
@@ -77,9 +77,9 @@ describe('explode devCloud bigip.conf tests', function() {
         assert.ok(typeof extractAppEvents[0].time === "number", '"time" param should be a number')
     });
 
-    it(`list apps`, function() {
+    it(`list apps`, async function() {
 
-        const apps = device.appList();
+        const apps = await device.appList();
 
         const expected = [
             "/Common/app1_t80_vs",
