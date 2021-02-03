@@ -271,22 +271,26 @@ export default class BigipConfig extends EventEmitter {
             }
 
         } else {
+            
             // means we didn't get an app name, so try to dig all apps...
-
             const apps = [];
 
             const i = this.configObject.ltm.virtual;
             for (const [key, value] of Object.entries(i)) {
-                const vsConfig = await digVsConfig(key, value, this.configObject, this.rx);
-
                 // event about extracted app
                 this.emit('extractApp', {
                     app: key,
                     time: Number(process.hrtime.bigint() - startTime) / 1000000
                 })
-                // setTimeout( () => { }, 500);
-                // await new Promise(r => setTimeout(r, 200)); // pause...
-                apps.push({name: key, configs: vsConfig.config, map: vsConfig.map});
+
+                // dig config, but catch errors
+                await digVsConfig(key, value, this.configObject, this.rx)
+                .then( vsConfig => {
+                    apps.push({name: key, configs: vsConfig.config, map: vsConfig.map});
+                })
+                .catch( err => {
+                    apps.push({name: key, configs: err, map: ''});
+                })
             }
     
             this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
