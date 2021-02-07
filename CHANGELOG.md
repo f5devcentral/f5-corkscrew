@@ -13,6 +13,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Modified
 
+- Disabled errors for files that do not have the same tmos version as the first
+  - this opened the opportunity to try to parse parent tmos objects from the file anyway, at least attempting to extract config
+- Line returns are converted from \r\n to \n
+- Added datagroup extraction from irules (pending)
+
+---
+
+## [0.7.0] - (01-25-2021)
+
+### Modified
+
 - More work to make functions async and throw appropriate errors
   - Mainly around the unPacker function responsible for detecting and unpacking ucs/qkviews
 
