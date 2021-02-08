@@ -308,6 +308,8 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
     logger.debug(`rule references found: `, ruleNames);
 
     // list of rules on the vs
+    const iRuleConfigs = [];
+    // config list to return (includes irules and other objects referenced by irules)
     const config = [];
 
     type ruleMap = {
@@ -323,12 +325,12 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
 
     const map: ruleMap = {};
 
-    ruleNames.forEach( async name => {
+    await ruleNames.forEach( async name => {
         // search config, return matches
         const x = pathValueFromKey(configObject.ltm.rule, name)
 
         if (x) {
-            config.push(`ltm rule ${x.key} {${x.value}}`);
+            iRuleConfigs.push(`ltm rule ${x.key} {${x.value}}`);
 
             const iRulePools = poolsInRule(x.value);
             if (iRulePools) {
@@ -342,7 +344,8 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
                         const poolC = digPoolConfig(el[0], configObject, rx);
 
                         if (poolC) {
-                            obj.config.push(poolC.config[0]);
+                            // obj.config.push(poolC.config[0]);
+                            config.push(poolC.config[0]);
                             // deepMergeObj(obj, { map: { pools: poolC.map }})
                             map.pools = poolC.map;
                         }
@@ -353,7 +356,8 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
                         const poolC = digPoolConfig(`/Common/${el[0]}`, configObject, rx);
                         
                         if (poolC) {
-                            obj.config.push(poolC.config[0]);
+                            // obj.config.push(poolC.config[0]);
+                            config.push(poolC.config[0]);
                             // deepMergeObj(obj, { map: { pools: poolC.map }})
                             map.pools = poolC.map;
                         }
@@ -362,28 +366,28 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
                 // add pools to map
                 map.pools = iRulePools;
             }
-            // todo: add node mapping
+
 
             // find data groups in irule
             const dataGroups = Object.keys(configObject.ltm['data-group'].internal)
             await digDataGroupsiniRule(x.value, dataGroups)
-            .then( dgNamesInRule => {
-                dgNamesInRule.forEach( dg => {
-                    obj.config.push(`ltm data-group internal ${dg} { ${configObject.ltm['data-group'].internal[dg]} }`);
+            .then( async dgNamesInRule => {
+                await dgNamesInRule.forEach( async dg => {
+                    const dgBody = configObject.ltm['data-group'].internal[dg];
+                    const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`
+                    config.push(fullDgConfig);
                 })
-            })
-            
+            })           
         }
     })
 
-    const defaultRules = ruleNames.length - config.length;
+    const defaultRules = ruleNames.length - iRuleConfigs.length;
     if(defaultRules) {
         logger.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`)
     }
 
-    // Object.assign(obj, map);
-    // push additional config objects back now that we have logged about default rules
-    config.push(...obj.config);
+    // add the irules to the beginning of the config array to be returned
+    config.unshift(...iRuleConfigs);
 
     return { config, map };
 }

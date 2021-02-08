@@ -16,7 +16,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Disabled errors for files that do not have the same tmos version as the first
   - this opened the opportunity to try to parse parent tmos objects from the file anyway, at least attempting to extract config
 - Line returns are converted from \r\n to \n
-- Added datagroup extraction from irules (pending)
+- Added datagroup extraction from irules
 
 ---
 
