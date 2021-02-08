@@ -39,7 +39,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Mocha monster config tests",
+            "name": "process private files",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
                 "-r",
@@ -47,7 +47,7 @@
                 "--timeout",
                 "999999",
                 "--colors",
-                "${workspaceFolder}/private/monster_config.tests.ts",
+                "${workspaceFolder}/src/tests/outside_files.tests.ts",
             ],
             "internalConsoleOptions": "neverOpen",
             "protocol": "inspector",

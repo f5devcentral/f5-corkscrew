@@ -1,6 +1,13 @@
-"use strict";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // /* eslint-disable @typescript-eslint/no-explicit-any */
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
+'use strict';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,7 +66,8 @@ class BigipConfig extends events_1.EventEmitter {
             const startTime = process.hrtime.bigint();
             // capture incoming file type
             this.inputFileType = path_1.default.parse(file).ext;
-            return yield unPacker_1.unPacker(file).then(files => {
+            return yield unPacker_1.unPacker(file)
+                .then(files => {
                 this.configFiles = files;
                 // run through files and add up file size
                 this.stats.configBytes = this.configFiles.map(item => item.size).reduce((total, each) => {
@@ -92,6 +100,9 @@ class BigipConfig extends events_1.EventEmitter {
                     of: this.configFiles.length // total # of files
                 };
                 this.emit('parseFile', parsingFile);
+                if (/\r\n/.test(el.content)) {
+                    el.content = el.content.replace(/\r\n/g, '\n');
+                }
                 if (this.rx) {
                     // rex tree already assigned, lets confirm subsequent file tmos version match
                     if (this.tmosVersion === this.getTMOSversion(el.content, this.rx.tmosVersion)) {
@@ -100,7 +111,7 @@ class BigipConfig extends events_1.EventEmitter {
                     else {
                         const err = `Parsing [${el.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`;
                         logger_1.default.error(err);
-                        throw new Error(err);
+                        // throw new Error(err);
                     }
                 }
                 else {
@@ -235,7 +246,10 @@ class BigipConfig extends events_1.EventEmitter {
             if (app) {
                 // extract single app config
                 const value = this.configObject.ltm.virtual[app];
-                this.emit('extractApp', 'app');
+                this.emit('extractApp', {
+                    app,
+                    time: Number(process.hrtime.bigint() - startTime) / 1000000
+                });
                 if (value) {
                     // dig config, then stop timmer, then return config...
                     const x = [yield digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
@@ -248,15 +262,19 @@ class BigipConfig extends events_1.EventEmitter {
                 const apps = [];
                 const i = this.configObject.ltm.virtual;
                 for (const [key, value] of Object.entries(i)) {
-                    const vsConfig = yield digConfigs_1.digVsConfig(key, value, this.configObject, this.rx);
                     // event about extracted app
                     this.emit('extractApp', {
                         app: key,
                         time: Number(process.hrtime.bigint() - startTime) / 1000000
                     });
-                    // setTimeout( () => { }, 500);
-                    // await new Promise(r => setTimeout(r, 200)); // pause...
-                    apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
+                    // dig config, but catch errors
+                    yield digConfigs_1.digVsConfig(key, value, this.configObject, this.rx)
+                        .then(vsConfig => {
+                        apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
+                    })
+                        .catch(err => {
+                        apps.push({ name: key, configs: err, map: '' });
+                    });
                 }
                 this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
                 return apps;
@@ -277,26 +295,9 @@ class BigipConfig extends events_1.EventEmitter {
         else {
             const msg = 'tmos version not detected -> meaning this probably is not a bigip.conf';
             logger_1.default.error(msg);
-            throw new Error(msg);
+            // throw new Error(msg)
         }
     }
 }
 exports.default = BigipConfig;
-// /**
-//  * standardize line endings to linux
-//  * "\r\n" and "\r" to "\n"
-//  * @param config config as string
-//  * @returns config
-//  */
-// function standardizeLineReturns (config: string){
-//     const regex = /(\r\n|\r)/g;
-//     return config.replace(regex, "\n");
-// }
-// /**
-//  * Reverse string
-//  * @param str string to reverse
-//  */
-// function reverse(str: string){
-//     return [...str].reverse().join('');
-//   }
 //# sourceMappingURL=ltm.js.map

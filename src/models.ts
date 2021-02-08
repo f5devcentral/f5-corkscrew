@@ -1,19 +1,33 @@
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
 
+'use strict';
 
 /**
  * object type that represends bigip.conf as multi-level json tree
  */
 export type BigipConfObj = {
     ltm?: {
-        virtual?: unknown;
-        pool?: unknown;
-        node?: unknown;
-        monitor?: unknown;
-        profile?: unknown;
-        policy?: unknown;
-        rule?: unknown;
-        persistence?: unknown;
-        snatpool?: unknown;
+        virtual?: { [key: string]: string };
+        pool?: { [key: string]: string };
+        node?: { [key: string]: string };
+        monitor?: { [key: string]: string };
+        profile?: { [key: string]: string };
+        policy?: { [key: string]: string };
+        rule?: { [key: string]: string };
+        persistence?: { [key: string]: string };
+        snatpool?: { [key: string]: string };
+        "data-group"?: {
+            internal?: { [key: string]: string }
+        },
+        ifile?: { [key: string]: string },
+        "virtual-address"?: { [key: string]: string },
+        "default-node-monitor"?: string;
     },
     apm?: unknown;
     auth?: {
@@ -30,6 +44,29 @@ export type BigipConfObj = {
     },
     sys?: {
         "global-settings"?: string;
+        application?: {
+            service?: { [key: string]: string }
+        },
+        "compatibility-level"?: string;
+        dns?: string;
+        file?: {
+            ifile?: { [key: string]: string }
+            "ssl-cert"?: { [key: string]: string }
+            "ssl-key"?: { [key: string]: string }
+        },
+        folder?: { [key: string]: string }
+        httpd?: string;
+        icall?: {
+            handler?: {
+                periodic?: { [key: string]: string }
+            }
+        },
+        "management-dhcp"?: { [key: string]: string }
+        "management-route"?: { [key: string]: string }
+        ntp?: string;
+        provision?: { [key: string]: string }
+        snmp?: string;
+        software?: { [key: string]: string }
     }
 }
 
