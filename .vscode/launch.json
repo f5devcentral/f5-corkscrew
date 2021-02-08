@@ -136,6 +136,7 @@
             "type": "node",
             "request": "launch",
             "name": "Mocha All",
+            "runtimeExecutable": "/home/ted/.nvm/versions/node/v14.15.4/bin/node",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
                 "-r",
