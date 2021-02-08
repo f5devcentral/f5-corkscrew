@@ -10,7 +10,19 @@
 
 
 export async function digDataGroupsiniRule(rule: string, dgNames: string[]): Promise<string[]> {
-    //
+    // !!! great example of filtering an array with another array !!!
+    // https://stackoverflow.com/questions/34901593/how-to-filter-an-array-from-all-elements-of-another-array
+
+    const excludeRx: RegExp[] = [
+        /\/____appsvcs_declaration-/,
+        /\/__appsvcs_update/,
+        /\/appsvcs\//,
+        /\/atgTeem/,
+        /\/f5-appsvcs-templates\//
+    ]
+
+    // filter out data-groups for other internal services
+    dgNames = dgNames.filter(el => !excludeRx.some(rx => rx.test(el)));
 
     return dgNames.filter( dg => {
         // turn data-group name into an rx

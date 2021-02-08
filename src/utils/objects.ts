@@ -233,7 +233,7 @@ export function deepGet(path: string[], obj: unknown): unknown {
  * @param key to find
  * @param return [{ path: string, key: string, value: string }]
  */
-export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
+export function pathValueFromKey(obj: unknown, key: string): RetObj {
 
     const results: RetObj[] = [];
 
