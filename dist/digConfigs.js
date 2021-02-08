@@ -1,5 +1,12 @@
-"use strict";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
+'use strict';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -17,6 +24,7 @@ exports.getHostname = exports.uniqueList = exports.digVsConfig = exports.digBase
 const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
 const pools_1 = require("./pools");
+const digiRules_1 = require("./digiRules");
 /**
  * dig base config information like vlans/SelfIPs
  * @param configTree bigip config as json tree
@@ -103,12 +111,14 @@ function digVsConfig(vsName, vsConfig, configTree, rx) {
         }
         if (rules && rules[1]) {
             // add irule connection destination mapping
-            const x = digRuleConfigs(rules[1], configTree, rx);
-            config.push(...x.config);
-            if (x.map) {
-                map.irule = x.map;
-            }
-            logger_1.default.debug(`[${vsName}] found the following rules`, rules[1]);
+            yield digRuleConfigs(rules[1], configTree, rx)
+                .then(x => {
+                config.push(...x.config);
+                if (x.map) {
+                    map.irule = x.map;
+                }
+                logger_1.default.debug(`[${vsName}] found the following rules`, rules[1]);
+            });
         }
         if (snat && snat[1]) {
             const x = digSnatConfig(snat[1], configTree, rx);
@@ -237,58 +247,68 @@ function digProfileConfigs(profilesList, configObject, rx) {
  * @param rulesList raw irules regex from vs dig
  */
 function digRuleConfigs(rulesList, configObject, rx) {
-    const ruleNames = rulesList.match(rx.vs.rules.names);
-    logger_1.default.debug(`rule references found: `, ruleNames);
-    // list of rules on the vs
-    const config = [];
-    // final config object
-    const obj = {
-        config: []
-    };
-    const map = {};
-    ruleNames.forEach(name => {
-        // search config, return matches
-        const x = objects_1.pathValueFromKey(configObject.ltm.rule, name);
-        if (x) {
-            config.push(`ltm rule ${x.key} {${x.value}}`);
-            const iRulePools = pools_1.poolsInRule(x.value);
-            if (iRulePools) {
-                // for each pool reference found, get config
-                iRulePools.forEach(el => {
-                    // if no "/", this is a "/Common/" partition rule
-                    if (/\//.test(el[0])) {
-                        // found slash, so has parition prefix
-                        const poolC = digPoolConfig(el[0], configObject, rx);
-                        if (poolC) {
-                            obj.config.push(poolC.config[0]);
-                            // deepMergeObj(obj, { map: { pools: poolC.map }})
-                            map.pools = poolC.map;
+    return __awaiter(this, void 0, void 0, function* () {
+        const ruleNames = rulesList.match(rx.vs.rules.names);
+        logger_1.default.debug(`rule references found: `, ruleNames);
+        // list of rules on the vs
+        const config = [];
+        // final config object
+        const obj = {
+            config: []
+        };
+        const map = {};
+        ruleNames.forEach((name) => __awaiter(this, void 0, void 0, function* () {
+            // search config, return matches
+            const x = objects_1.pathValueFromKey(configObject.ltm.rule, name);
+            if (x) {
+                config.push(`ltm rule ${x.key} {${x.value}}`);
+                const iRulePools = pools_1.poolsInRule(x.value);
+                if (iRulePools) {
+                    // for each pool reference found, get config
+                    iRulePools.forEach(el => {
+                        // if no "/", this is a "/Common/" partition rule
+                        if (/\//.test(el[0])) {
+                            // found slash, so has parition prefix
+                            const poolC = digPoolConfig(el[0], configObject, rx);
+                            if (poolC) {
+                                obj.config.push(poolC.config[0]);
+                                // deepMergeObj(obj, { map: { pools: poolC.map }})
+                                map.pools = poolC.map;
+                            }
                         }
-                    }
-                    else {
-                        // no slash, so adding commond partition prefix
-                        const poolC = digPoolConfig(`/Common/${el[0]}`, configObject, rx);
-                        if (poolC) {
-                            obj.config.push(poolC.config[0]);
-                            // deepMergeObj(obj, { map: { pools: poolC.map }})
-                            map.pools = poolC.map;
+                        else {
+                            // no slash, so adding commond partition prefix
+                            const poolC = digPoolConfig(`/Common/${el[0]}`, configObject, rx);
+                            if (poolC) {
+                                obj.config.push(poolC.config[0]);
+                                // deepMergeObj(obj, { map: { pools: poolC.map }})
+                                map.pools = poolC.map;
+                            }
                         }
-                    }
+                    });
+                    // add pools to map
+                    map.pools = iRulePools;
+                }
+                // todo: add node mapping
+                // find data groups in irule
+                const dataGroups = Object.keys(configObject.ltm['data-group'].internal);
+                yield digiRules_1.digDataGroupsiniRule(x.value, dataGroups)
+                    .then(dgNamesInRule => {
+                    dgNamesInRule.forEach(dg => {
+                        obj.config.push(`ltm data-group internal ${dg} { ${configObject.ltm['data-group'].internal[dg]} }`);
+                    });
                 });
-                // add pools to map
-                map.pools = iRulePools;
             }
-            // todo: add node mapping
+        }));
+        const defaultRules = ruleNames.length - config.length;
+        if (defaultRules) {
+            logger_1.default.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`);
         }
+        // Object.assign(obj, map);
+        // push additional config objects back now that we have logged about default rules
+        config.push(...obj.config);
+        return { config, map };
     });
-    const defaultRules = ruleNames.length - config.length;
-    if (defaultRules) {
-        logger_1.default.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`);
-    }
-    // Object.assign(obj, map);
-    // push additional config objects back now that we have logged about default rules
-    config.push(...obj.config);
-    return { config, map };
 }
 /**
  * analyzes vs snat config, returns full snat configuration if pool reference

@@ -1,6 +1,13 @@
-"use strict";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // /* eslint-disable @typescript-eslint/no-explicit-any */
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
+'use strict';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -293,21 +300,4 @@ class BigipConfig extends events_1.EventEmitter {
     }
 }
 exports.default = BigipConfig;
-// /**
-//  * standardize line endings to linux
-//  * "\r\n" and "\r" to "\n"
-//  * @param config config as string
-//  * @returns config
-//  */
-// function standardizeLineReturns (config: string){
-//     const regex = /(\r\n|\r)/g;
-//     return config.replace(regex, "\n");
-// }
-// /**
-//  * Reverse string
-//  * @param str string to reverse
-//  */
-// function reverse(str: string){
-//     return [...str].reverse().join('');
-//   }
 //# sourceMappingURL=ltm.js.map

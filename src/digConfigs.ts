@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
+
+'use strict';
 
 import logger from './logger';
 import { AppMap, BigipConfObj } from './models'
 import { TmosRegExTree } from './regex';
 import { cleanObject, pathValueFromKey } from './utils/objects';
 import { poolsInPolicy, poolsInRule } from './pools';
+import { digDataGroupsiniRule } from './digiRules';
 
 
 /**
@@ -107,12 +117,14 @@ export async function digVsConfig(vsName: string, vsConfig: string, configTree: 
     if(rules && rules[1]) {
         // add irule connection destination mapping
 
-        const x = digRuleConfigs(rules[1], configTree, rx);
-        config.push(...x.config);
-        if (x.map) {
-            map.irule = x.map;
-        }
-        logger.debug(`[${vsName}] found the following rules`, rules[1]);
+        await digRuleConfigs(rules[1], configTree, rx)
+        .then( x => {
+            config.push(...x.config);
+            if (x.map) {
+                map.irule = x.map;
+            }
+            logger.debug(`[${vsName}] found the following rules`, rules[1]);
+        })
     }
 
     if(snat && snat[1]) {
@@ -290,7 +302,7 @@ function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx:
  * 
  * @param rulesList raw irules regex from vs dig
  */
-function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: TmosRegExTree) {
 
     const ruleNames = rulesList.match(rx.vs.rules.names);
     logger.debug(`rule references found: `, ruleNames);
@@ -311,7 +323,7 @@ function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: TmosR
 
     const map: ruleMap = {};
 
-    ruleNames.forEach( name => {
+    ruleNames.forEach( async name => {
         // search config, return matches
         const x = pathValueFromKey(configObject.ltm.rule, name)
 
@@ -345,14 +357,22 @@ function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: TmosR
                             // deepMergeObj(obj, { map: { pools: poolC.map }})
                             map.pools = poolC.map;
                         }
-
                     }
                 })
-
                 // add pools to map
                 map.pools = iRulePools;
             }
             // todo: add node mapping
+
+            // find data groups in irule
+            const dataGroups = Object.keys(configObject.ltm['data-group'].internal)
+            await digDataGroupsiniRule(x.value, dataGroups)
+            .then( dgNamesInRule => {
+                dgNamesInRule.forEach( dg => {
+                    obj.config.push(`ltm data-group internal ${dg} { ${configObject.ltm['data-group'].internal[dg]} }`);
+                })
+            })
+            
         }
     })
 

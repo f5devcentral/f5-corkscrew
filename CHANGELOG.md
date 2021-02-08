@@ -9,7 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [0.7.0] - (01-25-2021)
+## [0.8.0] - (02-07-2021)
 
 ### Modified
 

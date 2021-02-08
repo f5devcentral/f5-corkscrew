@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // /* eslint-disable @typescript-eslint/no-empty-function */
 
 'use strict';
@@ -7,27 +8,44 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { poolsInPolicy, poolsInRule } from '../pools';
+import { digDataGroupsiniRule } from '../digiRules';
 
 
 const iRuleWithPools = fs.readFileSync(path.join(__dirname, 'artifacts', 'pools.irule'), "utf-8");
 const iRuleNoRef = fs.readFileSync(path.join(__dirname, 'artifacts', 'pools_noRef.irule'), "utf-8");
+const iRuleDataGroups = fs.readFileSync(path.join(__dirname, 'artifacts', 'data-groups.irule'), "utf-8");
 
 describe('pool reference tests', function() {
 
-    it(`get virtuals from iRule`, async function() {
-        //todo:
-    });
+    // it(`get virtuals from iRule`, async function() {
+    //     //todo:
+    // });
 
-    it(`get virtuals from iRule - no virtuals`, async function() {
-        //todo:
-    });
+    // it(`get virtuals from iRule - no virtuals`, async function() {
+    //     //todo:
+    // });
 
-    it(`get nodes from iRule`, async function() {
-        //todo:
-    });
+    // it(`get nodes from iRule`, async function() {
+    //     //todo:
+    // });
 
-    it(`get nodes from iRule - no nodes`, async function() {
-        //todo:
+    // it(`get nodes from iRule - no nodes`, async function() {
+    //     //todo:
+    // });
+
+
+    it(`get data-groups from iRule`, async function() {
+
+        const knownDataGroups = ['/Common/one', '/Common/localusers_dg', '/Common/app_class', '/Common/two' ];
+        
+        await digDataGroupsiniRule(iRuleDataGroups, knownDataGroups)
+        .then( dgs => {
+            assert.deepStrictEqual(dgs, ['/Common/localusers_dg', '/Common/app_class'])
+        })
+        .catch( err => {
+            debugger; 
+        });
+
     });
     
 
