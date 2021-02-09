@@ -1,4 +1,3 @@
-import { BigipConfObj } from "../models";
 /**
  * recursively removes empty value/objects/arrays
  * @param obj
@@ -63,5 +62,5 @@ export declare function deepGet(path: string[], obj: unknown): unknown;
  * @param key to find
  * @param return [{ path: string, key: string, value: string }]
  */
-export declare function pathValueFromKey(obj: BigipConfObj, key: string): RetObj;
+export declare function pathValueFromKey(obj: unknown, key: string): RetObj;
 export {};

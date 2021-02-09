@@ -19,7 +19,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.digDataGroupsiniRule = void 0;
 function digDataGroupsiniRule(rule, dgNames) {
     return __awaiter(this, void 0, void 0, function* () {
-        //
+        // !!! great example of filtering an array with another array !!!
+        // https://stackoverflow.com/questions/34901593/how-to-filter-an-array-from-all-elements-of-another-array
+        const excludeRx = [
+            /\/____appsvcs_declaration-/,
+            /\/__appsvcs_update/,
+            /\/appsvcs\//,
+            /\/atgTeem/,
+            /\/f5-appsvcs-templates\//
+        ];
+        // filter out data-groups for other internal services
+        dgNames = dgNames.filter(el => !excludeRx.some(rx => rx.test(el)));
         return dgNames.filter(dg => {
             // turn data-group name into an rx
             const dgRx = new RegExp(dg);

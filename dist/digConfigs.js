@@ -251,17 +251,19 @@ function digRuleConfigs(rulesList, configObject, rx) {
         const ruleNames = rulesList.match(rx.vs.rules.names);
         logger_1.default.debug(`rule references found: `, ruleNames);
         // list of rules on the vs
+        const iRuleConfigs = [];
+        // config list to return (includes irules and other objects referenced by irules)
         const config = [];
         // final config object
         const obj = {
             config: []
         };
         const map = {};
-        ruleNames.forEach((name) => __awaiter(this, void 0, void 0, function* () {
+        yield ruleNames.forEach((name) => __awaiter(this, void 0, void 0, function* () {
             // search config, return matches
             const x = objects_1.pathValueFromKey(configObject.ltm.rule, name);
             if (x) {
-                config.push(`ltm rule ${x.key} {${x.value}}`);
+                iRuleConfigs.push(`ltm rule ${x.key} {${x.value}}`);
                 const iRulePools = pools_1.poolsInRule(x.value);
                 if (iRulePools) {
                     // for each pool reference found, get config
@@ -271,7 +273,8 @@ function digRuleConfigs(rulesList, configObject, rx) {
                             // found slash, so has parition prefix
                             const poolC = digPoolConfig(el[0], configObject, rx);
                             if (poolC) {
-                                obj.config.push(poolC.config[0]);
+                                // obj.config.push(poolC.config[0]);
+                                config.push(poolC.config[0]);
                                 // deepMergeObj(obj, { map: { pools: poolC.map }})
                                 map.pools = poolC.map;
                             }
@@ -280,7 +283,8 @@ function digRuleConfigs(rulesList, configObject, rx) {
                             // no slash, so adding commond partition prefix
                             const poolC = digPoolConfig(`/Common/${el[0]}`, configObject, rx);
                             if (poolC) {
-                                obj.config.push(poolC.config[0]);
+                                // obj.config.push(poolC.config[0]);
+                                config.push(poolC.config[0]);
                                 // deepMergeObj(obj, { map: { pools: poolC.map }})
                                 map.pools = poolC.map;
                             }
@@ -289,24 +293,24 @@ function digRuleConfigs(rulesList, configObject, rx) {
                     // add pools to map
                     map.pools = iRulePools;
                 }
-                // todo: add node mapping
                 // find data groups in irule
                 const dataGroups = Object.keys(configObject.ltm['data-group'].internal);
                 yield digiRules_1.digDataGroupsiniRule(x.value, dataGroups)
-                    .then(dgNamesInRule => {
-                    dgNamesInRule.forEach(dg => {
-                        obj.config.push(`ltm data-group internal ${dg} { ${configObject.ltm['data-group'].internal[dg]} }`);
-                    });
-                });
+                    .then((dgNamesInRule) => __awaiter(this, void 0, void 0, function* () {
+                    yield dgNamesInRule.forEach((dg) => __awaiter(this, void 0, void 0, function* () {
+                        const dgBody = configObject.ltm['data-group'].internal[dg];
+                        const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`;
+                        config.push(fullDgConfig);
+                    }));
+                }));
             }
         }));
-        const defaultRules = ruleNames.length - config.length;
+        const defaultRules = ruleNames.length - iRuleConfigs.length;
         if (defaultRules) {
             logger_1.default.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`);
         }
-        // Object.assign(obj, map);
-        // push additional config objects back now that we have logged about default rules
-        config.push(...obj.config);
+        // add the irules to the beginning of the config array to be returned
+        config.unshift(...iRuleConfigs);
         return { config, map };
     });
 }
