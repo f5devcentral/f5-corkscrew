@@ -12,6 +12,8 @@ import path from "path";
 import * as fs from 'fs';
 import logger from "./logger";
 import decompress from 'decompress';
+import zlib from 'zlib';
+import tar from 'tar-stream'
 
 
 /**
@@ -23,11 +25,11 @@ export type ConfigFiles = {
     content: string
 }[]
 
- /**
-  * extracts needed config files from archive
-  * @param input path/file to .conf|.ucs|.qkview|.gz
-  */
-export async function unPacker (input: string):Promise<ConfigFiles> {
+/**
+ * extracts needed config files from archive
+ * @param input path/file to .conf|.ucs|.qkview|.gz
+ */
+export async function unPacker(input: string): Promise<ConfigFiles> {
 
     /**
      * look at streaming specific files from the archive without having to load the entire thing into memory
@@ -36,6 +38,8 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
      * https://github.com/mafintosh/gunzip-maybe
      * https://github.com/mafintosh/tar-stream
      * https://github.com/npm/node-tar#readme
+     * 
+     * https://stackoverflow.com/questions/19978452/how-to-extract-single-file-from-tar-gz-archive-using-node-js
      * 
      */
 
@@ -46,14 +50,14 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
      * what kind of file we workin with?
      */
     if (filePath.ext === '.conf') {
-        
+
         try {
-            
+
             // get file size
             const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
             // try to read file contents
             const content = fs.readFileSync(path.join(filePath.dir, filePath.base), 'utf-8');
-            
+
             logger.debug(`got .conf file [${input}], size [${size}]`)
 
             return [{ fileName: filePath.base, size, content }];
@@ -69,18 +73,58 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
         const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
         logger.debug(`detected file: [${input}], size: [${size}]`)
 
-        return await decompress(input, {
-            filter: file => archiveFileFilter(file)
+
+        const extract = tar.extract();
+        const data = [];
+
+        return new Promise((resolve, reject) => {
+
+            const files = []
+
+            extract.on('entry', function (header, stream, next) {
+                const fileName
+                const size
+                const content = []
+                stream.on('data', function (chunk) {
+                    if (header.name == 'documents.json')
+                        content.push(chunk);
+                });
+    
+                stream.on('end', function () {
+                    files.push({
+                        fileName: header.name,
+                        size: header.size,
+                        content: content.join('')
+                    })
+                    next();
+                });
+    
+                stream.resume();
+            });
+    
+            extract.on('finish', function () {
+                // fs.writeFile('documents.json', data.join(''));
+                debugger;
+            });
+    
+            fs.createReadStream(input)
+                .pipe(zlib.createGunzip())
+                .pipe(extract);
+
         })
-        .then( extracted => {
-            return extracted.map( x => { 
-                return { fileName: x.path, size: x.data.byteLength, content: x.data.toString()} 
-            })
-        })
+
+        // return await decompress(input, {
+        //     filter: file => archiveFileFilter(file)
+        // })
+        // .then( extracted => {
+        //     return extracted.map( x => { 
+        //         return { fileName: x.path, size: x.data.byteLength, content: x.data.toString()} 
+        //     })
+        // })
 
 
     } else {
-        
+
         const msg = `file type of "${filePath.ext}", not supported, try (.conf|.ucs|.kqview|.gz)`
         logger.error(msg);
         throw new Error(`not able to read file => ${msg}`);
