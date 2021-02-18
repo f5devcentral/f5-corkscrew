@@ -12,8 +12,6 @@ import path from "path";
 import * as fs from 'fs';
 import logger from "./logger";
 import decompress from 'decompress';
-import zlib from 'zlib';
-import tar from 'tar-stream'
 
 
 /**
@@ -73,55 +71,15 @@ export async function unPacker(input: string): Promise<ConfigFiles> {
         const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
         logger.debug(`detected file: [${input}], size: [${size}]`)
 
-
-        const extract = tar.extract();
-        const data = [];
-
-        return new Promise((resolve, reject) => {
-
-            const files = []
-
-            extract.on('entry', function (header, stream, next) {
-                const fileName
-                const size
-                const content = []
-                stream.on('data', function (chunk) {
-                    if (header.name == 'documents.json')
-                        content.push(chunk);
-                });
-    
-                stream.on('end', function () {
-                    files.push({
-                        fileName: header.name,
-                        size: header.size,
-                        content: content.join('')
-                    })
-                    next();
-                });
-    
-                stream.resume();
-            });
-    
-            extract.on('finish', function () {
-                // fs.writeFile('documents.json', data.join(''));
-                debugger;
-            });
-    
-            fs.createReadStream(input)
-                .pipe(zlib.createGunzip())
-                .pipe(extract);
-
+        return await decompress(input, {
+            filter: file => archiveFileFilter(file)
+            // filter: file => (fileFilter(file.path) && file.type === 'file')
         })
-
-        // return await decompress(input, {
-        //     filter: file => archiveFileFilter(file)
-        // })
-        // .then( extracted => {
-        //     return extracted.map( x => { 
-        //         return { fileName: x.path, size: x.data.byteLength, content: x.data.toString()} 
-        //     })
-        // })
-
+        .then( extracted => {
+            return extracted.map( x => { 
+                return { fileName: x.path, size: x.data.byteLength, content: x.data.toString()} 
+            })
+        })
 
     } else {
 
@@ -147,13 +105,12 @@ function archiveFileFilter(file: decompress.File) {
      *  
      */
 
-    if (/^config\/bigip.conf$/.test(file.path) && file.type === 'file') {
-        return true
-    }
-    if (/^config\/bigip_base.conf$/.test(file.path) && file.type === 'file') {
-        return true
-    }
-    if (/^config\/partitions\/.+?/.test(file.path) && file.type === 'file') {
-        return true
-    }
+    if (/^config\/bigip.conf$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/bigip_base.conf$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/partitions\/.+?$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/bigip_gtm.conf$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/bigip.license$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/profile_base.conf$/.test(file.path) && file.type === 'file') { return true }
+    if (/^var\/tmp\/filestore_temp\/files_d\/.+?$/.test(file.path) && file.type === 'file') { return true }
+
 }
