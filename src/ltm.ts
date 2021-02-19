@@ -12,6 +12,7 @@ import { countObjects } from './objCounter';
 import { ConfigFiles, unPacker } from './unPacker'
 import { digBaseConfig, digVsConfig, getHostname } from './digConfigs';
 import path from 'path';
+import { UnPacker, ConfigFile } from './unPackerStream';
 
 
 /**
@@ -46,6 +47,125 @@ export default class BigipConfig extends EventEmitter {
     }
 
     /**
+     * 
+     * @param file bigip .conf/ucs/qkview/mini_ucs.tar.gz
+     */
+    async loadParseAsync(file: string): Promise<void> {
+        const startTime = process.hrtime.bigint();
+        // capture incoming file type
+        this.inputFileType = path.parse(file).ext;
+
+        const parseConfPromises = []
+        const unPacker = new UnPacker();
+
+        unPacker.on('conf', conf => {
+            // as conf files are emitted, parse them
+            // will need a new function to parse each file
+            // have it return a promise, then wait for all promises to resolve before parsing all the non-conf files
+            // eventFiles.push(dFile)
+            parseConfPromises.push(this.parseConf(conf))
+        })
+        await unPacker.stream(file)
+            .then(files => {
+                // wait for all the parse config promises to finish
+                // await Promise.all(parseConfPromises)
+
+                // then parse all the other non-conf files
+            })
+    }
+
+    /**
+     * async config parse function
+     */
+    async parseConf(conf: ConfigFile): Promise<void> {
+
+        // add config file to tree
+        // if default profile base, pass on parsing
+
+        this.emit('parseFile', conf.fileName)
+
+        if (/\r\n/.test(conf.content)) {
+            conf.content = conf.content.replace(/\r\n/g, '\n')
+        }
+
+        if (this.rx) {
+            // rex tree already assigned, lets confirm subsequent file tmos version match
+            if (this.tmosVersion === this.getTMOSversion(conf.content, this.rx.tmosVersion)) {
+                // do nothing, current file version matches existing files tmos verion
+            } else {
+                const err = `Parsing [${conf.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`;
+                logger.error(err)
+                // throw new Error(err);
+            }
+        } else {
+
+            // first time through - build everything
+            const rex = new RegExTree();  // instantiate regex tree
+            this.tmosVersion = this.getTMOSversion(conf.content, rex.tmosVersionReg);  // get tmos version
+            logger.info(`Recieved .conf file of version: ${this.tmosVersion}`)
+
+            // assign regex tree for particular version
+            this.rx = rex.get(this.tmosVersion)
+        }
+
+        //  #####################3
+        // make a function
+        let configArray = [];
+        try {
+            // try to parse the config into an array
+            configArray = [...conf.content.match(this.rx.parentObjects)];
+        } catch (e) {
+            logger.error('failed to extract any parent matches from file - might be a scripts file...');
+        }
+
+        // that can .then into another function wrapping the following
+
+        if (configArray) {
+
+            // add object count to main stats
+            this.stats.objectCount += configArray.length;
+
+            logger.debug(`creating more detailed arrays/objects for deeper inspection`)
+            configArray.forEach((el, index) => {
+
+                // extract object name from body
+                const name = el.match(this.rx.parentNameValue);
+
+                if (name && name[2]) {
+
+                    // create parsing details obj for emitter
+                    const parsingObj = {
+                        parsing: name[1],              // current obj name
+                        num: index + 1,             // obj #
+                        of: configArray.length      // total # of objs
+                    }
+
+                    this.emit('parseObject', parsingObj)
+
+                    // split extracted name element by spaces
+                    const names = name[1].split(' ');
+                    // create new nested objects with each of the names, assigning value on inner-most
+                    const newObj = nestedObjValue(names, name[2]);
+
+                    this.configObject = deepMergeObj(this.configObject, newObj);
+                } else {
+                    logger.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el)
+                }
+            });
+
+        }
+    }
+
+    async parseExtras(files: ConfigFile[]): Promise<void> {
+        // take in list of files (non-conf)
+        // loop through list
+        // if bigip.license add raw file to tree
+        // if cert/key/iFile -> extract name -> find name in tree -> add/replace content
+
+        // discard file list when done
+    }
+
+    /**
      * load .conf file or files from ucs/qkview
      *  
      * @param config array of configs as strings
@@ -75,6 +195,7 @@ export default class BigipConfig extends EventEmitter {
 
     /**
      * new parsing fuction to work on list of files from unPacker
+     * - original syncrounous version that takes the list of config files
      */
     async parse(): Promise<number> {
         const startTime = process.hrtime.bigint();

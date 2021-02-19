@@ -20,11 +20,11 @@ import { EventEmitter } from "events";
 /**
  * defines the structure of the archive file extraction or single bigip.conf
  */
-export type ConfigFiles = {
+export type ConfigFile = {
     fileName: string,
     size: number,
     content: string
-}[]
+}
 
 export type fsStreamHeader = {
     name: string,
@@ -32,7 +32,12 @@ export type fsStreamHeader = {
     type: 'file' | 'directory'
 }
 
-
+/**
+ * async method for extracting config files from archives
+ * - .conf files are emited as "conf" events
+ * - all other config files are return at promise resolution
+ * 
+ */
 export class UnPacker extends EventEmitter {
     constructor() {
         super();
@@ -40,9 +45,11 @@ export class UnPacker extends EventEmitter {
 
     /**
      * extracts needed config files from archive
+     *  - .conf files are emited as events during extraction so they can be parsed asyncronously
+     *  - all other files returned at end in promise completion to be added to the conf tree
      * @param input path/file to .conf|.ucs|.qkview|.gz
      */
-    async stream(input: string): Promise<ConfigFiles> {
+    async stream(input: string): Promise<ConfigFile[]> {
 
         /**
          * look at streaming specific files from the archive without having to load the entire thing into memory
@@ -73,9 +80,10 @@ export class UnPacker extends EventEmitter {
 
                 logger.debug(`got .conf file [${input}], size [${size}]`)
 
-                this.emit('file-extracted', { fileName: filePath.base, size, content })
+                this.emit('conf', { fileName: filePath.base, size, content })
 
                 // return [{ fileName: filePath.base, size, content }];
+                return
 
             } catch (e) {
                 logger.error('not able to read file', e.message);
@@ -89,34 +97,42 @@ export class UnPacker extends EventEmitter {
             logger.debug(`detected file: [${input}], size: [${size}]`)
 
             const extract = tar.extract();
-            const files: ConfigFiles = []
+            const files: ConfigFile[] = []
 
             return new Promise((resolve, reject) => {
                 extract.on('entry', (header, stream, next) => {
                     let captureFile = false;
                     const contentBuffer = []
+                    // detect the files we want and set capture flag
                     if (fileFilter(header.name) && header.type === 'file') {
                         captureFile = true;
                     } else {
+                        // not the file we want, so call the next entry
                         next()
                     }
                     stream.on('data', (chunk) => {
+                        // if this is a file we want, buffer it's content
                         if (captureFile) {
                             contentBuffer.push(chunk);
                         }
                     });
                     stream.on('end', () => {
                         if (captureFile) {
-                            this.emit('file-extracted', {
-                                fileName: header.name,
-                                size: header.size,
-                                content: contentBuffer.join('')
-                            })
-                            files.push({
-                                fileName: header.name,
-                                size: header.size,
-                                content: contentBuffer.join('')
-                            })
+                            if((header.name as string).endsWith('.conf')) {
+                                // only emit conf files for events
+                                this.emit('conf', {
+                                    fileName: header.name,
+                                    size: header.size,
+                                    content: contentBuffer.join('')
+                                })
+                            } else {
+                                // buffer all other files to be returned when complete
+                                files.push({
+                                    fileName: header.name,
+                                    size: header.size,
+                                    content: contentBuffer.join('')
+                                })
+                            }
                         }
                         next();
                     });
@@ -124,6 +140,7 @@ export class UnPacker extends EventEmitter {
                 });
 
                 extract.on('finish', () => {
+                    // we finished processing, .conf file should have been emited as events, so now resolve the promise with all the other config files
                     return resolve(files);
                 });
                 extract.on('error', err => {
@@ -145,18 +162,16 @@ export class UnPacker extends EventEmitter {
 }
 
 /**
- * filter for decompress function that filters files we want
- * @param file decompress file output
+ * filters files we want
+ * @param file name as string
  * @param boolean if file match -> return (pass filter)
  */
 export function fileFilter(name: string): boolean {
 
     /**
-     * I'm sure this could be done waaay cleaner, but I figured this was a nice way
-     *  to spell it out for others
+     * list of RegEx's to find the files we need
      * 
-     * When these return true for the item passed in, it means the filter will return it
-     *  
+     * only one has to pass to return true
      */
     const fileRegexs: RegExp[] = [
         /^config\/bigip.conf$/, //
