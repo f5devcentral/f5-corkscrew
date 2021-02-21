@@ -11,26 +11,12 @@
 import path from "path";
 import * as fs from 'fs';
 import logger from "./logger";
-// import decompress from 'decompress';
 import zlib from 'zlib';
 import tar from 'tar-stream'
 import { EventEmitter } from "events";
+import { multilineRegExp } from "./regex";
+import { ConfigFile } from "./models";
 
-
-/**
- * defines the structure of the archive file extraction or single bigip.conf
- */
-export type ConfigFile = {
-    fileName: string,
-    size: number,
-    content: string
-}
-
-export type fsStreamHeader = {
-    name: string,
-    size: number,
-    type: 'file' | 'directory'
-}
 
 /**
  * async method for extracting config files from archives
@@ -49,7 +35,10 @@ export class UnPacker extends EventEmitter {
      *  - all other files returned at end in promise completion to be added to the conf tree
      * @param input path/file to .conf|.ucs|.qkview|.gz
      */
-    async stream(input: string): Promise<ConfigFile[]> {
+    async stream(input: string): Promise<{
+        files: ConfigFile[],
+        size: number
+    }> {
 
         /**
          * look at streaming specific files from the archive without having to load the entire thing into memory
@@ -119,19 +108,32 @@ export class UnPacker extends EventEmitter {
                     stream.on('end', () => {
                         if (captureFile) {
                             if((header.name as string).endsWith('.conf')) {
-                                // only emit conf files for events
+
+                                // emit conf files
                                 this.emit('conf', {
                                     fileName: header.name,
                                     size: header.size,
                                     content: contentBuffer.join('')
                                 })
+
+                            } else if ((header.name as string).endsWith('.xml')) {
+
+                                // emit .xml stats files
+                                this.emit('stat', {
+                                    fileName: header.name,
+                                    size: header.size,
+                                    content: contentBuffer.join('')
+                                })
+
                             } else {
+
                                 // buffer all other files to be returned when complete
                                 files.push({
                                     fileName: header.name,
                                     size: header.size,
                                     content: contentBuffer.join('')
                                 })
+
                             }
                         }
                         next();
@@ -141,7 +143,10 @@ export class UnPacker extends EventEmitter {
 
                 extract.on('finish', () => {
                     // we finished processing, .conf file should have been emited as events, so now resolve the promise with all the other config files
-                    return resolve(files);
+                    return resolve({
+                        files,
+                        size
+                    });
                 });
                 extract.on('error', err => {
                     return reject(err);
@@ -168,19 +173,61 @@ export class UnPacker extends EventEmitter {
  */
 export function fileFilter(name: string): boolean {
 
+
+    /**
+     * breakind down this bigger regex for explaination
+     * added to list of regex's below
+     */
+    const allConfs = multilineRegExp([
+        // base /config directory
+        /^config/,
+        // optional /partitions directory including /partition name directory
+        /(?:\/partitions\/[\w-]+?)?/,
+        // any bigip*.conf file
+        /\/bigip(?:[\w-]*).conf$/
+    ], undefined)
+
+
+    /**
+     * qkviews do NOT includes private keys
+     */
+    const fileStoreFilesQkview = multilineRegExp([
+        // base directory
+        /^config\/filestore\/files_d/,
+        // /partition folder
+        /\/[\w]+?/,
+        // all directories excluding "epsec_pacakage_d" or "datasync_update_file_d"
+        /\/(?!epsec_package_d|datasync_update_file_d)[\w]+?/,
+        // any file/suffix
+        /\/.+?$/
+    ], undefined);
+
+    /**
+     * UCS private keys unless excluded at generation
+     */
+    const fileStoreFilesUcs = multilineRegExp([
+        // base directory
+        /^var\/tmp\/filestore_temp\/files_d/,
+        // /partition folder
+        /\/[\w]+?/,
+        // all directories excluding "epsec_pacakage_d" or "datasync_update_file_d"
+        /\/(?!epsec_package_d|datasync_update_file_d)[\w]+?/,
+        // any file/suffix
+        /\/.+?$/
+    ], undefined);
+
     /**
      * list of RegEx's to find the files we need
      * 
      * only one has to pass to return true
      */
     const fileRegexs: RegExp[] = [
-        /^config\/bigip.conf$/, //
-        /^config\/bigip_base.conf$/,
-        /^config\/partitions\/.+?$/,
-        /^config\/bigip_gtm.conf$/,
-        /^config\/bigip.license$/,
-        /^config\/profile_base.conf$/,
-        /^var\/tmp\/filestore_temp\/files_d\/.+?$/
+        allConfs,                           // all .conf files (including partitions)
+        /^config\/bigip.license$/,          // license file
+        /^config\/profile_base.conf$/,      // default profiles
+        fileStoreFilesUcs,                  // certs/keys (ucs)
+        fileStoreFilesQkview,               // certs/keys (qkviews)
+        /^\w+.xml$/                         // qkview stats files
     ]
     
     return fileRegexs.some( rx => rx.test(name));

@@ -24,25 +24,57 @@ describe('instantiation unPacker', async function () {
 
     it(`stream unPack ucs`, async () => {
 
-        // const startTime = process.hrtime.bigint();
-        const eventFiles = []
+        const confFiles = []
+        const statFiles = []
         const unPacker = new UnPacker();
 
-        unPacker.on('file-extracted', dFile => eventFiles.push(dFile))
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
 
         await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
             .then(respFiles => {
                 assert.ok(
-                    eventFiles.length > 3,
+                    confFiles.length > 3,
                     'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
                 )
-                assert.ok(typeof eventFiles[0].fileName === 'string')
-                assert.ok(typeof eventFiles[0].size === 'number')
-                assert.ok(typeof eventFiles[0].content === 'string')
-                // assert.deepStrictEqual(respFiles, eventFiles, 'events should match async output')
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
+
+                // respFiles should also have the same structure
+                assert.ok(typeof respFiles[0].fileName === 'string')
+                assert.ok(typeof respFiles[0].size === 'number')
+                assert.ok(typeof respFiles[0].content === 'string')
             })
 
-        // console.log('processing time: ', Number(process.hrtime.bigint() - startTime) / 1000000)
+    });
+
+
+    it(`stream unPack qkview`, async () => {
+
+        const confFiles = []
+        const statFiles = []
+        const unPacker = new UnPacker();
+
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview'))
+            .then(respFiles => {
+                assert.ok(
+                    confFiles.length > 3,
+                    'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
+                )
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
+
+                // respFiles should also have the same structure
+                assert.ok(typeof respFiles[0].fileName === 'string')
+                assert.ok(typeof respFiles[0].size === 'number')
+                assert.ok(typeof respFiles[0].content === 'string')
+            })
+
     });
 
 

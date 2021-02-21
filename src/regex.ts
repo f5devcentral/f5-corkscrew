@@ -45,7 +45,7 @@ export class RegExTree {
      *  (apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom), 
      *  then "{" and ending "}" just before next partent object
      */
-    private parentObjectsRegex = this.multilineRegExp([
+    private parentObjectsRegex = multilineRegExp([
         // parent level object beginnings with trailing space
         /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,  
         // include any child object definitions and object name
@@ -155,14 +155,17 @@ export class RegExTree {
     }
 
 
-    /**
-     * used to produce final regex from multiline/commented regex
-     * @param regs regex pieces in array
-     * @param opts regex options (g/m/s/i/y/u/s)
-     */
-    private multilineRegExp(regs, opts: string) {
-        return new RegExp(regs.map(reg => reg.source).join(''), opts);
-    }
+}
+
+
+
+/**
+ * combines multi-line commented regex final regex
+ * @param regs regex pieces in array
+ * @param opts regex options (g/m/s/i/y/u/s)
+ */
+export function multilineRegExp(regs: RegExp[], opts: string): RegExp {
+    return new RegExp(regs.map(reg => reg.source).join(''), opts);
 }
 
 

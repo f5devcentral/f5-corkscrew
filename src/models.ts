@@ -46,11 +46,12 @@ export type Explosion = {
     hostname?: string,
     inputFileType: string,
     config: {
-        sources: ConfigFiles[],
+        sources: ConfigFile[],
         apps: TmosApp[],
         base: string[]
     },
     stats: Stats,
+    fileStore?: ConfigFile[]
     logs: string[]
 }
 
@@ -101,6 +102,7 @@ export type Stats = {
     objectCount?: number,
     // lineCount?: number,
     objects?: ObjStats
+    sourceSize?: number;
 }
 
 /**
@@ -177,9 +179,9 @@ export type ParseResp = {
 /**
  * defines the structure of the archive file extraction or single bigip.conf
  */
-export type ConfigFiles = {
+export type ConfigFile = {
     fileName: string,
     size: number,
-    content?: string
+    content: string
 }
 

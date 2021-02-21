@@ -108,9 +108,11 @@ function archiveFileFilter(file: decompress.File) {
     if (/^config\/bigip.conf$/.test(file.path) && file.type === 'file') { return true }
     if (/^config\/bigip_base.conf$/.test(file.path) && file.type === 'file') { return true }
     if (/^config\/partitions\/.+?$/.test(file.path) && file.type === 'file') { return true }
-    if (/^config\/bigip_gtm.conf$/.test(file.path) && file.type === 'file') { return true }
-    if (/^config\/bigip.license$/.test(file.path) && file.type === 'file') { return true }
-    if (/^config\/profile_base.conf$/.test(file.path) && file.type === 'file') { return true }
-    if (/^var\/tmp\/filestore_temp\/files_d\/.+?$/.test(file.path) && file.type === 'file') { return true }
+
+    // added these with the unPackerStream creation, but then realized that down stream functions of this flow will not be able to handle the new files
+    // if (/^config\/bigip_gtm.conf$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^config\/bigip.license$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^config\/profile_base.conf$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^var\/tmp\/filestore_temp\/files_d\/.+?$/.test(file.path) && file.type === 'file') { return true }
 
 }
