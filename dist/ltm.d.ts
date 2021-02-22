@@ -36,30 +36,30 @@ export default class BigipConfig extends EventEmitter {
     /**
      * new parsing fuction to work on list of files from unPacker
      */
-    parse(): number;
+    parse(): Promise<number>;
     /**
      * return list of applications
      *
      * @return array of app names
      * @example ['/Common/app1_80t_vs', '/tenant1/app4_t443_vs']
      */
-    appList(): string[];
+    appList(): Promise<string[]>;
     /**
      * returns all details from processing
      *
      * -
      */
-    explode(): Explosion;
+    explode(): Promise<Explosion>;
     /**
      * Get processing logs
      */
-    logs(): string[];
+    logs(): Promise<string[]>;
     /**
      * extracts app(s)
      * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
-    apps(app?: string): any[];
+    apps(app?: string): Promise<any[]>;
     /**
      * extract tmos config version from first line
      * ex.  #TMSH-VERSION: 15.1.0.4

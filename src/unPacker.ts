@@ -1,3 +1,13 @@
+/*
+ * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
+ * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
+ * may copy and modify this software product for its internal business purposes.
+ * Further, Licensee may upload, publish and distribute the modified version of
+ * the software product on devcentral.f5.com.
+ */
+
+'use strict';
+
 import path from "path";
 import * as fs from 'fs';
 import logger from "./logger";
@@ -19,7 +29,17 @@ export type ConfigFiles = {
   */
 export async function unPacker (input: string):Promise<ConfigFiles> {
 
-    // part input to usable pieces
+    /**
+     * look at streaming specific files from the archive without having to load the entire thing into memory
+     * 
+     * https://github.com/mafintosh/tar-fs
+     * https://github.com/mafintosh/gunzip-maybe
+     * https://github.com/mafintosh/tar-stream
+     * https://github.com/npm/node-tar#readme
+     * 
+     */
+
+    // parse input to usable pieces
     const filePath = path.parse(input);
 
     /**
@@ -33,7 +53,6 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
             const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
             // try to read file contents
             const content = fs.readFileSync(path.join(filePath.dir, filePath.base), 'utf-8');
-            // const fileName  = path.join(filePath.base, filePath.ext);
             
             logger.debug(`got .conf file [${input}], size [${size}]`)
 
@@ -41,21 +60,14 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
 
         } catch (e) {
             logger.error('not able to read file', e.message);
-            return
-            // Promise.reject(`not able to read file => ${e.message}`);
+            throw new Error(`not able to read file => ${e.message}`);
         }
 
 
     } else if (filePath.ext === '.gz' || filePath.ext === '.ucs' || filePath.ext === '.qkview') {
 
-        
-        try {
-            const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
-            logger.debug(`detected file: [${input}], size: [${size}]`)
-        } catch (e) {
-            logger.error(`file ${input}, is not readable: ${e.messge}`);
-            return;
-        }
+        const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
+        logger.debug(`detected file: [${input}], size: [${size}]`)
 
         return await decompress(input, {
             filter: file => archiveFileFilter(file)
@@ -71,8 +83,7 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
         
         const msg = `file type of "${filePath.ext}", not supported, try (.conf|.ucs|.kqview|.gz)`
         logger.error(msg);
-        // Promise.reject(new Error(msg));
-        return;
+        throw new Error(`not able to read file => ${msg}`);
     }
 
 }

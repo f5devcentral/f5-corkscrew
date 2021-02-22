@@ -19,7 +19,18 @@
  * @returns array of discovered pools in irule
  */
 export function poolsInRule (rule: string, existingPools?: string[]): string[] | string[][] {
-    const poolReg = /\n[\s]*[^#]pool\s([$/A-Za-z_][$/\w._-]+[\s\w\d.]+)/g;
+    // const poolReg = /\n[\s]*[^#]pool\s([$/A-Za-z_][$/\w._-]+[\s\w\d.]+)/g;  // regex with $var
+    /**
+     * breakdown:  
+     *  - new line
+     *  - optional spaces
+     *  - exclude match if # found
+     *  - "pool "
+     *  - object name starting with [/A-Za-z_]
+     *  - rest of the object name (can now include numbers...): [/\w._-]+
+     *  - followed my any space/word/digit
+     */
+    const poolReg = /\n[\s]*[^#]pool\s([/A-Za-z_][/\w._-]+[\s\w\d.]+)/g;
 
     const rawPools = rule.match(poolReg);
     // let newPools: string[][]; // array of strings or arrays with strings
@@ -48,28 +59,32 @@ export function poolsInRule (rule: string, existingPools?: string[]): string[] |
             return item.split(" ");
             // newPools.push(item.split(""));
 
-        } else if (item.includes("$")) {
+        // } else if (item.includes("$")) {
 
-            item = item.replace('$', '');   // remove leading '$'
+        // /**
+        //  * this section was an attempt to discover if the pool reference was a variable, and if a variable, then try to find what that variable was assigned.  This led to unpredictable results with big complicated irules, so for now, removing, will look into searching the irule for a list of known object names like pools/datagroups instead of using regex to identify them (search irule for every KNOWN pool name)
+        //  */
 
-            /**
-             * the mateched pool destination is a variable, so
-             * search the irule again, looking for that variable definition
-             *  - will return last match after cleaning
-             */
-            const regx = new RegExp("\\n[\\s]*[^#]set\\s" + item + "\\s(.+?)\\s", "g");
+        //     item = item.replace('$', '');   // remove leading '$'
+
+        //     /**
+        //      * the mateched pool destination is a variable, so
+        //      * search the irule again, looking for that variable definition
+        //      *  - will return last match after cleaning
+        //      */
+        //     const regx = new RegExp("\\n[\\s]*[^#]set\\s" + item + "\\s(.+?)\\s", "g");
             
-            // look for item in orginal irule, if found, return last match
-            // let poolVar = rule.match(regx);
-            let poolVar = rule.match(regx)?.pop();
-            if(poolVar) {
-                poolVar = poolVar.trim();   // trim leading/ending whitespace
-                // poolVar = poolVar[0].replace(/^\s+|\s+$/g, '');  // regex method
+        //     // look for item in orginal irule, if found, return last match
+        //     // let poolVar = rule.match(regx);
+        //     let poolVar = rule.match(regx)?.pop();
+        //     if(poolVar) {
+        //         poolVar = poolVar.trim();   // trim leading/ending whitespace
+        //         // poolVar = poolVar[0].replace(/^\s+|\s+$/g, '');  // regex method
 
-                // split on spaces, return last element
-                // "set html-pool web1Pool" -> web1Pool
-                return [poolVar.split(" ").pop()];
-            }
+        //         // split on spaces, return last element
+        //         // "set html-pool web1Pool" -> web1Pool
+        //         return [poolVar.split(" ").pop()];
+        //     }
         } else {
             return [item];
         }
@@ -123,17 +138,3 @@ export function poolsInPolicy (ltp: string): string[] {
 
     return newPools;
 }
-
-
-// export function poolsInAP (ap: string, pools?: string[]): string[] {
-//     console.log('called poolsInAP to get referenced ltm pools in a Access Policy (APM)');
-
-//     //working on getting an access policy together
-    
-// }
-
-
-
-// exports.poolsInRule = poolsInRule;
-// exports.poolsInLTP = poolsInLTP;
-// exports.poolsInAP = poolsInAP;

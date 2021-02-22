@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 'use strict';
 
@@ -22,10 +23,11 @@ describe('New parse function tests', async () => {
      * 
      * This updated function will get factored back into the main ltm class so events can be emitted for other actions, like unpack and app extraction
      */
+    console.log('NOT PART OF CORE FUNCTIONALITY, HERE FOR DEV')
     
     it(`unpack config from mini ucs`, async () => {
         
-        unPacked = await unPacker(path.join(__dirname, "./mini_ucs.tar.gz"));
+        unPacked = await unPacker(path.join(__dirname, 'artifacts', 'mini_ucs.tar.gz'));
         const converted = [ unPacked[0].fileName, unPacked[2].size, unPacked[4].fileName ];
         const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf' ];
         assert.deepStrictEqual(converted, expected)
@@ -45,10 +47,10 @@ describe('New parse function tests', async () => {
         assert.deepStrictEqual('x', 'x');
     });
     
-    it(`tmos config file to json tree - monster config`, function() {
+    // it(`tmos config file to json tree - monster config`, function() {
         
-        assert.deepStrictEqual('x', 'x');
-    });
+    //     assert.deepStrictEqual('x', 'x');
+    // });
 });
 
 

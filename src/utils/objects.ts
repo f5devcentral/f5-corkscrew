@@ -136,7 +136,7 @@ export function simpleMergeDeep(target: unknown, ...sources: any): unknown {
  * @param path 
  * @param value 
  */
-export function setNestedKey(obj: unknown, path: string[], value: string): unknown {
+export function setNestedKey(obj: unknown, path: string[], value: unknown): unknown {
 
     /**
      * https://stackoverflow.com/questions/18936915/dynamically-set-property-of-nested-object
@@ -233,7 +233,7 @@ export function deepGet(path: string[], obj: unknown): unknown {
  * @param key to find
  * @param return [{ path: string, key: string, value: string }]
  */
-export function pathValueFromKey(obj: BigipConfObj, key: string): RetObj {
+export function pathValueFromKey(obj: unknown, key: string): RetObj {
 
     const results: RetObj[] = [];
 

@@ -3,12 +3,18 @@
 'use strict';
 
 import assert from 'assert';
-import balanced from 'balanced-match';
+// import balanced from 'balanced-match';
 // import { assert } from 'console';
 
-import { deepMergeObj, setNestedKey, tmosChildToObj, getPathOfValue, deepGet, pathValueFromKey } from '../utils/objects'
+import { 
+  deepMergeObj, 
+  setNestedKey, 
+  getPathOfValue, 
+  deepGet, 
+  pathValueFromKey 
+} from '../utils/objects'
 
-import { simpleVSbody_asJson, simpleVStmosBody, vsApp3 } from './json_objects_data'
+// import { simpleVSbody_asJson, simpleVStmosBody, vsApp3 } from './json_objects_data'
 
 
 describe('Testing json object manipulation functions', function() {
@@ -281,18 +287,18 @@ describe('Testing json object manipulation functions', function() {
 });
 
 
-describe('Testing tmos to json conversions', function() {
+// describe('Testing tmos to json conversions', function() {
 
-    it(`simple tmos vs text body to json - iterative`, function() {
-        // outline
+//     it(`simple tmos vs text body to json - iterative`, function() {
+//         // outline
 
-        // const value = tmosChildToObj(simpleVStmosBody)
+//         // const value = tmosChildToObj(simpleVStmosBody)
 
-        // const exptected = simpleVSbody_asJson;
+//         // const exptected = simpleVSbody_asJson;
         
-        // assert.deepStrictEqual(exptected, value);
-    });
-});
+//         // assert.deepStrictEqual(exptected, value);
+//     });
+// });
 
 
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
@@ -165,4 +166,157 @@
             "protocol": "inspector",
         },
     ]
+=======
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha json_objects tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/json_objects.test.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha pools tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/pools.test.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "process private files",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/outside_files.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha devCloud config tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/devCloud_config.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha devCloud ucs tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/devCloud_ucs.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha devCloud ALL config tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/private/devCloud_ALL_bigip.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha unPacker tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/unPacker.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha tmosParser.tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/tmosParser.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha All",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/tests/ALL.tests.ts",
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "protocol": "inspector",
+        }
+    ]
+>>>>>>> 2325a3f03247cfccb659e70a0ddb662094ec987b
 }
