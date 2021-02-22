@@ -1,9 +1,8 @@
 import { boolean } from "yargs";
 
 export function parseRule( cmdout: string ) {
-    ParseRuleStats(cmdout.split("\n"))
-    //ParseRuleStats(cmdout)
-    return("dfsa")
+    
+    return ParseRuleStats(cmdout.split("\n"))
 }
 function ParseRuleStats(myArray: Array<string>) {
     // const regex = /Rule\sEvent:\s+(.*)/g;
