@@ -1,6 +1,6 @@
 import { boolean } from "yargs";
 
-export function parseVS( cmdout: string) {
+export function parseVS( cmdout: string ) {
      
     const obj = {}
 
@@ -31,7 +31,6 @@ function mapListDic(myArray: Array<string>) {
     }
 function mapListDic1(myArray: Array<string>, separator, traffic=false) {
     const myMap = {};
-    const obj1 ={}
     for (let value of myArray) {
         value = value.trim().replace(/\s\s+/g, ' ');
         const ls = value.split(separator);

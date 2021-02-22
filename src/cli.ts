@@ -62,6 +62,15 @@ yargs
     // console.log(argv.file);
     explode(argv.file)
 })
+.command('test', 'test', (yargs) => {
+    yargs
+    .positional('file', {
+        describe: '.conf|ucs|kqview to explode'
+    });
+}, (argv: any) => {
+    // console.log(argv.file);
+    explode(argv.file)
+})
 // .command()
 .demandCommand(1, 'A command is required')
 .wrap(120)
