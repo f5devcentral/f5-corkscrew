@@ -29,10 +29,10 @@ console.log('outFile', outFile);
 
 describe('explode devCloud qkview tests', async function() {
     
-    let device;
+    let device: BigipConfig;
     let log;
     let err;
-    it(`instantiate class, load configs`, async function() {
+    it(`instantiate class, load/parse configs - async`, async function() {
         this.timeout(300000) // 5 minute timeout
         
         device = new BigipConfig();
@@ -52,6 +52,7 @@ describe('explode devCloud qkview tests', async function() {
         .then( x => {
             // just here for a spot to put a breaking point
             assert.deepStrictEqual(x, undefined)
+            fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
         })
         .catch( y => {
             err = y;
@@ -124,21 +125,21 @@ describe('explode devCloud qkview tests', async function() {
         assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
     });
 
-    it(`explode config output`, async function() {
+    // it(`explode config output`, async function() {
 
-        const explode = await device.explode()
-        .then( exp => {
-            return exp
-        })
-        .catch( err => {
-            debugger;
-        });
+    //     const explode = await device.explode()
+    //     .then( exp => {
+    //         return exp
+    //     })
+    //     .catch( err => {
+    //         debugger;
+    //     });
 
-        const bigLog = logOutput(device.configObject, explode);
+    //     // const bigLog = logOutput(device.configObject, explode);
 
-        fs.writeFileSync(outFile, bigLog);
+    //     // fs.writeFileSync(outFile, bigLog);
 
-        assert.ok(explode);
-    });
+    //     assert.ok(explode);
+    // });
 });
 

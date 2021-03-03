@@ -19,3 +19,5 @@ tmp_*
 settings.json
 *.ucs
 *.qkview
+# exclude the xml to json stats output
+*.xml.json
