@@ -9,6 +9,20 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.8.0] - (03-25-2021)
+
+### Added
+
+- certificate/key extraction
+
+### Modified
+
+- Core parsing/extraction process is now asyncronous
+  - emits config and stats files during processing
+  - Once config files are done processing, all other files are processed into the config tree
+
+---
+
 ## [0.7.0] - (01-25-2021)
 
 ### Modified

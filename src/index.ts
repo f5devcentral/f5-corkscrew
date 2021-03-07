@@ -15,14 +15,17 @@ export * from './models';
 
 export { ConfigFiles } from './unPacker'
 export { TmosRegExTree } from './regex'
+// export { BigipConfig } from './ltm'
+
+
 
 // export default bigipConfig = _BigipConfig;
-// export default BigipConfig;
+export default BigipConfig;
 
 
 
-// import { BigipConfig } from './ltm';
-// import { poolsInLTP, poolsInRule } from './pools';
+import BigipConfig from './ltm';
+// // import { poolsInLTP, poolsInRule } from './pools';
 
 // module.exports = {
 //     BigipConfig,

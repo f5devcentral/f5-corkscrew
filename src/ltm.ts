@@ -14,7 +14,7 @@ import { EventEmitter } from 'events';
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
 import { nestedObjValue } from './utils/objects'
-import { BigipConfObj, ConfigFile, Explosion, Stats } from './models'
+import { BigipConfObj, ConfigFile, Explosion, Stats, xmlStats } from './models'
 import { deepMergeObj } from './utils/objects'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
@@ -52,7 +52,7 @@ export default class BigipConfig extends EventEmitter {
     private stats: Stats = {
         objectCount: 0,
     };
-    deviceXmlStats = {};
+    deviceXmlStats: xmlStats = {};
     defaultProfileBase: ConfigFile;
     license: ConfigFile;
     fileStore: ConfigFile[] = [];
@@ -109,6 +109,8 @@ export default class BigipConfig extends EventEmitter {
 
         // end processing time, convert microseconds to miliseconds
         this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+
+        return;
     }
 
 
@@ -182,11 +184,14 @@ export default class BigipConfig extends EventEmitter {
 
         this.emit('parseFile', file.fileName)
 
-        // xml2js.parseConfPromises(file.content)
-        await xml2json(file.content)
-            .then(out => {
-                this.deviceXmlStats[file.fileName] = out;
-            });
+        // was parsing all files for ALL stats, but it ends up being 100sMb of data
+        // so, just getting some interesting stuff for now
+        if (file.fileName === 'mcp_module.xml'){
+            await xml2json(file.content)
+                .then(out => {
+                    this.deviceXmlStats[file.fileName] = out;
+                });
+        }
 
     }
 

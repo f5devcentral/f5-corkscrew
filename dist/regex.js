@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegExTree = void 0;
+exports.multilineRegExp = exports.RegExTree = void 0;
 const logger_1 = __importDefault(require("./logger"));
 // /**
 //  * This file servers as the central place for all regex's, we'll call it a regex tree
@@ -45,7 +45,7 @@ class RegExTree {
          *  (apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom),
          *  then "{" and ending "}" just before next partent object
          */
-        this.parentObjectsRegex = this.multilineRegExp([
+        this.parentObjectsRegex = multilineRegExp([
             // parent level object beginnings with trailing space
             /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,
             // include any child object definitions and object name
@@ -144,16 +144,17 @@ class RegExTree {
         }
         return this.regexTree;
     }
-    /**
-     * used to produce final regex from multiline/commented regex
-     * @param regs regex pieces in array
-     * @param opts regex options (g/m/s/i/y/u/s)
-     */
-    multilineRegExp(regs, opts) {
-        return new RegExp(regs.map(reg => reg.source).join(''), opts);
-    }
 }
 exports.RegExTree = RegExTree;
+/**
+ * combines multi-line commented regex final regex
+ * @param regs regex pieces in array
+ * @param opts regex options (g/m/s/i/y/u/s)
+ */
+function multilineRegExp(regs, opts) {
+    return new RegExp(regs.map(reg => reg.source).join(''), opts);
+}
+exports.multilineRegExp = multilineRegExp;
 /**
  * returns full number without decimals so it can be compared
  * @param ver tmos version in full x.x.x.x format

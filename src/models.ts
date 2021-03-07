@@ -34,6 +34,35 @@ export type BigipConfObj = {
 }
 
 
+export type xmlStats = {
+    'mcp_module.xml'?: {
+        "Qkproc": {
+            "admin_ip": unknown
+            "system_information": unknown
+            "cert_status_object": unknown
+            "system_module": unknown
+            "tmm_stat": unknown
+            "traffic_group": unknown
+            "virtual_address": unknown
+            "virtual_address_stat": unknown
+            "virtual_server": unknown
+            "virtual_server_stat": unknown,
+            "interface": unknown,
+            "interface_stat": unknown,
+            "pool": unknown,
+            "pool_member": unknown,
+            "pool_member_metadata": unknown,
+            "pool_member_stat": unknown,
+            "pool_stat": unknown,
+            "profile_dns_stat": unknown,
+            "profile_http_stat": unknown,
+            "profile_tcp_stat": unknown,
+            "rule_stat": unknown,
+        }
+    }
+
+
+}
 
 
 /**

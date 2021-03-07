@@ -57,6 +57,8 @@ function unPacker(input) {
          * https://github.com/mafintosh/tar-stream
          * https://github.com/npm/node-tar#readme
          *
+         * https://stackoverflow.com/questions/19978452/how-to-extract-single-file-from-tar-gz-archive-using-node-js
+         *
          */
         // parse input to usable pieces
         const filePath = path_1.default.parse(input);
@@ -82,6 +84,7 @@ function unPacker(input) {
             logger_1.default.debug(`detected file: [${input}], size: [${size}]`);
             return yield decompress_1.default(input, {
                 filter: file => archiveFileFilter(file)
+                // filter: file => (fileFilter(file.path) && file.type === 'file')
             })
                 .then(extracted => {
                 return extracted.map(x => {
@@ -116,8 +119,13 @@ function archiveFileFilter(file) {
     if (/^config\/bigip_base.conf$/.test(file.path) && file.type === 'file') {
         return true;
     }
-    if (/^config\/partitions\/.+?/.test(file.path) && file.type === 'file') {
+    if (/^config\/partitions\/.+?$/.test(file.path) && file.type === 'file') {
         return true;
     }
+    // added these with the unPackerStream creation, but then realized that down stream functions of this flow will not be able to handle the new files
+    // if (/^config\/bigip_gtm.conf$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^config\/bigip.license$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^config\/profile_base.conf$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^var\/tmp\/filestore_temp\/files_d\/.+?$/.test(file.path) && file.type === 'file') { return true }
 }
 //# sourceMappingURL=unPacker.js.map

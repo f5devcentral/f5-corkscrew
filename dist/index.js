@@ -9,6 +9,9 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./ltm"), exports);
 // import { 
@@ -19,4 +22,8 @@ __exportStar(require("./ltm"), exports);
 //     TmosApp,
 // } from './models'
 __exportStar(require("./models"), exports);
+// export { BigipConfig } from './ltm'
+// export default bigipConfig = _BigipConfig;
+exports.default = ltm_1.default;
+const ltm_1 = __importDefault(require("./ltm"));
 //# sourceMappingURL=index.js.map
