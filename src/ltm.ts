@@ -45,16 +45,43 @@ export default class BigipConfig extends EventEmitter {
      * placeholder for future fully jsonified tmos config
      */
     public configFullObject: BigipConfObj = {};
-    public tmosVersion: string | undefined; // move to stats tree...
+    /**
+     * tmos version of the config file
+     */
+    public tmosVersion: string | undefined;
+    /**
+     * hostname of the source device
+     */
     public hostname: string | undefined;
+    /**
+     * input file type (.conf/.ucs/.qkview/.tar.gz)
+     */
     public inputFileType: string;
+    /**
+     * tmos version specific regex tree for abstracting applications
+     */
     private rx: TmosRegExTree | undefined;
+    /**
+     * corkscrew processing stats object
+     */
     private stats: Stats = {
         objectCount: 0,
     };
+    /**
+     * stats information extracted from qkview xml files
+     */
     deviceXmlStats: xmlStats = {};
+    /**
+     * default profile settings
+     */
     defaultProfileBase: ConfigFile;
+    /**
+     * bigip license file
+     */
     license: ConfigFile;
+    /**
+     * tmos file store files, which include certs/keys/external_monitors/...
+     */
     fileStore: ConfigFile[] = [];
 
     constructor() {
