@@ -15,8 +15,8 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { unPacker } from '../unPacker'
-import { UnPacker } from '../unPackerStream'
+import { unPacker } from '../src/unPacker'
+import { UnPacker } from '../src/unPackerStream'
 
 describe('instantiation unPacker', async function () {
 
@@ -31,22 +31,24 @@ describe('instantiation unPacker', async function () {
         unPacker.on('conf', conf => confFiles.push(conf))
         unPacker.on('stat', stat => statFiles.push(stat))
 
-        const respFiles = await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
-            // .then(respFiles => {
-            // })
-            
-            assert.ok(
-                confFiles.length > 3,
-                'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
-            )
-            assert.ok(typeof confFiles[0].fileName === 'string')
-            assert.ok(typeof confFiles[0].size === 'number')
-            assert.ok(typeof confFiles[0].content === 'string')
-
-            // respFiles should also have the same structure
-            assert.ok(typeof respFiles[0].fileName === 'string')
-            assert.ok(typeof respFiles[0].size === 'number')
-            assert.ok(typeof respFiles[0].content === 'string')
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
+            .then(respFiles => {
+                assert.ok(
+                    confFiles.length > 3,
+                    'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
+                )
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
+    
+                // respFiles should also have the same structure
+                assert.ok(typeof respFiles[0].fileName === 'string')
+                assert.ok(typeof respFiles[0].size === 'number')
+                assert.ok(typeof respFiles[0].content === 'string')
+            })
+            .catch( err => {
+                debugger;
+            })
     });
 
 
@@ -74,6 +76,9 @@ describe('instantiation unPacker', async function () {
                 assert.ok(typeof respFiles[0].content === 'string')
                 assert.ok(typeof respFiles[0].size === 'number')
             })
+            .catch( err => {
+                debugger;
+            })
 
     });
 
@@ -87,6 +92,9 @@ describe('instantiation unPacker', async function () {
                 assert.ok(typeof file[0].size === 'number')
                 assert.ok(typeof file[0].content === 'string')
                 assert.deepStrictEqual(file[0].content, expected);
+            })
+            .catch( err => {
+                debugger;
             })
     });
 

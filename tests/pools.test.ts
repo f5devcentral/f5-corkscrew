@@ -6,7 +6,7 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { poolsInPolicy, poolsInRule } from '../pools';
+import { poolsInPolicy, poolsInRule } from '../src/pools';
 
 
 const iRuleWithPools = fs.readFileSync(path.join(__dirname, 'artifacts', 'pools.irule'), "utf-8");

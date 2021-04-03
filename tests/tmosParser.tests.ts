@@ -6,8 +6,8 @@ import assert from 'assert';
 import * as path from 'path';
 // import fetch from 'fetch'
 
-import { Parser } from '../tmosParse2';
-import { unPacker } from '../unPacker';
+import { Parser } from '../src/tmosParse2';
+import { unPacker } from '../src/unPacker';
 
 let unPacked;
 describe('New parse function tests', async () => {

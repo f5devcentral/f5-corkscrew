@@ -12,7 +12,7 @@ import {
   getPathOfValue, 
   deepGet, 
   pathValueFromKey 
-} from '../utils/objects'
+} from '../src/utils/objects'
 
 // import { simpleVSbody_asJson, simpleVStmosBody, vsApp3 } from './json_objects_data'
 
