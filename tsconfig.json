@@ -1,24 +1,23 @@
 {
     "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "removeComments": false,
-      "resolveJsonModule": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-    //   "strict": true,
-      "declaration": true,
-      "sourceMap": true,
-      "rootDir": "src",
-      "outDir": "dist"
+        "target": "ES6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "removeComments": false,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        //   "strict": true,
+        "declaration": true,
+        "sourceMap": true,
+        "rootDir": "src",
+        "outDir": "dist"
     },
     "include": [
         "src/**/*"
     ],
     "exclude": [
         "node_modules",
-        "src/tests",
         ".vscode",
         "dist"
     ]

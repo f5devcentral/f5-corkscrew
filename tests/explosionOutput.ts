@@ -1,4 +1,4 @@
-import { BigipConfObj, Explosion } from '../models'
+import { BigipConfObj, Explosion } from '../src/models'
 
 export function logOutput (configObject: BigipConfObj, explosion: Explosion): string {
 
