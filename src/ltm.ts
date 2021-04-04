@@ -233,7 +233,7 @@ export default class BigipConfig extends EventEmitter {
                 this.license = file;
             }
 
-            if (file.fileName.includes('/filestore/')) {
+            if (file.fileName.includes('/filestore')) {
                 this.fileStore.push(file);
                 // todo: figure out what kind of file this is and put the contents into the main config tree
             }
