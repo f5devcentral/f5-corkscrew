@@ -53,10 +53,19 @@ class BigipConfig extends events_1.EventEmitter {
          * placeholder for future fully jsonified tmos config
          */
         this.configFullObject = {};
+        /**
+         * corkscrew processing stats object
+         */
         this.stats = {
             objectCount: 0,
         };
+        /**
+         * stats information extracted from qkview xml files
+         */
         this.deviceXmlStats = {};
+        /**
+         * tmos file store files, which include certs/keys/external_monitors/...
+         */
         this.fileStore = [];
     }
     /**
@@ -172,7 +181,7 @@ class BigipConfig extends events_1.EventEmitter {
                 if (file.fileName.includes('license')) {
                     this.license = file;
                 }
-                if (file.fileName.includes('/filestore/')) {
+                if (file.fileName.includes('/filestore')) {
                     this.fileStore.push(file);
                     // todo: figure out what kind of file this is and put the contents into the main config tree
                 }
