@@ -32,6 +32,9 @@ check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
 
 ## Tasks/Ideas
 
+* look into using a main stream parser like
+  * https://nearley.js.org/
+
 - Deeper app parsing
     - looking into digging/crawling the partitions for all configs (complete except for "default" profile information)
     - expand the discovery of pools referenced in irules, local traffic policies
