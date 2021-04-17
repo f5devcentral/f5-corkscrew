@@ -24,9 +24,17 @@ check out the: [CHANGE LOG](CHANGELOG.md) for details of the different releases
   - pool monitors
   - main stream profiles including http, tcp, clien/server-ssl profiles
 
+<p>&nbsp;</p>
+
 ---
 
 ## Tasks/Ideas
+
+- look into using a main stream parser like
+  - https://nearley.js.org/
+- HashiCorp HCL has a very similar laguage structure
+  - Need to see if it might be able to parse TMOS
+  - <https://www.google.com/search?q=hcl+parser+javascript&rlz=1C1CHBF_enUS923US923&oq=hcl+parser&aqs=chrome.5.69i57j0l4j0i22i30l5.4778j0j7&sourceid=chrome&ie=UTF-8>
 
 - Deeper app parsing
   - looking into digging/crawling the partitions for all configs (complete except for "default" profile information)
