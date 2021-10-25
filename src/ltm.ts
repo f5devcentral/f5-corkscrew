@@ -320,7 +320,6 @@ export default class BigipConfig extends EventEmitter {
 
     /**
      * new parsing fuction to work on list of files from unPacker
-     * - original syncrounous version that takes the list of config files
      */
     async parse(): Promise<number> {
         const startTime = process.hrtime.bigint();
@@ -474,14 +473,19 @@ export default class BigipConfig extends EventEmitter {
             inputFileType: this.inputFileType,      // add input file type
             config: {
                 sources: this.configFiles,
-                apps,
                 base
             },
             stats: this.stats,                      // add stats object
             logs: await this.logs()                 // get all the processing logs
         }
 
+        if (apps.length > 0) {
+            // add virtual servers (apps), if found
+            retObj.config['apps'] = apps;
+        }
+
         if (this.fileStore.length > 0) {
+            // add files from file store
             retObj['fileStore'] = this.fileStore;
         }
 
@@ -528,31 +532,33 @@ export default class BigipConfig extends EventEmitter {
                 return x;
             }
 
-        } else {
-
+        } else if (this.configObject.ltm.virtual && Object.keys(this.configObject.ltm.virtual).length > 0) {
+            
             // means we didn't get an app name, so try to dig all apps...
             const apps = [];
-
-            const i = this.configObject.ltm.virtual;
-            for (const [key, value] of Object.entries(i)) {
+            
+            for (const [key, value] of Object.entries(this.configObject.ltm.virtual)) {
                 // event about extracted app
                 this.emit('extractApp', {
                     app: key,
                     time: Number(process.hrtime.bigint() - startTime) / 1000000
                 })
-
+                
                 // dig config, but catch errors
                 await digVsConfig(key, value, this.configObject, this.rx)
-                    .then(vsConfig => {
+                .then(vsConfig => {
                         apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
                     })
                     .catch(err => {
                         apps.push({ name: key, configs: err, map: '' });
                     })
             }
-
+            
             this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
             return apps;
+        } else {
+            logger.info('no ltm virtual servers found - excluding apps information')
+            return [];
         }
     }
 
