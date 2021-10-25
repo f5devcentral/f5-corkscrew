@@ -9,6 +9,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.9.0] - (10.31.2021)
+
+- fixed cli
+- fixed parsing error when no virtual servers
+- added option for exploring archives with passphrase
+
+- started creating tests archive generator
+---
+
 ## [0.8.0] - (02-25-2021)
 
 ### Added

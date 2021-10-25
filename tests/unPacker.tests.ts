@@ -14,6 +14,7 @@
 import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
+import { ConfigFile } from '../src/models';
 
 import { unPacker } from '../src/unPacker'
 import { UnPacker } from '../src/unPackerStream'
@@ -21,11 +22,43 @@ import { UnPacker } from '../src/unPackerStream'
 describe('instantiation unPacker', async function () {
 
 
+    // it(`stream unPack ucs - PASSPHRASE`, async () => {
+
+    //     // test to start developing decrypting archive with passphrase
+
+    //     const confFiles = []    // all the main .conf files
+    //     const statFiles = []    // statistics .xml files
+    //     const unPacker = new UnPacker();
+
+    //     unPacker.on('conf', conf => confFiles.push(conf))
+    //     unPacker.on('stat', stat => statFiles.push(stat))
+
+    //     await unPacker.stream(path.join(__dirname, 'artifacts', 'test_passphrase_1.ucs'))
+    //         .then(respFiles => {
+
+    //             // These response files should be all the other files except the conf/stat files, mainly filestore files
+    //             assert.ok(
+    //                 confFiles.length > 3,
+    //                 'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
+    //             )
+    //             assert.ok(typeof confFiles[0].fileName === 'string')
+    //             assert.ok(typeof confFiles[0].size === 'number')
+    //             assert.ok(typeof confFiles[0].content === 'string')
+    
+    //             // respFiles should also have the same structure
+    //             assert.ok(typeof respFiles.files[0].fileName === 'string')
+    //             assert.ok(typeof respFiles.files[0].size === 'number')
+    //             assert.ok(typeof respFiles.files[0].content === 'string')
+    //         })
+    //         .catch( err => {
+    //             debugger;
+    //         })
+    // });
 
     it(`stream unPack ucs`, async () => {
 
-        const confFiles = []
-        const statFiles = []
+        const confFiles = []    // all the main .conf files
+        const statFiles = []    // statistics .xml files
         const unPacker = new UnPacker();
 
         unPacker.on('conf', conf => confFiles.push(conf))
@@ -33,6 +66,8 @@ describe('instantiation unPacker', async function () {
 
         await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
             .then(respFiles => {
+
+                // These response files should be all the other files except the conf/stat files, mainly filestore files
                 assert.ok(
                     confFiles.length > 3,
                     'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
@@ -42,9 +77,9 @@ describe('instantiation unPacker', async function () {
                 assert.ok(typeof confFiles[0].content === 'string')
     
                 // respFiles should also have the same structure
-                assert.ok(typeof respFiles[0].fileName === 'string')
-                assert.ok(typeof respFiles[0].size === 'number')
-                assert.ok(typeof respFiles[0].content === 'string')
+                assert.ok(typeof respFiles.files[0].fileName === 'string')
+                assert.ok(typeof respFiles.files[0].size === 'number')
+                assert.ok(typeof respFiles.files[0].content === 'string')
             })
             .catch( err => {
                 debugger;
@@ -56,6 +91,7 @@ describe('instantiation unPacker', async function () {
 
         const confFiles = []
         const statFiles = []
+        let respFilesG: { files: ConfigFile[]; size: number; };
         const unPacker = new UnPacker();
 
         unPacker.on('conf', conf => confFiles.push(conf))
@@ -63,6 +99,7 @@ describe('instantiation unPacker', async function () {
 
         await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview'))
             .then(respFiles => {
+                respFilesG = respFiles // reassign respFiles to a higher variable so we can see them if/when we hit the catch
                 assert.ok(
                     confFiles.length > 3,
                     'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
@@ -72,9 +109,9 @@ describe('instantiation unPacker', async function () {
                 assert.ok(typeof confFiles[0].size === 'number')
 
                 // respFiles should also have the same structure
-                assert.ok(typeof respFiles[0].fileName === 'string')
-                assert.ok(typeof respFiles[0].content === 'string')
-                assert.ok(typeof respFiles[0].size === 'number')
+                assert.ok(typeof respFiles.files[0].fileName === 'string')
+                assert.ok(typeof respFiles.files[0].content === 'string')
+                assert.ok(typeof respFiles.files[0].size === 'number')
             })
             .catch( err => {
                 debugger;
