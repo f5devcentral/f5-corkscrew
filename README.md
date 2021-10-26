@@ -144,16 +144,6 @@ If/when we get to the point that we do need to increase performance, I have the 
 
 ---
 
-## Exclusions
-
-The following items are excluded from application extraction since the main goal of this is for transitioning to AS3
-
-- certificates
-  - not only are these sensitive, but also probably need to be create and associated with the AS3 declaration as part of the automation process
-- system settings?
-- APM/ASM policies - for now...  maybe whatever APM config is in the config files
-
----
 
 ## Architecture
 
@@ -229,319 +219,17 @@ The top of the main class also describes some of the different ways I have the t
 
 ---
 
-## Test file output
+## Example output
 
-This includes most of the different pieces all in a single text file for example.  This is way easier to read all the text output without being serialized for JSON structure.
+Everything is in a json tree for easy manipulation
 
-Updated as of 10.8.2020
+Updated as of 10.26.2021
 
-> latest test output file [devCloud01_conversionOutput.txt](./devCloud01_conversionOutput.txt)
+> latest test output file [output_example.json](./output_example.json)
 
 ---
 
-## JSON output
 
-full json output of a ucs extraction, as of 10.25.2020
-
-```json
-{
-    "id": "70ee8359-7d28-40e4-80af-40c4f13db25b",
-    "dateTime": "2020-10-25T12:19:09.526Z",
-    "hostname": "devCloud01.benlab.io",
-    "inputFileType": ".ucs",
-    "config": {
-        "sources": [
-            {
-                "fileName": "config/bigip.conf",
-                "size": 57563
-            },
-            {
-                "fileName": "config/bigip_base.conf",
-                "size": 14543
-            },
-            {
-                "fileName": "config/partitions/test/bigip.conf",
-                "size": 341
-            },
-            {
-                "fileName": "config/partitions/test/bigip_script.conf",
-                "size": 713
-            },
-            {
-                "fileName": "config/partitions/foo/bigip.conf",
-                "size": 1504
-            }
-        ],
-        "apps": [
-            {
-                "name": "/Common/app1_t80_vs",
-                "configs": [
-                    "ltm virtual /Common/app1_t80_vs {\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.1.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/192.168.1.21:80"
-                }
-            },
-            {
-                "name": "/Common/app1_t443_vs",
-                "configs": [
-                    "ltm virtual /Common/app1_t443_vs {\n    destination /Common/192.168.1.21:443\n    ip-protocol tcp\n    last-modified-time 2020-09-18:10:05:54\n    mask 255.255.255.255\n    pool /Common/app1_t80_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n}",
-                    "ltm pool /Common/app1_t80_pool {\n    members {\n        /Common/app1_Node1:80 {\n            address 192.168.1.22\n        }\n        /Common/app1_Node2:80 {\n            address 192.168.1.23\n        }\n    }\n    monitor /Common/http and /Common/tcp\n}",
-                    "ltm node /Common/app1_Node1 {\n    address 192.168.1.22\n}",
-                    "ltm node /Common/app1_Node2 {\n    address 192.168.1.23\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/192.168.1.21:443",
-                    "pool": [
-                        "192.168.1.22:80",
-                        "192.168.1.23:80"
-                    ]
-                }
-            },
-            {
-                "name": "/Common/app2_t80_vs",
-                "configs": [
-                    "ltm virtual /Common/app2_t80_vs {\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.2.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/192.168.2.21:80"
-                }
-            },
-            {
-                "name": "/Common/app2_t443_vs",
-                "configs": [
-                    "ltm virtual /Common/app2_t443_vs {\n    destination /Common/192.168.2.21:443\n    ip-protocol tcp\n    last-modified-time 2020-09-18:10:05:47\n    mask 255.255.255.255\n    pool /Common/app2_t80_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n}",
-                    "ltm pool /Common/app2_t80_pool {\n    load-balancing-mode least-connections-member\n    members {\n        /Common/app2_Node1:80 {\n            address 192.168.2.22\n        }\n        /Common/app2_Node2:80 {\n            address 192.168.2.23\n        }\n    }\n    monitor /Common/global_http_monitor and /Common/global_https_monitor\n}",
-                    "ltm node /Common/app2_Node1 {\n    address 192.168.2.22\n    description app2_Node1\n}",
-                    "ltm node /Common/app2_Node2 {\n    address 192.168.2.23\n    description app2_Node2\n}",
-                    "ltm monitor http /Common/global_http_monitor {\n    adaptive disabled\n    defaults-from /Common/http\n    interval 5\n    ip-dscp 0\n    recv \"ok 200\"\n    recv-disable none\n    send \"GET /anywebsite.com\\r\\n\"\n    time-until-up 0\n    timeout 16\n}",
-                    "ltm monitor https /Common/global_https_monitor {\n    adaptive disabled\n    defaults-from /Common/https\n    interval 5\n    ip-dscp 0\n    recv \"201 continue\"\n    recv-disable none\n    send \"GET /any-secure-website.com\\r\\n\"\n    time-until-up 0\n    timeout 16\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/192.168.2.21:443",
-                    "pool": [
-                        "192.168.2.22:80",
-                        "192.168.2.23:80"
-                    ]
-                }
-            },
-            {
-                "name": "/Common/app3_t8443_vs",
-                "configs": [
-                    "ltm virtual /Common/app3_t8443_vs {\n    destination /Common/192.168.1.51:8443\n    fallback-persistence /Common/app3_srcAddr_persist\n    ip-protocol tcp\n    last-modified-time 2020-09-17:12:45:40\n    mask 255.255.255.255\n    persist {\n        /Common/app3_cookie {\n            default yes\n        }\n    }\n    policies {\n        /Common/app3_ltm_policy { }\n    }\n    pool /Common/app3_t8443_pool\n    profiles {\n        /Common/app3_clientssl {\n            context clientside\n        }\n        /Common/app3_serverssl {\n            context serverside\n        }\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/app3_rule\n        /Common/app3_rule2\n        /Common/app3_rule3\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        pool /Common/app3_snat_pool\n        type snat\n    }\n    translate-address enabled\n    translate-port enabled\n}",
-                    "ltm pool /Common/app3_t8443_pool {\n    load-balancing-mode least-connections-member\n    members {\n        /Common/app3_Node1:8443 {\n            address 192.168.1.52\n        }\n        /Common/app3_Node2:8443 {\n            address 192.168.1.53\n        }\n    }\n    monitor /Common/app1_tcp_half_open_quick_monitor and /Common/http_head_f5 and /Common/http2_head_f5 and /Common/http and /Common/tcp_half_open\n}",
-                    "ltm node /Common/app3_Node1 {\n    address 192.168.1.52\n}",
-                    "ltm node /Common/app3_Node2 {\n    address 192.168.1.53\n}",
-                    "ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n    defaults-from /Common/tcp_half_open\n    destination *:*\n    interval 1\n    time-until-up 0\n    timeout 4\n}",
-                    "ltm profile client-ssl /Common/app3_clientssl {\n    app-service none\n    cert-key-chain {\n        default {\n            cert /Common/default.crt\n            key /Common/default.key\n        }\n    }\n    defaults-from /Common/clientssl\n    inherit-ca-certkeychain true\n    inherit-certkeychain true\n}",
-                    "ltm profile server-ssl /Common/app3_serverssl {\n    app-service none\n    defaults-from /Common/serverssl\n}",
-                    "ltm rule /Common/app3_rule {\n#comment\n\nwhen HTTP_REQUEST {\n    # add more here\n}",
-                    "ltm rule /Common/app3_rule2 {\n#comment\n\nwhen HTTP_REQUEST {\n    # ben test 444\n}",
-                    "ltm rule /Common/app3_rule3 {\n# app3_rule3 header\n\nwhen SERVERSSL_DATA {\n    # got something from server\n}",
-                    "ltm snatpool /Common/app3_snat_pool {\n    members {\n        /Common/192.168.1.51\n    }\n}",
-                    "ltm policy /Common/app3_ltm_policy {\n    rules {\n        global_rule_1 { }\n    }\n    strategy /Common/first-match\n}",
-                    "ltm persistence cookie /Common/app3_cookie {\n    always-send disabled\n    app-service none\n    cookie-encryption disabled\n    cookie-name app3CustomeCookie\n    defaults-from /Common/cookie\n    encrypt-cookie-poolname disabled\n    expiration 0\n    httponly enabled\n    method insert\n    override-connection-limit disabled\n    secure enabled\n}",
-                    "ltm persistence source-addr /Common/app3_srcAddr_persist {\n    app-service none\n    defaults-from /Common/source_addr\n    hash-algorithm default\n    map-proxies enabled\n    mask none\n    match-across-pools disabled\n    match-across-services disabled\n    match-across-virtuals disabled\n    override-connection-limit disabled\n    timeout 180\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/192.168.1.51:8443",
-                    "pool": [
-                        "192.168.1.52:8443",
-                        "192.168.1.53:8443"
-                    ]
-                }
-            },
-            {
-                "name": "/Common/app4_t80_vs",
-                "configs": [
-                    "ltm virtual /Common/app4_t80_vs {\n    description \"test pool references in irule extration and ltp\"\n    destination /Common/192.168.2.25:80\n    ip-protocol tcp\n    last-modified-time 2020-10-07:07:28:35\n    mask 255.255.255.255\n    policies {\n        /Common/app4_ltPolicy { }\n    }\n    pool /Common/app4_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n        /Common/app4_pool_rule\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n}",
-                    "ltm pool /Common/app4_pool {\n    members {\n        /Common/api.chucknorris.io:443 {\n            fqdn {\n                autopopulate enabled\n                name api.chucknorris.io\n            }\n        }\n    }\n}",
-                    "ltm node /Common/api.chucknorris.io {\n    fqdn {\n        address-family all\n        autopopulate enabled\n        name api.chucknorris.io\n    }\n}",
-                    "ltm rule /Common/app4_pool_rule {\n### test rule for corkscrew\n\n  # \n\nwhen HTTP_REQUEST {\n\n  # pool reference by variable declaration\n  set html-pool web1Pool\n\n  if { [HTTP::path] ends_with \"*.css\" }{\n\n    # regular pool refernce\n    pool css_pool\n\n  } elseif { [HTTP::path] ends_with \"*.jpg\" }{\n\n    # pool member refernce\n    pool jpg.pool member 10.10.10.1 80\n\n  } elseif { [HTTP::path] ends_with \"*.js\" }{\n\n    # another pool reference with special characters\n    pool js.io_t80_pool \n\n  } elseif { [HTTP::path] ends_with \"*.xx\" }{\n\n    # pool reference not in tmos config\n    ### *** seems the gui won't let you attach an irule to a vs with a pool that doesn't exist\n    #pool missing_pool\n\n  } elseif { [HTTP::path] ends_with \"*.txt\" }{\n\n    # node reference\n    node 10.10.10.1 80\n\n  } else {\n\n    # pool referenced by variable\n    pool $html-pool\n\n  }\n}",
-                    "ltm pool /Common/css_pool { }",
-                    "ltm pool /Common/jpg.pool { }",
-                    "ltm pool /Common/js.io_t80_pool { }",
-                    null,
-                    "ltm policy /Common/app4_ltPolicy {\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/192.168.2.25:80",
-                    "pool": [
-                        "/Common/api.chucknorris.io,/Common/api.chucknorris.io:443"
-                    ],
-                    "irule": {
-                        "pools": [
-                            [
-                                "css_pool"
-                            ],
-                            [
-                                "jpg.pool",
-                                "member",
-                                "10.10.10.1",
-                                "80"
-                            ],
-                            [
-                                "js.io_t80_pool"
-                            ],
-                            [
-                                "web1Pool"
-                            ]
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "/Common/forwarder_net_0.0.0.0",
-                "configs": [
-                    "ltm virtual /Common/forwarder_net_0.0.0.0 {\n    destination /Common/0.0.0.0:0\n    ip-forward\n    mask any\n    profiles {\n        /Common/fastl4_loose { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address disabled\n    translate-port disabled\n}",
-                    "ltm profile fastl4 /Common/fastl4_loose {\n    app-service none\n    loose-close enabled\n    loose-initialization enabled\n    reset-on-timeout disabled\n    syn-cookie-enable disabled\n}"
-                ],
-                "map": {
-                    "vsDest": "/Common/0.0.0.0:0"
-                }
-            },
-            {
-                "name": "/foo/defaultsUDP_5555/serviceMain",
-                "configs": [
-                    "ltm virtual /foo/defaultsUDP_5555/serviceMain {\n    creation-time 2020-10-06:13:27:20\n    description defaultsUDP_5555\n    destination /foo/192.50.2.1:5555\n    ip-protocol udp\n    last-modified-time 2020-10-06:13:27:20\n    mask 255.255.255.255\n    persist {\n        /Common/source_addr {\n            default yes\n        }\n    }\n    pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1\n    profiles {\n        /Common/udp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n}",
-                    "ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {\n    members {\n        /foo/192.50.2.2:5555 {\n            address 192.50.2.2\n            metadata {\n                source {\n                    value declaration\n                }\n            }\n        }\n    }\n    min-active-members 1\n    monitor min 1 of { /Common/gateway_icmp }\n}"
-                ],
-                "map": {
-                    "vsDest": "/foo/192.50.2.1:5555"
-                }
-            }
-        ],
-        "base": [
-            "net vlan /Common/internal {\n    interfaces {\n        1.0 { }\n    }\n    tag 4094\n}",
-            "net route-domain /Common/0 {\n    id 0\n    vlans {\n        /Common/http-tunnel\n        /Common/socks-tunnel\n        /Common/internal\n    }\n}",
-            "auth partition Common {\n    description \"Updated by AS3 at Thu, 17 Sep 2020 15:14:36 GMT\"\n}",
-            "auth partition foo {\n    description \"Updated by AS3 at Tue, 06 Oct 2020 18:27:20 GMT\"\n}",
-            "auth partition test { }"
-        ]
-    },
-    "stats": {
-        "objectCount": 251,
-        "configBytes": 74664,
-        "loadTime": 2546.2405,
-        "objects": {
-            "virtuals": 8,
-            "profiles": 6,
-            "policies": 2,
-            "pools": 8,
-            "irules": 5,
-            "monitors": 6,
-            "nodes": 11,
-            "snatPools": 1
-        },
-        "sourceTmosVersion": "15.1.0.4",
-        "parseTime": 11.9013,
-        "appTime": 9.7713,
-        "packTime": 0.569
-    },
-    "logs": [
-        "[2020-10-25T12:19:05.673Z] DeBuG: 'regular date log message'",
-        "[10/25/2020, 7:19:05 AM] DeBuG: 'toLocalString date log message'",
-        "[Sun, 25 Oct 2020 12:19:05 GMT] DeBuG: 'to UTC date log message'",
-        "[2020-10-25T12:19:06.956Z] [DEBUG]: detected file: [/mnt/c/Users/ted/projects/f5-corkscrew/src/tests/artifacts/devCloud_10.9.2020.ucs], size: [117504228]",
-        "[2020-10-25T12:19:09.503Z] [DEBUG]: Begining to parse configs",
-        "[2020-10-25T12:19:09.504Z] [INFO]: Recieved .conf file of version: 15.1.0.4",
-        "[2020-10-25T12:19:09.504Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection",
-        "[2020-10-25T12:19:09.510Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection",
-        "[2020-10-25T12:19:09.514Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection",
-        "[2020-10-25T12:19:09.515Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...",
-        "[2020-10-25T12:19:09.515Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection",
-        "[2020-10-25T12:19:09.515Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection",
-        "[2020-10-25T12:19:09.516Z] [INFO]: digging vs config for /Common/app1_t80_vs",
-        "[2020-10-25T12:19:09.517Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]",
-        "[2020-10-25T12:19:09.517Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.517Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles \n        /Common/http { }\n        /Common/tcp { }",
-        "[2020-10-25T12:19:09.518Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]",
-        "[2020-10-25T12:19:09.518Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details",
-        "[2020-10-25T12:19:09.518Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules \n        /Common/_sys_https_redirect",
-        "[2020-10-25T12:19:09.518Z] [INFO]: digging vs config for /Common/app1_t443_vs",
-        "[2020-10-25T12:19:09.518Z] [DEBUG]: digging pool config for /Common/app1_t80_pool",
-        "[2020-10-25T12:19:09.518Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: pool monitor configs found: []",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles \n        /Common/http { }\n        /Common/tcp { }",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration \n        type automap",
-        "[2020-10-25T12:19:09.519Z] [INFO]: digging vs config for /Common/app2_t80_vs",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles \n        /Common/http { }\n        /Common/tcp { }",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules \n        /Common/_sys_https_redirect",
-        "[2020-10-25T12:19:09.519Z] [INFO]: digging vs config for /Common/app2_t443_vs",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: digging pool config for /Common/app2_t80_pool",
-        "[2020-10-25T12:19:09.519Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: pool monitor configs found: [\n  'ltm monitor http /Common/global_http_monitor {\\n' +\n    '    adaptive disabled\\n' +\n    '    defaults-from /Common/http\\n' +\n    '    interval 5\\n' +\n    '    ip-dscp 0\\n' +\n    '    recv \"ok 200\"\\n' +\n    '    recv-disable none\\n' +\n    '    send \"GET /anywebsite.com\\\\r\\\\n\"\\n' +\n    '    time-until-up 0\\n' +\n    '    timeout 16\\n' +\n    '}',\n  'ltm monitor https /Common/global_https_monitor {\\n' +\n    '    adaptive disabled\\n' +\n    '    defaults-from /Common/https\\n' +\n    '    interval 5\\n' +\n    '    ip-dscp 0\\n' +\n    '    recv \"201 continue\"\\n' +\n    '    recv-disable none\\n' +\n    '    send \"GET /any-secure-website.com\\\\r\\\\n\"\\n' +\n    '    time-until-up 0\\n' +\n    '    timeout 16\\n' +\n    '}'\n]",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles \n        /Common/http { }\n        /Common/tcp { }",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration \n        type automap",
-        "[2020-10-25T12:19:09.520Z] [INFO]: digging vs config for /Common/app3_t8443_vs",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool",
-        "[2020-10-25T12:19:09.520Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: pool monitor references found: [\n  '/Common/app1_tcp_half_open_quick_monitor',\n  '/Common/http_head_f5',\n  '/Common/http2_head_f5',\n  '/Common/http',\n  '/Common/tcp_half_open'\n]",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: pool monitor configs found: [\n  'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\\n' +\n    '    defaults-from /Common/tcp_half_open\\n' +\n    '    destination *:*\\n' +\n    '    interval 1\\n' +\n    '    time-until-up 0\\n' +\n    '    timeout 4\\n' +\n    '}'\n]",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: profile references found:  [\n  '/Common/app3_clientssl',\n  '/Common/app3_serverssl',\n  '/Common/http',\n  '/Common/tcp'\n]",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles \n        /Common/app3_clientssl {\n            context clientside\n        }\n        /Common/app3_serverssl {\n            context serverside\n        }\n        /Common/http { }\n        /Common/tcp { }",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules \n        /Common/app3_rule\n        /Common/app3_rule2\n        /Common/app3_rule3",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration \n        pool /Common/app3_snat_pool\n        type snat",
-        "[2020-10-25T12:19:09.523Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: policy found [/Common/app3_ltm_policy]",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies \n        /Common/app3_ltm_policy { }",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence \n        /Common/app3_cookie {\n            default yes\n        }",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist",
-        "[2020-10-25T12:19:09.524Z] [INFO]: digging vs config for /Common/app4_t80_vs",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: digging pool config for /Common/app4_pool",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles \n        /Common/http { }\n        /Common/tcp { }",
-        "[2020-10-25T12:19:09.524Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: digging pool config for /Common/css_pool",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: digging pool config for /Common/jpg.pool",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: digging pool config for /Common/web1Pool",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules \n        /Common/_sys_https_redirect\n        /Common/app4_pool_rule",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: policy found [/Common/app4_ltPolicy]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies \n        /Common/app4_ltPolicy { }",
-        "[2020-10-25T12:19:09.525Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles \n        /Common/fastl4_loose { }",
-        "[2020-10-25T12:19:09.525Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: profile references found:  [ '/Common/udp' ]",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles \n        /Common/udp { }",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration \n        type automap",
-        "[2020-10-25T12:19:09.525Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence \n        /Common/source_addr {\n            default yes\n        }"
-    ]
-}
-```
 
 ---
 
@@ -571,6 +259,8 @@ Corkscrew comes with a simple command line utility.  This utility takes in a big
 
     `npm install -g https://github.com/f5devcentral/f5-corkscrew.git`
 
+> latest branch as of 10.26.2021 is v0.9.0 -> `npm install -g https://github.com/f5devcentral/f5-corkscrew.git#`
+
 3. Run `corkscrew` to confirm installation status
 
     ```bash
@@ -585,8 +275,12 @@ Corkscrew comes with a simple command line utility.  This utility takes in a big
     cli.js explode <file>  explode bigip.conf to apps
 
     Options:
-    --help     Show help                                                                                         [boolean]
-    --version  Show version number                                                                               [boolean]
+      --help                Show help                                                                              [boolean]
+      --version             Show version number                                                                    [boolean]
+      --no_sources          supress config file sources bigip.conf, bigip_base.conf output                         [boolean]
+      --no_file_store       supress filestore files output                                                         [boolean]
+      --no_command_logs     no cli output                                                                          [boolean]
+      --no_conversion_logs  no extraction parsing logs                                                             [boolean]
 
     A command is required
     ```

@@ -255,7 +255,6 @@ class BigipConfig extends events_1.EventEmitter {
     }
     /**
      * new parsing fuction to work on list of files from unPacker
-     * - original syncrounous version that takes the list of config files
      */
     parse() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -388,13 +387,17 @@ class BigipConfig extends events_1.EventEmitter {
                 inputFileType: this.inputFileType,
                 config: {
                     sources: this.configFiles,
-                    apps,
                     base
                 },
                 stats: this.stats,
                 logs: yield this.logs() // get all the processing logs
             };
+            if (apps.length > 0) {
+                // add virtual servers (apps), if found
+                retObj.config['apps'] = apps;
+            }
             if (this.fileStore.length > 0) {
+                // add files from file store
                 retObj['fileStore'] = this.fileStore;
             }
             // capture pack time
@@ -435,11 +438,10 @@ class BigipConfig extends events_1.EventEmitter {
                     return x;
                 }
             }
-            else {
+            else if (this.configObject.ltm.virtual && Object.keys(this.configObject.ltm.virtual).length > 0) {
                 // means we didn't get an app name, so try to dig all apps...
                 const apps = [];
-                const i = this.configObject.ltm.virtual;
-                for (const [key, value] of Object.entries(i)) {
+                for (const [key, value] of Object.entries(this.configObject.ltm.virtual)) {
                     // event about extracted app
                     this.emit('extractApp', {
                         app: key,
@@ -456,6 +458,10 @@ class BigipConfig extends events_1.EventEmitter {
                 }
                 this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
                 return apps;
+            }
+            else {
+                logger_1.default.info('no ltm virtual servers found - excluding apps information');
+                return [];
             }
         });
     }

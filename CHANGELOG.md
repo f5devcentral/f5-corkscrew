@@ -11,11 +11,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.9.0] - (10.31.2021)
 
-- fixed cli
 - fixed parsing error when no virtual servers
-- added option for exploring archives with passphrase
-
+- fixed cli (was not working with new async parser)
+- added cli options
+  - All output is in json format now
+  - includes command processing logs
+  - added switches to exclude output for:
+    - no_sources
+    - no_file_store
+    - no_command_logs
+    - no_conversion_logs
 - started creating tests archive generator
+- started looking into adding an option for exploring archives with passphrase
+
 ---
 
 ## [0.8.0] - (02-25-2021)

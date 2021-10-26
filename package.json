@@ -19,7 +19,8 @@
     "test": "nyc mocha -r ts-node/register \"src/tests/ALL.tests.ts\"",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "build-code-docs": "typedoc --out code_docs src",
-    "build-package": "tsc -p ."
+    "compile": "tsc -p .",
+    "watch": "tsc -watch -p ./"
   },
   "bugs": {
     "url": "https://github.com/f5devcentral/f5-corkscrew/issues"
@@ -70,6 +71,7 @@
     "balanced-match": "^1.0.0",
     "decompress": "^4.2.1",
     "deepmerge": "^4.2.2",
+    "f5-conx-core": "file:../f5-conx-core/f5-conx-core-0.10.0.tgz",
     "tar-stream": "^2.2.0",
     "uuid": "^8.3.0",
     "xml2js": "^0.4.23",

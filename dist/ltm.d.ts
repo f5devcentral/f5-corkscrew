@@ -83,7 +83,6 @@ export default class BigipConfig extends EventEmitter {
     load(file: string): Promise<number>;
     /**
      * new parsing fuction to work on list of files from unPacker
-     * - original syncrounous version that takes the list of config files
      */
     parse(): Promise<number>;
     /**
