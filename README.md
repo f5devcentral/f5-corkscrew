@@ -259,7 +259,7 @@ Corkscrew comes with a simple command line utility.  This utility takes in a big
 
     `npm install -g https://github.com/f5devcentral/f5-corkscrew.git`
 
-> latest branch as of 10.26.2021 is v0.9.0 -> `npm install -g https://github.com/f5devcentral/f5-corkscrew.git#`
+> latest branch as of 10.26.2021 is v0.9.0 -> `npm install -g https://github.com/f5devcentral/f5-corkscrew.git#v0.9.0`
 
 3. Run `corkscrew` to confirm installation status
 
