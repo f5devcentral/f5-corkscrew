@@ -16,8 +16,11 @@
                 "999999",
                 "--colors",
                 "${workspaceFolder}/tests/json_objects.test.ts",
+                "--attach",
             ],
             "internalConsoleOptions": "neverOpen",
+            "autoAttachChildProcesses": true,
+            "console": "integratedTerminal",
             "protocol": "inspector",
         },
         {

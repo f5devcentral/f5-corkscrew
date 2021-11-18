@@ -134,8 +134,8 @@ function digVsConfig(vsName, vsConfig, configTree, rx) {
         // remove any duplicate entries
         config = uniqueList(config);
         // removed empty values and objects
-        objects_1.cleanObject(config);
-        objects_1.cleanObject(map);
+        (0, objects_1.cleanObject)(config);
+        (0, objects_1.cleanObject)(map);
         return { config, map };
     });
 }
@@ -149,7 +149,7 @@ function digPoolConfig(poolName, configObject, rx) {
     // const rx = this.rx.vs.pool; // get needed rx sub-tree
     const config = [];
     const map = [];
-    const poolConfig = objects_1.pathValueFromKey(configObject.ltm.pool, poolName);
+    const poolConfig = (0, objects_1.pathValueFromKey)(configObject.ltm.pool, poolName);
     if (poolConfig) {
         config.push(`ltm pool ${poolName} {${poolConfig.value}}`);
         const members = poolConfig.value.match(rx.vs.pool.members);
@@ -169,7 +169,7 @@ function digPoolConfig(poolName, configObject, rx) {
                     const name = el.match(/(\/[\w\-\/.]+)/);
                     const port = el.match(/(?<=:)\d+(?= )/);
                     const addr = el.match(/(?<=address )[\d.]+/);
-                    const x = objects_1.pathValueFromKey(configObject.ltm.node, name[0]);
+                    const x = (0, objects_1.pathValueFromKey)(configObject.ltm.node, name[0]);
                     config.push(`ltm node ${x.key} {${x.value}}`);
                     map.push(`${addr}:${port}`);
                 });
@@ -179,7 +179,7 @@ function digPoolConfig(poolName, configObject, rx) {
                     // const memberFqdnNames = el.match(/([\s\S]+?)\n/g);
                     const name = el.match(/(\/[\w\-\/.]+)/);
                     const port = el.match(/(?<=:)\d+(?= )/);
-                    const a = objects_1.pathValueFromKey(configObject.ltm.node, name[0]);
+                    const a = (0, objects_1.pathValueFromKey)(configObject.ltm.node, name[0]);
                     config.push(`ltm node ${a.key} {${a.value}}`);
                     map.push(`${name}:${port}`);
                 });
@@ -193,7 +193,7 @@ function digPoolConfig(poolName, configObject, rx) {
             const monitorNameConfigs = [];
             monitorNames.forEach(name => {
                 // new way look for key in .ltm.monitor
-                const x = objects_1.pathValueFromKey(configObject.ltm.monitor, name);
+                const x = (0, objects_1.pathValueFromKey)(configObject.ltm.monitor, name);
                 if (x) {
                     // rebuild tmos object
                     monitorNameConfigs.push(`ltm monitor ${x.path} ${x.key} {${x.value}}`);
@@ -220,7 +220,7 @@ function digProfileConfigs(profilesList, configObject, rx) {
     const config = [];
     const map = [];
     profileNames.forEach(name => {
-        const x = objects_1.pathValueFromKey(configObject.ltm.profile, name);
+        const x = (0, objects_1.pathValueFromKey)(configObject.ltm.profile, name);
         if (x) {
             config.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
         }
@@ -248,10 +248,10 @@ function digRuleConfigs(rulesList, configObject, rx) {
     const map = {};
     ruleNames.forEach(name => {
         // search config, return matches
-        const x = objects_1.pathValueFromKey(configObject.ltm.rule, name);
+        const x = (0, objects_1.pathValueFromKey)(configObject.ltm.rule, name);
         if (x) {
             config.push(`ltm rule ${x.key} {${x.value}}`);
-            const iRulePools = pools_1.poolsInRule(x.value);
+            const iRulePools = (0, pools_1.poolsInRule)(x.value);
             if (iRulePools) {
                 // for each pool reference found, get config
                 iRulePools.forEach(el => {
@@ -300,7 +300,7 @@ function digSnatConfig(snat, configObject, rx) {
     if (snat.includes('pool')) {
         const snatName = snat.match(rx.vs.snat.name);
         if (snatName) {
-            const x = objects_1.pathValueFromKey(configObject.ltm.snatpool, snatName[1]);
+            const x = (0, objects_1.pathValueFromKey)(configObject.ltm.snatpool, snatName[1]);
             config.push(`ltm snatpool ${x.key} {${x.value}}`);
         }
         else {
@@ -324,15 +324,15 @@ function digPolicyConfig(policys, configObject, rx) {
     const map = [];
     // get policy references from vs
     policyNames.forEach(name => {
-        const x = objects_1.pathValueFromKey(configObject.ltm.policy, name);
+        const x = (0, objects_1.pathValueFromKey)(configObject.ltm.policy, name);
         if (x) {
             logger_1.default.debug(`policy found [${x.key}]`);
             config.push(`ltm policy ${x.key} {${x.value}}`);
             // got through each policy and dig references (like pools)
-            const pools = pools_1.poolsInPolicy(x.value);
+            const pools = (0, pools_1.poolsInPolicy)(x.value);
             if (pools) {
                 pools.forEach(pool => {
-                    const cfg = objects_1.pathValueFromKey(configObject.ltm.pool, pool);
+                    const cfg = (0, objects_1.pathValueFromKey)(configObject.ltm.pool, pool);
                     // if we got here there should be a pool for the reference, 
                     // but just in case, we confirm with (if) statement
                     if (cfg) {
@@ -371,7 +371,7 @@ function digPersistConfig(persist, configObject, rx) {
     const map = [];
     const persistName = persist.match(rx.vs.persist.name);
     if (persistName) {
-        const x = objects_1.pathValueFromKey(configObject.ltm.persistence, persistName[1]);
+        const x = (0, objects_1.pathValueFromKey)(configObject.ltm.persistence, persistName[1]);
         if (x) {
             config.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
         }
@@ -385,7 +385,7 @@ function digPersistConfig(persist, configObject, rx) {
 function digFbPersistConfig(fbPersist, configObject) {
     const config = [];
     const map = [];
-    const x = objects_1.pathValueFromKey(configObject.ltm.persistence, fbPersist);
+    const x = (0, objects_1.pathValueFromKey)(configObject.ltm.persistence, fbPersist);
     if (x) {
         config.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
     }

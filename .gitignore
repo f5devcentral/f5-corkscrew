@@ -25,3 +25,5 @@ settings.json
 # temp directory for testing files
 tmp/
 package-lock.json
+# exclude package files
+*.tgz

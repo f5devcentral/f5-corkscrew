@@ -77,7 +77,8 @@ export type Explosion = {
     config: {
         sources: ConfigFile[],
         apps?: TmosApp[],
-        base: string[]
+        base?: string[],
+        doClasses?: string[]
     },
     stats: Stats,
     fileStore?: ConfigFile[]

@@ -23,6 +23,7 @@ import { digBaseConfig, digVsConfig, getHostname } from './digConfigs';
 import path from 'path';
 import { UnPacker } from './unPackerStream';
 import { parseStringPromise as xml2json } from 'xml2js';
+import { digDoConfig } from './digDoClassesAuto';
 
 
 
@@ -463,7 +464,10 @@ export default class BigipConfig extends EventEmitter {
         const startTime = process.hrtime.bigint();  // start pack timer
 
         // collect base information like vlans/IPs
-        const base = await digBaseConfig(this.configObject)
+        const base = await digBaseConfig(this.configObject);
+
+        // extract DO classes (base information expanded)
+        const doClasses = await digDoConfig(this.configObject);
 
         // build return object
         const retObj = {
@@ -473,7 +477,8 @@ export default class BigipConfig extends EventEmitter {
             inputFileType: this.inputFileType,      // add input file type
             config: {
                 sources: this.configFiles,
-                base
+                base,
+                doClasses
             },
             stats: this.stats,                      // add stats object
             logs: await this.logs()                 // get all the processing logs

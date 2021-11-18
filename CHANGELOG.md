@@ -11,6 +11,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.9.0] - (10.31.2021)
 
+- updated base config extraction to pull all DO classes supported in ACC
 - fixed parsing error when no virtual servers
 - fixed cli (was not working with new async parser)
 - added cli options

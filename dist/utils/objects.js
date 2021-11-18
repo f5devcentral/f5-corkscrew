@@ -74,7 +74,7 @@ exports.nestedObjValue = nestedObjValue;
 * @param objs list of objects to merge
  */
 function deepMergeObj(target, source) {
-    return deepmerge_1.default(target, source, { clone: false });
+    return (0, deepmerge_1.default)(target, source, { clone: false });
 }
 exports.deepMergeObj = deepMergeObj;
 /**

@@ -32,6 +32,7 @@ const digConfigs_1 = require("./digConfigs");
 const path_1 = __importDefault(require("path"));
 const unPackerStream_1 = require("./unPackerStream");
 const xml2js_1 = require("xml2js");
+const digDoClassesAuto_1 = require("./digDoClassesAuto");
 /**
  * Class to consume bigip configs -> parse apps
  *
@@ -99,11 +100,11 @@ class BigipConfig extends events_1.EventEmitter {
             // wait for all the stats files processing promises to finish
             yield Promise.all(parseStatPromises);
             // get ltm object counts
-            this.stats.objects = objCounter_1.countObjects(this.configObject);
+            this.stats.objects = (0, objCounter_1.countObjects)(this.configObject);
             // assign souceTmosVersion to stats object also
             this.stats.sourceTmosVersion = this.tmosVersion;
             // get hostname to show in vscode extension view
-            this.hostname = digConfigs_1.getHostname(this.configObject);
+            this.hostname = (0, digConfigs_1.getHostname)(this.configObject);
             // end processing time, convert microseconds to miliseconds
             this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
             return;
@@ -150,8 +151,8 @@ class BigipConfig extends events_1.EventEmitter {
                         // split extracted name element by spaces
                         const names = name[1].split(' ');
                         // create new nested objects with each of the names, assigning value on inner-most
-                        const newObj = objects_1.nestedObjValue(names, name[2]);
-                        this.configObject = objects_2.deepMergeObj(this.configObject, newObj);
+                        const newObj = (0, objects_1.nestedObjValue)(names, name[2]);
+                        this.configObject = (0, objects_2.deepMergeObj)(this.configObject, newObj);
                     }
                     else {
                         logger_1.default.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el);
@@ -166,7 +167,7 @@ class BigipConfig extends events_1.EventEmitter {
             // was parsing all files for ALL stats, but it ends up being 100sMb of data
             // so, just getting some interesting stuff for now
             if (file.fileName === 'mcp_module.xml') {
-                yield xml2js_1.parseStringPromise(file.content)
+                yield (0, xml2js_1.parseStringPromise)(file.content)
                     .then(out => {
                     this.deviceXmlStats[file.fileName] = out;
                 });
@@ -240,7 +241,7 @@ class BigipConfig extends events_1.EventEmitter {
             const startTime = process.hrtime.bigint();
             // capture incoming file type
             this.inputFileType = path_1.default.parse(file).ext;
-            return yield unPacker_1.unPacker(file)
+            return yield (0, unPacker_1.unPacker)(file)
                 .then(files => {
                 this.configFiles = files;
                 // run through files and add up file size
@@ -329,8 +330,8 @@ class BigipConfig extends events_1.EventEmitter {
                             // split extracted name element by spaces
                             const names = name[1].split(' ');
                             // create new nested objects with each of the names, assigning value on inner-most
-                            const newObj = objects_1.nestedObjValue(names, name[2]);
-                            this.configObject = objects_2.deepMergeObj(this.configObject, newObj);
+                            const newObj = (0, objects_1.nestedObjValue)(names, name[2]);
+                            this.configObject = (0, objects_2.deepMergeObj)(this.configObject, newObj);
                         }
                         else {
                             logger_1.default.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el);
@@ -339,11 +340,11 @@ class BigipConfig extends events_1.EventEmitter {
                 }
             });
             // get ltm object counts
-            this.stats.objects = objCounter_1.countObjects(this.configObject);
+            this.stats.objects = (0, objCounter_1.countObjects)(this.configObject);
             // assign souceTmosVersion to stats object also
             this.stats.sourceTmosVersion = this.tmosVersion;
             // get hostname to show in vscode extension view
-            this.hostname = digConfigs_1.getHostname(this.configObject);
+            this.hostname = (0, digConfigs_1.getHostname)(this.configObject);
             // end processing time, convert microseconds to miliseconds
             this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
             return this.stats.parseTime;
@@ -378,16 +379,19 @@ class BigipConfig extends events_1.EventEmitter {
             const apps = yield this.apps(); // extract apps before parse timer...
             const startTime = process.hrtime.bigint(); // start pack timer
             // collect base information like vlans/IPs
-            const base = yield digConfigs_1.digBaseConfig(this.configObject);
+            const base = yield (0, digConfigs_1.digBaseConfig)(this.configObject);
+            // extract DO classes (base information expanded)
+            const doClasses = yield (0, digDoClassesAuto_1.digDoConfig)(this.configObject);
             // build return object
             const retObj = {
-                id: uuid_1.v4(),
+                id: (0, uuid_1.v4)(),
                 dateTime: new Date(),
                 hostname: this.hostname,
                 inputFileType: this.inputFileType,
                 config: {
                     sources: this.configFiles,
-                    base
+                    base,
+                    doClasses
                 },
                 stats: this.stats,
                 logs: yield this.logs() // get all the processing logs
@@ -433,7 +437,7 @@ class BigipConfig extends events_1.EventEmitter {
                 });
                 if (value) {
                     // dig config, then stop timmer, then return config...
-                    const x = [yield digConfigs_1.digVsConfig(app, value, this.configObject, this.rx)];
+                    const x = [yield (0, digConfigs_1.digVsConfig)(app, value, this.configObject, this.rx)];
                     this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
                     return x;
                 }
@@ -448,7 +452,7 @@ class BigipConfig extends events_1.EventEmitter {
                         time: Number(process.hrtime.bigint() - startTime) / 1000000
                     });
                     // dig config, but catch errors
-                    yield digConfigs_1.digVsConfig(key, value, this.configObject, this.rx)
+                    yield (0, digConfigs_1.digVsConfig)(key, value, this.configObject, this.rx)
                         .then(vsConfig => {
                         apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
                     })

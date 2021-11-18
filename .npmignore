@@ -16,3 +16,7 @@ docs/
 .gitlab-ci.yml
 # vscode project configuration settings
 .vscode
+# ignore archive building temp dir
+/tmp
+# ignore existing packages
+*.tgz

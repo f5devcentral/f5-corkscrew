@@ -82,7 +82,7 @@ function unPacker(input) {
         else if (filePath.ext === '.gz' || filePath.ext === '.ucs' || filePath.ext === '.qkview') {
             const size = fs.statSync(path_1.default.join(filePath.dir, filePath.base)).size;
             logger_1.default.debug(`detected file: [${input}], size: [${size}]`);
-            return yield decompress_1.default(input, {
+            return yield (0, decompress_1.default)(input, {
                 filter: file => archiveFileFilter(file)
                 // filter: file => (fileFilter(file.path) && file.type === 'file')
             })

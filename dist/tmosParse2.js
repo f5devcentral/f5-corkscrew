@@ -81,14 +81,14 @@ class Parser extends events_1.EventEmitter {
                         // split extracted name element by spaces
                         const names = name[1].split(' ');
                         // create new nested objects with each of the names, assigning value on inner-most
-                        const newObj = objects_1.nestedObjValue(names, name[2]);
-                        this.configObject = objects_1.deepMergeObj(this.configObject, newObj);
+                        const newObj = (0, objects_1.nestedObjValue)(names, name[2]);
+                        this.configObject = (0, objects_1.deepMergeObj)(this.configObject, newObj);
                     }
                 });
             }
         });
         // get ltm object counts
-        const objects = objCounter_1.countObjects(this.configObject);
+        const objects = (0, objCounter_1.countObjects)(this.configObject);
         // end processing time, convert microseconds to miliseconds
         const parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
         this.emit('parseEnd', `we done finished, took ${this.parseTime}ms`);

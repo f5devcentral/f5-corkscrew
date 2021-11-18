@@ -86,9 +86,9 @@ class Log {
         if (typeof val === 'string') {
             return val;
         }
-        return util_1.inspect(val, {
+        return (0, util_1.inspect)(val, {
             colors: false,
-            depth: 6,
+            depth: 6, // heuristic
         });
     }
 }

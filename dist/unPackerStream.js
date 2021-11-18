@@ -184,7 +184,7 @@ function fileFilter(name) {
      * breakind down this bigger regex for explaination
      * added to list of regex's below
      */
-    const allConfs = regex_1.multilineRegExp([
+    const allConfs = (0, regex_1.multilineRegExp)([
         // base /config directory
         /^config/,
         // optional /partitions directory including /partition name directory
@@ -195,7 +195,7 @@ function fileFilter(name) {
     /**
      * qkviews do NOT includes private keys
      */
-    const fileStoreFilesQkview = regex_1.multilineRegExp([
+    const fileStoreFilesQkview = (0, regex_1.multilineRegExp)([
         // base directory
         /^config\/filestore\/files_d/,
         // /partition folder
@@ -208,7 +208,7 @@ function fileFilter(name) {
     /**
      * UCS private keys unless excluded at generation
      */
-    const fileStoreFilesUcs = regex_1.multilineRegExp([
+    const fileStoreFilesUcs = (0, regex_1.multilineRegExp)([
         // base directory
         /^var\/tmp\/filestore_temp\/files_d/,
         // /partition folder
