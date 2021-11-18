@@ -1,7 +1,7 @@
 # Source directory
 src/
 # Tests directory
-#tests/
+tests/
 # Coverage directory
 coverage/
 # Code Documentation directory
@@ -16,3 +16,7 @@ docs/
 .gitlab-ci.yml
 # vscode project configuration settings
 .vscode
+# ignore archive building temp dir
+/tmp
+# ignore existing packages
+*.tgz

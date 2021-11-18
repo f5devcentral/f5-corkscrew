@@ -103,6 +103,33 @@ export declare type BigipConfObj = {
         };
     };
 };
+export declare type xmlStats = {
+    'mcp_module.xml'?: {
+        "Qkproc": {
+            "admin_ip": unknown;
+            "system_information": unknown;
+            "cert_status_object": unknown;
+            "system_module": unknown;
+            "tmm_stat": unknown;
+            "traffic_group": unknown;
+            "virtual_address": unknown;
+            "virtual_address_stat": unknown;
+            "virtual_server": unknown;
+            "virtual_server_stat": unknown;
+            "interface": unknown;
+            "interface_stat": unknown;
+            "pool": unknown;
+            "pool_member": unknown;
+            "pool_member_metadata": unknown;
+            "pool_member_stat": unknown;
+            "pool_stat": unknown;
+            "profile_dns_stat": unknown;
+            "profile_http_stat": unknown;
+            "profile_tcp_stat": unknown;
+            "rule_stat": unknown;
+        };
+    };
+};
 /**
  * main explosion output
  *
@@ -113,11 +140,13 @@ export declare type Explosion = {
     hostname?: string;
     inputFileType: string;
     config: {
-        sources: ConfigFiles[];
-        apps: TmosApp[];
-        base: string[];
+        sources: ConfigFile[];
+        apps?: TmosApp[];
+        base?: string[];
+        doClasses?: string[];
     };
     stats: Stats;
+    fileStore?: ConfigFile[];
     logs: string[];
 };
 /**
@@ -159,6 +188,7 @@ export declare type Stats = {
     sourceTmosVersion?: string;
     objectCount?: number;
     objects?: ObjStats;
+    sourceSize?: number;
 };
 /**
  * ltm object stats
@@ -222,8 +252,8 @@ export declare type ParseResp = {
 /**
  * defines the structure of the archive file extraction or single bigip.conf
  */
-export declare type ConfigFiles = {
+export declare type ConfigFile = {
     fileName: string;
     size: number;
-    content?: string;
+    content: string;
 };

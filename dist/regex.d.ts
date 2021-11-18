@@ -57,13 +57,13 @@ export declare class RegExTree {
      * @param tmosVersion
      */
     get(tmosVersion?: string): TmosRegExTree;
-    /**
-     * used to produce final regex from multiline/commented regex
-     * @param regs regex pieces in array
-     * @param opts regex options (g/m/s/i/y/u/s)
-     */
-    private multilineRegExp;
 }
+/**
+ * combines multi-line commented regex final regex
+ * @param regs regex pieces in array
+ * @param opts regex options (g/m/s/i/y/u/s)
+ */
+export declare function multilineRegExp(regs: RegExp[], opts: string): RegExp;
 export declare type TmosRegExTree = {
     tmosVersion: RegExp;
     parentObjects: RegExp;

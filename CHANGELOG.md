@@ -9,7 +9,39 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [0.8.0] - (02-07-2021)
+## [0.9.0] - (10.31.2021)
+
+- updated base config extraction to pull all DO classes supported in ACC
+- fixed parsing error when no virtual servers
+- fixed cli (was not working with new async parser)
+- added cli options
+  - All output is in json format now
+  - includes command processing logs
+  - added switches to exclude output for:
+    - no_sources
+    - no_file_store
+    - no_command_logs
+    - no_conversion_logs
+- started creating tests archive generator
+- started looking into adding an option for exploring archives with passphrase
+
+---
+
+## [0.8.0] - (02-25-2021)
+
+### Added
+
+- certificate/key extraction
+
+### Modified
+
+- Core parsing/extraction process is now asyncronous
+  - emits config and stats files during processing
+  - Once config files are done processing, all other files are processed into the config tree
+
+---
+
+## [0.7.0] - (01-25-2021)
 
 ### Modified
 

@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { BigipConfObj, Explosion } from './models';
+import { BigipConfObj, ConfigFile, Explosion, xmlStats } from './models';
 import { ConfigFiles } from './unPacker';
 /**
  * Class to consume bigip configs -> parse apps
@@ -21,12 +21,60 @@ export default class BigipConfig extends EventEmitter {
      * placeholder for future fully jsonified tmos config
      */
     configFullObject: BigipConfObj;
+    /**
+     * tmos version of the config file
+     */
     tmosVersion: string | undefined;
+    /**
+     * hostname of the source device
+     */
     hostname: string | undefined;
+    /**
+     * input file type (.conf/.ucs/.qkview/.tar.gz)
+     */
     inputFileType: string;
+    /**
+     * tmos version specific regex tree for abstracting applications
+     */
     private rx;
+    /**
+     * corkscrew processing stats object
+     */
     private stats;
+    /**
+     * stats information extracted from qkview xml files
+     */
+    deviceXmlStats: xmlStats;
+    /**
+     * default profile settings
+     */
+    defaultProfileBase: ConfigFile;
+    /**
+     * bigip license file
+     */
+    license: ConfigFile;
+    /**
+     * tmos file store files, which include certs/keys/external_monitors/...
+     */
+    fileStore: ConfigFile[];
     constructor();
+    /**
+     *
+     * @param file bigip .conf/ucs/qkview/mini_ucs.tar.gz
+     */
+    loadParseAsync(file: string): Promise<void>;
+    /**
+     * async parsing of config files
+     */
+    parseConf(conf: ConfigFile): Promise<void>;
+    parseXmlStats(file: ConfigFile): Promise<void>;
+    parseExtras(files: ConfigFile[]): Promise<void>;
+    parentTmosObjects(conf: ConfigFile): Promise<string[]>;
+    /**
+     * parses config file for tmos version, sets tmos version specific regex tree used to parse applications
+     * @param x config-file object
+     */
+    setTmosVersion(x: ConfigFile): Promise<void>;
     /**
      * load .conf file or files from ucs/qkview
      *

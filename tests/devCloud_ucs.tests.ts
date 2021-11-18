@@ -7,7 +7,7 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import BigipConfig from '../ltm';
+import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
 
 /**
@@ -23,7 +23,51 @@ describe('explode devCloud ucs tests', async function() {
     
     let device;
     let log;
-    it(`instantiate class, load configs`, async function() {
+    let err;
+    it(`instantiate class, load/parse configs - async`, async function() {
+        this.timeout(300000) // 5 minute timeout
+        
+        device = new BigipConfig();
+
+        const parsedFileEvents = []
+        const parsedObjEvents = []
+        device.on('parseFile', x => {
+            parsedFileEvents.push(x)
+            // console.log('parseFile', x)
+        })
+        device.on('parseObject', x => {
+            parsedObjEvents.push(x)
+            // console.log('parseObject', x)
+        })
+
+        await device.loadParseAsync(testFile)
+        .then( x => {
+            // just here for a spot to put a breaking point
+            assert.deepStrictEqual(x, undefined)
+            fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
+        })
+        .catch( y => {
+            err = y;
+            log = device.logs()
+            debugger;
+        })
+        
+        await device.explode()
+        .then( expld => {
+            // debugger;
+        })
+        .catch( thisErr => {
+            err = thisErr;
+            log = device.logs()
+            debugger
+        });
+
+
+        // this.done();        
+    });
+
+
+    it(`instantiate class, load configs - sync `, async function() {
         device = new BigipConfig();
 
         const x = await device.load(testFile);

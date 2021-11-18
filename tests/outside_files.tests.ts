@@ -14,14 +14,14 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import BigipConfig from '../ltm';
+import BigipConfig from '../src/ltm';
 
 /**
  * test package use to test outside ucs/qkviews
  *  - need to change this to read all filenames from folder, then loop through all the qkview/ucs files and process them
  */
 
-const privateFolder = path.join(__dirname, '..', '..', '..', 'private');
+const privateFolder = path.join(__dirname, '..', '..', 'private');
 let device: BigipConfig;
 const log = [];
 const events = []

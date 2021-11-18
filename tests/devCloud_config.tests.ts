@@ -7,7 +7,7 @@ import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import BigipConfig from '../ltm';
+import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
 
 const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");

@@ -52,7 +52,7 @@ function tmosChildToObj(cfg, obj) {
      */
     // while this part of the config has brackets...
     while (/{/.test(cfg)) {
-        const blncd = balanced_match_1.default('{', '}', cfg);
+        const blncd = (0, balanced_match_1.default)('{', '}', cfg);
         if (blncd) {
             // get line up to first '{'
             const name = blncd.pre;

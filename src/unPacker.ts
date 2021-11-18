@@ -23,11 +23,11 @@ export type ConfigFiles = {
     content: string
 }[]
 
- /**
-  * extracts needed config files from archive
-  * @param input path/file to .conf|.ucs|.qkview|.gz
-  */
-export async function unPacker (input: string):Promise<ConfigFiles> {
+/**
+ * extracts needed config files from archive
+ * @param input path/file to .conf|.ucs|.qkview|.gz
+ */
+export async function unPacker(input: string): Promise<ConfigFiles> {
 
     /**
      * look at streaming specific files from the archive without having to load the entire thing into memory
@@ -36,6 +36,8 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
      * https://github.com/mafintosh/gunzip-maybe
      * https://github.com/mafintosh/tar-stream
      * https://github.com/npm/node-tar#readme
+     * 
+     * https://stackoverflow.com/questions/19978452/how-to-extract-single-file-from-tar-gz-archive-using-node-js
      * 
      */
 
@@ -46,14 +48,14 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
      * what kind of file we workin with?
      */
     if (filePath.ext === '.conf') {
-        
+
         try {
-            
+
             // get file size
             const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
             // try to read file contents
             const content = fs.readFileSync(path.join(filePath.dir, filePath.base), 'utf-8');
-            
+
             logger.debug(`got .conf file [${input}], size [${size}]`)
 
             return [{ fileName: filePath.base, size, content }];
@@ -71,6 +73,7 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
 
         return await decompress(input, {
             filter: file => archiveFileFilter(file)
+            // filter: file => (fileFilter(file.path) && file.type === 'file')
         })
         .then( extracted => {
             return extracted.map( x => { 
@@ -78,9 +81,8 @@ export async function unPacker (input: string):Promise<ConfigFiles> {
             })
         })
 
-
     } else {
-        
+
         const msg = `file type of "${filePath.ext}", not supported, try (.conf|.ucs|.kqview|.gz)`
         logger.error(msg);
         throw new Error(`not able to read file => ${msg}`);
@@ -103,13 +105,14 @@ function archiveFileFilter(file: decompress.File) {
      *  
      */
 
-    if (/^config\/bigip.conf$/.test(file.path) && file.type === 'file') {
-        return true
-    }
-    if (/^config\/bigip_base.conf$/.test(file.path) && file.type === 'file') {
-        return true
-    }
-    if (/^config\/partitions\/.+?/.test(file.path) && file.type === 'file') {
-        return true
-    }
+    if (/^config\/bigip.conf$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/bigip_base.conf$/.test(file.path) && file.type === 'file') { return true }
+    if (/^config\/partitions\/.+?$/.test(file.path) && file.type === 'file') { return true }
+
+    // added these with the unPackerStream creation, but then realized that down stream functions of this flow will not be able to handle the new files
+    // if (/^config\/bigip_gtm.conf$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^config\/bigip.license$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^config\/profile_base.conf$/.test(file.path) && file.type === 'file') { return true }
+    // if (/^var\/tmp\/filestore_temp\/files_d\/.+?$/.test(file.path) && file.type === 'file') { return true }
+
 }

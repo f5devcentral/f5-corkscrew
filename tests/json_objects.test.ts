@@ -11,8 +11,8 @@ import {
   setNestedKey, 
   getPathOfValue, 
   deepGet, 
-  pathValueFromKey 
-} from '../utils/objects'
+  pathValueFromKey
+} from '../src/utils/objects'
 
 // import { simpleVSbody_asJson, simpleVStmosBody, vsApp3 } from './json_objects_data'
 

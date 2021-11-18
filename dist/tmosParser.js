@@ -38,14 +38,14 @@ function parseTmosConfig(config) {
         const firstLtm = parsingCfg.match(/\nltm /);
         parsingCfg = parsingCfg.slice(firstLtm.index);
         while (/\nltm .+?{/.test(parsingCfg)) {
-            const blncd = balanced_match_1.default('{', '}', parsingCfg);
+            const blncd = (0, balanced_match_1.default)('{', '}', parsingCfg);
             if (blncd) {
                 // extract object name from bracket match pre-text
                 const parentObjName = blncd.pre.trim().split(' ');
                 // create new nested object with name/paths and body
-                const newObj = objects_1.nestedObjValue(parentObjName, blncd.body);
+                const newObj = (0, objects_1.nestedObjValue)(parentObjName, blncd.body);
                 // merge new object back into main objects tree
-                fullObj = objects_1.deepMergeObj(fullObj, newObj);
+                fullObj = (0, objects_1.deepMergeObj)(fullObj, newObj);
                 // fullObj = simpleMergeDeep(fullObj, newObj);
                 // rebuild object we are extracting from config file
                 const rebuiltObj = `${parentObjName.join(' ')} {${blncd.body}}`;
@@ -59,14 +59,14 @@ function parseTmosConfig(config) {
     }
     else {
         while (/{/.test(parsingCfg)) {
-            const blncd = balanced_match_1.default('{', '}', parsingCfg);
+            const blncd = (0, balanced_match_1.default)('{', '}', parsingCfg);
             if (blncd) {
                 // extract object name from bracket match pre-text
                 const parentObjName = blncd.pre.trim().split(' ');
                 // create new nested object with name/paths and body
-                const newObj = objects_1.nestedObjValue(parentObjName, blncd.body);
+                const newObj = (0, objects_1.nestedObjValue)(parentObjName, blncd.body);
                 // merge new object back into main objects tree
-                fullObj = objects_1.deepMergeObj(fullObj, newObj);
+                fullObj = (0, objects_1.deepMergeObj)(fullObj, newObj);
                 // fullObj = simpleMergeDeep(fullObj, newObj);
                 // rebuild object we are extracting from config file
                 const rebuiltObj = `${parentObjName.join(' ')} {${blncd.body}}`;
