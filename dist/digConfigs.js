@@ -247,32 +247,37 @@ function digProfileConfigs(profilesList, configObject, rx) {
  * @param rulesList raw irules regex from vs dig
  */
 function digRuleConfigs(rulesList, configObject, rx) {
-    const ruleNames = rulesList.match(rx.vs.rules.names);
-    logger_1.default.debug(`rule references found: `, ruleNames);
-    // list of rules on the vs
-    const config = [];
-    // final config object
-    const obj = {
-        config: []
-    };
-    const map = {};
-    ruleNames.forEach(name => {
-        // search config, return matches
-        const x = (0, objects_1.pathValueFromKey)(configObject.ltm.rule, name);
-        if (x) {
-            config.push(`ltm rule ${x.key} {${x.value}}`);
-            const iRulePools = (0, pools_1.poolsInRule)(x.value);
-            if (iRulePools) {
-                // for each pool reference found, get config
-                iRulePools.forEach(el => {
-                    // if no "/", this is a "/Common/" partition rule
-                    if (/\//.test(el[0])) {
-                        // found slash, so has parition prefix
-                        const poolC = digPoolConfig(el[0], configObject, rx);
-                        if (poolC) {
-                            obj.config.push(poolC.config[0]);
-                            // deepMergeObj(obj, { map: { pools: poolC.map }})
-                            map.pools = poolC.map;
+    return __awaiter(this, void 0, void 0, function* () {
+        const ruleNames = rulesList.match(rx.vs.rules.names);
+        logger_1.default.debug(`rule references found: `, ruleNames);
+        // list of rules on the vs
+        const iRuleConfigs = [];
+        // config list to return (includes irules and other objects referenced by irules)
+        const config = [];
+        // final config object
+        const obj = {
+            config: []
+        };
+        const map = {};
+        yield ruleNames.forEach((name) => __awaiter(this, void 0, void 0, function* () {
+            // search config, return matches
+            const x = (0, objects_1.pathValueFromKey)(configObject.ltm.rule, name);
+            if (x) {
+                iRuleConfigs.push(`ltm rule ${x.key} {${x.value}}`);
+                const iRulePools = (0, pools_1.poolsInRule)(x.value);
+                if (iRulePools) {
+                    // for each pool reference found, get config
+                    iRulePools.forEach(el => {
+                        // if no "/", this is a "/Common/" partition rule
+                        if (/\//.test(el[0])) {
+                            // found slash, so has parition prefix
+                            const poolC = digPoolConfig(el[0], configObject, rx);
+                            if (poolC) {
+                                // obj.config.push(poolC.config[0]);
+                                config.push(poolC.config[0]);
+                                // deepMergeObj(obj, { map: { pools: poolC.map }})
+                                map.pools = poolC.map;
+                            }
                         }
                         else {
                             // no slash, so adding commond partition prefix
@@ -290,7 +295,7 @@ function digRuleConfigs(rulesList, configObject, rx) {
                 }
                 // find data groups in irule
                 const dataGroups = Object.keys(configObject.ltm['data-group'].internal);
-                yield digiRules_1.digDataGroupsiniRule(x.value, dataGroups)
+                yield (0, digiRules_1.digDataGroupsiniRule)(x.value, dataGroups)
                     .then((dgNamesInRule) => __awaiter(this, void 0, void 0, function* () {
                     yield dgNamesInRule.forEach((dg) => __awaiter(this, void 0, void 0, function* () {
                         const dgBody = configObject.ltm['data-group'].internal[dg];
