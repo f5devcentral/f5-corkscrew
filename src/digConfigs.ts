@@ -22,33 +22,33 @@ import { digDataGroupsiniRule } from './digiRules';
  * @param configTree bigip config as json tree
  * @returns raw config objects
  */
-export async function digBaseConfig (configTree: BigipConfObj) {
+export async function digBaseConfig(configTree: BigipConfObj) {
 
     const confs = [];
 
-    if(configTree?.net?.vlan) {
+    if (configTree?.net?.vlan) {
         // get vlans
         for (const [key, value] of Object.entries(configTree.net.vlan)) {
             confs.push(`net vlan ${key} {${value}}`)
         }
     }
-    
-    
-    if(configTree?.net?.self) {
+
+
+    if (configTree?.net?.self) {
         // get ip addresses
         for (const [key, value] of Object.entries(configTree.net.self)) {
             confs.push(`net self ${key} {${value}}`)
         }
     }
 
-    if(configTree?.net?.["route-domain"]) {
+    if (configTree?.net?.["route-domain"]) {
         // get route-domains
         for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
             confs.push(`net route-domain ${key} {${value}}`)
         }
     }
 
-    if(configTree?.auth?.partition) {
+    if (configTree?.auth?.partition) {
         // get partitions
         for (const [key, value] of Object.entries(configTree.auth.partition)) {
             confs.push(`auth partition ${key} {${value}}`)
@@ -101,52 +101,52 @@ export async function digVsConfig(vsName: string, vsConfig: string, configTree: 
     let config = [];
     config.push(`ltm virtual ${vsName} {${vsConfig}}`);
 
-    if(pool && pool[1]) {
+    if (pool && pool[1]) {
         const x = digPoolConfig(pool[1], configTree, rx);
         config.push(...x.config);
         map.pool = x.map;
         logger.debug(`[${vsName}] found the following pool`, pool[1]);
     }
 
-    if(profiles && profiles[1]){
+    if (profiles && profiles[1]) {
         const x = digProfileConfigs(profiles[1], configTree, rx);
         config.push(...x.config);
         logger.debug(`[${vsName}] found the following profiles`, profiles[1]);
     }
 
-    if(rules && rules[1]) {
+    if (rules && rules[1]) {
         // add irule connection destination mapping
 
         await digRuleConfigs(rules[1], configTree, rx)
-        .then( x => {
-            config.push(...x.config);
-            if (x.map) {
-                map.irule = x.map;
-            }
-            logger.debug(`[${vsName}] found the following rules`, rules[1]);
-        })
+            .then(x => {
+                config.push(...x.config);
+                if (x.map) {
+                    map.irule = x.map;
+                }
+                logger.debug(`[${vsName}] found the following rules`, rules[1]);
+            })
     }
 
-    if(snat && snat[1]) {
+    if (snat && snat[1]) {
         const x = digSnatConfig(snat[1], configTree, rx);
         config.push(...x.config);
         logger.debug(`[${vsName}] found snat configuration`, snat[1])
     }
 
-    if(policies && policies[1]) {
+    if (policies && policies[1]) {
         // add ltp destination mapping
         const x = digPolicyConfig(policies[1], configTree, rx);
         config.push(...x.config);
         logger.debug(`[${vsName}] found the following policies`, policies[1]);
     }
 
-    if(persistence && persistence[1]) {
+    if (persistence && persistence[1]) {
         const x = digPersistConfig(persistence[1], configTree, rx);
         config.push(...x.config);
         logger.debug(`[${vsName}] found the following persistence`, persistence[1]);
     }
-    
-    if(fallBackPersist && fallBackPersist[1]) {
+
+    if (fallBackPersist && fallBackPersist[1]) {
         const x = digFbPersistConfig(fallBackPersist[1], configTree);
         config.push(...x.config);
         logger.debug(`[${vsName}] found the following persistence`, fallBackPersist[1]);
@@ -160,7 +160,7 @@ export async function digVsConfig(vsName: string, vsConfig: string, configTree: 
     cleanObject(map);
 
     return { config, map };
-    
+
 }
 
 /**
@@ -184,14 +184,14 @@ function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: TmosReg
         const members = poolConfig.value.match(rx.vs.pool.members);
         const monitors = poolConfig.value.match(rx.vs.pool.monitors);
 
-        if(members && members[1]){
+        if (members && members[1]) {
 
             // TODO:  move all these regex's to the rx tree
 
             // dig node information from members
             const nodeNames = members[1].match(rx.vs.pool.nodesFromMembers);
             // const nodeAddresses = members[1].match(rx.n)
-            
+
             // regular pool member definition regex
             const memberDef = members[1].match(/(\/[\w\-\/.]+:\d+) {\s+address(.+?)\s+}/g)
 
@@ -213,20 +213,20 @@ function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: TmosReg
             }
 
             if (memberFqdnDef) {
-                memberFqdnDef.forEach((el:string) => {
+                memberFqdnDef.forEach((el: string) => {
                     // const memberFqdnNames = el.match(/([\s\S]+?)\n/g);
                     const name = el.match(/(\/[\w\-\/.]+)/);
                     const port = el.match(/(?<=:)\d+(?= )/);
 
                     const a = pathValueFromKey(configObject.ltm.node, name[0]);
-                    
+
                     config.push(`ltm node ${a.key} {${a.value}}`);
                     map.push(`${name}:${port}`)
                 })
             }
         }
 
-        if(monitors && monitors[1]) {
+        if (monitors && monitors[1]) {
 
             //dig monitor configs like pool members above
             const monitorNames = monitors[1].split(/ and /);
@@ -234,24 +234,24 @@ function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: TmosReg
 
             // eslint-disable-next-line prefer-const
             const monitorNameConfigs = [];
-            monitorNames.forEach( name => {
+            monitorNames.forEach(name => {
 
                 // new way look for key in .ltm.monitor
                 const x = pathValueFromKey(configObject.ltm.monitor, name)
-                if(x){
+                if (x) {
                     // rebuild tmos object
                     monitorNameConfigs.push(`ltm monitor ${x.path} ${x.key} {${x.value}}`);
                 }
             })
-            
+
             logger.debug('pool monitor configs found:', monitorNameConfigs);
             const defaultMonitors = monitorNames.length - monitorNameConfigs.length
-            
-            if(defaultMonitors){
+
+            if (defaultMonitors) {
                 logger.debug(`[${poolName}] references ${defaultMonitors} system default monitors, compare previous arrays for details`)
             }
-            
-            if(monitorNameConfigs){
+
+            if (monitorNameConfigs) {
                 // monitorNameConfigs.join('\n');
                 config.push(...monitorNameConfigs);
 
@@ -271,11 +271,11 @@ function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx:
     // regex profiles list to individual profiles
     const profileNames = profilesList.match(rx.vs.profiles.names);
     logger.debug(`profile references found: `, profileNames);
-    
+
     // eslint-disable-next-line prefer-const
     const config = [];
     const map = [];
-    profileNames.forEach( name => {
+    profileNames.forEach(name => {
 
         const x = pathValueFromKey(configObject.ltm.profile, name);
         if (x) {
@@ -283,9 +283,9 @@ function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx:
         }
 
     })
-    
+
     const defaultProfiles = profileNames.length - config.length;
-    if(defaultProfiles){
+    if (defaultProfiles) {
         logger.debug(`Found ${defaultProfiles} system default profiles, compare previous arrays for details`)
     }
     // return config.join('\n');
@@ -317,7 +317,7 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
         virtuals?: string[]
         nodes?: string[]
     }
-    
+
     // final config object
     const obj = {
         config: []
@@ -325,7 +325,7 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
 
     const map: ruleMap = {};
 
-    await ruleNames.forEach( async name => {
+    await ruleNames.forEach(async name => {
         // search config, return matches
         const x = pathValueFromKey(configObject.ltm.rule, name)
 
@@ -336,7 +336,7 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
             if (iRulePools) {
 
                 // for each pool reference found, get config
-                iRulePools.forEach( el => {
+                iRulePools.forEach(el => {
 
                     // if no "/", this is a "/Common/" partition rule
                     if (/\//.test(el[0])) {
@@ -349,12 +349,12 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
                             // deepMergeObj(obj, { map: { pools: poolC.map }})
                             map.pools = poolC.map;
                         }
-                        
+
                     } else {
-                        
+
                         // no slash, so adding commond partition prefix
                         const poolC = digPoolConfig(`/Common/${el[0]}`, configObject, rx);
-                        
+
                         if (poolC) {
                             // obj.config.push(poolC.config[0]);
                             config.push(poolC.config[0]);
@@ -368,21 +368,23 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
             }
 
 
-            // find data groups in irule
+            // if we have any data-groups, find data groups in irule
             const dataGroups = Object.keys(configObject.ltm['data-group'].internal)
-            await digDataGroupsiniRule(x.value, dataGroups)
-            .then( async dgNamesInRule => {
-                await dgNamesInRule.forEach( async dg => {
-                    const dgBody = configObject.ltm['data-group'].internal[dg];
-                    const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`
-                    config.push(fullDgConfig);
-                })
-            })           
+            if (dataGroups.length > 0) {
+                await digDataGroupsiniRule(x.value, dataGroups)
+                    .then(async dgNamesInRule => {
+                        await dgNamesInRule.forEach(async dg => {
+                            const dgBody = configObject.ltm['data-group'].internal[dg];
+                            const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`
+                            config.push(fullDgConfig);
+                        })
+                    })
+            }
         }
     })
 
     const defaultRules = ruleNames.length - iRuleConfigs.length;
-    if(defaultRules) {
+    if (defaultRules) {
         logger.debug(`Found ${defaultRules} system default iRules, compare previous arrays for details`)
     }
 
@@ -417,7 +419,7 @@ function digSnatConfig(snat: string, configObject: BigipConfObj, rx: TmosRegExTr
     } else {
         logger.debug(`snat configuration detected, but no pool reference found, presume -> automap`)
     }
-    return { config, map } ;
+    return { config, map };
 }
 
 
@@ -433,24 +435,24 @@ function digPolicyConfig(policys: string, configObject: BigipConfObj, rx: TmosRe
     // regex local traffic list to individual profiles
     const policyNames = policys.match(rx.vs.ltPolicies.names);
     logger.debug(`policy references found: `, policyNames);
-    
+
     const config = [];
     const map = [];
-    
+
     // get policy references from vs
-    policyNames.forEach( name => {
-        
+    policyNames.forEach(name => {
+
         const x = pathValueFromKey(configObject.ltm.policy, name)
-        
+
         if (x) {
             logger.debug(`policy found [${x.key}]`);
             config.push(`ltm policy ${x.key} {${x.value}}`)
-            
+
             // got through each policy and dig references (like pools)
             const pools = poolsInPolicy(x.value)
-            
+
             if (pools) {
-                pools.forEach( pool => {
+                pools.forEach(pool => {
                     const cfg = pathValueFromKey(configObject.ltm.pool, pool)
                     // if we got here there should be a pool for the reference, 
                     // but just in case, we confirm with (if) statement
@@ -482,7 +484,7 @@ function digPolicyConfig(policys: string, configObject: BigipConfObj, rx: TmosRe
  * @param x list of strings
  * @return list of unique strings
  */
-export function uniqueList (x: string[]) {
+export function uniqueList(x: string[]) {
     return Array.from(new Set(x));
 }
 
@@ -533,7 +535,7 @@ function digFbPersistConfig(fbPersist: string, configObject: BigipConfObj) {
  * get hostname from json config tree (if present)
  * @param configObject to search for hostname
  */
-export function getHostname (configObject: BigipConfObj): string {
+export function getHostname(configObject: BigipConfObj): string {
 
     if (configObject?.sys?.['global-settings']) {
 

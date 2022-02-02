@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { poolsInPolicy, poolsInRule } from '../src/pools';
+import { digDataGroupsiniRule } from '../src/digiRules'
 
 
 const iRuleWithPools = fs.readFileSync(path.join(__dirname, 'artifacts', 'pools.irule'), "utf-8");
@@ -98,3 +99,4 @@ describe('pool reference tests', function () {
 
 
 });
+
