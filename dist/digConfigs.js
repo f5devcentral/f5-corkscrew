@@ -293,16 +293,18 @@ function digRuleConfigs(rulesList, configObject, rx) {
                     // add pools to map
                     map.pools = iRulePools;
                 }
-                // find data groups in irule
+                // if we have any data-groups, find data groups in irule
                 const dataGroups = Object.keys(configObject.ltm['data-group'].internal);
-                yield (0, digiRules_1.digDataGroupsiniRule)(x.value, dataGroups)
-                    .then((dgNamesInRule) => __awaiter(this, void 0, void 0, function* () {
-                    yield dgNamesInRule.forEach((dg) => __awaiter(this, void 0, void 0, function* () {
-                        const dgBody = configObject.ltm['data-group'].internal[dg];
-                        const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`;
-                        config.push(fullDgConfig);
+                if (dataGroups.length > 0) {
+                    yield (0, digiRules_1.digDataGroupsiniRule)(x.value, dataGroups)
+                        .then((dgNamesInRule) => __awaiter(this, void 0, void 0, function* () {
+                        yield dgNamesInRule.forEach((dg) => __awaiter(this, void 0, void 0, function* () {
+                            const dgBody = configObject.ltm['data-group'].internal[dg];
+                            const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`;
+                            config.push(fullDgConfig);
+                        }));
                     }));
-                }));
+                }
             }
         }));
         const defaultRules = ruleNames.length - iRuleConfigs.length;
