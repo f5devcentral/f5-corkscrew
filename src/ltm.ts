@@ -29,7 +29,7 @@ import { deepMergeObj } from './utils/objects'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
 import { ConfigFiles, unPacker } from './unPacker'
-import { digBaseConfig, digVsConfig, getHostname } from './digConfigs';
+import { digVsConfig, getHostname } from './digConfigs';
 import path from 'path';
 import { UnPacker } from './unPackerStream';
 import { parseStringPromise as xml2json } from 'xml2js';
@@ -473,9 +473,6 @@ export default class BigipConfig extends EventEmitter {
 
         const startTime = process.hrtime.bigint();  // start pack timer
 
-        // collect base information like vlans/IPs
-        const base = await digBaseConfig(this.configObject);
-
         // extract DO classes (base information expanded)
         const doClasses = await digDoConfig(this.configObject);
 
@@ -487,7 +484,6 @@ export default class BigipConfig extends EventEmitter {
             inputFileType: this.inputFileType,      // add input file type
             config: {
                 sources: this.configFiles,
-                base,
                 doClasses
             },
             stats: this.stats,                      // add stats object

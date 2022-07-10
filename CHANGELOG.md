@@ -9,6 +9,22 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.10.0] - (07.10.2022)
+
+- Added parent APM profile digging (apm profile acces \<name\>)
+  - Not digging the entire apm profile yet, just the main profile that gets attached to the virtual so we can at least see that this VS has APM
+- Removed old base config digging
+  - All details and more are in DO search
+
+---
+
+## [0.9.3] - (02.02.2022)
+
+- TypeError: Cannot read properties of undefined (reading 'internal') #23
+  - https://github.com/f5devcentral/f5-corkscrew/issues/23
+
+---
+
 ## [0.9.0] - (10.31.2021)
 
 - updated base config extraction to pull all DO classes supported in ACC

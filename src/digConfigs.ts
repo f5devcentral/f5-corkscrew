@@ -18,48 +18,6 @@ import { digDataGroupsiniRule } from './digiRules';
 
 
 /**
- * dig base config information like vlans/SelfIPs
- * @param configTree bigip config as json tree
- * @returns raw config objects
- */
-export async function digBaseConfig(configTree: BigipConfObj) {
-
-    const confs = [];
-
-    if (configTree?.net?.vlan) {
-        // get vlans
-        for (const [key, value] of Object.entries(configTree.net.vlan)) {
-            confs.push(`net vlan ${key} {${value}}`)
-        }
-    }
-
-
-    if (configTree?.net?.self) {
-        // get ip addresses
-        for (const [key, value] of Object.entries(configTree.net.self)) {
-            confs.push(`net self ${key} {${value}}`)
-        }
-    }
-
-    if (configTree?.net?.["route-domain"]) {
-        // get route-domains
-        for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
-            confs.push(`net route-domain ${key} {${value}}`)
-        }
-    }
-
-    if (configTree?.auth?.partition) {
-        // get partitions
-        for (const [key, value] of Object.entries(configTree.auth.partition)) {
-            confs.push(`auth partition ${key} {${value}}`)
-        }
-    }
-    return confs;
-}
-
-
-
-/**
  * scans vs config, and discovers child configs
  * @param vsName virtual server name
  * @param vsConfig virtual server tmos config body 
@@ -272,14 +230,20 @@ function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx:
     const profileNames = profilesList.match(rx.vs.profiles.names);
     logger.debug(`profile references found: `, profileNames);
 
-    // eslint-disable-next-line prefer-const
     const config = [];
     const map = [];
     profileNames.forEach(name => {
 
+        // check the ltm profiles
         const x = pathValueFromKey(configObject.ltm.profile, name);
         if (x) {
             config.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
+        }
+
+        // check apm profiles
+        const y =  pathValueFromKey(configObject.apm.profile.access, name);
+        if (y) {
+            config.push(`apm profile access ${x.path} ${x.key} {${x.value}}`);
         }
 
     })
