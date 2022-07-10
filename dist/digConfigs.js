@@ -198,7 +198,7 @@ function digProfileConfigs(profilesList, configObject, rx) {
             config.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
         }
         // check apm profiles
-        const y = (0, objects_1.pathValueFromKey)(configObject.apm.profile.access, name);
+        const y = (0, objects_1.pathValueFromKey)(configObject.apm.profile, name);
         if (y) {
             config.push(`apm profile access ${x.path} ${x.key} {${x.value}}`);
         }

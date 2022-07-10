@@ -243,7 +243,7 @@ function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx:
         // check apm profiles
         const y =  pathValueFromKey(configObject.apm.profile, name);
         if (y) {
-            config.push(`apm profile access ${x.path} ${x.key} {${x.value}}`);
+            config.push(`apm profile access ${y.path} ${y.key} {${y.value}}`);
         }
 
     })
