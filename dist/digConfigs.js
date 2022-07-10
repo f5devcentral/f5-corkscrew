@@ -20,48 +20,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHostname = exports.uniqueList = exports.digVsConfig = exports.digBaseConfig = void 0;
+exports.getHostname = exports.uniqueList = exports.digVsConfig = void 0;
 const logger_1 = __importDefault(require("./logger"));
 const objects_1 = require("./utils/objects");
 const pools_1 = require("./pools");
 const digiRules_1 = require("./digiRules");
-/**
- * dig base config information like vlans/SelfIPs
- * @param configTree bigip config as json tree
- * @returns raw config objects
- */
-function digBaseConfig(configTree) {
-    var _a, _b, _c, _d;
-    return __awaiter(this, void 0, void 0, function* () {
-        const confs = [];
-        if ((_a = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _a === void 0 ? void 0 : _a.vlan) {
-            // get vlans
-            for (const [key, value] of Object.entries(configTree.net.vlan)) {
-                confs.push(`net vlan ${key} {${value}}`);
-            }
-        }
-        if ((_b = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _b === void 0 ? void 0 : _b.self) {
-            // get ip addresses
-            for (const [key, value] of Object.entries(configTree.net.self)) {
-                confs.push(`net self ${key} {${value}}`);
-            }
-        }
-        if ((_c = configTree === null || configTree === void 0 ? void 0 : configTree.net) === null || _c === void 0 ? void 0 : _c["route-domain"]) {
-            // get route-domains
-            for (const [key, value] of Object.entries(configTree.net["route-domain"])) {
-                confs.push(`net route-domain ${key} {${value}}`);
-            }
-        }
-        if ((_d = configTree === null || configTree === void 0 ? void 0 : configTree.auth) === null || _d === void 0 ? void 0 : _d.partition) {
-            // get partitions
-            for (const [key, value] of Object.entries(configTree.auth.partition)) {
-                confs.push(`auth partition ${key} {${value}}`);
-            }
-        }
-        return confs;
-    });
-}
-exports.digBaseConfig = digBaseConfig;
 /**
  * scans vs config, and discovers child configs
  * @param vsName virtual server name
@@ -226,13 +189,18 @@ function digProfileConfigs(profilesList, configObject, rx) {
     // regex profiles list to individual profiles
     const profileNames = profilesList.match(rx.vs.profiles.names);
     logger_1.default.debug(`profile references found: `, profileNames);
-    // eslint-disable-next-line prefer-const
     const config = [];
     const map = [];
     profileNames.forEach(name => {
+        // check the ltm profiles
         const x = (0, objects_1.pathValueFromKey)(configObject.ltm.profile, name);
         if (x) {
             config.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
+        }
+        // check apm profiles
+        const y = (0, objects_1.pathValueFromKey)(configObject.apm.profile.access, name);
+        if (y) {
+            config.push(`apm profile access ${x.path} ${x.key} {${x.value}}`);
         }
     });
     const defaultProfiles = profileNames.length - config.length;
@@ -260,6 +228,7 @@ function digRuleConfigs(rulesList, configObject, rx) {
         };
         const map = {};
         yield ruleNames.forEach((name) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             // search config, return matches
             const x = (0, objects_1.pathValueFromKey)(configObject.ltm.rule, name);
             if (x) {
@@ -294,7 +263,7 @@ function digRuleConfigs(rulesList, configObject, rx) {
                     map.pools = iRulePools;
                 }
                 // if we have any data-groups, find data groups in irule
-                const dataGroups = Object.keys(configObject.ltm['data-group'].internal);
+                const dataGroups = Object.keys((_a = configObject.ltm['data-group']) === null || _a === void 0 ? void 0 : _a.internal);
                 if (dataGroups.length > 0) {
                     yield (0, digiRules_1.digDataGroupsiniRule)(x.value, dataGroups)
                         .then((dgNamesInRule) => __awaiter(this, void 0, void 0, function* () {

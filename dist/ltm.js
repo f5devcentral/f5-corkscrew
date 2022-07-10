@@ -386,8 +386,6 @@ class BigipConfig extends events_1.EventEmitter {
             }
             const apps = yield this.apps(); // extract apps before parse timer...
             const startTime = process.hrtime.bigint(); // start pack timer
-            // collect base information like vlans/IPs
-            const base = yield (0, digConfigs_1.digBaseConfig)(this.configObject);
             // extract DO classes (base information expanded)
             const doClasses = yield (0, digDoClassesAuto_1.digDoConfig)(this.configObject);
             // build return object
@@ -398,7 +396,6 @@ class BigipConfig extends events_1.EventEmitter {
                 inputFileType: this.inputFileType,
                 config: {
                     sources: this.configFiles,
-                    base,
                     doClasses
                 },
                 stats: this.stats,

@@ -43,7 +43,13 @@ export declare type BigipConfObj = {
         };
         "default-node-monitor"?: string;
     };
-    apm?: unknown;
+    apm?: {
+        profile?: {
+            access?: {
+                [key: string]: string;
+            };
+        };
+    };
     auth?: {
         partition?: unknown;
     };
