@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: publishing
     needs: test
-    name: Package-Release-Publish
+    name: Release-Publish
     steps:
 
       - name: Checkout code
