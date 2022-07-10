@@ -200,7 +200,7 @@ function digProfileConfigs(profilesList, configObject, rx) {
         // check apm profiles
         const y = (0, objects_1.pathValueFromKey)(configObject.apm.profile, name);
         if (y) {
-            config.push(`apm profile access ${x.path} ${x.key} {${x.value}}`);
+            config.push(`apm profile access ${y.path} ${y.key} {${y.value}}`);
         }
     });
     const defaultProfiles = profileNames.length - config.length;

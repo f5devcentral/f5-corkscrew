@@ -332,17 +332,20 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
             }
 
 
-            // if we have any data-groups, find data groups in irule
-            const dataGroups = Object.keys(configObject.ltm['data-group']?.internal)
-            if (dataGroups.length > 0) {
-                await digDataGroupsiniRule(x.value, dataGroups)
-                    .then(async dgNamesInRule => {
-                        await dgNamesInRule.forEach(async dg => {
-                            const dgBody = configObject.ltm['data-group'].internal[dg];
-                            const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`
-                            config.push(fullDgConfig);
+            // if we have any internal data-groups, find data groups in irule
+            if(configObject.ltm['data-group'].internal) {
+
+                const dataGroups = Object.keys(configObject.ltm['data-group'].internal)
+                if (dataGroups.length > 0) {
+                    await digDataGroupsiniRule(x.value, dataGroups)
+                        .then(async dgNamesInRule => {
+                            await dgNamesInRule.forEach(async dg => {
+                                const dgBody = configObject.ltm['data-group'].internal[dg];
+                                const fullDgConfig = `ltm data-group internal ${dg} { ${dgBody} }`
+                                config.push(fullDgConfig);
+                            })
                         })
-                    })
+                }
             }
         }
     })
