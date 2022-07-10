@@ -333,7 +333,7 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
 
 
             // if we have any internal data-groups, find data groups in irule
-            if(configObject.ltm['data-group'].internal) {
+            if(configObject.ltm['data-group']?.internal) {
 
                 const dataGroups = Object.keys(configObject.ltm['data-group'].internal)
                 if (dataGroups.length > 0) {
