@@ -228,6 +228,7 @@ function digRuleConfigs(rulesList, configObject, rx) {
         };
         const map = {};
         yield ruleNames.forEach((name) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             // search config, return matches
             const x = (0, objects_1.pathValueFromKey)(configObject.ltm.rule, name);
             if (x) {
@@ -262,7 +263,7 @@ function digRuleConfigs(rulesList, configObject, rx) {
                     map.pools = iRulePools;
                 }
                 // if we have any internal data-groups, find data groups in irule
-                if (configObject.ltm['data-group'].internal) {
+                if ((_a = configObject.ltm['data-group']) === null || _a === void 0 ? void 0 : _a.internal) {
                     const dataGroups = Object.keys(configObject.ltm['data-group'].internal);
                     if (dataGroups.length > 0) {
                         yield (0, digiRules_1.digDataGroupsiniRule)(x.value, dataGroups)

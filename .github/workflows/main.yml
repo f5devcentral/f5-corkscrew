@@ -42,9 +42,17 @@ jobs:
       - name: install node deps
         run: npm ci
 
-      - name: publish release
+      - name: Generate GitHub Release
+        uses: lsegal/github-release-from-changelog-action@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        run: npx semantic-release
-# 
+
+      - name: publish release
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+
+
+
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
