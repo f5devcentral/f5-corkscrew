@@ -16,49 +16,23 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ConfigFile } from '../src/models';
 
-import { unPacker } from '../src/unPacker'
+// import { unPacker } from '../src/unPacker'
 import { UnPacker } from '../src/unPackerStream'
+
+const confFiles: any[] = []    // all the main .conf files
+const statFiles: any[] = []    // statistics .xml files
 
 describe('instantiation unPacker', async function () {
 
 
-    // it(`stream unPack ucs - PASSPHRASE`, async () => {
-
-    //     // test to start developing decrypting archive with passphrase
-
-    //     const confFiles = []    // all the main .conf files
-    //     const statFiles = []    // statistics .xml files
-    //     const unPacker = new UnPacker();
-
-    //     unPacker.on('conf', conf => confFiles.push(conf))
-    //     unPacker.on('stat', stat => statFiles.push(stat))
-
-    //     await unPacker.stream(path.join(__dirname, 'artifacts', 'test_passphrase_1.ucs'))
-    //         .then(respFiles => {
-
-    //             // These response files should be all the other files except the conf/stat files, mainly filestore files
-    //             assert.ok(
-    //                 confFiles.length > 3,
-    //                 'should have at least 3 files (bigip.conf/bigip.license/bigip_base.conf)'
-    //             )
-    //             assert.ok(typeof confFiles[0].fileName === 'string')
-    //             assert.ok(typeof confFiles[0].size === 'number')
-    //             assert.ok(typeof confFiles[0].content === 'string')
-    
-    //             // respFiles should also have the same structure
-    //             assert.ok(typeof respFiles.files[0].fileName === 'string')
-    //             assert.ok(typeof respFiles.files[0].size === 'number')
-    //             assert.ok(typeof respFiles.files[0].content === 'string')
-    //         })
-    //         .catch( err => {
-    //             debugger;
-    //         })
-    // });
+    beforeEach(() => {
+        confFiles.length = 0;
+        statFiles.length = 0;
+    })
 
     it(`stream unPack ucs`, async () => {
 
-        const confFiles = []    // all the main .conf files
-        const statFiles = []    // statistics .xml files
+
         const unPacker = new UnPacker();
 
         unPacker.on('conf', conf => confFiles.push(conf))
@@ -89,8 +63,6 @@ describe('instantiation unPacker', async function () {
 
     it(`stream unPack qkview`, async () => {
 
-        const confFiles = []
-        const statFiles = []
         let respFilesG: { files: ConfigFile[]; size: number; };
         const unPacker = new UnPacker();
 
@@ -121,8 +93,12 @@ describe('instantiation unPacker', async function () {
 
 
     it(`path to actual .conf file`, async function () {
+        
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
 
-        await unPacker(path.join(__dirname, 'artifacts', 'unPacker_test.conf'))
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'unPacker_test.conf'))
             .then(file => {
                 const expected = fs.readFileSync(path.join(__dirname, 'artifacts', 'unPacker_test.conf'), "utf-8");
                 assert.ok(typeof file[0].fileName === 'string')
@@ -139,7 +115,11 @@ describe('instantiation unPacker', async function () {
 
     it(`not a valid path to file`, async function () {
 
-        await unPacker(path.join(__dirname, "broken-file_path.io"))
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, "broken-file_path.io"))
             .then(file => {
                 debugger;
                 assert.ifError(file);  // should not have a response here
@@ -152,7 +132,11 @@ describe('instantiation unPacker', async function () {
 
     it(`unpack mini_ucs.tar.gz - success`, async function () {
 
-        await unPacker(path.join(__dirname, 'artifacts', 'mini_ucs.tar.gz'))
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'mini_ucs.tar.gz'))
             .then(file => {
 
                 // just grabing some details to confirm
@@ -173,7 +157,11 @@ describe('instantiation unPacker', async function () {
 
         // const startTime = process.hrtime.bigint();
 
-        await unPacker(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
             .then(file => {
 
                 // capture some key information pieces so we don't have to verify the whole thing
@@ -191,7 +179,11 @@ describe('instantiation unPacker', async function () {
 
     it(`unPack ucs - fail`, async function () {
 
-        await unPacker(path.join(__dirname, 'artifacts', 'bad.ucs'))
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'bad.ucs'))
             .then(file => {
                 debugger;
                 assert.ifError(file);
@@ -203,7 +195,11 @@ describe('instantiation unPacker', async function () {
 
     it(`unPack qkview - success`, async function () {
 
-        await unPacker(path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview'))
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview'))
             .then(file => {
 
                 // const converted = [file[0].fileName, file[2].size, file[4].fileName];
@@ -222,7 +218,11 @@ describe('instantiation unPacker', async function () {
     it(`unPack qkview - fail`, async function () {
 
         // read ucs should fail, log error to logger, return undefined
-        await unPacker(path.join(__dirname, 'artifacts', 'bad.qkview'))
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'bad.qkview'))
             .then(file => {
                 debugger;
                 assert.ifError(file);

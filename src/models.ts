@@ -74,6 +74,14 @@ export type BigipConfObj = {
     }
 }
 
+/**
+ * defines the structure of the archive file extraction or single bigip.conf
+ */
+export type ConfigFiles = {
+    fileName: string,
+    size: number,
+    content: string
+}[]
 
 export type xmlStats = {
     'mcp_module.xml'?: {

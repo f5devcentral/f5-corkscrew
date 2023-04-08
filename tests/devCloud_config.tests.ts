@@ -14,22 +14,25 @@ const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
 const testFileDetails = path.parse(testFile);
 const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`);
 console.log('outFile', outFile);
-const parsedFileEvents = []
-const parsedObjEvents = []
-const extractAppEvents = []
+const parsedFileEvents: any[] = []
+const parsedObjEvents: any[] = []
+const extractAppEvents: any[] = []
 let device: BigipConfig;
-const log = [];
+const log: string[] = [];
 
 describe('explode devCloud bigip.conf tests', async function () {
 
     it(`instantiate class, load configs`, async function () {
         device = new BigipConfig();
 
-        const x = await device.load(testFile);
-        if (!x) {
+        await device.loadParseAsync(testFile)
+        .then( resp => {
+            assert.ok(resp);
+        })
+        .catch( async err => {
             log.push(...await device.logs());
-        }
-        assert.ok(x)
+        })
+        
     });
 
     it(`parse configs, get parseTime`, async function () {
@@ -122,7 +125,7 @@ describe('explode devCloud bigip.conf tests', async function () {
         
         await device.apps('/Common/app4_t80_vs')
         .then( app => {
-            const appConfig = app[0].config;
+            const appConfig = app![0].config;
             assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
         })
 

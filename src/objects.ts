@@ -4,8 +4,8 @@
 
 import deepmerge from 'deepmerge'
 
-import logger from "../logger";
-import { BigipConfObj } from "../models";
+import logger from "./logger";
+import { BigipConfObj } from "./models";
 
 
 /**
@@ -20,11 +20,11 @@ export function cleanObject (obj: any) {
     cleanEmpty(obj);
     clearEmpties(obj);
 
-    // following is also a way to remove empty values from stuff
-    //  but can be process intensive
-    function removeUndefined (json) {
-        return JSON.parse(JSON.stringify(json))
-    }
+    // // following is also a way to remove empty values from stuff
+    // //  but can be process intensive
+    // function removeUndefined (json) {
+    //     return JSON.parse(JSON.stringify(json))
+    // }
 }
 
 
@@ -96,38 +96,38 @@ export function deepMergeObj(target: unknown, source: unknown,): unknown {
     }
 
 
-/**
- * Simple object check.
- * @param item
- * @returns {boolean}
- */
-function isObject(item) {
-    return (item && typeof item === 'object' && !Array.isArray(item));
-}
+// /**
+//  * Simple object check.
+//  * @param item
+//  * @returns {boolean}
+//  */
+// function isObject(item) {
+//     return (item && typeof item === 'object' && !Array.isArray(item));
+// }
 
-/**
- * Deep merge two objects.
- * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
- * @param target
- * @param ...sources
- */
-export function simpleMergeDeep(target: unknown, ...sources: any): unknown {
-    if (!sources.length) return target;
-    const source = sources.shift();
+// /**
+//  * Deep merge two objects.
+//  * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+//  * @param target
+//  * @param ...sources
+//  */
+// export function simpleMergeDeep(target: unknown, ...sources: any): unknown {
+//     if (!sources.length) return target;
+//     const source = sources.shift();
 
-    if (isObject(target) && isObject(source)) {
-        for (const key in source) {
-            if (isObject(source[key])) {
-                if (!target[key]) Object.assign(target, { [key]: {} });
-                simpleMergeDeep(target[key], source[key]);
-            } else {
-                Object.assign(target, { [key]: source[key] });
-            }
-        }
-    }
+//     if (isObject(target) && isObject(source)) {
+//         for (const key in source) {
+//             if (isObject(source[key])) {
+//                 if (!target[key]) Object.assign(target, { [key]: {} });
+//                 simpleMergeDeep(target[key], source[key]);
+//             } else {
+//                 Object.assign(target, { [key]: source[key] });
+//             }
+//         }
+//     }
 
-    return simpleMergeDeep(target, ...sources);
-}
+//     return simpleMergeDeep(target, ...sources);
+// }
 
 
 /**

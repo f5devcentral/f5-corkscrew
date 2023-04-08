@@ -12,7 +12,7 @@ import path from "path";
 import * as fs from 'fs';
 import logger from "./logger";
 import zlib from 'zlib';
-import tar from 'tar-stream'
+import tar from 'tar-stream';
 import { EventEmitter } from "events";
 import { multilineRegExp } from "./regex";
 import { ConfigFile } from "./models";

@@ -23,16 +23,14 @@
 import { EventEmitter } from 'events';
 import { RegExTree, TmosRegExTree } from './regex'
 import logger from './logger';
-import { nestedObjValue } from './utils/objects'
-import { BigipConfObj, ConfigFile, Explosion, Stats, xmlStats } from './models'
-import { deepMergeObj } from './utils/objects'
+import { nestedObjValue } from './objects'
+import { BigipConfObj, ConfigFile, ConfigFiles, Explosion, Stats, xmlStats } from './models'
+import { deepMergeObj } from './objects'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
-import { ConfigFiles, unPacker } from './unPacker'
 import { digVsConfig, getHostname } from './digConfigs';
 import path from 'path';
 import { UnPacker } from './unPackerStream';
-import { parseStringPromise as xml2json } from 'xml2js';
 import { digDoConfig } from './digDoClassesAuto';
 
 
@@ -224,12 +222,12 @@ export default class BigipConfig extends EventEmitter {
 
         // was parsing all files for ALL stats, but it ends up being 100sMb of data
         // so, just getting some interesting stuff for now
-        if (file.fileName === 'mcp_module.xml'){
-            await xml2json(file.content)
-                .then(out => {
-                    this.deviceXmlStats[file.fileName] = out;
-                });
-        }
+        // if (file.fileName === 'mcp_module.xml'){
+        //     await xml2json(file.content)
+        //         .then(out => {
+        //             this.deviceXmlStats[file.fileName] = out;
+        //         });
+        // }
 
     }
 
@@ -297,37 +295,6 @@ export default class BigipConfig extends EventEmitter {
 
 
 
-
-
-
-
-    /**
-     * load .conf file or files from ucs/qkview
-     *  
-     * @param config array of configs as strings
-     */
-    async load(file: string): Promise<number> {
-
-        const startTime = process.hrtime.bigint();
-
-        // capture incoming file type
-        this.inputFileType = path.parse(file).ext;
-
-        return await unPacker(file)
-            .then(files => {
-
-                this.configFiles = files;
-
-                // run through files and add up file size
-                this.stats.configBytes = this.configFiles.map(item => item.size).reduce((total, each) => {
-                    return total += each;
-                })
-                this.stats.loadTime = Number(process.hrtime.bigint() - startTime) / 1000000;
-
-                // unPacker returned something so respond with processing time
-                return this.stats.loadTime;
-            })
-    }
 
     /**
      * new parsing fuction to work on list of files from unPacker

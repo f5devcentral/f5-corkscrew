@@ -5,7 +5,7 @@
 import balanced from 'balanced-match';
 import { ParseResp } from './models';
 
-import { deepMergeObj, nestedObjValue } from './utils/objects'
+import { deepMergeObj, nestedObjValue } from './objects'
 
 
 
@@ -57,7 +57,6 @@ export function parseTmosConfig (config: string): ParseResp {
                 
                 // merge new object back into main objects tree
                 fullObj = deepMergeObj(fullObj, newObj);
-                // fullObj = simpleMergeDeep(fullObj, newObj);
 
                 // rebuild object we are extracting from config file
                 const rebuiltObj = `${parentObjName.join(' ')} {${blncd.body}}`
@@ -87,8 +86,6 @@ export function parseTmosConfig (config: string): ParseResp {
 
                 // merge new object back into main objects tree
                 fullObj = deepMergeObj(fullObj, newObj);
-
-                // fullObj = simpleMergeDeep(fullObj, newObj);
     
                 // rebuild object we are extracting from config file
                 const rebuiltObj = `${parentObjName.join(' ')} {${blncd.body}}`

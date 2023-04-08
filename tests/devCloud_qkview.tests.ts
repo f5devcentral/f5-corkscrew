@@ -32,20 +32,20 @@ describe('explode devCloud qkview tests', async function() {
     let device: BigipConfig;
     let log;
     let err;
+    const parsedFileEvents: string[] = []
+    const parsedObjEvents: string[] = []
+
     it(`instantiate class, load/parse configs - async`, async function() {
         this.timeout(300000) // 5 minute timeout
         
         device = new BigipConfig();
 
-        const parsedFileEvents = []
-        const parsedObjEvents = []
+
         device.on('parseFile', x => {
             parsedFileEvents.push(x)
-            // console.log('parseFile', x)
         })
         device.on('parseObject', x => {
             parsedObjEvents.push(x)
-            // console.log('parseObject', x)
         })
 
         await device.loadParseAsync(testFile)
@@ -76,8 +76,6 @@ describe('explode devCloud qkview tests', async function() {
 
     it(`parse configs, get parseTime`, function() {
         
-        const parsedFileEvents = []
-        const parsedObjEvents = []
         device.on('parseFile', x => parsedFileEvents.push(x) )
         device.on('parseObject', x => parsedObjEvents.push(x) )
 
@@ -120,7 +118,7 @@ describe('explode devCloud qkview tests', async function() {
             "ltm policy /Common/app4_ltPolicy {\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n}",
           ];
 
-        const appConfig = app[0].config;
+        const appConfig = app![0].config;
         
         assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
     });

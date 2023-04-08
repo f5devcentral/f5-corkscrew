@@ -12,7 +12,7 @@
 import logger from './logger';
 import { AppMap, BigipConfObj } from './models'
 import { TmosRegExTree } from './regex';
-import { cleanObject, pathValueFromKey } from './utils/objects';
+import { cleanObject, pathValueFromKey } from './objects';
 import { poolsInPolicy, poolsInRule } from './pools';
 import { digDataGroupsiniRule } from './digiRules';
 
