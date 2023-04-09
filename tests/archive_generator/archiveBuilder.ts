@@ -8,12 +8,14 @@
 
 'use strict';
 
-import * as fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import tar from 'tar';
 
 import { globSync } from 'glob';
 import { execSync } from 'child_process';
+
+
 
 /**
  * generate f5 archive for testing this project
@@ -23,9 +25,13 @@ import { execSync } from 'child_process';
  * Add and necessary files/apps/configs to the archive directory to be included in the testing
  * 
  * Will probably just call this function at the beginning of each test for now
+ * 
+ * mini = .tar.gz
+ * 
+ * @type (optional) ucs|qkview|conf|mini -> returns path to the requested conf/archive type (mini->default)
  * @returns 
  */
-export async function archiveMake(): Promise<string> {
+export async function archiveMake(type: 'ucs' | 'qkview' | 'conf' | 'mini' = 'mini'): Promise<fs.PathLike | string> {
 
     // for testing we are just going to use tar.gz like a mini_ucs, but this process should also work for UCS and QKVIEWs
     // https://coderrocketfuel.com/article/recursively-list-all-the-files-in-a-directory-using-node-js
@@ -36,24 +42,67 @@ export async function archiveMake(): Promise<string> {
     // look at using node-tar axtract to simplify the main parseAsync function currently filtering and streaming out the files we want from the archive
 
     const filesInArchive: any[] = [];
-    const archiveName = 'f5_corkscrew_test.tar.gz'
-    const archiveDir = path.join(__dirname, 'archive1');
-    const testArchiveOut = path.join(__dirname, '..', 'artifacts', archiveName);
-
-    // glob all the files from the archive dir
-    const files = globSync('**/*', { cwd: archiveDir })
-
+    const baseArchiveName = 'f5_corkscrew_test';
+    let fileExt = 'tar.gz'; // default file extension/type
     const cwd = process.cwd();  // just to confirm our current working director
-    const d1 = fs.readdirSync(archiveDir);
+    let gzip = true;
+    // let filter = (path, stat) => true;  // allow everything -> no filter
+
+    const baseArchiveDir = path.join(__dirname, 'archive1');
+    const qkviewDir = path.join(__dirname, 'qkview')
+
+
+    // start building the list of filePaths to include in the archive
+    // config dir should always be in the archive
+    let filesPaths: string[] = globSync('config/*', { cwd: baseArchiveDir })
+
+    if (type === 'conf') {
+
+        // single conf file, copy the conf file to artifacts and return the path
+        const srcConf = path.join(baseArchiveDir, 'config', 'bigip.conf')
+        const destFolder = path.join(__dirname, '..', 'artifacts', `${baseArchiveName}.conf`);
+        fs.copyFileSync(srcConf, destFolder)
+        return destFolder;
+
+    }
+
+
+    /**
+     * files unique to qkviews
+     */
+    const qkviewFiles = [
+        'config/low_profile_base.conf',
+        'config/profile_base.conf'
+    ]
+
+    if (type === 'ucs') {
+
+        fileExt = 'ucs'
+        // filter out qkview specific files
+        filesPaths = filesPaths.filter(x => !qkviewFiles.includes(x))
+
+    } else if (type === 'qkview') {
+
+        fileExt = 'qkview'
+
+    }
+
+    // build the file output path/name
+    const archiveName = `${baseArchiveName}.${fileExt}`
+    const testArchiveOut: fs.PathLike = path.join(__dirname, '..', 'artifacts', archiveName);
+
+
+    const d1 = fs.readdirSync(baseArchiveDir);
 
     //this method has the potential to be quicker and easier method for managing tar files...
     await tar.create({
-        cwd: archiveDir,
+        cwd: baseArchiveDir,
         file: testArchiveOut,
-        gzip: true
+        gzip
     },
-        files
+        filesPaths
     )
+
 
     // this is how it was working with native tar command
     // const cmd = [

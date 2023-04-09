@@ -9,6 +9,24 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [0.14.0] - (03.20.2023)
+
+- updated all deps
+- removed legacy syncronous unpack function
+  - all the new async unpacking functionality seems to be working well
+- removed xml2js functionality
+  - used for parsing xml stats in qkview - weren't really using the output
+- GTM/GSLB parsing/abstraction (pending)
+  - Get parent objects into main tree (pending)
+  - Abstract WIP and supporting configurations (pending)
+- created archive generator to creat archive(ucs/qkview/tar.gz) via local files for tests
+  - regular archives were too big for github file sizes
+  - this also allows easy updating and expansion of project functionality and testing
+- updated tests
+- major code hygene and clean up
+
+---
+
 ## [0.10.0] - (07.10.2022)
 
 - Added parent APM profile digging (apm profile acces \<name\>)

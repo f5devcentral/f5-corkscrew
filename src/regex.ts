@@ -147,9 +147,10 @@ export class RegExTree {
             this.regexTree.vs.fbPersist = /new-fallBackPersist-regex/;
             this.regexTree.vs.pool.obj = /new-pool-regex/;
         }
-        if(x < 12000){
+        if(x < 10000){
             logger.error('<v12.0.0.0 tmos detected - have not tested this yet!!!')
             // other regex tree changes specific to v12.0.0.0
+            // todo: this process needs to be refined a little more; things change when a lower semver version number becomes double digit ex: 12.1.3.16 and 14.1.11.32
         }
         return this.regexTree;
     }
@@ -208,11 +209,11 @@ export type TmosRegExTree = {
 
 /**
  * returns full number without decimals so it can be compared
+ * 
+ * *** note!:  this just flattens what is there and does not take into account double digit version placement! -> needs to be refined!
+ * 
  * @param ver tmos version in full x.x.x.x format
  */
 function removeVersionDecimals(ver: string): number {
     return parseInt(ver.replace(/\./g, ''));
 }
-
-// const regexTree = new RegExTree();
-// export default regexTree;

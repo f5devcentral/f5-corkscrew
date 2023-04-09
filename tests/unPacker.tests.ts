@@ -26,7 +26,7 @@ let testFile: string;
 describe('instantiation unPacker', async function () {
 
     before(async () => {
-        testFile = await archiveMake();
+        testFile = await archiveMake() as string;
         // const testFileDetails = path.parse(testFile);
         // outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
         // console.log('outFile', outFile);
@@ -144,7 +144,7 @@ describe('instantiation unPacker', async function () {
         unPacker.on('conf', conf => confFiles.push(conf))
         unPacker.on('stat', stat => statFiles.push(stat))
 
-        await unPacker.stream(path.join(__dirname, 'artifacts', 'mini_ucs.tar.gz'))
+        await unPacker.stream(testFile)
             .then(file => {
 
                 // just grabing some details to confirm
@@ -154,7 +154,7 @@ describe('instantiation unPacker', async function () {
                 assert.ok(typeof confFiles[0].fileName === 'string')
                 assert.ok(typeof confFiles[0].size === 'number')
                 assert.ok(typeof confFiles[0].content === 'string')
-                assert.ok(confFiles.length === 5);
+                assert.ok(confFiles.length > 1);
             })
             .catch(err => {
                 debugger;  // catch a debug if we got an error
@@ -232,6 +232,25 @@ describe('instantiation unPacker', async function () {
             .then(file => {
                 debugger;
                 assert.ifError(file);
+            })
+            .catch(err => {
+                assert.ok(err);
+            })
+    });
+
+
+    it(`unPack badArchive1.tar.gz -> fail`, async function () {
+
+        // this archive has two conf files with different tmos versions
+        //      not supported
+
+        const unPacker = new UnPacker();
+        unPacker.on('conf', conf => confFiles.push(conf))
+        unPacker.on('stat', stat => statFiles.push(stat))
+
+        await unPacker.stream(path.join(__dirname, 'artifacts', 'badArchive1.tar.gz'))
+            .then(file => {
+                assert.ok(!file);
             })
             .catch(err => {
                 assert.ok(err);

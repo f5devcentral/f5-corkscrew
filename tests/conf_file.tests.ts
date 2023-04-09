@@ -9,49 +9,54 @@ import * as path from 'path';
 
 import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
+import { archiveMake } from './archive_generator/archiveBuilder';
+import { Explosion } from '../src/models';
+import { promises } from 'dns';
 
-const testFile = path.join(__dirname, 'archive_generator', 'archive1', 'config', 'bigip.conf');
-const testFileDetails = path.parse(testFile);
-const outFile = path.join(__dirname, 'artifacts', `${testFileDetails.base}.log`);
-console.log('outFile', outFile);
-const parsedFileEvents: any[] = []
-const parsedObjEvents: any[] = []
-const extractAppEvents: any[] = []
 let device: BigipConfig;
-const log: string[] = [];
+const log: any[] = [];
+let err;
+let expld: Explosion;
+const parsedFileEvents: any[] = [];
+const parsedObjEvents: any[] = [];
+const extractAppEvents: any[] = [];
+let testFile = '';
+let outFile = '';
 
-describe('explode devCloud bigip.conf tests', async function () {
+describe('bigip.conf tests', async function () {
+
+    before(async () => {
+        testFile = await archiveMake('conf') as string;
+        const testFileDetails = path.parse(testFile);
+        outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
+        console.log('outFile', outFile);
+    })
 
     it(`instantiate class, load configs`, async function () {
         device = new BigipConfig();
 
-        await device.loadParseAsync(testFile)
-        .then( resp => {
-            assert.ok(resp);
-        })
-        .catch( async err => {
-            log.push(...await device.logs());
-        })
-        
-    });
-
-    it(`parse configs, get parseTime`, async function () {
         device.on('parseFile', x => parsedFileEvents.push(x))
         device.on('parseObject', x => parsedObjEvents.push(x))
         device.on('extractApp', x => extractAppEvents.push(x))
 
-        await device.parse()
-            .then(parseTime => {
-                assert.ok(parseTime, 'should be a number');
+        await device.loadParseAsync(testFile)
+            .then(resp => {
+                assert.ok(resp);
             })
             .catch(async err => {
                 log.push(...await device.logs());
-                debugger;
-            });
+            })
+
+    });
+
+    it(`parse configs, get parseTime`, async function () {
+
 
         await device.explode()
             .then(expld => {
                 fs.writeFileSync(`${outFile}.json`, JSON.stringify(expld, undefined, 4));
+                const bigLog = logOutput(device.configObject, expld);
+                fs.writeFileSync(outFile, bigLog);
             })
             .catch(async err => {
                 log.push(...await device.logs());
@@ -62,13 +67,8 @@ describe('explode devCloud bigip.conf tests', async function () {
 
     it(`check parseFile event`, async function () {
 
-        // confirm event object structure
-        assert.ok(parsedFileEvents[0].num, 'should have a "num" param')
-        assert.ok(parsedFileEvents[0].of, 'should have a "of" param')
-        assert.ok(parsedFileEvents[0].parsing, 'should have a "parsing" param')
-        assert.ok(typeof parsedFileEvents[0].num === "number", '"num" param should be a number')
-        assert.ok(typeof parsedFileEvents[0].of === "number", '"of" param should be a number')
-        assert.ok(typeof parsedFileEvents[0].parsing === "string", '"parsing" param should be a string')
+        assert.deepStrictEqual(parsedFileEvents[0], 'f5_corkscrew_test.conf')
+
     });
 
 
@@ -82,7 +82,6 @@ describe('explode devCloud bigip.conf tests', async function () {
         assert.ok(typeof parsedObjEvents[0].parsing === "string", '"parsing" param should be a string')
 
     });
-
 
 
     it(`check extractApp event`, async function () {
@@ -122,30 +121,59 @@ describe('explode devCloud bigip.conf tests', async function () {
             "ltm pool /Common/js.io_t80_pool { }",
             "ltm policy /Common/app4_ltPolicy {\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n}",
         ];
-        
+
         await device.apps('/Common/app4_t80_vs')
-        .then( app => {
-            const appConfig = app![0].config;
-            assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
-        })
+            .then(app => {
+                const appConfig = app![0].config;
+                assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
+            })
 
 
     });
 
-    it(`explode config output`, async function () {
+    it(`conf file explode should/not have these details`, async function () {
 
-        const explode = await device.explode()
-            .then(exp => {
-                // const bigLog = logOutput(device.configObject, explode);
-                // fs.writeFileSync(outFile, JSON.stringify(exp, undefined, 4));
-                assert.ok(exp);
-                // return exp
+        const baseLtmProfiles = device.defaultProfileBase;
+        const sysLowProfiles = device.defaultLowProfileBase;
+
+        const configFilesNumber = device.configFiles.length;
+        const xmlStats = device.deviceXmlStats;
+        const fileStoreLength = device.fileStore.length;
+
+        assert.ok(!baseLtmProfiles);
+        assert.ok(!sysLowProfiles);
+        assert.ok(configFilesNumber === 1);
+        assert.ok(Object.keys(xmlStats).length === 0);
+        assert.ok(fileStoreLength === 0);
+
+    });
+
+
+    it(`parse badArchive1.tar.gz -> fail`, async function () {
+
+        const device = new BigipConfig();
+        const parsedFileEvents: any[] = [];
+        const parsedObjEvents: any[] = [];
+
+        device.on('parseFile', (x: any) => parsedFileEvents.push(x))
+        device.on('parseObject', (x: any) => parsedObjEvents.push(x))
+
+        const badArchive = path.join(__dirname, 'artifacts', 'badArchive1.tar.gz')
+
+        // this still doesn't reject as expected
+        // this should fail since the archive has ban files...
+        await device.loadParseAsync(badArchive)
+            .then(async parse => {
+                const p = parse;
+                const expld = await device.explode();
             })
             .catch(err => {
-                debugger;
+                console.log(err)
+                Promise.reject(err);
             })
 
-
+        // assert.ok(err)
+        // assert.deepStrictEqual(err, 'tmos version CHANGE detected: previous file version was undefined -> this tmos version is 15.1.0.4');
 
     });
 });

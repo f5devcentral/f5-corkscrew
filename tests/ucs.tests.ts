@@ -2,89 +2,51 @@
 'use strict';
 
 import assert from 'assert';
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
 import { archiveMake } from './archive_generator/archiveBuilder';
+import { Explosion } from '../src/models';
 
-/**
- * this test suite can run the ucs or qkview, either should produce the same results
- */
 
-// const testFile = path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs');
-
+let device: BigipConfig;
+let log;
+let err;
+let expld: Explosion;
+const parsedFileEvents: any[] = [];
+const parsedObjEvents: any[] = [];
 let testFile = '';
 let outFile = '';
 
 
-describe('explode devCloud ucs tests', async function () {
+describe('ucs tests', async function () {
 
-    let device;
-    let log;
-    let err;
-    const parsedFileEvents: any[] = [];
-    const parsedObjEvents: any[] = [];
 
     before(async () => {
-        testFile = await archiveMake();
+        testFile = await archiveMake('ucs') as string;
         const testFileDetails = path.parse(testFile);
         outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
         console.log('outFile', outFile);
     })
 
-    it(`instantiate class, load/parse configs - async`, async function () {
-        this.timeout(300000) // 5 minute timeout
+    it(`instantiate -> parse configs, get parseTime, explode`, async function () {
 
         device = new BigipConfig();
-
-        device.on('parseFile', (x: any) => {
-            parsedFileEvents.push(x)
-            // console.log('parseFile', x)
-        })
-        device.on('parseObject', (x: any) => {
-            parsedObjEvents.push(x)
-            // console.log('parseObject', x)
-        })
-
-        await device.loadParseAsync(testFile)
-            .then(x => {
-                // just here for a spot to put a breaking point
-                assert.ok(typeof x === 'number')
-                // fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
-            })
-            .catch(y => {
-                err = y;
-                log = device.logs()
-                debugger;
-            })
-
-        await device.explode()
-            .then(expld => {
-                // debugger;
-            })
-            .catch(thisErr => {
-                err = thisErr;
-                log = device.logs()
-                debugger
-            });
-
-
-        // this.done();        
-    });
-
-
-    it(`parse configs, get parseTime`, async function () {
-
-        device.on('parseFile', x => parsedFileEvents.push(x))
-        device.on('parseObject', x => parsedObjEvents.push(x))
+        
+        device.on('parseFile', (x: any) => parsedFileEvents.push(x))
+        device.on('parseObject', (x: any) => parsedObjEvents.push(x))
 
         const parseTime = await device.loadParseAsync(testFile);
-        const expld = await device.explode();
+        expld = await device.explode();
 
         fs.writeFileSync(`${outFile}.json`, JSON.stringify(expld, undefined, 4));
+        const bigLog = logOutput(device.configObject, expld);
+        fs.writeFileSync(outFile, bigLog);
+
         assert.ok(parseTime, 'should be a number');
+
     });
 
     it(`list apps`, async function () {
@@ -119,26 +81,19 @@ describe('explode devCloud ucs tests', async function () {
             "ltm policy /Common/app4_ltPolicy {\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n}",
         ];
 
-        const appConfig = app[0].config;
+        const appConfig = app![0].config;
 
         assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
     });
 
-    it(`explode config output`, async function () {
+    it(`ucs should NOT have default profiles/settings`, async function () {
 
-        const explode = await device.explode()
-            .then(exp => {
-                return exp
-            })
-            .catch(err => {
-                debugger;
-            });
+        const baseLtmProfiles = device.defaultProfileBase;
+        const sysLowProfiles = device.defaultLowProfileBase;
 
-        const bigLog = logOutput(device.configObject, explode);
-
-        fs.writeFileSync(outFile, bigLog);
-
-        assert.ok(explode);
+        assert.ok(!baseLtmProfiles);
+        assert.ok(!sysLowProfiles);
+        
     });
 });
 

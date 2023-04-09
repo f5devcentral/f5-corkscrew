@@ -71,8 +71,8 @@ export class UnPacker extends EventEmitter {
 
                 this.emit('conf', { fileName: filePath.base, size, content })
 
-                // return [{ fileName: filePath.base, size, content }];
-                return
+                // don't return anything here, since the conf file got sent via event
+                return;
 
             } catch (e) {
                 logger.error('not able to read file', e.message);
@@ -225,6 +225,7 @@ export function fileFilter(name: string): boolean {
         allConfs,                           // all .conf files (including partitions)
         /^config\/bigip.license$/,          // license file
         /^config\/profile_base.conf$/,      // default profiles
+        /^config\/low_profile_base.conf$/,  // default system profiles
         fileStoreFilesUcs,                  // certs/keys (ucs)
         fileStoreFilesQkview,               // certs/keys (qkviews)
         /^\w+.xml$/                         // qkview stats files

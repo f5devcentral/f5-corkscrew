@@ -1,89 +1,51 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/*
- * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
- * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
- * may copy and modify this software product for its internal business purposes.
- * Further, Licensee may upload, publish and distribute the modified version of
- * the software product on devcentral.f5.com.
- */
 
 'use strict';
 
 import assert from 'assert';
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
+import { archiveMake } from './archive_generator/archiveBuilder';
+import { Explosion } from '../src/models';
 
-/**
- * this test suite can run the ucs or qkview, either should produce the same results
- */
 
-const testFile = path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview');
-const testFileDetails = path.parse(testFile);
-const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
-console.log('outFile', outFile);
+let device: BigipConfig;
+let log;
+let err;
+let expld: Explosion;
+const parsedFileEvents: any[] = [];
+const parsedObjEvents: any[] = [];
+let testFile = '';
+let outFile = '';
 
-describe('explode devCloud qkview tests', async function() {
+
+describe('qkview tests', async function() {
     
-    let device: BigipConfig;
-    let log;
-    let err;
-    const parsedFileEvents: string[] = []
-    const parsedObjEvents: string[] = []
+    before(async () => {
+        testFile = await archiveMake('qkview') as string;
+        const testFileDetails = path.parse(testFile);
+        outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
+        console.log('outFile', outFile);
+    })
 
-    it(`instantiate class, load/parse configs - async`, async function() {
-        this.timeout(300000) // 5 minute timeout
+    it(`instantiate -> parse configs, get parseTime, explode`, async function() {
         
         device = new BigipConfig();
 
+        device.on('parseFile', (x: any) => parsedFileEvents.push(x) )
+        device.on('parseObject', (x: any) => parsedObjEvents.push(x) )
 
-        device.on('parseFile', x => {
-            parsedFileEvents.push(x)
-        })
-        device.on('parseObject', x => {
-            parsedObjEvents.push(x)
-        })
-
-        await device.loadParseAsync(testFile)
-        .then( x => {
-            // just here for a spot to put a breaking point
-            assert.deepStrictEqual(x, undefined)
-            fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
-        })
-        .catch( y => {
-            err = y;
-            log = device.logs()
-            debugger;
-        })
-        
-        await device.explode()
-        .then( expld => {
-            // debugger;
-        })
-        .catch( thisErr => {
-            err = thisErr;
-            log = device.logs()
-            debugger
-        });
-
-
-        // this.done();        
-    });
-
-    it(`parse configs, get parseTime`, function() {
-        
-        device.on('parseFile', x => parsedFileEvents.push(x) )
-        device.on('parseObject', x => parsedObjEvents.push(x) )
-
-        const parseTime = device.parse();
-        const expld = device.explode();
+        const parseTime = await device.loadParseAsync(testFile);
+        expld = await device.explode();
 
         fs.writeFileSync(`${outFile}.json`, JSON.stringify(expld, undefined, 4));
+        const bigLog = logOutput(device.configObject, expld);
+        fs.writeFileSync(outFile, bigLog);
+
         assert.ok(parseTime, 'should be a number');
+
     });
 
     it(`list apps`, async function() {
@@ -123,21 +85,13 @@ describe('explode devCloud qkview tests', async function() {
         assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
     });
 
-    // it(`explode config output`, async function() {
+    it(`only qvkiew SHOULD have default profiles/settings`, async function() {
 
-    //     const explode = await device.explode()
-    //     .then( exp => {
-    //         return exp
-    //     })
-    //     .catch( err => {
-    //         debugger;
-    //     });
+        const baseLtmProfiles = device.defaultProfileBase;
+        const sysLowProfiles = device.defaultLowProfileBase;
 
-    //     // const bigLog = logOutput(device.configObject, explode);
-
-    //     // fs.writeFileSync(outFile, bigLog);
-
-    //     assert.ok(explode);
-    // });
+        assert.ok(baseLtmProfiles);
+        assert.ok(sysLowProfiles);
+    });
 });
 

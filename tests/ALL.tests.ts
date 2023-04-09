@@ -16,6 +16,7 @@
 
 
 require('./json_objects.test')
+require('./regexTree.tests')
 
 require('./unPacker.tests')
 
@@ -26,5 +27,6 @@ require('./pools.test')
 
 require('./conf_file.tests')
 require('./ucs.tests')
+require('./qkview.tests')
 
 // require('./outside_files.tests')
