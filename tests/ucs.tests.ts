@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
 
 'use strict';
 
@@ -53,8 +51,8 @@ describe('explode devCloud ucs tests', async function () {
         await device.loadParseAsync(testFile)
             .then(x => {
                 // just here for a spot to put a breaking point
-                assert.deepStrictEqual(x, undefined)
-                fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
+                assert.ok(typeof x === 'number')
+                // fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
             })
             .catch(y => {
                 err = y;
@@ -77,13 +75,13 @@ describe('explode devCloud ucs tests', async function () {
     });
 
 
-    it(`parse configs, get parseTime`, function () {
+    it(`parse configs, get parseTime`, async function () {
 
         device.on('parseFile', x => parsedFileEvents.push(x))
         device.on('parseObject', x => parsedObjEvents.push(x))
 
-        const parseTime = device.parse();
-        const expld = device.explode();
+        const parseTime = await device.loadParseAsync(testFile);
+        const expld = await device.explode();
 
         fs.writeFileSync(`${outFile}.json`, JSON.stringify(expld, undefined, 4));
         assert.ok(parseTime, 'should be a number');

@@ -14,9 +14,6 @@
  * higher level components
  */
 
-// import path from "path"
-// import fs from 'fs';
-// import { TMP_DIR } from '../src/constants'
 
 require('./json_objects.test')
 
@@ -27,7 +24,7 @@ require('./unPacker.tests')
 require('./pools.test')
 
 
-require('./devCloud_config.tests')
-require('./devCloud_ucs.tests')
+require('./conf_file.tests')
+require('./ucs.tests')
 
 // require('./outside_files.tests')

@@ -5,13 +5,13 @@
 ###  Section 2: apps
 ###  Section 3: conversion logs (error/info/debug)
 ###  Section 4: configObjects (not object values yet)
-###  2023-04-09T10:26:47.859Z
+###  2023-04-09T10:51:51.619Z
 ################################################
 
 ################################################
 ### explosion stats ##########
-### uuid: 8974cb84-fcd4-4b84-bf4c-82ac89905dfe
-### dateTime: Sun Apr 09 2023 05:26:47 GMT-0500 (Central Daylight Time)
+### uuid: ca507f9f-c12d-480d-a760-b8599bb1fca5
+### dateTime: Sun Apr 09 2023 05:51:51 GMT-0500 (Central Daylight Time)
 {
   "objectCount": 1056,
   "sourceSize": 80253,
@@ -26,9 +26,9 @@
     "snatPools": 1
   },
   "sourceTmosVersion": "15.1.0.4",
-  "parseTime": 16.3552,
-  "appTime": 1.9825,
-  "packTime": 0.7315
+  "parseTime": 22.7513,
+  "appTime": 2.0328,
+  "packTime": 0.5766
 }
 ################################################
 
@@ -621,60 +621,60 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
 
 #######################################
 ### conversion log ####################
-[2023-04-09T10:26:46.311Z] DeBuG: 'regular date log message'
-[4/9/2023, 5:26:46 AM] DeBuG: 'toLocalString date log message'
-[Sun, 09 Apr 2023 10:26:46 GMT] DeBuG: 'to UTC date log message'
-[2023-04-09T10:26:47.699Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
-[2023-04-09T10:26:47.715Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
-[2023-04-09T10:26:47.721Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/unPacker_test.conf], size [45]
-[2023-04-09T10:26:47.722Z] [ERROR]: file type of ".io", not supported, try (.conf|.ucs|.kqview|.gz)
-[2023-04-09T10:26:47.723Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/mini_ucs.tar.gz], size: [32369]
-[2023-04-09T10:26:47.726Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
-[2023-04-09T10:26:47.732Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
-[2023-04-09T10:26:47.743Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/archive_generator/archive1/config/bigip.conf], size [57563]
-[2023-04-09T10:26:47.744Z] [INFO]: Recieved .conf file of version: 15.1.0.4
-[2023-04-09T10:26:47.750Z] [DEBUG]: Begining to parse configs
-[2023-04-09T10:26:47.750Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.755Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-04-09T10:26:47.757Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.757Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.757Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+[2023-04-09T10:51:50.005Z] DeBuG: 'regular date log message'
+[4/9/2023, 5:51:50 AM] DeBuG: 'toLocalString date log message'
+[Sun, 09 Apr 2023 10:51:50 GMT] DeBuG: 'to UTC date log message'
+[2023-04-09T10:51:51.448Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
+[2023-04-09T10:51:51.463Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
+[2023-04-09T10:51:51.470Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/unPacker_test.conf], size [45]
+[2023-04-09T10:51:51.471Z] [ERROR]: file type of ".io", not supported, try (.conf|.ucs|.kqview|.gz)
+[2023-04-09T10:51:51.472Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/mini_ucs.tar.gz], size: [32369]
+[2023-04-09T10:51:51.475Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
+[2023-04-09T10:51:51.482Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
+[2023-04-09T10:51:51.493Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/archive_generator/archive1/config/bigip.conf], size [57563]
+[2023-04-09T10:51:51.493Z] [INFO]: Recieved .conf file of version: 15.1.0.4
+[2023-04-09T10:51:51.500Z] [DEBUG]: Begining to parse configs
+[2023-04-09T10:51:51.500Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
+[2023-04-09T10:51:51.505Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-09T10:51:51.506Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.506Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.506Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.757Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.757Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.757Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+[2023-04-09T10:51:51.506Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.507Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.507Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.758Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-04-09T10:26:47.758Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
-[2023-04-09T10:26:47.759Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2023-04-09T10:26:47.759Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.759Z] [DEBUG]: pool monitor configs found: []
-[2023-04-09T10:26:47.759Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.759Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
-[2023-04-09T10:26:47.759Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.759Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.759Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.507Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-09T10:51:51.508Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-09T10:51:51.508Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-09T10:51:51.508Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.508Z] [DEBUG]: pool monitor configs found: []
+[2023-04-09T10:51:51.508Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.508Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-09T10:51:51.508Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.509Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.509Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.759Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.759Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.509Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.509Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.760Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-04-09T10:26:47.760Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.760Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.760Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.509Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-09T10:51:51.509Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.509Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.509Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.760Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.760Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.760Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+[2023-04-09T10:51:51.509Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.509Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.509Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.760Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-04-09T10:26:47.760Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
-[2023-04-09T10:26:47.760Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2023-04-09T10:26:47.760Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.509Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-09T10:51:51.509Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-09T10:51:51.509Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-09T10:51:51.509Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-09T10:51:51.510Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -698,26 +698,26 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 16\n' +
     '}'
 ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
-[2023-04-09T10:26:47.761Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.761Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.510Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-09T10:51:51.510Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.510Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.510Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.761Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.761Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.510Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.510Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.761Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-04-09T10:26:47.761Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
-[2023-04-09T10:26:47.761Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: pool monitor references found: [
+[2023-04-09T10:51:51.510Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-09T10:51:51.510Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-09T10:51:51.510Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-09T10:51:51.510Z] [DEBUG]: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.510Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -726,16 +726,16 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 4\n' +
     '}'
 ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.761Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
-[2023-04-09T10:26:47.761Z] [DEBUG]: profile references found:  [
+[2023-04-09T10:51:51.510Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.510Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-09T10:51:51.510Z] [DEBUG]: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2023-04-09T10:26:47.761Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.761Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+[2023-04-09T10:51:51.510Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.510Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
         /Common/app3_clientssl {
             context clientside
         }
@@ -744,170 +744,170 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
         }
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.761Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+[2023-04-09T10:51:51.510Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-09T10:51:51.511Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
         /Common/app3_rule
         /Common/app3_rule2
         /Common/app3_rule3
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+[2023-04-09T10:51:51.511Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
         pool /Common/app3_snat_pool
         type snat
-[2023-04-09T10:26:47.762Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
-[2023-04-09T10:26:47.762Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+[2023-04-09T10:51:51.511Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-09T10:51:51.511Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-09T10:51:51.511Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
         /Common/app3_ltm_policy { }
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+[2023-04-09T10:51:51.511Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
         /Common/app3_cookie {
             default yes
         }
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
-[2023-04-09T10:26:47.762Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.762Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.762Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.762Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.762Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.762Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.511Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-09T10:51:51.512Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.512Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.512Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.512Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.512Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.512Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.512Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.763Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.763Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.763Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.763Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.763Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.763Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.512Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.512Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.512Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.512Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.512Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.512Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.763Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.763Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.763Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.763Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.763Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.763Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.512Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.513Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.513Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.513Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.513Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.513Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.763Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-04-09T10:26:47.763Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
-[2023-04-09T10:26:47.763Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+[2023-04-09T10:51:51.513Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-09T10:51:51.513Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-09T10:51:51.513Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
         /Common/fastl4_loose { }
-[2023-04-09T10:26:47.763Z] [INFO]: digging DO classes for base config info
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys global-settings" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cli global-settings" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys db" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys management-ip" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys provision" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys ntp" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys dns" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net trunk" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net vlan" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net self" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net route" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net routing access-list" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net routing as-path" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net routing route-map" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net routing bgp" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm device-group" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys management-route" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys syslog" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "auth tacacs" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net route-domain" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "auth ldap" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys snmp" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys snmp" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys snmp users" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "net dag-globals" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "sys httpd" in object
-[2023-04-09T10:26:47.764Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "sys sshd" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "net tunnels tunnel" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "sys disk directory" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm server" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "security firewall policy" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "security firewall port-list" in object
-[2023-04-09T10:26:47.765Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-04-09T10:26:47.767Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.767Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.767Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.767Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.768Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.768Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.768Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.513Z] [INFO]: digging DO classes for base config info
+[2023-04-09T10:51:51.513Z] [DEBUG]: no path "sys global-settings" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys db" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys management-ip" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys provision" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys ntp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys dns" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net trunk" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net vlan" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net self" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net route" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys management-route" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net route-domain" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys snmp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys snmp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys httpd" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net tunnels tunnel" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm global-settings general" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm datacenter" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm server" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "security firewall port-list" in object
+[2023-04-09T10:51:51.514Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-09T10:51:51.518Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.518Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.518Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.518Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.518Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.518Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.518Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.768Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.768Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.768Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.768Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.768Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.768Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.518Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.518Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.518Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.518Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.518Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.518Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.768Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.768Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.768Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.768Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.768Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.768Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.518Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.518Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.519Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.519Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.519Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.519Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.768Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-04-09T10:26:47.769Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.519Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-09T10:51:51.519Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.519Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.519Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.769Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+[2023-04-09T10:51:51.519Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.519Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.519Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.769Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-04-09T10:26:47.769Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
-[2023-04-09T10:26:47.769Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: pool monitor configs found: []
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
-[2023-04-09T10:26:47.769Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.519Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-09T10:51:51.519Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-09T10:51:51.519Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: pool monitor configs found: []
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-09T10:51:51.520Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.769Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.520Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.769Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-04-09T10:26:47.769Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.520Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-09T10:51:51.520Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.769Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.769Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.769Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+[2023-04-09T10:51:51.520Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.769Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-04-09T10:26:47.769Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
-[2023-04-09T10:26:47.770Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.520Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-09T10:51:51.520Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-09T10:51:51.520Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -931,26 +931,26 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 16\n' +
     '}'
 ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
-[2023-04-09T10:26:47.770Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.770Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-09T10:51:51.520Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.770Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.770Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.520Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.520Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.770Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-04-09T10:26:47.770Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
-[2023-04-09T10:26:47.770Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: pool monitor references found: [
+[2023-04-09T10:51:51.520Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-09T10:51:51.520Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-09T10:51:51.520Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-09T10:51:51.520Z] [DEBUG]: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.520Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -959,16 +959,16 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 4\n' +
     '}'
 ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.770Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
-[2023-04-09T10:26:47.770Z] [DEBUG]: profile references found:  [
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-09T10:51:51.521Z] [DEBUG]: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2023-04-09T10:26:47.770Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.770Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+[2023-04-09T10:51:51.521Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
         /Common/app3_clientssl {
             context clientside
         }
@@ -977,154 +977,154 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
         }
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.770Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+[2023-04-09T10:51:51.521Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
         /Common/app3_rule
         /Common/app3_rule2
         /Common/app3_rule3
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
         pool /Common/app3_snat_pool
         type snat
-[2023-04-09T10:26:47.771Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
-[2023-04-09T10:26:47.771Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+[2023-04-09T10:51:51.521Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-09T10:51:51.521Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
         /Common/app3_ltm_policy { }
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
         /Common/app3_cookie {
             default yes
         }
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
-[2023-04-09T10:26:47.771Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.771Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.771Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.771Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.771Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.771Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.521Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-09T10:51:51.521Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.521Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.521Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.522Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.522Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.522Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.522Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.771Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.771Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.771Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.771Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.771Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.772Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.522Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.522Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.522Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.522Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.522Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.522Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.772Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.772Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.772Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.772Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.772Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.772Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.522Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.522Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.522Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.522Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.522Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.522Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.772Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-04-09T10:26:47.772Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
-[2023-04-09T10:26:47.772Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+[2023-04-09T10:51:51.522Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-09T10:51:51.522Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-09T10:51:51.522Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
         /Common/fastl4_loose { }
-[2023-04-09T10:26:47.772Z] [INFO]: digging DO classes for base config info
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys global-settings" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cli global-settings" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys db" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys management-ip" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys provision" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys ntp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys dns" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net trunk" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net vlan" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net self" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net route" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net routing access-list" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net routing as-path" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net routing route-map" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net routing bgp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm device-group" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys management-route" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys syslog" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "auth tacacs" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net route-domain" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "auth ldap" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys snmp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys snmp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys snmp users" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net dag-globals" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys httpd" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys sshd" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net tunnels tunnel" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "sys disk directory" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm server" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "security firewall policy" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "security firewall port-list" in object
-[2023-04-09T10:26:47.772Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-04-09T10:26:47.806Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
-[2023-04-09T10:26:47.807Z] [INFO]: Recieved .conf file of version: 15.1.0.4
-[2023-04-09T10:26:47.808Z] [ERROR]: failed to extract any parent tmos matches from config/bigip_gtm.conf - might be a scripts file...
-[2023-04-09T10:26:47.813Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
-[2023-04-09T10:26:47.826Z] [ERROR]: failed to extract any parent tmos matches from config/bigip_gtm.conf - might be a scripts file...
-[2023-04-09T10:26:47.827Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
-[2023-04-09T10:26:47.828Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
-[2023-04-09T10:26:47.829Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
-[2023-04-09T10:26:47.830Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-04-09T10:26:47.830Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.831Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.831Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.522Z] [INFO]: digging DO classes for base config info
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "sys global-settings" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "sys db" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "sys management-ip" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "sys provision" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "sys ntp" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "sys dns" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "net trunk" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "net vlan" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "net self" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "net route" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-09T10:51:51.522Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys management-route" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net route-domain" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys snmp" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys snmp" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys httpd" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net tunnels tunnel" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm global-settings general" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm datacenter" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm server" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "security firewall port-list" in object
+[2023-04-09T10:51:51.523Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-09T10:51:51.557Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
+[2023-04-09T10:51:51.559Z] [INFO]: Recieved .conf file of version: 15.1.0.4
+[2023-04-09T10:51:51.560Z] [ERROR]: failed to extract any parent tmos matches from config/bigip_gtm.conf - might be a scripts file...
+[2023-04-09T10:51:51.564Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.577Z] [ERROR]: failed to extract any parent tmos matches from config/bigip_gtm.conf - might be a scripts file...
+[2023-04-09T10:51:51.578Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.580Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.580Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.581Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-09T10:51:51.581Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.582Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.582Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.831Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.831Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.831Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+[2023-04-09T10:51:51.582Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.583Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.831Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-04-09T10:26:47.831Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
-[2023-04-09T10:26:47.831Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2023-04-09T10:26:47.831Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.831Z] [DEBUG]: pool monitor configs found: []
-[2023-04-09T10:26:47.831Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.831Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
-[2023-04-09T10:26:47.831Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.583Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-09T10:51:51.583Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-09T10:51:51.583Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-09T10:51:51.583Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.583Z] [DEBUG]: pool monitor configs found: []
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-09T10:51:51.583Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.583Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.832Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.583Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.832Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-04-09T10:26:47.832Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.583Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-09T10:51:51.583Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.583Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.832Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+[2023-04-09T10:51:51.583Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.583Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.583Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.832Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-04-09T10:26:47.832Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
-[2023-04-09T10:26:47.832Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.583Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-09T10:51:51.583Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-09T10:51:51.583Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -1148,26 +1148,26 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 16\n' +
     '}'
 ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
-[2023-04-09T10:26:47.832Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-09T10:51:51.584Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.832Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.584Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.832Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-04-09T10:26:47.832Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
-[2023-04-09T10:26:47.832Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: pool monitor references found: [
+[2023-04-09T10:51:51.584Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-09T10:51:51.584Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-09T10:51:51.584Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.584Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -1176,16 +1176,16 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 4\n' +
     '}'
 ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
-[2023-04-09T10:26:47.832Z] [DEBUG]: profile references found:  [
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-09T10:51:51.584Z] [DEBUG]: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2023-04-09T10:26:47.832Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.832Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+[2023-04-09T10:51:51.584Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
         /Common/app3_clientssl {
             context clientside
         }
@@ -1194,177 +1194,155 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
         }
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.833Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+[2023-04-09T10:51:51.584Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
         /Common/app3_rule
         /Common/app3_rule2
         /Common/app3_rule3
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
         pool /Common/app3_snat_pool
         type snat
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+[2023-04-09T10:51:51.584Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
         /Common/app3_ltm_policy { }
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
         /Common/app3_cookie {
             default yes
         }
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
-[2023-04-09T10:26:47.833Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.833Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.833Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.833Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-09T10:51:51.584Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.584Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.584Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.584Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.584Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.584Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.833Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.833Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.833Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.833Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.584Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.585Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.585Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.585Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.585Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.833Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.585Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.585Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.585Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.585Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.585Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.833Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-04-09T10:26:47.833Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+[2023-04-09T10:51:51.585Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-09T10:51:51.585Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
         /Common/fastl4_loose { }
-[2023-04-09T10:26:47.833Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-04-09T10:26:47.833Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
-[2023-04-09T10:26:47.833Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
-[2023-04-09T10:26:47.833Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
-[2023-04-09T10:26:47.833Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
+[2023-04-09T10:51:51.585Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2023-04-09T10:51:51.585Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-09T10:51:51.585Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-09T10:51:51.585Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
+[2023-04-09T10:51:51.585Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
         /Common/udp { }
-[2023-04-09T10:26:47.833Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
+[2023-04-09T10:51:51.585Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
         type automap
-[2023-04-09T10:26:47.833Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
+[2023-04-09T10:51:51.585Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
         /Common/source_addr {
             default yes
         }
-[2023-04-09T10:26:47.834Z] [INFO]: digging DO classes for base config info
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cli global-settings" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys db" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net trunk" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net self" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net route" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net routing access-list" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net routing as-path" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net routing route-map" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net routing bgp" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm device-group" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys syslog" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "auth tacacs" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "auth ldap" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys snmp users" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net dag-globals" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys sshd" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "sys disk directory" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm server" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "security firewall policy" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-04-09T10:26:47.834Z] [DEBUG]: Begining to parse configs
-[2023-04-09T10:26:47.834Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.835Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.835Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...
-[2023-04-09T10:26:47.835Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.835Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.837Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.840Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...
-[2023-04-09T10:26:47.840Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.840Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.840Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.840Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.848Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.849Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...
-[2023-04-09T10:26:47.849Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.849Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.849Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.850Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.851Z] [ERROR]: failed to extract any parent matches from file - might be a scripts file...
-[2023-04-09T10:26:47.851Z] [DEBUG]: creating more detailed arrays/objects for deeper inspection
-[2023-04-09T10:26:47.851Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-04-09T10:26:47.851Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.851Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.851Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.585Z] [INFO]: digging DO classes for base config info
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys db" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net trunk" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net self" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net route" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "gtm global-settings general" in object
+[2023-04-09T10:51:51.585Z] [DEBUG]: no path "gtm datacenter" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm server" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-09T10:51:51.586Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [80253]
+[2023-04-09T10:51:51.589Z] [ERROR]: failed to extract any parent tmos matches from config/bigip_gtm.conf - might be a scripts file...
+[2023-04-09T10:51:51.592Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.606Z] [ERROR]: failed to extract any parent tmos matches from config/bigip_gtm.conf - might be a scripts file...
+[2023-04-09T10:51:51.607Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.608Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.608Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/test/bigip_script.conf - might be a scripts file...
+[2023-04-09T10:51:51.609Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-09T10:51:51.609Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.609Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.609Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.851Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.851Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.851Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+[2023-04-09T10:51:51.609Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.609Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.609Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.851Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-04-09T10:26:47.852Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
-[2023-04-09T10:26:47.852Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: pool monitor configs found: []
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
-[2023-04-09T10:26:47.852Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.609Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-09T10:51:51.609Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-09T10:51:51.609Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-09T10:51:51.609Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.609Z] [DEBUG]: pool monitor configs found: []
+[2023-04-09T10:51:51.609Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.609Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-09T10:51:51.609Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.609Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.609Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.852Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.609Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.609Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.852Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-04-09T10:26:47.852Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.610Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-09T10:51:51.610Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.852Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+[2023-04-09T10:51:51.610Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.852Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-04-09T10:26:47.852Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
-[2023-04-09T10:26:47.852Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.610Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-09T10:51:51.610Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-09T10:51:51.610Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -1388,26 +1366,26 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 16\n' +
     '}'
 ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
-[2023-04-09T10:26:47.852Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-09T10:51:51.610Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.852Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.852Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.610Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.852Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-04-09T10:26:47.852Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
-[2023-04-09T10:26:47.852Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: pool monitor references found: [
+[2023-04-09T10:51:51.610Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-09T10:51:51.610Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-09T10:51:51.610Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2023-04-09T10:26:47.852Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.610Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -1416,16 +1394,16 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 4\n' +
     '}'
 ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
-[2023-04-09T10:26:47.853Z] [DEBUG]: profile references found:  [
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-09T10:51:51.610Z] [DEBUG]: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+[2023-04-09T10:51:51.610Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
         /Common/app3_clientssl {
             context clientside
         }
@@ -1434,172 +1412,172 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
         }
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.853Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+[2023-04-09T10:51:51.610Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
         /Common/app3_rule
         /Common/app3_rule2
         /Common/app3_rule3
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
         pool /Common/app3_snat_pool
         type snat
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+[2023-04-09T10:51:51.610Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
         /Common/app3_ltm_policy { }
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
         /Common/app3_cookie {
             default yes
         }
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
-[2023-04-09T10:26:47.853Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.853Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.853Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.853Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-09T10:51:51.610Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.610Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.610Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.610Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.610Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.610Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.853Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.853Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.853Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.853Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.611Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.611Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.611Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.611Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.611Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.853Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.611Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.611Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.611Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.611Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.611Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.853Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-04-09T10:26:47.853Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+[2023-04-09T10:51:51.611Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-09T10:51:51.611Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
         /Common/fastl4_loose { }
-[2023-04-09T10:26:47.853Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-04-09T10:26:47.853Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
-[2023-04-09T10:26:47.853Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
-[2023-04-09T10:26:47.853Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
-[2023-04-09T10:26:47.853Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
+[2023-04-09T10:51:51.611Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2023-04-09T10:51:51.611Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-09T10:51:51.611Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-09T10:51:51.611Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
+[2023-04-09T10:51:51.611Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
         /Common/udp { }
-[2023-04-09T10:26:47.853Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
+[2023-04-09T10:51:51.611Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
         type automap
-[2023-04-09T10:26:47.853Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
+[2023-04-09T10:51:51.611Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
         /Common/source_addr {
             default yes
         }
-[2023-04-09T10:26:47.854Z] [INFO]: digging DO classes for base config info
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cli global-settings" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys db" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net trunk" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net self" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net route" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net routing access-list" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net routing as-path" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net routing route-map" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net routing bgp" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm device-group" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys syslog" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "auth tacacs" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "auth ldap" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys snmp users" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net dag-globals" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys sshd" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "sys disk directory" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm server" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "security firewall policy" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-04-09T10:26:47.854Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-04-09T10:26:47.855Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.855Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.855Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.855Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.855Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.855Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.855Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.611Z] [INFO]: digging DO classes for base config info
+[2023-04-09T10:51:51.611Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-09T10:51:51.611Z] [DEBUG]: no path "sys db" in object
+[2023-04-09T10:51:51.611Z] [DEBUG]: no path "net trunk" in object
+[2023-04-09T10:51:51.611Z] [DEBUG]: no path "net self" in object
+[2023-04-09T10:51:51.611Z] [DEBUG]: no path "net route" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm global-settings general" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm datacenter" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm server" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-09T10:51:51.612Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-09T10:51:51.616Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.616Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.616Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.616Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.616Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.616Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.616Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.855Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.855Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.855Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.855Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.855Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.855Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.616Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.616Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.616Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.616Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.616Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.616Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.855Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.855Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.855Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.855Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.855Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.855Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.616Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.616Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.616Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.616Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.616Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.616Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.856Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-04-09T10:26:47.856Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.617Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-09T10:51:51.617Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.856Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+[2023-04-09T10:51:51.617Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.856Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-04-09T10:26:47.856Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
-[2023-04-09T10:26:47.856Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: pool monitor configs found: []
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
-[2023-04-09T10:26:47.856Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.617Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-09T10:51:51.617Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-09T10:51:51.617Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: pool monitor configs found: []
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-09T10:51:51.617Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.856Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.617Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.856Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-04-09T10:26:47.856Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.617Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-09T10:51:51.617Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.856Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.856Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+[2023-04-09T10:51:51.617Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-09T10:26:47.856Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-04-09T10:26:47.856Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
-[2023-04-09T10:26:47.856Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2023-04-09T10:26:47.856Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.617Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-09T10:51:51.617Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-09T10:51:51.617Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -1623,26 +1601,26 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 16\n' +
     '}'
 ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-09T10:51:51.617Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.617Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.857Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+[2023-04-09T10:51:51.617Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.617Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
         type automap
-[2023-04-09T10:26:47.857Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-04-09T10:26:47.857Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: pool monitor references found: [
+[2023-04-09T10:51:51.618Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-09T10:51:51.618Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: pool monitor configs found: [
+[2023-04-09T10:51:51.618Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -1651,16 +1629,16 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
     '    timeout 4\n' +
     '}'
 ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: profile references found:  [
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+[2023-04-09T10:51:51.618Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
         /Common/app3_clientssl {
             context clientside
         }
@@ -1669,108 +1647,108 @@ ltm pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 {
         }
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.857Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+[2023-04-09T10:51:51.618Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
         /Common/app3_rule
         /Common/app3_rule2
         /Common/app3_rule3
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
         pool /Common/app3_snat_pool
         type snat
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
         /Common/app3_ltm_policy { }
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
         /Common/app3_cookie {
             default yes
         }
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
-[2023-04-09T10:26:47.857Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-09T10:26:47.857Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-09T10:51:51.618Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-09T10:51:51.618Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-09T10:26:47.857Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-09T10:26:47.857Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-09T10:51:51.618Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-09T10:51:51.618Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-09T10:26:47.857Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-09T10:26:47.857Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-09T10:51:51.618Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-09T10:51:51.618Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-09T10:26:47.858Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-04-09T10:26:47.858Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
-[2023-04-09T10:26:47.858Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+[2023-04-09T10:51:51.619Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-09T10:51:51.619Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-09T10:51:51.619Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
         /Common/fastl4_loose { }
-[2023-04-09T10:26:47.858Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-04-09T10:26:47.858Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
-[2023-04-09T10:26:47.858Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
-[2023-04-09T10:26:47.858Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
-[2023-04-09T10:26:47.858Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
-[2023-04-09T10:26:47.858Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
-[2023-04-09T10:26:47.858Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
+[2023-04-09T10:51:51.619Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2023-04-09T10:51:51.619Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-09T10:51:51.619Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
+[2023-04-09T10:51:51.619Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-09T10:51:51.619Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
+[2023-04-09T10:51:51.619Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
+[2023-04-09T10:51:51.619Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
         /Common/udp { }
-[2023-04-09T10:26:47.858Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-09T10:26:47.858Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
+[2023-04-09T10:51:51.619Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-09T10:51:51.619Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
         type automap
-[2023-04-09T10:26:47.858Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
+[2023-04-09T10:51:51.619Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
         /Common/source_addr {
             default yes
         }
-[2023-04-09T10:26:47.858Z] [INFO]: digging DO classes for base config info
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cli global-settings" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys db" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net trunk" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net self" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net route" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net routing access-list" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net routing as-path" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net routing route-map" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net routing bgp" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm device-group" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys syslog" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "auth tacacs" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "auth ldap" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys snmp users" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net dag-globals" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys sshd" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "sys disk directory" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm server" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "security firewall policy" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-04-09T10:26:47.858Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-09T10:51:51.619Z] [INFO]: digging DO classes for base config info
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys db" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net trunk" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net self" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net route" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm global-settings general" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm datacenter" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm server" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-09T10:51:51.619Z] [DEBUG]: no path "security firewall management-ip-rules" in object
 
 #######################################
 ### configMultiLevelObjects ###########

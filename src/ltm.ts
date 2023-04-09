@@ -1,15 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-/*
- * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
- * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
- * may copy and modify this software product for its internal business purposes.
- * Further, Licensee may upload, publish and distribute the modified version of
- * the software product on devcentral.f5.com.
- */
-
-'use strict';
-
 /*
  * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
  * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
@@ -101,7 +89,7 @@ export default class BigipConfig extends EventEmitter {
      * 
      * @param file bigip .conf/ucs/qkview/mini_ucs.tar.gz
      */
-    async loadParseAsync(file: string): Promise<void> {
+    async loadParseAsync(file: string): Promise<number> {
         const startTime = process.hrtime.bigint();
         // capture incoming file type
         this.inputFileType = path.parse(file).ext;
@@ -146,7 +134,7 @@ export default class BigipConfig extends EventEmitter {
         // end processing time, convert microseconds to miliseconds
         this.stats.parseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
 
-        return;
+        return this.stats.parseTime;
     }
 
 
