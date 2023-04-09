@@ -9,80 +9,78 @@ import * as path from 'path';
 
 import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
+import { archiveMake } from './archive_generator/archiveBuilder';
 
 /**
  * this test suite can run the ucs or qkview, either should produce the same results
  */
 
-const testFile = path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs');
-const testFileDetails = path.parse(testFile);
-const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
-console.log('outFile', outFile);
+// const testFile = path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs');
 
-describe('explode devCloud ucs tests', async function() {
-    
+let testFile = '';
+let outFile = '';
+
+
+describe('explode devCloud ucs tests', async function () {
+
     let device;
     let log;
     let err;
-    it(`instantiate class, load/parse configs - async`, async function() {
+    const parsedFileEvents: any[] = [];
+    const parsedObjEvents: any[] = [];
+
+    before(async () => {
+        testFile = await archiveMake();
+        const testFileDetails = path.parse(testFile);
+        outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
+        console.log('outFile', outFile);
+    })
+
+    it(`instantiate class, load/parse configs - async`, async function () {
         this.timeout(300000) // 5 minute timeout
-        
+
         device = new BigipConfig();
 
-        const parsedFileEvents = []
-        const parsedObjEvents = []
-        device.on('parseFile', x => {
+        device.on('parseFile', (x: any) => {
             parsedFileEvents.push(x)
             // console.log('parseFile', x)
         })
-        device.on('parseObject', x => {
+        device.on('parseObject', (x: any) => {
             parsedObjEvents.push(x)
             // console.log('parseObject', x)
         })
 
         await device.loadParseAsync(testFile)
-        .then( x => {
-            // just here for a spot to put a breaking point
-            assert.deepStrictEqual(x, undefined)
-            fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
-        })
-        .catch( y => {
-            err = y;
-            log = device.logs()
-            debugger;
-        })
-        
+            .then(x => {
+                // just here for a spot to put a breaking point
+                assert.deepStrictEqual(x, undefined)
+                fs.writeFileSync(`${outFile}.xml.json`, JSON.stringify(device.deviceXmlStats, undefined, 4));
+            })
+            .catch(y => {
+                err = y;
+                log = device.logs()
+                debugger;
+            })
+
         await device.explode()
-        .then( expld => {
-            // debugger;
-        })
-        .catch( thisErr => {
-            err = thisErr;
-            log = device.logs()
-            debugger
-        });
+            .then(expld => {
+                // debugger;
+            })
+            .catch(thisErr => {
+                err = thisErr;
+                log = device.logs()
+                debugger
+            });
 
 
         // this.done();        
     });
 
 
-    it(`instantiate class, load configs - sync `, async function() {
-        device = new BigipConfig();
+    it(`parse configs, get parseTime`, function () {
 
-        const x = await device.load(testFile);
-        if (!x) {
-            log = device.logs();
-        }
-        assert.ok(x)
-    });
-
-    it(`parse configs, get parseTime`, function() {
-        
-        const parsedFileEvents = []
-        const parsedObjEvents = []
-        device.on('parseFile', x => parsedFileEvents.push(x) )
-        device.on('parseObject', x => parsedObjEvents.push(x) )
+        device.on('parseFile', x => parsedFileEvents.push(x))
+        device.on('parseObject', x => parsedObjEvents.push(x))
 
         const parseTime = device.parse();
         const expld = device.explode();
@@ -91,7 +89,7 @@ describe('explode devCloud ucs tests', async function() {
         assert.ok(parseTime, 'should be a number');
     });
 
-    it(`list apps`, async function() {
+    it(`list apps`, async function () {
 
         const apps = await device.appList();
 
@@ -104,12 +102,12 @@ describe('explode devCloud ucs tests', async function() {
             "/Common/app4_t80_vs",
             "/Common/forwarder_net_0.0.0.0",
             "/foo/defaultsUDP_5555/serviceMain"
-          ];
-        
+        ];
+
         assert.deepStrictEqual(apps, expected, 'Should get list of virtual servers / apps');
     });
 
-    it(`get app config by name`, async function() {
+    it(`get app config by name`, async function () {
 
         const app = await device.apps('/Common/app4_t80_vs');
         const expected = [
@@ -121,22 +119,22 @@ describe('explode devCloud ucs tests', async function() {
             "ltm pool /Common/jpg.pool { }",
             "ltm pool /Common/js.io_t80_pool { }",
             "ltm policy /Common/app4_ltPolicy {\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n}",
-          ];
+        ];
 
         const appConfig = app[0].config;
-        
+
         assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
     });
 
-    it(`explode config output`, async function() {
+    it(`explode config output`, async function () {
 
         const explode = await device.explode()
-        .then( exp => {
-            return exp
-        })
-        .catch( err => {
-            debugger;
-        });
+            .then(exp => {
+                return exp
+            })
+            .catch(err => {
+                debugger;
+            });
 
         const bigLog = logOutput(device.configObject, explode);
 

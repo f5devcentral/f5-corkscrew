@@ -10,9 +10,9 @@ import * as path from 'path';
 import BigipConfig from '../src/ltm';
 import { logOutput } from './explosionOutput';
 
-const testFile = path.join(__dirname, "./artifacts/devCloud01_10.7.2020.conf");
+const testFile = path.join(__dirname, 'archive_generator', 'archive1', 'config', 'bigip.conf');
 const testFileDetails = path.parse(testFile);
-const outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`);
+const outFile = path.join(__dirname, 'artifacts', `${testFileDetails.base}.log`);
 console.log('outFile', outFile);
 const parsedFileEvents: any[] = []
 const parsedObjEvents: any[] = []
@@ -137,7 +137,7 @@ describe('explode devCloud bigip.conf tests', async function () {
         const explode = await device.explode()
             .then(exp => {
                 // const bigLog = logOutput(device.configObject, explode);
-                fs.writeFileSync(outFile, JSON.stringify(exp, undefined, 4));
+                // fs.writeFileSync(outFile, JSON.stringify(exp, undefined, 4));
                 assert.ok(exp);
                 // return exp
             })

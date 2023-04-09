@@ -16,13 +16,21 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ConfigFile } from '../src/models';
 
-// import { unPacker } from '../src/unPacker'
+import { archiveMake } from './archive_generator/archiveBuilder'
 import { UnPacker } from '../src/unPackerStream'
 
 const confFiles: any[] = []    // all the main .conf files
 const statFiles: any[] = []    // statistics .xml files
+let testFile: string;
 
 describe('instantiation unPacker', async function () {
+
+    before(async () => {
+        testFile = await archiveMake();
+        // const testFileDetails = path.parse(testFile);
+        // outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
+        // console.log('outFile', outFile);
+    })
 
 
     beforeEach(() => {
@@ -38,7 +46,7 @@ describe('instantiation unPacker', async function () {
         unPacker.on('conf', conf => confFiles.push(conf))
         unPacker.on('stat', stat => statFiles.push(stat))
 
-        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
+        await unPacker.stream(testFile)
             .then(respFiles => {
 
                 // These response files should be all the other files except the conf/stat files, mainly filestore files
@@ -69,7 +77,7 @@ describe('instantiation unPacker', async function () {
         unPacker.on('conf', conf => confFiles.push(conf))
         unPacker.on('stat', stat => statFiles.push(stat))
 
-        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview'))
+        await unPacker.stream(testFile)
             .then(respFiles => {
                 respFilesG = respFiles // reassign respFiles to a higher variable so we can see them if/when we hit the catch
                 assert.ok(
@@ -94,17 +102,17 @@ describe('instantiation unPacker', async function () {
 
     it(`path to actual .conf file`, async function () {
         
-        const unPacker = new UnPacker();
-        unPacker.on('conf', conf => confFiles.push(conf))
-        unPacker.on('stat', stat => statFiles.push(stat))
+        const unPackerLocal = new UnPacker();
+        unPackerLocal.on('conf', conf => confFiles.push(conf))
+        unPackerLocal.on('stat', stat => statFiles.push(stat))
 
-        await unPacker.stream(path.join(__dirname, 'artifacts', 'unPacker_test.conf'))
+        await unPackerLocal.stream(path.join(__dirname, 'artifacts', 'unPacker_test.conf'))
             .then(file => {
                 const expected = fs.readFileSync(path.join(__dirname, 'artifacts', 'unPacker_test.conf'), "utf-8");
-                assert.ok(typeof file[0].fileName === 'string')
-                assert.ok(typeof file[0].size === 'number')
-                assert.ok(typeof file[0].content === 'string')
-                assert.deepStrictEqual(file[0].content, expected);
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
+                assert.deepStrictEqual(confFiles[0].content, expected);
             })
             .catch( err => {
                 debugger;
@@ -143,9 +151,10 @@ describe('instantiation unPacker', async function () {
                 // const converted = [file[0].fileName, file[2].size, file[4].fileName];
                 // const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf'];
                 // assert.deepStrictEqual(converted, expected)
-                assert.ok(typeof file[0].fileName === 'string')
-                assert.ok(typeof file[0].size === 'number')
-                assert.ok(typeof file[0].content === 'string')
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
+                assert.ok(confFiles.length === 5);
             })
             .catch(err => {
                 debugger;  // catch a debug if we got an error
@@ -155,26 +164,23 @@ describe('instantiation unPacker', async function () {
 
     it(`unPack ucs - success`, async function () {
 
-        // const startTime = process.hrtime.bigint();
-
         const unPacker = new UnPacker();
         unPacker.on('conf', conf => confFiles.push(conf))
         unPacker.on('stat', stat => statFiles.push(stat))
 
-        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.9.2020.ucs'))
+        await unPacker.stream(testFile)
             .then(file => {
 
                 // capture some key information pieces so we don't have to verify the whole thing
                 // const converted = [file[0].fileName, file[2].size, file[4].fileName];
                 // const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf'];
                 // assert.deepStrictEqual(converted, expected);
-                assert.ok(typeof file[0].fileName === 'string')
-                assert.ok(typeof file[0].size === 'number')
-                assert.ok(typeof file[0].content === 'string')
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
 
             })
 
-        // console.log('processing time: ', Number(process.hrtime.bigint() - startTime) / 1000000)
     });
 
     it(`unPack ucs - fail`, async function () {
@@ -199,15 +205,15 @@ describe('instantiation unPacker', async function () {
         unPacker.on('conf', conf => confFiles.push(conf))
         unPacker.on('stat', stat => statFiles.push(stat))
 
-        await unPacker.stream(path.join(__dirname, 'artifacts', 'devCloud_10.10.2020.qkview'))
+        await unPacker.stream(testFile)
             .then(file => {
 
                 // const converted = [file[0].fileName, file[2].size, file[4].fileName];
                 // const expected = ['config/bigip.conf', 341, 'config/partitions/foo/bigip.conf'];
                 // assert.deepStrictEqual(converted, expected);
-                assert.ok(typeof file[0].fileName === 'string')
-                assert.ok(typeof file[0].size === 'number')
-                assert.ok(typeof file[0].content === 'string')
+                assert.ok(typeof confFiles[0].fileName === 'string')
+                assert.ok(typeof confFiles[0].size === 'number')
+                assert.ok(typeof confFiles[0].content === 'string')
 
             })
             .catch(err => {
