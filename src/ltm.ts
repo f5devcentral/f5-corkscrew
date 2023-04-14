@@ -20,6 +20,7 @@ import { digVsConfig, getHostname } from './digConfigs';
 import path from 'path';
 import { UnPacker } from './unPackerStream';
 import { digDoConfig } from './digDoClassesAuto';
+import { DigGslb } from './digGslb';
 
 
 
@@ -115,13 +116,13 @@ export default class BigipConfig extends EventEmitter {
             .then(async x => {
 
                 // we don't get x, if we only process a single conf file
-                if(x) {
+                if (x) {
 
                     this.stats.sourceSize = x.size;
-    
+
                     // wait for all the parse config promises to finish
                     await Promise.all(parseConfPromises)
-    
+
                     // then parse all the other non-conf files
                     this.parseExtras(x.files)
                 }
@@ -130,8 +131,8 @@ export default class BigipConfig extends EventEmitter {
         // wait for all the stats files processing promises to finish
         await Promise.all(parseStatPromises)
 
-        // get ltm object counts
-        this.stats.objects = countObjects(this.configObject);
+        // get ltm/gtm/apm/asm object counts
+        this.stats.objects = await countObjects(this.configObject)
 
         // assign souceTmosVersion to stats object also
         this.stats.sourceTmosVersion = this.tmosVersion
@@ -219,6 +220,14 @@ export default class BigipConfig extends EventEmitter {
     async parseXmlStats(file: ConfigFile): Promise<void> {
 
         this.emit('parseFile', file.fileName)
+
+        // look at replacing with 'fast-xml-parser'
+
+        // todo: refactor xml parsing to just get the things we want
+        //  - virtual server stats (to get top apps)
+        //  - wideip stats (top talkers)
+        //      - any other dns sizing stats like listeners qps
+        //  - any other high level asm/apm stats that would help indicate importance
 
         // was parsing all files for ALL stats, but it ends up being 100sMb of data
         // so, just getting some interesting stuff for now
@@ -313,7 +322,9 @@ export default class BigipConfig extends EventEmitter {
     async explode(): Promise<Explosion> {
 
 
-        const apps = await this.apps();   // extract apps before parse timer...
+        const apps = await this.apps();   // extract apps before pack timer...
+
+        const fqdns = await this.digGslb();
 
         const startTime = process.hrtime.bigint();  // start pack timer
 
@@ -357,9 +368,25 @@ export default class BigipConfig extends EventEmitter {
         return logger.getLogs();
     }
 
+    async digGslb(fqdn?: string) {
+
+        const startTime = process.hrtime.bigint();
+
+        const apps = [];
+
+        const dg = new DigGslb(this.configObject.gtm, this.rx.gtm);
+
+        await dg.fqdns(fqdn).then(fs => {
+            apps.push();
+        })
+
+        this.stats.fqdnTime = Number(process.hrtime.bigint() - startTime) / 1000000;
+        return apps;
+    }
+
 
     /**
-     * extracts app(s)
+     * extracts ltm app(s)
      * @param app single app string
      * @return [{ name: <appName>, config: <appConfig>, map: <appMap> }]
      */
@@ -429,7 +456,7 @@ export default class BigipConfig extends EventEmitter {
         if (version) {
             //found tmos version
             // if(version[1] === this.tmosVersion) {
-                return version[1];
+            return version[1];
             // } else {
             //     const msg = `tmos version CHANGE detected: previous file version was ${this.tmosVersion} -> this tmos version is ${version[1]}`
             //     logger.error(msg)

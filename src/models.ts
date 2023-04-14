@@ -1,10 +1,3 @@
-/*
- * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
- * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
- * may copy and modify this software product for its internal business purposes.
- * Further, Licensee may upload, publish and distribute the modified version of
- * the software product on devcentral.f5.com.
- */
 
 'use strict';
 
@@ -28,12 +21,19 @@ export type BigipConfObj = {
         ifile?: { [key: string]: string },
         "virtual-address"?: { [key: string]: string },
         "default-node-monitor"?: string;
-    },
+    };
+    gtm?: GtmConfObj;
     apm?: {
+        policy?: {
+            "access-policy"?: { [k: string]: string };
+        };
         profile?: { 
             access?: { [key: string]: string }
         }
     };
+    asm?: {
+        policy?: { [k: string]: string };
+    }
     auth?: {
         partition?: unknown;
     }
@@ -71,6 +71,36 @@ export type BigipConfObj = {
         provision?: { [key: string]: string }
         snmp?: string;
         software?: { [key: string]: string }
+    }
+}
+
+
+/**
+ * parent gtm config objects in nested form for BigipConfObj
+ * 
+ */
+export type GtmConfObj = {
+    datacenter?: { [key: string]: string },
+    "global-settings"?: { [key: string]: string },
+    pool?: {
+        a?: { [key: string]: string };
+        aaaa?: { [key: string]: string };
+        ns?: { [key: string]: string };
+        srv?: { [key: string]: string };
+        cname?: { [key: string]: string };
+        mx?: { [key: string]: string };
+        naptr?: { [key: string]: string };
+    };
+    region?: { [key: string]: string };
+    server?: { [key: string]: string };
+    wideip?: {
+        a?: { [key: string]: string };
+        aaaa?: { [key: string]: string };
+        ns?: { [key: string]: string };
+        srv?: { [key: string]: string };
+        cname?: { [key: string]: string };
+        mx?: { [key: string]: string };
+        naptr?: { [key: string]: string };
     }
 }
 
@@ -126,12 +156,40 @@ export type Explosion = {
     config: {
         sources: ConfigFile[],
         apps?: TmosApp[],
+        gslb?: GslbApp[],
         base?: string[],
         doClasses?: string[]
     },
     stats: Stats,
     fileStore?: ConfigFile[]
     logs: string[]
+}
+
+/**
+ * this is only used for Typescript Typing, notice everything is "OR"
+ *  Also, these types are not included after compile (running app)
+ */
+export type GtmRecordTypes = 'a' | 'aaaa' | 'ns' | 'srv' | 'cname' | 'mx' | 'naptr'
+
+export type GslbApp = {
+    fqdn: string;
+    partition: string;
+    type: GtmRecordTypes;
+    aliases?: string[];
+    configs: string[];
+    iRules?: string[];
+    pools?: GtmPool[]
+}
+
+export type GtmPool = {
+    name: string;
+    order: number;
+    type: GtmRecordTypes;
+    'load-balancing-mode'?: string;
+    'alternate-mode'?: string;
+    'fallback-mode'?: string;
+    'fallback-ip'?: string;
+    members?: {}
 }
 
 /**
@@ -172,10 +230,11 @@ export type AppMap = {
  * - child of explosion
  */
 export type Stats = {
-    configBytes?: number,
-    loadTime?: number,
-    parseTime?: number,
-    appTime?: number,
+    configBytes?: number;
+    loadTime?: number;
+    parseTime?: number;
+    appTime?: number;
+    fqdnTime?: number;
     packTime?: number,
     sourceTmosVersion?: string,
     objectCount?: number,
@@ -199,11 +258,18 @@ export type ObjStats = {
     snatPools?: number,
     apmProfiles?: number,
     apmPolicies?: number,
-    asmPolicies?: number
+    asmPolicies?: number,
+    gtm?: GslbStats;
 }
 
 
-
+export type GslbStats = {
+    datacenters?: number;
+    pools?: number;
+    regions?: number;
+    server?: number;
+    wideips?: number;
+}
 
 
 

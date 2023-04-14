@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@types/assert": "^1.5.2",
+    "@types/balanced-match": "^1.0.2",
     "@types/decompress": "^4.2.4",
     "@types/deepmerge": "^2.2.0",
     "@types/glob": "^8.1.0",
@@ -81,6 +82,7 @@
     "tar": "^6.1.13",
     "tar-stream": "^3.0.0",
     "uuid": "^9.0.0",
+    "xregexp": "^5.1.1",
     "yargs": "^17.7.1",
     "zlib": "^1.0.5"
   }

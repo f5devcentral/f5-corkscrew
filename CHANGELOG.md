@@ -9,8 +9,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [0.14.0] - (03.20.2023)
+## [1.0.0] - (04.15.2023)
 
+- **formerly v0.14.0**
 - updated all deps
 - removed legacy syncronous unpack function
   - all the new async unpacking functionality seems to be working well
@@ -24,6 +25,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - this also allows easy updating and expansion of project functionality and testing
 - updated tests
 - major code hygene and clean up
+- [RFE] move tests to folder outside srcs #16 (complete)
+- [RFE] refactor initial parent object extraction #6 (complete)
+- [RFE] Add gslb/dns abstraction #25 (PENDING)
+- [RFE] add asm/waf details #24 (PENDING)
 
 ---
 

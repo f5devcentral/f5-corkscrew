@@ -47,13 +47,13 @@ export class RegExTree {
      */
     private parentObjectsRegex = multilineRegExp([
         // parent level object beginnings with trailing space
-        /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,  
+        /(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,
         // include any child object definitions and object name
         /[ \w\-\/.]+/,
         // capture single line data or everything till "\n}\n"
         /({.*}\n|{[\s\S]+?\n}\n)/,
         // look forward to capture the last "}" before the next parent item name
-        /(?=(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom))/   
+        /(?=(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom))/
     ], 'g');
 
     /**
@@ -121,6 +121,18 @@ export class RegExTree {
             },
             fbPersist: this.fallBackPersistRegex,
             destination: this.destination
+        },
+        gtm: {
+            wideip: {
+                name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+                lastResortPool: /last-resort-pool (?<type>\w+) (?<value>[\/\w.]+)/
+            },
+            pool: {
+                'load-balancing-mode': /\n +load-balancing-mode (?<mode>[\S]+)\n/,
+                'alternate-mode': /\n +alternate-mode (?<mode>[\S]+)\n/,
+                'fallback-mode': /\n +fallback-mode (?<mode>[\S]+)\n/,
+                'fallback-ip': /\n +fallback-ip (?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})\n/,
+            }
         }
     }
 
@@ -142,12 +154,12 @@ export class RegExTree {
          */
 
         // full tmos version without decimals
-        if(x > 19000) {
+        if (x > 19000) {
             logger.error('>v19.0.0.0 tmos detected - this should never happen!!!')
             this.regexTree.vs.fbPersist = /new-fallBackPersist-regex/;
             this.regexTree.vs.pool.obj = /new-pool-regex/;
         }
-        if(x < 10000){
+        if (x < 10000) {
             logger.error('<v12.0.0.0 tmos detected - have not tested this yet!!!')
             // other regex tree changes specific to v12.0.0.0
             // todo: this process needs to be refined a little more; things change when a lower semver version number becomes double digit ex: 12.1.3.16 and 14.1.11.32
@@ -204,8 +216,24 @@ export type TmosRegExTree = {
         },
         fbPersist: RegExp,
         destination: RegExp
+    },
+    gtm: GtmRegexTree
+}
+
+
+export type GtmRegexTree = {
+    wideip: {
+        name: RegExp;
+        lastResortPool: RegExp;
+    };
+    pool: {
+        'fallback-ip': RegExp;
+        'alternate-mode': RegExp;
+        'fallback-mode': RegExp;
+        'load-balancing-mode': RegExp;
     }
 }
+
 
 /**
  * returns full number without decimals so it can be compared

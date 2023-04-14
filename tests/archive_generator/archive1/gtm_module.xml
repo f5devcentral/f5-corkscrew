@@ -1,0 +1,1188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Qkproc version="1.6">
+ <file_info/>
+ <cmd_output module_name="gtm_module">
+  <command cmdline="/usr/bin/tmsh -q show gtm datacenter detail">
+   <piece num="0">
+    <value>
+-------------------------------------------
+Gtm::Datacenter: home_dc
+-------------------------------------------
+Status             
+  Availability : available
+  State        : enabled
+  Reason       : Available
+                   
+Global             
+  Connections            0
+                   
+Throughput              In     Out
+  Bits/sec           61.0K    9.3K
+  Packets/sec           32       2
+                   
+Prober Queue Depths  Total  Active  Pending
+  Monitors               0       0        0
+  SNMP                   0       0        0
+  Path                   0       0        0
+  Trace                  0       0        0
+
+  ------------------------------------------------
+  | Gtm::Server: bigiq01  
+  ------------------------------------------------
+  | Status                
+  |   Availability : offline
+  |   State        : enabled
+  |   Reason       : No enabled VS available
+  |                       
+  | Global                
+  |   Virtual Server Picks      0
+  |   Connections               0
+  |                       
+  | Throughput                 In     Out
+  |   Bits/sec                  0       0
+  |   Packets/sec               0       0
+  |                       
+  | Prober Queue Depths     Total  Active  Pending
+  |   Monitors                  0       0        0
+  |   SNMP                      0       0        0
+  |   Path                      0       0        0
+  |   Trace                     0       0        0
+
+     ----------------------------------------
+     | Gtm::Virtual Server: bigiq01.benlab.io
+     ----------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/https from 192.168.200.5 : no route
+     |   Destination  : 10.200.244.15:443
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+  ------------------------------------------------
+  | Gtm::Server: coreltm01_02
+  ------------------------------------------------
+  | Status                
+  |   Availability : available
+  |   State        : enabled
+  |   Reason       : Available
+  |                       
+  | Global                
+  |   Virtual Server Picks      0
+  |   Connections               0
+  |                       
+  | Throughput                 In     Out
+  |   Bits/sec              30.5K    4.6K
+  |   Packets/sec              16       1
+  |                       
+  | Prober Queue Depths     Total  Active  Pending
+  |   Monitors                  0       0        0
+  |   SNMP                      0       0        0
+  |   Path                      0       0        0
+  |   Trace                     0       0        0
+
+     ------------------------------------------------
+     | Gtm::Virtual Server: /Sample_01/A1/serviceMain
+     ------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 10.44.1.10:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     -----------------------------------------------------------------------------
+     | Gtm::Virtual Server: /com-load/Shared/loadhost-chd.openapi.starbucks.com_80
+     -----------------------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 10.12.20.110:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ------------------------------------------------------------------------------
+     | Gtm::Virtual Server: /com-load/Shared/loadhost-chd.openapi.starbucks.com_443
+     ------------------------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 10.12.20.110:443
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ------------------------------------------------------
+     | Gtm::Virtual Server: /core1_epic_01/epic/serviceMain
+     ------------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 10.0.1.10:80
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     --------------------------------------------------------
+     | Gtm::Virtual Server: /core1_pizza_02/pizza/serviceMain
+     --------------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 10.0.2.10:80
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     --------------------------------------------------------------------------
+     | Gtm::Virtual Server: /external_proxy/extProxy/extExplicit_proxy_t8888_vs
+     --------------------------------------------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.11:8888
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Ou</value>
+   </piece>
+   <piece num="1">
+    <value>t
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ----------------------------------------------------------------
+     | Gtm::Virtual Server: /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+     ----------------------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.29:80
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     -----------------------------------------------------------------
+     | Gtm::Virtual Server: /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+     -----------------------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.29:443
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ---------------------------------------------
+     | Gtm::Virtual Server: /iqt1/iqt1/serviceMain
+     ---------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.164:443
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     -------------------------------------------------------
+     | Gtm::Virtual Server: /iqt1/iqt1/serviceMain-Redirect-
+     -------------------------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.164:80
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ---------------------------------------------------
+     | Gtm::Virtual Server: /nas-infra/nas01/nas01_t0_vs
+     ---------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.27:any
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     -----------------------------------------------------
+     | Gtm::Virtual Server: /ntp-infra/ntp_vip/ntp_u123_vs
+     -----------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.9:123
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     --------------------------------------------------
+     | Gtm::Virtual Server: /sap/main/ssl_bridge_443_vs
+     --------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 172.24.82.67:443
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ------------------------------------------------------------
+     | Gtm::Virtual Server: /sap/main/ssl_bridge_443_vs-Redirect-
+     ------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 172.24.82.67:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ---------------------------------------------------
+     | Gtm::Virtual Server: /tenant_1/Shared/app1_443_vs
+     ---------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 172.24.80.163:443
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     --------------------------------------------------
+     | Gtm::Virtual Server: /tenant_2/app_2/app2_443_vs
+     --------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 172.24.80.217:443
+     |   Up Time      : ---  
+    </value>
+   </piece>
+   <piece num="2">
+    <value> |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ------------------------------------------------------------
+     | Gtm::Virtual Server: /tenant_2/app_2/app2_443_vs-Redirect-
+     ------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 172.24.80.217:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ----------------------------------------------
+     | Gtm::Virtual Server: /tenn1/app1/app1_t80_vs
+     ----------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.1.21:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     -----------------------------------------------
+     | Gtm::Virtual Server: /tenn1/app1/app1_t443_vs
+     -----------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.1.21:443
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     -----------------------------------------------------------------------
+     | Gtm::Virtual Server: /vcenter-infra/vcenter/vcenter.benlab.io_t443_vs
+     -----------------------------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.50:443
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ----------------------------------------------
+     | Gtm::Virtual Server: bigiq.benlab.io_t443_vs
+     ----------------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 10.200.244.15:443
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score        200
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     -----------------------------------------------------
+     | Gtm::Virtual Server: dns_listener_coreltm2_tcp53_vs
+     -----------------------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.8:53
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     -----------------------------------------------------
+     | Gtm::Virtual Server: dns_listener_coreltm2_udp53_vs
+     -----------------------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 192.168.200.8:53
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ----------------------------------------
+     | Gtm::Virtual Server: ipv6_listener
+     ----------------------------------------
+     | Status                      
+     |   Availability : offline    
+     |   State        : enabled    
+     |   Reason       : No nodes up
+     |   Destination  : 2001:db8:200::7.53
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     --------------------------------------------------
+     | Gtm::Virtual Server: russ.app/russ_iqdash_t80_vs
+     --------------------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.160:80
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ----------------------------------------
+     | Gtm::Virtual Server: sslvpn_tcp80_vs
+     ----------------------------------------
+     | Status                      
+     |   Availabi</value>
+   </piece>
+   <piece num="3">
+    <value>lity : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.10:80
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     ----------------------------------------
+     | Gtm::Virtual Server: sslvpn_tcp443_vs
+     ----------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.10:443
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+     -------------------------------------------
+     | Gtm::Virtual Server: test_listener_u53_vs
+     -------------------------------------------
+     | Status                      
+     |   Availability : available  
+     |   State        : enabled    
+     |   Reason       :  Monitor /Common/bigip from 10.200.30.5 : UP
+     |   Destination  : 192.168.200.7:53
+     |   Up Time      : 3 days 1:54
+     |                             
+     | Link Name                     ---
+     |                             
+     | Global                      
+     |   Picks                         0
+     |   Connections                   0
+     |   Virtual Server Score          0
+     |                             
+     | Throughput                     In  Out
+     |   Bits/sec                      0    0
+     |   Packets/sec                   0    0
+
+  ------------------------------------------------
+  | Gtm::Server: gtm_coreltm01
+  ------------------------------------------------
+  | Status                
+  |   Availability : available
+  |   State        : enabled
+  |   Reason       : iQuery communication established
+  |                       
+  | Global                
+  |   Virtual Server Picks      0
+  |   Connections               0
+  |                       
+  | Throughput                 In     Out
+  |   Bits/sec              30.5K    4.6K
+  |   Packets/sec              16       1
+  |                       
+  | Prober Queue Depths     Total  Active  Pending
+  |   Monitors                  0       0        0
+  |   SNMP                      0       0        0
+  |   Path                      0       0        0
+  |   Trace                     0       0        0
+
+  ------------------------------------------------
+  | Gtm::Server: gtm_coreltm02
+  ------------------------------------------------
+  | Status                
+  |   Availability : unknown
+  |   State        : enabled
+  |   Reason       : Checking
+  |                       
+  | Global                
+  |   Virtual Server Picks      0
+  |   Connections               0
+  |                       
+  | Throughput                 In     Out
+  |   Bits/sec                  0       0
+  |   Packets/sec               0       0
+  |                       
+  | Prober Queue Depths     Total  Active  Pending
+  |   Monitors                  0       0        0
+  |   SNMP                      0       0        0
+  |   Path                      0       0        0
+  |   Trace                     0       0        0
+
+  ------------------------------------------------
+  | Gtm::Server: intouch01_02
+  ------------------------------------------------
+  | Status                
+  |   Availability : offline
+  |   State        : enabled
+  |   Reason       : No enabled VS available
+  |                       
+  | Global                
+  |   Virtual Server Picks      0
+  |   Connections               0
+  |                       
+  | Throughput                 In     Out
+  |   Bits/sec                  0       0
+  |   Packets/sec               0       0
+  |                       
+  | Prober Queue Depths     Total  Active  Pending
+  |   Monitors                  0       0        0
+  |   SNMP                      0       0        0
+  |   Path                      0       0        0
+  |   Trace                     0       0        0
+
+     --------------------------------------
+     | Gtm::Virtual Server: cloverleaf_0_vs
+     --------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.200.120:any
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     -----------------------------------------------------------------------------
+     | Gtm::Virtual Server: sldc_clvf_dev02.app/sldc_clvf_dev02_buffer_mgmt_t80_vs
+     -----------------------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.200.136:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     --------------------------------------------------------------------------
+     | Gtm::Virtual Server: sldc_clvf_dev02.app/sldc_clvf_dev02_buffer_t8442_vs
+     --------------------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.200.136:8442
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     ---------------------------------------------------------------------
+     | Gtm::Virtual Server: sldc_clvf_dev02.app/sldc_clvf_dev02_main_t0_vs
+     ---------------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.200.136:any
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bi</value>
+   </piece>
+   <piece num="4">
+    <value>ts/sec                0    0
+     |   Packets/sec             0    0
+
+     -----------------------------------------------------------------------------
+     | Gtm::Virtual Server: sldc_clvf_dev02.app/sldc_clvf_dev02_waterpark_t8443_vs
+     -----------------------------------------------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.200.136:8443
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+     --------------------------------------
+     | Gtm::Virtual Server: tiki_web_t80_vs
+     --------------------------------------
+     | Status                
+     |   Availability : offline
+     |   State        : enabled
+     |   Reason       :  Monitor /Common/bigip from /Common/coreltm01_02 : no reply from big3d: timed out
+     |   Destination  : 192.168.200.120:80
+     |   Up Time      : ---  
+     |                       
+     | Link Name               ---
+     |                       
+     | Global                
+     |   Picks                   0
+     |   Connections             0
+     |   Virtual Server Score    0
+     |                       
+     | Throughput               In  Out
+     |   Bits/sec                0    0
+     |   Packets/sec             0    0
+
+</value>
+   </piece>
+   <pieces>5</pieces>
+   <retcode>0</retcode>
+  </command>
+  <command cmdline="/usr/bin/tmsh -q show gtm distributed-app">
+   <pieces>0</pieces>
+   <retcode>0</retcode>
+  </command>
+  <command cmdline="/usr/bin/tmsh -q show gtm wideip">
+   <piece num="0">
+    <value>
+------------------------
+Gtm::WideIp::A benlab.io
+------------------------
+Status               
+  Availability : available
+  State        : enabled
+  Reason       : Available
+                     
+Requests             
+  Total                0
+  Persisted            0
+  Resolved             0
+  Dropped              0
+                     
+Load Balancing       
+  Preferred            0
+  Alternate            0
+  Fallback             0
+  CNAME Resolutions    0
+  Returned from DNS    0
+  Returned to DNS      0
+  Failures with RCODE  0
+                     
+
+------------------------------
+Gtm::WideIp::A bigiq.benlab.io
+------------------------------
+Status               
+  Availability : available
+  State        : enabled
+  Reason       : Available
+                     
+Requests             
+  Total                0
+  Persisted            0
+  Resolved             0
+  Dropped              0
+                     
+Load Balancing       
+  Preferred            0
+  Alternate            0
+  Fallback             0
+  CNAME Resolutions    0
+  Returned from DNS    0
+  Returned to DNS      0
+  Failures with RCODE  0
+                     
+
+-----------------------------------
+Gtm::WideIp::A devCloud01.benlab.io
+-----------------------------------
+Status               
+  Availability : offline
+  State        : enabled
+  Reason       : No enabled pools available
+                     
+Requests             
+  Total                0
+  Persisted            0
+  Resolved             0
+  Dropped              0
+                     
+Load Balancing       
+  Preferred            0
+  Alternate            0
+  Fallback             0
+  CNAME Resolutions    0
+  Returned from DNS    0
+  Returned to DNS      0
+  Failures with RCODE  0
+                     
+
+------------------------------
+Gtm::WideIp::A unifi.benlab.io
+------------------------------
+Status               
+  Availability : offline
+  State        : enabled
+  Reason       : No enabled pools available
+                     
+Requests             
+  Total                0
+  Persisted            0
+  Resolved             0
+  Dropped              0
+                     
+Load Balancing       
+  Preferred            0
+  Alternate            0
+  Fallback             0
+  CNAME Resolutions    0
+  Returned from DNS    0
+  Returned to DNS      0
+  Failures with RCODE  0
+                     
+
+</value>
+   </piece>
+   <pieces>1</pieces>
+   <retcode>0</retcode>
+  </command>
+  <command cmdline="/usr/bin/tmsh -q show gtm iquery">
+   <piece num="0">
+    <value>
+----------------------------------------------------
+Gtm::IQuery: 10.200.30.5       
+----------------------------------------------------
+Server                                  coreltm01_02
+Server Type                                BIGIP-DNS
+Data Center                                  home_dc
+Connection Time                    04/07/23 15:04:00
+State                                      connected
+Connection ID                                      2
+Reconnects                                         0
+Backlogs                                           0
+Bits In                                         1.4G
+Bits Out                                       46.4M
+Bytes Dropped                                    592
+Cert Expiration Date               07/13/29 20:54:56
+Configuration Time                 04/10/23 16:22:28
+Configuration Commit ID                          952
+Configuration Commit Originator  coreltm01.benlab.io
+Local TMOS version                            15.1.8
+Remote TMOS version                         15.1.8.2
+Local big3d version                  15.1.8.2.0.0.17
+Remote big3d version                 15.1.8.2.0.0.17
+Cipher Name                        AES256-GCM-SHA384
+Cipher Bits                                      256
+Cipher Protocol                              TLSv1.2
+
+------------------------------------------------
+Gtm::IQuery: 10.200.30.6       
+------------------------------------------------
+Server                              coreltm01_02
+Server Type                              unknown
+Data Center                              home_dc
+Connection Time                             None
+State                                 connecting
+Connection ID                                  0
+Reconnects                                     0
+Backlogs                                       0
+Bits In                                        0
+Bits Out                                       0
+Bytes Dropped                              76.3M
+Cert Expiration Date                        None
+Configuration Time                          None
+Configuration Commit ID                        0
+Configuration Commit Originator              ---
+Local TMOS version                        15.1.8
+Remote TMOS version                          ---
+Local big3d version              15.1.8.2.0.0.17
+Remote big3d version                         ---
+Cipher Name                                  ---
+Cipher Bits                                    0
+Cipher Protocol                              ---
+
+----------------------------------------------------
+Gtm::IQuery: 192.168.200.5     
+----------------------------------------------------
+Server                                 gtm_coreltm01
+Server Type                                BIGIP-DNS
+Data Center                                  home_dc
+Connection Time                    04/07/23 15:04:00
+State                                      connected
+Connection ID                                      1
+Reconnects                                         0
+Backlogs                                           0
+Bits In                                       224.3M
+Bits Out                                        3.3M
+Bytes Dropped                                     56
+Cert Expiration Date               07/13/29 20:54:56
+Configuration Time                 04/10/23 16:22:28
+Configuration Commit ID                          952
+Configuration Commit Originator  coreltm01.benlab.io
+Local TMOS version                            15.1.8
+Remote TMOS version                         15.1.8.2
+Local big3d version                  15.1.8.2.0.0.17
+Remote big3d version                 15.1.8.2.0.0.17
+Cipher Name                        AES256-GCM-SHA384
+Cipher Bits                                      256
+Cipher Protocol                              TLSv1.2
+
+------------------------------------------------
+Gtm::IQuery: 192.168.200.6     
+------------------------------------------------
+Server                             gtm_coreltm02
+Server Type                              unknown
+Data Center                              home_dc
+Connection Time                             None
+State                              not-connected
+Connection ID                                  0
+Reconnects                                     0
+Backlogs                                       0
+Bits In                                        0
+Bits Out                                       0
+Bytes Dropped                               1.4M
+Cert Expiration Date                        None
+Configuration Time                          None
+Configuration Commit ID                        0
+Configuration Commit Originator              ---
+Local TMOS version                        15.1.8
+Remote TMOS version                          ---
+Local big3d version              15.1.8.2.0.0.17
+Remote big3d version                         ---
+Cipher Name                                  ---
+Cipher Bits                                    0
+Cipher Protocol                              ---
+
+------------------------------------------------
+Gtm::IQuery: 192.168.200.101   
+------------------------------------------------
+Server                              intouch01_02
+Server Type                              unknown
+Data Center                              home_dc
+Connection Time                             None
+State                              not-connected
+Connection ID                                  0
+Reconnects                                     0
+Backlogs                                       0
+Bits In                                        0
+Bits Out                                       0
+Bytes Dropped                              18.0M
+Cert Expiration Date                        None
+Configuration Time                          None
+Configuration Commit ID                        0
+Configuration Commit Originator              ---
+Local TMOS version                        15.1.8
+Remote TMOS version                          ---
+Local big3d version              15.1.8.2.0.0.17
+Remote big3d version                         ---
+Cipher Name                                  ---
+Cipher Bits                                    0
+Cipher Protocol                              ---
+
+------------------------------------------------
+Gtm::IQuery: 192.168.200.102   
+------------------------------------------------
+Server                              intouch01_02
+Server Type                              unknown
+Data Center                              home_dc
+Connection Time                             None
+State                              not-connected
+Connection ID                                  0
+Reconnects                                     0
+Backlogs                                       0
+Bits In                                        0
+Bits Out                                       0
+Bytes Dropped                              18.0M
+Cert Expiration Date                        None
+Configuration Time                          None
+Configuration Commit ID                        0
+Configuration Commit Originator              ---
+Local TMOS version                        15.1.8
+Remote TMOS version                          ---
+Local big3d version              15.1.8.2.0.0.17
+Remote big3d version                         ---
+Cipher Name                                  ---
+Cipher Bits                                    0
+Cipher Protocol                              ---
+
+</value>
+   </piece>
+   <pieces>1</pieces>
+   <retcode>0</retcode>
+  </command>
+  <command cmdline="/usr/bin/tmsh -q show gtm rule">
+   <pieces>0</pieces>
+   <retcode>0</retcode>
+  </command>
+  <command cmdline="/usr/bin/tmsh -q show gtm traffic">
+   <piece num="0">
+    <value>
+------------------------
+Gtm::Global:        
+------------------------
+A Requests            74
+AAAA Requests          0
+CNAME Requests         0
+MX Requests            0
+NAPTR Requests         0
+SRV Requests           0
+Current LDNS Entries   1
+Current Paths          0
+
+</value>
+   </piece>
+   <pieces>1</pieces>
+   <retcode>0</retcode>
+  </command>
+ </cmd_output>
+</Qkproc>
