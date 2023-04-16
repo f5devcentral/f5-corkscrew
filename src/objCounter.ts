@@ -90,6 +90,7 @@ export async function countAPM(obj: BigipConfObj, stats: ObjStats): Promise<void
 
 /**
  * list of gtm record types, not for Typescript typing (see models export)
+ * [ 'a', 'aaaa', 'ns', 'srv', 'cname', 'mx', 'naptr']
  */
 export const gtmRecordTypes = [ 'a', 'aaaa', 'ns', 'srv', 'cname', 'mx', 'naptr'];
 

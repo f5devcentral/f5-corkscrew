@@ -60,8 +60,10 @@ describe('qkview tests', async function() {
             "/Common/app3_t8443_vs",
             "/Common/app4_t80_vs",
             "/Common/forwarder_net_0.0.0.0",
-            "/foo/defaultsUDP_5555/serviceMain"
-          ];
+            "/foo/defaultsUDP_5555/serviceMain",
+            "/hue-infra/hue-up/hue-up.benlab.io_t80_vs",
+            "/hue-infra/hue-up/hue-up.benlab.io_t443_vs",
+          ]
         
         assert.deepStrictEqual(apps, expected, 'Should get list of virtual servers / apps');
     });
@@ -92,6 +94,18 @@ describe('qkview tests', async function() {
 
         assert.ok(baseLtmProfiles);
         assert.ok(sysLowProfiles);
+    });
+
+
+    it(`basic gtm - high level fqdn details`, async function() {
+
+        const gslb = expld.config.gslb;
+
+        assert.ok(gslb!.length === 5);
+        assert.ok(typeof gslb![0] == 'object');
+        assert.ok(typeof gslb![0].fqdn == 'string');
+        assert.ok(typeof gslb![0].type == 'string');
+        assert.ok(typeof gslb![1].aliases![0] == 'string');
     });
 });
 

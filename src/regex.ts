@@ -53,85 +53,76 @@ export class RegExTree {
         // capture single line data or everything till "\n}\n"
         /({.*}\n|{[\s\S]+?\n}\n)/,
         // look forward to capture the last "}" before the next parent item name
-        /(?=(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom))/
+        /(?=(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom|---end---))/
     ], 'g');
-
-    /**
-     * vs detail regexs
-     */
-    //following regex will get pool, but not snat pool from vs config
-    private poolRegex = /(?<!source-address-translation {\n\s+)    pool (.+?)\n/;
-    private profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
-    private rulesRegex = /rules {([\s\S]+?)\n    }\n/;
-    private snatRegex = /source-address-translation {([\s\S]+?)\n    }\n/;
-    private ltPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
-    private persistRegex = /persist {([\s\S]+?)\n    }\n/;
-    private fallBackPersistRegex = /fallback-persistence (\/\w+.+?)\n/;
-    private destination = /destination (\/\w+\/[\w+\.\-]+:\d+)/;
-
-    /**
-     * pool detail regexs
-     */
-    private poolMembersRegex = /members {([\s\S]+?)\n    }\n/;
-    private poolNodesFromMembersRegex = /(\/\w+\/.+?)(?=:)/g;
-    private poolMonitorsRegex = /monitor (\/\w+.+?)\n/;
-
-    /**
-     * profiles
-     */
-    private profileNamesRegex = /(\/[\w\-\/.]+)/g;
-    private snatNameRegex = /pool (\/[\w\-\/.]+)/;
-    private ruleNamesRegex = /(\/[\w\-\/.]+)/g;
-    private ltpNamesRegex = /(\/[\w\-\/.]+)/g;
-    private persistNameRegex = /(\/[\w\-\/.]+)/;
 
     /**
      * base regex tree for extracting tmos config items
      */
-    private regexTree: TmosRegExTree = {
+    private regexTree = {
         tmosVersion: this.tmosVersionReg,
         parentObjects: this.parentObjectsRegex,
         parentNameValue: this.parentNameValueRegex,
         vs: {
             pool: {
-                obj: this.poolRegex,
-                members: this.poolMembersRegex,
-                nodesFromMembers: this.poolNodesFromMembersRegex,
-                monitors: this.poolMonitorsRegex
+                obj: /(?<!source-address-translation {\n\s+)    pool (.+?)\n/,
+                members: /members {([\s\S]+?)\n    }\n/,
+                nodesFromMembers: /(\/\w+\/.+?)(?=:)/g,
+                monitors: /monitor (\/\w+.+?)\n/
             },
             profiles: {
-                obj: this.profilesRegex,
-                names: this.profileNamesRegex
+                obj: /profiles {([\s\S]+?)\n    }\n/,
+                names: /(\/[\w\-\/.]+)/g
             },
             rules: {
-                obj: this.rulesRegex,
-                names: this.ruleNamesRegex
+                obj: /rules {([\s\S]+?)\n    }\n/,
+                names: /(\/[\w\-\/.]+)/g
             },
             snat: {
-                obj: this.snatRegex,
-                name: this.snatNameRegex
+                obj: /source-address-translation {([\s\S]+?)\n    }\n/,
+                name: /pool (\/[\w\-\/.]+)/
             },
             ltPolicies: {
-                obj: this.ltPoliciesRegex,
-                names: this.ltpNamesRegex
+                obj: /policies {([\s\S]+?)\n    }\n/,
+                names: /(\/[\w\-\/.]+)/g
             },
             persist: {
-                obj: this.persistRegex,
-                name: this.persistNameRegex
+                obj: /persist {([\s\S]+?)\n    }\n/,
+                name: /(\/[\w\-\/.]+)/
             },
-            fbPersist: this.fallBackPersistRegex,
-            destination: this.destination
+            fbPersist: /fallback-persistence (\/\w+.+?)\n/,
+            destination: /destination (\/\w+\/[\w+\.\-]+:\d+)/
         },
         gtm: {
             wideip: {
                 name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
-                lastResortPool: /last-resort-pool (?<type>\w+) (?<value>[\/\w.]+)/
+                persistence: /persistence (?<bool>\w+)/,
+                'pool-lb-mode': /pool-lb-mode (?<mode>\w+)/,
+                aliases: /aliases {([\s\S]+?)\n    }\n/,
+                rules: /rules {([\s\S]+?)\n    }\n/,
+                lastResortPool: /last-resort-pool (?<type>\w+) (?<value>[\/\w.]+)/,
+                poolsParent: /pools {([\s\S]+?)\n    }\n/,
+                pools: /(?<name>[\w\-\/.]+) {\n +(?<body>[\s\S]+?)\n +}/g,
+                poolDetails: /(?<name>[\w\-\/.]+) {\n +(?<body>[\s\S]+?)\n +}/
             },
             pool: {
-                'load-balancing-mode': /\n +load-balancing-mode (?<mode>[\S]+)\n/,
-                'alternate-mode': /\n +alternate-mode (?<mode>[\S]+)\n/,
-                'fallback-mode': /\n +fallback-mode (?<mode>[\S]+)\n/,
-                'fallback-ip': /\n +fallback-ip (?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})\n/,
+                membersGroup: /members {([\s\S]+?)\n    }\n/,
+                membersDetails: /(?<server>[\/\w\-.]+):(?<vs>[\/\w\-.]+) {\n +(?<body>[\s\S]+?)\n +}/,
+                membersDetailsG: /(?<server>[\/\w\-.]+):(?<vs>[\/\w\-.]+) {\n +(?<body>[\s\S]+?)\n +}/g,
+                'load-balancing-mode': /\n +load-balancing-mode (?<mode>[\S]+)/,
+                'alternate-mode': /\n +alternate-mode (?<mode>[\S]+)/,
+                'fallback-mode': /\n +fallback-mode (?<mode>[\S]+)/,
+                'fallback-ip': /\n +fallback-ip (?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})/,
+                'verify-member-availability': /\n +verify-member-availability (?<flag>[\S]+)/,
+            },
+            server: {
+                devices: /devices {([\s\S]+?)\n    }\n/,
+                devicesG: /(?<server>[\/\w\-.]+) {([\s\S]+?)\n    }\n/g,
+                dAddressT: /(?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}) { (translation (?<nat>[\d.]+) )?}/,
+                'virtual-servers': /virtual-servers {([\s\S]+?)\n    }\n/,
+                vs: {
+                    'depends-on': / /,
+                }
             }
         }
     }
@@ -145,7 +136,7 @@ export class RegExTree {
      * 
      * @param tmosVersion
      */
-    get(tmosVersion?: string): TmosRegExTree {
+    get(tmosVersion?: string) {
         const x = removeVersionDecimals(tmosVersion);
 
         /**

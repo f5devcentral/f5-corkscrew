@@ -21,6 +21,7 @@ import path from 'path';
 import { UnPacker } from './unPackerStream';
 import { digDoConfig } from './digDoClassesAuto';
 import { DigGslb } from './digGslb';
+import { parseDeep } from './deepParse';
 
 
 
@@ -205,8 +206,12 @@ export default class BigipConfig extends EventEmitter {
 
                         // split extracted name element by spaces
                         const names = name[1].split(' ');
+
                         // create new nested objects with each of the names, assigning value on inner-most
                         const newObj = nestedObjValue(names, name[2]);
+
+                        // fully parse key items before adding to the tree
+                        parseDeep(newObj, this.rx)
 
                         this.configObject = deepMergeObj(this.configObject, newObj);
                     } else {
@@ -262,11 +267,14 @@ export default class BigipConfig extends EventEmitter {
 
     async parentTmosObjects(conf: ConfigFile): Promise<string[]> {
 
-
+        // this is needed to mark the end of the file, and get the regex to complete
+        //      the parentObjects rx relies on the start of the next known parent object (ltm|apm|gtm|asm|sys|...)
+        const confContent = conf.content.concat('---end---');
+        
         const x = []
         try {
             // try to parse the config into an array
-            x.push(...conf.content.match(this.rx.parentObjects));
+            x.push(...confContent.match(this.rx.parentObjects));
         } catch (e) {
             logger.error(`failed to extract any parent tmos matches from ${conf.fileName} - might be a scripts file...`);
             return []
@@ -324,6 +332,7 @@ export default class BigipConfig extends EventEmitter {
 
         const apps = await this.apps();   // extract apps before pack timer...
 
+        // extract all the dns apps/fqdns
         const fqdns = await this.digGslb();
 
         const startTime = process.hrtime.bigint();  // start pack timer
@@ -349,7 +358,12 @@ export default class BigipConfig extends EventEmitter {
             // add virtual servers (apps), if found
             retObj.config['apps'] = apps;
         }
-
+        
+        if (fqdns) {
+            // add dns/fqdn details, if available
+            retObj.config['gslb'] = fqdns;
+        }
+        
         if (this.fileStore.length > 0) {
             // add files from file store
             retObj['fileStore'] = this.fileStore;
@@ -377,7 +391,7 @@ export default class BigipConfig extends EventEmitter {
         const dg = new DigGslb(this.configObject.gtm, this.rx.gtm);
 
         await dg.fqdns(fqdn).then(fs => {
-            apps.push();
+            apps.push(...fs);
         })
 
         this.stats.fqdnTime = Number(process.hrtime.bigint() - startTime) / 1000000;

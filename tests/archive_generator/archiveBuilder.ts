@@ -16,6 +16,10 @@ import { globSync } from 'glob';
 import { execSync } from 'child_process';
 
 
+// todo:     loop through all the files and update the tmos version at the top
+//      this is mainly necessary if someone copy and pastes and entire config file with new features
+//      --  maybe this is a good test case?
+
 
 /**
  * generate f5 archive for testing this project

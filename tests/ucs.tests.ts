@@ -61,8 +61,10 @@ describe('ucs tests', async function () {
             "/Common/app3_t8443_vs",
             "/Common/app4_t80_vs",
             "/Common/forwarder_net_0.0.0.0",
-            "/foo/defaultsUDP_5555/serviceMain"
-        ];
+            "/foo/defaultsUDP_5555/serviceMain",
+            "/hue-infra/hue-up/hue-up.benlab.io_t80_vs",
+            "/hue-infra/hue-up/hue-up.benlab.io_t443_vs",
+          ]
 
         assert.deepStrictEqual(apps, expected, 'Should get list of virtual servers / apps');
     });

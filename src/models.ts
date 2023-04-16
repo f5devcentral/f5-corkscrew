@@ -27,7 +27,7 @@ export type BigipConfObj = {
         policy?: {
             "access-policy"?: { [k: string]: string };
         };
-        profile?: { 
+        profile?: {
             access?: { [key: string]: string }
         }
     };
@@ -74,76 +74,6 @@ export type BigipConfObj = {
     }
 }
 
-
-/**
- * parent gtm config objects in nested form for BigipConfObj
- * 
- */
-export type GtmConfObj = {
-    datacenter?: { [key: string]: string },
-    "global-settings"?: { [key: string]: string },
-    pool?: {
-        a?: { [key: string]: string };
-        aaaa?: { [key: string]: string };
-        ns?: { [key: string]: string };
-        srv?: { [key: string]: string };
-        cname?: { [key: string]: string };
-        mx?: { [key: string]: string };
-        naptr?: { [key: string]: string };
-    };
-    region?: { [key: string]: string };
-    server?: { [key: string]: string };
-    wideip?: {
-        a?: { [key: string]: string };
-        aaaa?: { [key: string]: string };
-        ns?: { [key: string]: string };
-        srv?: { [key: string]: string };
-        cname?: { [key: string]: string };
-        mx?: { [key: string]: string };
-        naptr?: { [key: string]: string };
-    }
-}
-
-/**
- * defines the structure of the archive file extraction or single bigip.conf
- */
-export type ConfigFiles = {
-    fileName: string,
-    size: number,
-    content: string
-}[]
-
-export type xmlStats = {
-    'mcp_module.xml'?: {
-        "Qkproc": {
-            "admin_ip": unknown
-            "system_information": unknown
-            "cert_status_object": unknown
-            "system_module": unknown
-            "tmm_stat": unknown
-            "traffic_group": unknown
-            "virtual_address": unknown
-            "virtual_address_stat": unknown
-            "virtual_server": unknown
-            "virtual_server_stat": unknown,
-            "interface": unknown,
-            "interface_stat": unknown,
-            "pool": unknown,
-            "pool_member": unknown,
-            "pool_member_metadata": unknown,
-            "pool_member_stat": unknown,
-            "pool_stat": unknown,
-            "profile_dns_stat": unknown,
-            "profile_http_stat": unknown,
-            "profile_tcp_stat": unknown,
-            "rule_stat": unknown,
-        }
-    }
-
-
-}
-
-
 /**
  * main explosion output
  * 
@@ -165,6 +95,79 @@ export type Explosion = {
     logs: string[]
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * parent gtm config objects in nested form for BigipConfObj
+ * 
+ */
+export type GtmConfObj = {
+    datacenter?: { [key: string]: string },
+    "global-settings"?: { [key: string]: string },
+    pool?: {
+        a?: GtmPool;
+        aaaa?: GtmPool;
+        ns?: GtmPool;
+        srv?: GtmPool;
+        cname?: GtmPool;
+        mx?: GtmPool;
+        naptr?: GtmPool;
+    };
+    region?: { [key: string]: string };
+    server?: {
+        [k: string]: {
+            line: string;
+            datacenter: string;
+            monitor?: string;
+            product?: string;
+            'virtual-server-discovery'?: string;
+            'virtual-servers': {
+                [k: string]: {
+                    destination: string;
+                    'depends-on'?: string[];
+                    monitor?: string;
+                    'translation-address'?: string;
+                    'translation-port'?: string;
+                }
+            }
+            devices?: {
+                [k: string]: {
+                    addresses: {
+                        [k: string]: {
+                            translation?: string;
+                        }
+                    }[]
+                }
+            }[]
+        }
+    };
+    wideip?: {
+        a?: GslbApp;
+        aaaa?: GslbApp;
+        ns?: GslbApp;
+        srv?: GslbApp;
+        cname?: GslbApp;
+        mx?: GslbApp;
+        naptr?: GslbApp;
+    };
+}
+
+
+
 /**
  * this is only used for Typescript Typing, notice everything is "OR"
  *  Also, these types are not included after compile (running app)
@@ -175,12 +178,24 @@ export type GslbApp = {
     fqdn: string;
     partition: string;
     type: GtmRecordTypes;
+    lines: string[];
     aliases?: string[];
-    configs: string[];
     iRules?: string[];
-    pools?: GtmPool[]
+    pools?: GtmPool[] | GtmPoolRef[];
 }
 
+/**
+ * gtm pool reference in a wideip
+ */
+export type GtmPoolRef = {
+    name: string;
+    order?: number;
+    ratio?: number;
+}
+
+/**
+ * full gtm pool details
+ */
 export type GtmPool = {
     name: string;
     order: number;
@@ -189,8 +204,27 @@ export type GtmPool = {
     'alternate-mode'?: string;
     'fallback-mode'?: string;
     'fallback-ip'?: string;
-    members?: {}
-}
+    members?: []
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * array item of returned "apps"
@@ -272,47 +306,6 @@ export type GslbStats = {
 }
 
 
-
-
-export type TmosRegExTree = {
-    tmosVersion: RegExp,
-    parentObjects: RegExp,
-    parentNameValue: RegExp,
-    vs: {
-        pool: {
-            obj: RegExp,
-            members: RegExp,
-            nodesFromMembers: RegExp,
-            monitors: RegExp
-        },
-        profiles: {
-            obj: RegExp,
-            names: RegExp
-        },
-        rules: {
-            obj: RegExp,
-            names: RegExp
-        },
-        snat: {
-            obj: RegExp,
-            name: RegExp
-        },
-        ltPolicies: {
-            obj: RegExp,
-            names: RegExp
-        },
-        persist: {
-            obj: RegExp,
-            name: RegExp
-        },
-        fbPersist: RegExp,
-        destination: RegExp
-    }
-}
-
-
-
-
 export type ParseResp = {
     totalObjectCount: number,
     ltmObjectCount: number,
@@ -330,3 +323,42 @@ export type ConfigFile = {
     content: string
 }
 
+
+/**
+ * defines the structure of the archive file extraction or single bigip.conf
+ */
+export type ConfigFiles = {
+    fileName: string,
+    size: number,
+    content: string
+}[]
+
+export type xmlStats = {
+    'mcp_module.xml'?: {
+        "Qkproc": {
+            "admin_ip": unknown
+            "system_information": unknown
+            "cert_status_object": unknown
+            "system_module": unknown
+            "tmm_stat": unknown
+            "traffic_group": unknown
+            "virtual_address": unknown
+            "virtual_address_stat": unknown
+            "virtual_server": unknown
+            "virtual_server_stat": unknown,
+            "interface": unknown,
+            "interface_stat": unknown,
+            "pool": unknown,
+            "pool_member": unknown,
+            "pool_member_metadata": unknown,
+            "pool_member_stat": unknown,
+            "pool_stat": unknown,
+            "profile_dns_stat": unknown,
+            "profile_http_stat": unknown,
+            "profile_tcp_stat": unknown,
+            "rule_stat": unknown,
+        }
+    }
+
+
+}

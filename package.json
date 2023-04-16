@@ -76,6 +76,7 @@
     "balanced-match": "^2.0.0",
     "decompress": "^4.2.1",
     "deepmerge": "^4.2.2",
+    "deepmerge-ts": "^5.1.0",
     "f5-conx-core": "^0.17.2",
     "glob": "^9.3.4",
     "object-path": "^0.11.8",
