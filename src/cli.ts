@@ -86,36 +86,36 @@ async function explode(args: argsObj) {
 
 }
 
-yargs
-    .command('explode <file>', 'explode bigip config', (yargs) => {
-        yargs
-            .positional('file', {
-                describe: '.conf|ucs|kqview to explode',
-                demandOption: true
-            })
-        .option('no_sources', {
-            describe: 'supress config file sources bigip.conf, bigip_base.conf output',
-            boolean: true
-        })
-        .option('no_file_store', {
-            describe: 'supress filestore files output',
-            boolean: true
-        })
-        .option('no_command_logs', {
-            describe: 'no cli output',
-            boolean: true
-        })
-        .option('no_conversion_logs', {
-            describe: 'no extraction parsing logs',
-            boolean: true
-        })
-    }, (argv: argsObj) => {
-        explode(argv)
-    })
-    .demandCommand(1, 'A command is required')
-    .wrap(120)
-    .strict()
-    .argv;
+// yargs
+//     .command('explode <file>', 'explode bigip config', (yargs) => {
+//         yargs
+//             .positional('file', {
+//                 describe: '.conf|ucs|kqview to explode',
+//                 demandOption: true
+//             })
+//         .option('no_sources', {
+//             describe: 'supress config file sources bigip.conf, bigip_base.conf output',
+//             boolean: true
+//         })
+//         .option('no_file_store', {
+//             describe: 'supress filestore files output',
+//             boolean: true
+//         })
+//         .option('no_command_logs', {
+//             describe: 'no cli output',
+//             boolean: true
+//         })
+//         .option('no_conversion_logs', {
+//             describe: 'no extraction parsing logs',
+//             boolean: true
+//         })
+//     }, (argv: argsObj) => {
+//         explode(argv)
+//     })
+//     .demandCommand(1, 'A command is required')
+//     .wrap(120)
+//     .strict()
+//     .argv;
 
 
 export type argsObj = {
