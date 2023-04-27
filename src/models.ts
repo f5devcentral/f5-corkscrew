@@ -1,10 +1,3 @@
-/*
- * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
- * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
- * may copy and modify this software product for its internal business purposes.
- * Further, Licensee may upload, publish and distribute the modified version of
- * the software product on devcentral.f5.com.
- */
 
 'use strict';
 
@@ -28,12 +21,19 @@ export type BigipConfObj = {
         ifile?: { [key: string]: string },
         "virtual-address"?: { [key: string]: string },
         "default-node-monitor"?: string;
-    },
+    };
+    gtm?: GtmConfObj;
     apm?: {
-        profile?: { 
+        policy?: {
+            "access-policy"?: { [k: string]: string };
+        };
+        profile?: {
             access?: { [key: string]: string }
         }
     };
+    asm?: {
+        policy?: { [k: string]: string };
+    }
     auth?: {
         partition?: unknown;
     }
@@ -74,38 +74,6 @@ export type BigipConfObj = {
     }
 }
 
-
-export type xmlStats = {
-    'mcp_module.xml'?: {
-        "Qkproc": {
-            "admin_ip": unknown
-            "system_information": unknown
-            "cert_status_object": unknown
-            "system_module": unknown
-            "tmm_stat": unknown
-            "traffic_group": unknown
-            "virtual_address": unknown
-            "virtual_address_stat": unknown
-            "virtual_server": unknown
-            "virtual_server_stat": unknown,
-            "interface": unknown,
-            "interface_stat": unknown,
-            "pool": unknown,
-            "pool_member": unknown,
-            "pool_member_metadata": unknown,
-            "pool_member_stat": unknown,
-            "pool_stat": unknown,
-            "profile_dns_stat": unknown,
-            "profile_http_stat": unknown,
-            "profile_tcp_stat": unknown,
-            "rule_stat": unknown,
-        }
-    }
-
-
-}
-
-
 /**
  * main explosion output
  * 
@@ -118,6 +86,7 @@ export type Explosion = {
     config: {
         sources: ConfigFile[],
         apps?: TmosApp[],
+        gslb?: GslbApp[],
         base?: string[],
         doClasses?: string[]
     },
@@ -125,6 +94,137 @@ export type Explosion = {
     fileStore?: ConfigFile[]
     logs: string[]
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * parent gtm config objects in nested form for BigipConfObj
+ * 
+ */
+export type GtmConfObj = {
+    datacenter?: { [key: string]: string },
+    "global-settings"?: { [key: string]: string },
+    pool?: {
+        a?: GtmPool;
+        aaaa?: GtmPool;
+        ns?: GtmPool;
+        srv?: GtmPool;
+        cname?: GtmPool;
+        mx?: GtmPool;
+        naptr?: GtmPool;
+    };
+    region?: { [key: string]: string };
+    server?: {
+        [k: string]: {
+            line: string;
+            datacenter: string;
+            monitor?: string;
+            product?: string;
+            'virtual-server-discovery'?: string;
+            'virtual-servers': {
+                [k: string]: {
+                    destination: string;
+                    'depends-on'?: string[];
+                    monitor?: string;
+                    'translation-address'?: string;
+                    'translation-port'?: string;
+                }
+            }
+            devices?: {
+                [k: string]: {
+                    addresses: {
+                        [k: string]: {
+                            translation?: string;
+                        }
+                    }[]
+                }
+            }[]
+        }
+    };
+    wideip?: {
+        a?: GslbApp;
+        aaaa?: GslbApp;
+        ns?: GslbApp;
+        srv?: GslbApp;
+        cname?: GslbApp;
+        mx?: GslbApp;
+        naptr?: GslbApp;
+    };
+}
+
+
+
+/**
+ * this is only used for Typescript Typing, notice everything is "OR"
+ *  Also, these types are not included after compile (running app)
+ */
+export type GtmRecordTypes = 'a' | 'aaaa' | 'ns' | 'srv' | 'cname' | 'mx' | 'naptr'
+
+export type GslbApp = {
+    fqdn: string;
+    partition: string;
+    type: GtmRecordTypes;
+    lines: string[];
+    aliases?: string[];
+    iRules?: string[];
+    pools?: GtmPool[] | GtmPoolRef[];
+}
+
+/**
+ * gtm pool reference in a wideip
+ */
+export type GtmPoolRef = {
+    name: string;
+    order?: number;
+    ratio?: number;
+}
+
+/**
+ * full gtm pool details
+ */
+export type GtmPool = {
+    name: string;
+    order: number;
+    type: GtmRecordTypes;
+    'load-balancing-mode'?: string;
+    'alternate-mode'?: string;
+    'fallback-mode'?: string;
+    'fallback-ip'?: string;
+    members?: []
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * array item of returned "apps"
@@ -164,10 +264,11 @@ export type AppMap = {
  * - child of explosion
  */
 export type Stats = {
-    configBytes?: number,
-    loadTime?: number,
-    parseTime?: number,
-    appTime?: number,
+    configBytes?: number;
+    loadTime?: number;
+    parseTime?: number;
+    appTime?: number;
+    fqdnTime?: number;
     packTime?: number,
     sourceTmosVersion?: string,
     objectCount?: number,
@@ -191,52 +292,18 @@ export type ObjStats = {
     snatPools?: number,
     apmProfiles?: number,
     apmPolicies?: number,
-    asmPolicies?: number
+    asmPolicies?: number,
+    gtm?: GslbStats;
 }
 
 
-
-
-
-
-
-export type TmosRegExTree = {
-    tmosVersion: RegExp,
-    parentObjects: RegExp,
-    parentNameValue: RegExp,
-    vs: {
-        pool: {
-            obj: RegExp,
-            members: RegExp,
-            nodesFromMembers: RegExp,
-            monitors: RegExp
-        },
-        profiles: {
-            obj: RegExp,
-            names: RegExp
-        },
-        rules: {
-            obj: RegExp,
-            names: RegExp
-        },
-        snat: {
-            obj: RegExp,
-            name: RegExp
-        },
-        ltPolicies: {
-            obj: RegExp,
-            names: RegExp
-        },
-        persist: {
-            obj: RegExp,
-            name: RegExp
-        },
-        fbPersist: RegExp,
-        destination: RegExp
-    }
+export type GslbStats = {
+    datacenters?: number;
+    pools?: number;
+    regions?: number;
+    server?: number;
+    wideips?: number;
 }
-
-
 
 
 export type ParseResp = {
@@ -256,3 +323,42 @@ export type ConfigFile = {
     content: string
 }
 
+
+/**
+ * defines the structure of the archive file extraction or single bigip.conf
+ */
+export type ConfigFiles = {
+    fileName: string,
+    size: number,
+    content: string
+}[]
+
+export type xmlStats = {
+    'mcp_module.xml'?: {
+        "Qkproc": {
+            "admin_ip": unknown
+            "system_information": unknown
+            "cert_status_object": unknown
+            "system_module": unknown
+            "tmm_stat": unknown
+            "traffic_group": unknown
+            "virtual_address": unknown
+            "virtual_address_stat": unknown
+            "virtual_server": unknown
+            "virtual_server_stat": unknown,
+            "interface": unknown,
+            "interface_stat": unknown,
+            "pool": unknown,
+            "pool_member": unknown,
+            "pool_member_metadata": unknown,
+            "pool_member_stat": unknown,
+            "pool_stat": unknown,
+            "profile_dns_stat": unknown,
+            "profile_http_stat": unknown,
+            "profile_tcp_stat": unknown,
+            "rule_stat": unknown,
+        }
+    }
+
+
+}

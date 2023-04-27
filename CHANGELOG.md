@@ -9,6 +9,35 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [1.0.0] - (04.20.2023)
+
+- **formerly v0.14.0**
+- updated all deps
+- removed legacy syncronous unpack function
+  - all the new async unpacking functionality seems to be working well
+- removed xml2js functionality
+  - used for parsing xml stats in qkview - weren't really using the output
+- [RFE] Add gslb/dns abstraction #25 (complete)
+  - Get parent objects into main tree (complete)
+    - deep parsing of gtm objects for easy abstraction and integration with conversion tools (complete)
+  - Abstract WIP and supporting configurations (complete)
+- created archive generator to creat archive(ucs/qkview/tar.gz) via local files for tests
+  - regular archives were too big for github file sizes
+  - this also allows easy updating and expansion of project functionality and testing
+- updated tests
+  - general updates to support new features and refactoring
+  - doClasses abstraction tests
+  - gtm/gslb parsing/abstraction tests
+  - waf parsing/abstraction tests
+- major code hygene and clean up
+- [RFE] add asm/waf details #24 (complete)
+- [RFE] move tests to folder outside srcs #16 (complete)
+- [RFE] refactor initial parent object extraction #6 (complete)
+- [RFE] Add gslb/dns abstraction #25 (complete)
+- [BUG] missing parent objects at end of file #26 (complete)
+
+---
+
 ## [0.10.0] - (07.10.2022)
 
 - Added parent APM profile digging (apm profile acces \<name\>)

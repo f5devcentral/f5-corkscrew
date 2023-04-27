@@ -1,0 +1,5 @@
+this is just a test file to confirm the archive generator was capturing files in the base dir
+
+can probably remove later when this archive grows more depth and structure.
+
+ben - 4.8.2023

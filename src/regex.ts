@@ -25,10 +25,12 @@ import logger from "./logger";
  */
 export class RegExTree {
 
+    tmosVersion: string;
+
     /**
      * extracts tmos version at beginning of bigip.conf
      */
-    public tmosVersionReg = /#TMSH-VERSION: (\d.+)/;
+    tmosVersionReg = /#TMSH-VERSION: (\d.+)/;
 
     /**
      * captures name and body from single tmos object
@@ -37,7 +39,7 @@ export class RegExTree {
      *  - name = tmos object name
      *  - body = tmos object body
      */
-    private parentNameValueRegex = /^(?<name>[ \w\-\/.]+) {(?<body>([\s\S]+| ))}(\n)$/;
+    parentNameValue = /^(?<name>[ \w\-\/.]+) {(?<body>([\s\S]+| ))}(\n)$/;
 
     /**
      * Parent tmos object regex
@@ -45,96 +47,120 @@ export class RegExTree {
      *  (apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom), 
      *  then "{" and ending "}" just before next partent object
      */
-    private parentObjectsRegex = multilineRegExp([
+    parentObjects = multilineRegExp([
         // parent level object beginnings with trailing space
-        /(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,  
+        /(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom) /,
         // include any child object definitions and object name
         /[ \w\-\/.]+/,
         // capture single line data or everything till "\n}\n"
         /({.*}\n|{[\s\S]+?\n}\n)/,
         // look forward to capture the last "}" before the next parent item name
-        /(?=(apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom))/   
+        /(?=(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom|---end---))/
     ], 'g');
 
-    /**
-     * vs detail regexs
-     */
-    //following regex will get pool, but not snat pool from vs config
-    private poolRegex = /(?<!source-address-translation {\n\s+)    pool (.+?)\n/;
-    private profilesRegex = /profiles {([\s\S]+?)\n    }\n/;
-    private rulesRegex = /rules {([\s\S]+?)\n    }\n/;
-    private snatRegex = /source-address-translation {([\s\S]+?)\n    }\n/;
-    private ltPoliciesRegex = /policies {([\s\S]+?)\n    }\n/;
-    private persistRegex = /persist {([\s\S]+?)\n    }\n/;
-    private fallBackPersistRegex = /fallback-persistence (\/\w+.+?)\n/;
-    private destination = /destination (\/\w+\/[\w+\.\-]+:\d+)/;
 
-    /**
-     * pool detail regexs
-     */
-    private poolMembersRegex = /members {([\s\S]+?)\n    }\n/;
-    private poolNodesFromMembersRegex = /(\/\w+\/.+?)(?=:)/g;
-    private poolMonitorsRegex = /monitor (\/\w+.+?)\n/;
+    vs = {
+        pool: {
+            obj: /(?<!source-address-translation {\n\s+)    pool (.+?)\n/,
+            members: /members {([\s\S]+?)\n    }\n/,
+            nodesFromMembers: /(\/\w+\/.+?)(?=:)/g,
+            monitors: /monitor (\/\w+.+?)\n/
+        },
+        profiles: {
+            obj: /profiles {([\s\S]+?)\n    }\n/,
+            asmProf: /ASM_([\w-.]+)/,
+            names: /(\/[\w\-\/.]+)/g
+        },
+        rules: {
+            obj: /rules {([\s\S]+?)\n    }\n/,
+            names: /(\/[\w\-\/.]+)/g
+        },
+        snat: {
+            obj: /source-address-translation {([\s\S]+?)\n    }\n/,
+            name: /pool (\/[\w\-\/.]+)/
+        },
+        ltPolicies: {
+            obj: /policies {([\s\S]+?)\n    }\n/,
+            asmRef: /asm (?<status>enable|disable) policy (?<policy>[\w\/._]+)/,
+            names: /(\/[\w\-\/.]+)/g
+        },
+        persist: {
+            obj: /persist {([\s\S]+?)\n    }\n/,
+            name: /(\/[\w\-\/.]+)/
+        },
+        fbPersist: /fallback-persistence (\/\w+.+?)\n/,
+        destination: /destination (\/\w+\/[\w+\.\-]+:\d+)/
+    }
 
-    /**
-     * profiles
-     */
-    private profileNamesRegex = /(\/[\w\-\/.]+)/g;
-    private snatNameRegex = /pool (\/[\w\-\/.]+)/;
-    private ruleNamesRegex = /(\/[\w\-\/.]+)/g;
-    private ltpNamesRegex = /(\/[\w\-\/.]+)/g;
-    private persistNameRegex = /(\/[\w\-\/.]+)/;
 
-    /**
-     * base regex tree for extracting tmos config items
-     */
-    private regexTree: TmosRegExTree = {
-        tmosVersion: this.tmosVersionReg,
-        parentObjects: this.parentObjectsRegex,
-        parentNameValue: this.parentNameValueRegex,
-        vs: {
-            pool: {
-                obj: this.poolRegex,
-                members: this.poolMembersRegex,
-                nodesFromMembers: this.poolNodesFromMembersRegex,
-                monitors: this.poolMonitorsRegex
-            },
-            profiles: {
-                obj: this.profilesRegex,
-                names: this.profileNamesRegex
-            },
-            rules: {
-                obj: this.rulesRegex,
-                names: this.ruleNamesRegex
-            },
-            snat: {
-                obj: this.snatRegex,
-                name: this.snatNameRegex
-            },
-            ltPolicies: {
-                obj: this.ltPoliciesRegex,
-                names: this.ltpNamesRegex
-            },
-            persist: {
-                obj: this.persistRegex,
-                name: this.persistNameRegex
-            },
-            fbPersist: this.fallBackPersistRegex,
-            destination: this.destination
+    gtm = {
+        wideip: {
+            name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            persistence: /persistence (?<bool>\w+)/,
+            'pool-lb-mode': /pool-lb-mode (?<mode>\w+)/,
+            aliases: /aliases {([\s\S]+?)\n    }\n/,
+            rules: /rules {([\s\S]+?)\n    }\n/,
+            lastResortPool: /last-resort-pool (?<type>\w+) (?<value>[\/\w.]+)/,
+            poolsParent: /pools {([\s\S]+?)\n    }\n/,
+            pools: /(?<name>[\w\-\/.]+) {\n +(?<body>[\s\S]+?)\n +}/g,
+            poolDetails: /(?<name>[\w\-\/.]+) {\n +(?<body>[\s\S]+?)\n +}/
+        },
+        pool: {
+            membersGroup: /members {([\s\S]+?)\n    }\n/,
+            membersDetails: /(?<server>[\/\w\-.]+):(?<vs>[\/\w\-.]+) {\n +(?<body>[\s\S]+?)\n +}/,
+            membersDetailsG: /(?<server>[\/\w\-.]+):(?<vs>[\/\w\-.]+) {\n +(?<body>[\s\S]+?)\n +}/g,
+            'load-balancing-mode': /\n +load-balancing-mode (?<mode>[\S]+)/,
+            'alternate-mode': /\n +alternate-mode (?<mode>[\S]+)/,
+            'fallback-mode': /\n +fallback-mode (?<mode>[\S]+)/,
+            'fallback-ip': /\n +fallback-ip (?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})/,
+            'verify-member-availability': /\n +verify-member-availability (?<flag>[\S]+)/,
+        },
+        server: {
+            devices: /devices {([\s\S]+?)\n    }\n/,
+            devicesG: /(?<server>[\/\w\-.]+) {([\s\S]+?)\n    }\n/g,
+            dAddressT: /(?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}) { (translation (?<nat>[\d.]+) )?}/,
+            'virtual-servers': /virtual-servers {([\s\S]+?)\n    }\n/,
+            vs: {
+                'depends-on': / /,
+            }
         }
     }
 
-    constructor() {
-        // commend to keep TS error away...
+    asm = {
+        status: /\n +(?<bool>active|inactive)\n/,
+        'blocking-mode': /\n +blocking-mode (?<bm>enabled|disabled)\n/,
+        description: /\n +description (?<desc>[\w'" .-]+)\n/,
+        encoding: /\n +encoding (?<enc>[\w]+)\n/,
+        'policy-builder': /\n +policy-builder (?<status>enabled|disabled)\n/,
+        'policy-template': /\n +policy-template (?<name>[\w-.]+)\n/,
+        'policy-type': /\n +policy-type (?<type>security|parent)\n/,
+        'parent-policy': /\n +parent-policy (?<name>[\w-.]+)\n/
     }
 
     /**
-     * Return updated base regex tree depending on version config differences
+     * first tmos config file
+     * 
+     * **must have '#TMSH-VERSION: 15.1.0.4' version at top**
+     * 
+     * this tmos version will update rx tree as needed and return itself
+     * 
+     * @param config tmos config file
+     */
+    constructor(config: string) {
+        // commend to keep TS error away...
+        this.tmosVersion = this.getTMOSversion(config);
+
+        this.update()
+        return;
+    }
+
+    /**
+     * Update rx tree depending on tmos version
      * 
      * @param tmosVersion
      */
-    get(tmosVersion?: string): TmosRegExTree {
-        const x = removeVersionDecimals(tmosVersion);
+    private update() {
+        const x = removeVersionDecimals(this.tmosVersion);
 
         /**
          * the following is just examples of how to expand the regex tree for different versions :)
@@ -142,18 +168,43 @@ export class RegExTree {
          */
 
         // full tmos version without decimals
-        if(x > 19000) {
+        if (x > 19000) {
             logger.error('>v19.0.0.0 tmos detected - this should never happen!!!')
-            this.regexTree.vs.fbPersist = /new-fallBackPersist-regex/;
-            this.regexTree.vs.pool.obj = /new-pool-regex/;
+            this.vs.fbPersist = /new-fallBackPersist-regex/;
+            this.vs.pool.obj = /new-pool-regex/;
         }
-        if(x < 12000){
-            logger.error('<v12.0.0.0 tmos detected - have not tested this yet!!!')
+        if (x < 10000) {
+            logger.error('<v10.0.0.0 tmos detected - have not tested this yet!!!')
             // other regex tree changes specific to v12.0.0.0
+            // todo: this process needs to be refined a little more; things change when a lower semver version number becomes double digit ex: 12.1.3.16 and 14.1.11.32
         }
-        return this.regexTree;
+        return;
     }
 
+    /**
+     * extract tmos config version from first line
+     * ex.  #TMSH-VERSION: 15.1.0.4
+     * @param config bigip.conf config file as string
+     */
+    getTMOSversion(config: string): string {
+        const version = config.match(this.tmosVersionReg);
+        if (version) {
+            //found tmos version
+            // if(version[1] === this.tmosVersion) {
+            return version[1];
+            // } else {
+            //     const msg = `tmos version CHANGE detected: previous file version was ${this.tmosVersion} -> this tmos version is ${version[1]}`
+            //     logger.error(msg)
+            //     throw new Error(msg)
+            // }
+        } else {
+            const msg = 'tmos version not detected -> meaning this probably is not a bigip.conf'
+            logger.error(msg)
+            Promise.reject(msg);
+            throw new Error(msg);
+        }
+        
+    }
 
 }
 
@@ -170,49 +221,13 @@ export function multilineRegExp(regs: RegExp[], opts: string): RegExp {
 
 
 
-export type TmosRegExTree = {
-    tmosVersion: RegExp,
-    parentObjects: RegExp,
-    parentNameValue: RegExp,
-    vs: {
-        pool: {
-            obj: RegExp,
-            members: RegExp,
-            nodesFromMembers: RegExp,
-            monitors: RegExp
-        },
-        profiles: {
-            obj: RegExp,
-            names: RegExp
-        },
-        rules: {
-            obj: RegExp,
-            names: RegExp
-        },
-        snat: {
-            obj: RegExp,
-            name: RegExp
-        },
-        ltPolicies: {
-            obj: RegExp,
-            names: RegExp
-        },
-        persist: {
-            obj: RegExp,
-            name: RegExp
-        },
-        fbPersist: RegExp,
-        destination: RegExp
-    }
-}
-
 /**
  * returns full number without decimals so it can be compared
+ * 
+ * *** note!:  this just flattens what is there and does not take into account double digit version placement! -> needs to be refined!
+ * 
  * @param ver tmos version in full x.x.x.x format
  */
 function removeVersionDecimals(ver: string): number {
     return parseInt(ver.replace(/\./g, ''));
 }
-
-// const regexTree = new RegExTree();
-// export default regexTree;
