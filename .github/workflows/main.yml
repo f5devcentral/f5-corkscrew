@@ -66,8 +66,8 @@ jobs:
         uses: ncipollo/release-action@v1
         id: create_release
         with:
-          tag: v${{ steps.publish.outputs.version }}
-          name: ${{ steps.publish.outputs.name }}
+          tag: v${{ env.PACKAGE_VERSION }}
+          name: ${{ env.PACKAGE_NAME }}
           body: "${{ steps.changelog_reader.outputs.changes }}"
           artifacts: ${{ env.PACKAGE_NAME }}
           draft: false
