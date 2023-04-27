@@ -9,11 +9,10 @@
 'use strict';
 
 import { EventEmitter } from 'events';
-import { RegExTree, TmosRegExTree } from './regex'
+import { RegExTree } from './regex'
 import logger from './logger';
 import { nestedObjValue } from './objects'
 import { BigipConfObj, ConfigFile, ConfigFiles, Explosion, Stats, xmlStats } from './models'
-import { deepMergeObj } from './objects'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
 import { digVsConfig, getHostname } from './digConfigs';
@@ -22,6 +21,8 @@ import { UnPacker } from './unPackerStream';
 import { digDoConfig } from './digDoClassesAuto';
 import { DigGslb } from './digGslb';
 import { parseDeep } from './deepParse';
+import { XMLParser } from 'fast-xml-parser';
+import { deepmergeInto } from 'deepmerge-ts';
 
 
 
@@ -34,36 +35,32 @@ export default class BigipConfig extends EventEmitter {
      * incoming config files array
      * ex. [{filename:'config/bigip.conf',size:12345,content:'...'},{...}]
      */
-    public configFiles: ConfigFiles = [];
+    configFiles: ConfigFiles = [];
     /**
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
      */
-    public configObject: BigipConfObj = {};
-    /**
-     * placeholder for future fully jsonified tmos config
-     */
-    public configFullObject: BigipConfObj = {};
+    configObject: BigipConfObj = {};
     /**
      * tmos version of the config file
      */
-    public tmosVersion: string | undefined;
+    tmosVersion: string | undefined;
     /**
      * hostname of the source device
      */
-    public hostname: string | undefined;
+    hostname: string | undefined;
     /**
      * input file type (.conf/.ucs/.qkview/.tar.gz)
      */
-    public inputFileType: string;
+    inputFileType: string;
     /**
      * tmos version specific regex tree for abstracting applications
      */
-    private rx: TmosRegExTree | undefined;
+    rx: RegExTree | undefined;
     /**
      * corkscrew processing stats object
      */
-    private stats: Stats = {
+    stats: Stats = {
         objectCount: 0,
     };
     /**
@@ -213,7 +210,7 @@ export default class BigipConfig extends EventEmitter {
                         // fully parse key items before adding to the tree
                         parseDeep(newObj, this.rx)
 
-                        this.configObject = deepMergeObj(this.configObject, newObj);
+                        deepmergeInto(this.configObject, newObj);
                     } else {
                         logger.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el)
                     }
@@ -236,11 +233,24 @@ export default class BigipConfig extends EventEmitter {
 
         // was parsing all files for ALL stats, but it ends up being 100sMb of data
         // so, just getting some interesting stuff for now
-        // if (file.fileName === 'mcp_module.xml'){
-        //     await xml2json(file.content)
-        //         .then(out => {
-        //             this.deviceXmlStats[file.fileName] = out;
-        //         });
+        // if (file.fileName === 'stat_module.xml'){
+
+        //     const options = {
+        //         ignoreAttributes: false,
+        //         attributeValueProcessor: (name, val, jPath) => {
+        //             const a = name;
+        //         },
+        //         updateTag: (tagName, jPath, attrs) => {
+        //             attrs["At"] = "Home";
+        //             return true;
+        //         }
+        //     };
+        //     const xmlParser = new XMLParser(options);
+        //     const xJson = xmlParser.parse(file.content)
+            
+        //     if(xJson) {
+                
+        //     }
         // }
 
     }
@@ -290,7 +300,7 @@ export default class BigipConfig extends EventEmitter {
     async setTmosVersion(x: ConfigFile): Promise<void> {
         if (this.rx) {
             // rex tree already assigned, lets confirm subsequent file tmos version match
-            if (this.tmosVersion === this.getTMOSversion(x.content, this.rx.tmosVersion)) {
+            if (this.tmosVersion === this.rx.getTMOSversion(x.content)) {
                 // do nothing, current file version matches existing files tmos verion
             } else {
                 const err = `Parsing [${x.fileName}], tmos version of this file does not match previous file [${this.tmosVersion}]`;
@@ -300,12 +310,12 @@ export default class BigipConfig extends EventEmitter {
         } else {
 
             // first time through - build everything
-            const rex = new RegExTree();  // instantiate regex tree
-            this.tmosVersion = this.getTMOSversion(x.content, rex.tmosVersionReg);  // get tmos version
+            this.rx = new RegExTree(x.content);  // instantiate regex tree
+            this.tmosVersion = this.rx.tmosVersion; // feed tmos version back into this class
             logger.info(`Recieved .conf file of version: ${this.tmosVersion}`)
 
             // assign regex tree for particular version
-            this.rx = rex.get(this.tmosVersion)
+            // this.rx = rex.get(this.tmosVersion)
         }
     }
 
@@ -459,30 +469,6 @@ export default class BigipConfig extends EventEmitter {
     }
 
 
-
-    /**
-     * extract tmos config version from first line
-     * ex.  #TMSH-VERSION: 15.1.0.4
-     * @param config bigip.conf config file as string
-     */
-    private getTMOSversion(config: string, regex: RegExp): string {
-        const version = config.match(regex);
-        if (version) {
-            //found tmos version
-            // if(version[1] === this.tmosVersion) {
-            return version[1];
-            // } else {
-            //     const msg = `tmos version CHANGE detected: previous file version was ${this.tmosVersion} -> this tmos version is ${version[1]}`
-            //     logger.error(msg)
-            //     throw new Error(msg)
-            // }
-        } else {
-            const msg = 'tmos version not detected -> meaning this probably is not a bigip.conf'
-            logger.error(msg)
-            Promise.reject(msg);
-            throw new Error(msg);
-        }
-    }
 
 }
 

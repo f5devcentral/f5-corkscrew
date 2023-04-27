@@ -6,7 +6,7 @@
 
 import { GslbApp, GtmConfObj } from "./models";
 import { gtmRecordTypes } from "./objCounter";
-import { GtmRegexTree } from "./regex";
+import { RegExTree } from "./regex";
 import { deepmergeInto } from "deepmerge-ts";
 
 
@@ -17,14 +17,14 @@ export class DigGslb {
     /**
      * this probably needs to be paired down to just the gtm rx we need like the input object
      */
-    rx: GtmRegexTree;
+    rx: RegExTree["gtm"];
 
     gtmRecordTypes = gtmRecordTypes;
 
     apps: GslbApp[] = [];
 
     // bring in the whole bigip config object since we don't have typing for just the gtm portion
-    constructor(gtm: GtmConfObj, rx: GtmRegexTree) {
+    constructor(gtm: GtmConfObj, rx: RegExTree["gtm"]) {
         this.gtm = gtm;
         this.rx = rx;
     }

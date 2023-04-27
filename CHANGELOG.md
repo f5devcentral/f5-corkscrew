@@ -30,11 +30,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - gtm/gslb parsing/abstraction tests
   - waf parsing/abstraction tests
 - major code hygene and clean up
-- [RFE] add asm/waf details #24 (***PENDING***)
+- [RFE] add asm/waf details #24 (complete)
 - [RFE] move tests to folder outside srcs #16 (complete)
 - [RFE] refactor initial parent object extraction #6 (complete)
 - [RFE] Add gslb/dns abstraction #25 (complete)
-- [RFE] add asm/waf details #24 (***PENDING***)
 - [BUG] missing parent objects at end of file #26 (complete)
 
 ---

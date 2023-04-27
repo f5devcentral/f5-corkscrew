@@ -5,7 +5,7 @@ export * from './ltm';
 
 export * from './models';
 
-export { TmosRegExTree } from './regex'
+export { RegExTree } from './regex'
 
 
 

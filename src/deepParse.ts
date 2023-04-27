@@ -249,7 +249,7 @@ export async function parseDeep(obj: any, rx) {
                 .forEach(x => {
                     const a = x.match(rx.gtm.wideip.poolDetails);
                     const mObj = { name: a.groups.name };  // initiate the object
-                    if(a) {
+                    if (a) {
                         a[2].split('\n')
                             .forEach(y => {
                                 const n = y.trim().split(' ');
@@ -259,6 +259,62 @@ export async function parseDeep(obj: any, rx) {
                     sObj.pools.push(mObj);
                 })
         }
+
+
+        // EXAMPLE NEXT PARSING OBJECT --------------------------------------------------
+    } else if (obj?.asm?.policy) {
+
+
+        const key = Object.keys(obj.asm.policy)[0]; // only one policy at this point
+        let body = obj.asm.policy[key];
+        obj.asm.policy[key] = { line: body };   // re-assign the original config string
+        const sObj = obj.asm.policy[key];
+
+        const statusRx = body.match(rx.asm.status);
+        const bmRx = body.match(rx.asm['blocking-mode']);
+        const descRx = body.match(rx.asm.description);
+        const encodingRx = body.match(rx.asm.encoding);
+        const pbRx = body.match(rx.asm['policy-builder']);
+        const pTempRx = body.match(rx.asm['policy-template']);
+        const pTypeRx = body.match(rx.asm['policy-type']);
+        const ppRx = body.match(rx.asm['parent-policy']);
+
+        if(statusRx) {
+            sObj.status = statusRx.groups.bool;
+        }
+
+        if(bmRx) {
+            sObj['blocking-mode'] = bmRx.groups.bm;
+        }
+
+        if(descRx) {
+            sObj.description = descRx.groups.desc;
+        }
+
+        if(encodingRx) {
+            sObj.encoding = encodingRx.groups.emc;
+        }
+
+        if(pbRx) {
+            sObj['policy-builder'] = pbRx.groups.status;
+        }
+
+        if(pTempRx) {
+            sObj['policy-template'] = pTempRx.groups.name;
+        }
+
+        if(pTypeRx) {
+            sObj['policy-type'] = pTypeRx.groups.type;
+        }
+
+        if(ppRx) {
+            sObj['parent-policy'] = ppRx.groups.name;
+        }
+
+        return;
+
+        // EXAMPLE NEXT PARSING OBJECT --------------------------------------------------
+    } else if (obj.some?.thing) {
 
     }
 }
@@ -291,7 +347,7 @@ export async function parseDeep(obj: any, rx) {
 export function digBrackets(config: string): {
     name: string;
     value: string
-} [] {
+}[] {
 
     // example input
 
@@ -326,8 +382,8 @@ export function digBrackets(config: string): {
         if (v.name === 'kkk' && x1[i + 1]) {
             const nv = x1[i + 1].value;
             x2.push({ name: v.value.trim(), value: nv.trim() });
-        // } else if( i === x1.length - 1 && v.value.trim() != '') {
-        //     x2.push({ name: 'r', value: v.value})
+            // } else if( i === x1.length - 1 && v.value.trim() != '') {
+            //     x2.push({ name: 'r', value: v.value})
         }
     })
 

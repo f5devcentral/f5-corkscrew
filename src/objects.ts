@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-import deepmerge from 'deepmerge'
 
 import logger from "./logger";
 import { BigipConfObj } from "./models";
@@ -86,14 +81,14 @@ export function nestedObjValue (fields: string[], value: string): unknown {
 
 
 
-    /**
- * provides deep merge of multi-level objects
- *  subsequent items in list overwrite conflicting entries
- * @param objs list of objects to merge
-     */
-export function deepMergeObj(target: unknown, source: unknown,): unknown {
-    return deepmerge(target, source, { clone: false })
-    }
+//     /**
+//  * provides deep merge of multi-level objects
+//  *  subsequent items in list overwrite conflicting entries
+//  * @param objs list of objects to merge
+//      */
+// export function deepMergeObj(target: unknown, source: unknown,): unknown {
+//     return deepmerge(target, source, { clone: false })
+// }
 
 
 // /**

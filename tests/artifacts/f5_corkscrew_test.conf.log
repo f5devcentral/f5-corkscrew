@@ -5,32 +5,33 @@
 ###  Section 2: apps
 ###  Section 3: conversion logs (error/info/debug)
 ###  Section 4: configObjects (not object values yet)
-###  2023-04-16T18:24:05.810Z
+###  2023-04-27T20:22:49.298Z
 ################################################
 
 ################################################
 ### explosion stats ##########
-### uuid: 7d228c9c-eb7b-4c0f-b69f-c7d2d451c752
-### dateTime: Sun Apr 16 2023 13:24:05 GMT-0500 (Central Daylight Time)
+### uuid: f006ffd1-7c3c-4157-ad64-6698f4b88051
+### dateTime: Thu Apr 27 2023 15:22:49 GMT-0500 (Central Daylight Time)
 {
-  "objectCount": 154,
+  "objectCount": 253,
   "objects": {
-    "virtuals": 7,
+    "virtuals": 8,
     "profiles": 6,
-    "policies": 2,
-    "pools": 7,
+    "policies": 3,
+    "pools": 8,
     "irules": 5,
     "monitors": 6,
-    "nodes": 10,
+    "nodes": 11,
     "snatPools": 1,
-    "apmPolicies": 1,
-    "apmProfiles": 1
+    "apmPolicies": 3,
+    "apmProfiles": 3,
+    "asmPolicies": 1
   },
   "sourceTmosVersion": "15.1.8.2",
-  "parseTime": 10.6079,
-  "appTime": 26.21,
-  "fqdnTime": 0.6413,
-  "packTime": 3.0252
+  "parseTime": 11.1762,
+  "appTime": 3.2063,
+  "fqdnTime": 0.0243,
+  "packTime": 0.4923
 }
 ################################################
 
@@ -130,6 +131,75 @@ ltm virtual /Common/app2_t80_vs {
     source 0.0.0.0/0
     translate-address enabled
     translate-port enabled
+}
+################################################
+
+################################################
+#### app name: /Common/bigiq.benlab.io_t443_vs
+#### app map: {
+    "vsDest": "/Common/10.200.244.15:443",
+    "pool": [
+        "10.200.244.15:443"
+    ]
+}
+####
+ltm virtual /Common/bigiq.benlab.io_t443_vs {
+    creation-time 2019-10-01:17:59:21
+    description "not flowing traffic, just used for GTM"
+    destination /Common/10.200.244.15:443
+    ip-protocol tcp
+    last-modified-time 2019-10-01:18:11:46
+    mask 255.255.255.255
+    policies {
+        /Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs { }
+    }
+    pool /Common/bigiq.benlab.io_t443_pool
+    profiles {
+        /Common/ASM_basic_policy_1 { }
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+        /Common/websecurity { }
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    source-address-translation {
+        type automap
+    }
+    translate-address enabled
+    translate-port enabled
+    vlans {
+        /Common/vlan255_f5peer
+    }
+    vlans-enabled
+}
+ltm pool /Common/bigiq.benlab.io_t443_pool {
+    members {
+        /Common/10.200.244.15:443 {
+            address 10.200.244.15
+        }
+    }
+    monitor /Common/https_head_f5
+}
+ltm node /Common/10.200.244.15 {
+    address 10.200.244.15
+    description bigiq01
+}
+ltm policy /Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs {
+    controls { asm }
+    requires { http }
+    rules {
+        default {
+            actions {
+                1 {
+                    asm
+                    enable
+                    policy /Common/basic_policy_1
+                }
+            }
+            ordinal 1
+        }
+    }
+    strategy /Common/first-match
 }
 ################################################
 
@@ -577,61 +647,89 @@ ltm profile fastl4 /Common/fastl4_loose {
 
 #######################################
 ### conversion log ####################
-[2023-04-16T18:24:03.827Z] DeBuG: 'regular date log message'
-[4/16/2023, 1:24:03 PM] DeBuG: 'toLocalString date log message'
-[Sun, 16 Apr 2023 18:24:03 GMT] DeBuG: 'to UTC date log message'
-[2023-04-16T18:24:05.644Z] [ERROR]: >v19.0.0.0 tmos detected - this should never happen!!!
-[2023-04-16T18:24:05.644Z] [ERROR]: <v12.0.0.0 tmos detected - have not tested this yet!!!
-[2023-04-16T18:24:05.697Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [69774]
-[2023-04-16T18:24:05.714Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [69774]
-[2023-04-16T18:24:05.721Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/unPacker_test.conf], size [45]
-[2023-04-16T18:24:05.722Z] [ERROR]: file type of ".io", not supported, try (.conf|.ucs|.kqview|.gz)
-[2023-04-16T18:24:05.723Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [69774]
-[2023-04-16T18:24:05.729Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [69774]
-[2023-04-16T18:24:05.738Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [69774]
-[2023-04-16T18:24:05.746Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/badArchive1.tar.gz], size: [28643]
-[2023-04-16T18:24:05.768Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.conf], size [57563]
-[2023-04-16T18:24:05.769Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-04-16T18:24:05.780Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-04-16T18:24:05.782Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-16T18:24:05.783Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-16T18:24:05.783Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+[2023-04-27T20:22:44.883Z] DeBuG: 'regular date log message'
+[4/27/2023, 3:22:44 PM] DeBuG: 'toLocalString date log message'
+[Thu, 27 Apr 2023 20:22:44 GMT] DeBuG: 'to UTC date log message'
+[2023-04-27T20:22:47.057Z] [ERROR]: >v19.0.0.0 tmos detected - this should never happen!!!
+[2023-04-27T20:22:47.058Z] [ERROR]: <v10.0.0.0 tmos detected - have not tested this yet!!!
+[2023-04-27T20:22:47.108Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [71910]
+[2023-04-27T20:22:47.123Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [71910]
+[2023-04-27T20:22:47.133Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/unPacker_test.conf], size [45]
+[2023-04-27T20:22:47.134Z] [ERROR]: file type of ".io", not supported, try (.conf|.ucs|.kqview|.gz)
+[2023-04-27T20:22:47.135Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [71910]
+[2023-04-27T20:22:47.143Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [71910]
+[2023-04-27T20:22:47.151Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [71910]
+[2023-04-27T20:22:47.158Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/badArchive1.tar.gz], size: [28643]
+[2023-04-27T20:22:47.713Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2580499]
+[2023-04-27T20:22:47.715Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2023-04-27T20:22:47.716Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2023-04-27T20:22:47.716Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2023-04-27T20:22:48.024Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-27T20:22:48.025Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.025Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.025Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-16T18:24:05.783Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-16T18:24:05.784Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-16T18:24:05.784Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+[2023-04-27T20:22:48.025Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-27T20:22:48.026Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:48.026Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-16T18:24:05.786Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-04-16T18:24:05.793Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
-[2023-04-16T18:24:05.793Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
-[2023-04-16T18:24:05.794Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
-[2023-04-16T18:24:05.794Z] [DEBUG]: pool monitor configs found: []
-[2023-04-16T18:24:05.794Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
-[2023-04-16T18:24:05.794Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
-[2023-04-16T18:24:05.794Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-16T18:24:05.794Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-16T18:24:05.794Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+[2023-04-27T20:22:48.026Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-27T20:22:48.026Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-27T20:22:48.027Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-27T20:22:48.027Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.027Z] [DEBUG]: pool monitor configs found: []
+[2023-04-27T20:22:48.027Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:48.027Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-27T20:22:48.027Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.027Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.027Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-16T18:24:05.795Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-16T18:24:05.795Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+[2023-04-27T20:22:48.027Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.027Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
         type automap
-[2023-04-16T18:24:05.795Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-04-16T18:24:05.795Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-16T18:24:05.795Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-16T18:24:05.795Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+[2023-04-27T20:22:48.027Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-27T20:22:48.027Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.028Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-16T18:24:05.795Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
-[2023-04-16T18:24:05.795Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-16T18:24:05.795Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+[2023-04-27T20:22:48.028Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-27T20:22:48.028Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
         /Common/_sys_https_redirect
-[2023-04-16T18:24:05.795Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-04-16T18:24:05.795Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
-[2023-04-16T18:24:05.796Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
-[2023-04-16T18:24:05.796Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
-[2023-04-16T18:24:05.796Z] [DEBUG]: pool monitor configs found: [
+[2023-04-27T20:22:48.028Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2023-04-27T20:22:48.028Z] [DEBUG]: digging pool config for /Common/bigiq.benlab.io_t443_pool
+[2023-04-27T20:22:48.028Z] [DEBUG]: Pool /Common/bigiq.benlab.io_t443_pool members found: [ '/Common/10.200.244.15' ]
+[2023-04-27T20:22:48.028Z] [DEBUG]: pool monitor references found: [ '/Common/https_head_f5' ]
+[2023-04-27T20:22:48.028Z] [DEBUG]: pool monitor configs found: []
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_pool] references 1 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following pool /Common/bigiq.benlab.io_t443_pool
+[2023-04-27T20:22:48.028Z] [DEBUG]: profile references found:  [
+  '/Common/ASM_basic_policy_1',
+  '/Common/f5-tcp-progressive',
+  '/Common/http',
+  '/Common/websecurity'
+]
+[2023-04-27T20:22:48.028Z] [DEBUG]: Found 4 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following profiles 
+        /Common/ASM_basic_policy_1 { }
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+        /Common/websecurity { }
+[2023-04-27T20:22:48.028Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.028Z] [DEBUG]: policy references found:  [ '/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs' ]
+[2023-04-27T20:22:48.028Z] [DEBUG]: policy found [/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs]
+[2023-04-27T20:22:48.028Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following policies 
+        /Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs { }
+[2023-04-27T20:22:48.029Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-27T20:22:48.029Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-27T20:22:48.029Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-27T20:22:48.029Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-27T20:22:48.029Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor http /Common/global_http_monitor {\n' +
     '    adaptive disabled\n' +
     '    defaults-from /Common/http\n' +
@@ -655,26 +753,26 @@ ltm profile fastl4 /Common/fastl4_loose {
     '    timeout 16\n' +
     '}'
 ]
-[2023-04-16T18:24:05.796Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
-[2023-04-16T18:24:05.796Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-16T18:24:05.796Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-16T18:24:05.796Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+[2023-04-27T20:22:48.029Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-27T20:22:48.029Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.029Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.029Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-16T18:24:05.796Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
-[2023-04-16T18:24:05.796Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+[2023-04-27T20:22:48.029Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.029Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
         type automap
-[2023-04-16T18:24:05.797Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-04-16T18:24:05.797Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
-[2023-04-16T18:24:05.797Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
-[2023-04-16T18:24:05.797Z] [DEBUG]: pool monitor references found: [
+[2023-04-27T20:22:48.029Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-27T20:22:48.029Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-27T20:22:48.029Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-27T20:22:48.029Z] [DEBUG]: pool monitor references found: [
   '/Common/app1_tcp_half_open_quick_monitor',
   '/Common/http_head_f5',
   '/Common/http2_head_f5',
   '/Common/http',
   '/Common/tcp_half_open'
 ]
-[2023-04-16T18:24:05.797Z] [DEBUG]: pool monitor configs found: [
+[2023-04-27T20:22:48.030Z] [DEBUG]: pool monitor configs found: [
   'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
     '    defaults-from /Common/tcp_half_open\n' +
     '    destination *:*\n' +
@@ -683,16 +781,16 @@ ltm profile fastl4 /Common/fastl4_loose {
     '    timeout 4\n' +
     '}'
 ]
-[2023-04-16T18:24:05.797Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
-[2023-04-16T18:24:05.797Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
-[2023-04-16T18:24:05.797Z] [DEBUG]: profile references found:  [
+[2023-04-27T20:22:48.030Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:48.030Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-27T20:22:48.030Z] [DEBUG]: profile references found:  [
   '/Common/app3_clientssl',
   '/Common/app3_serverssl',
   '/Common/http',
   '/Common/tcp'
 ]
-[2023-04-16T18:24:05.797Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-16T18:24:05.797Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+[2023-04-27T20:22:48.030Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.030Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
         /Common/app3_clientssl {
             context clientside
         }
@@ -701,106 +799,644 @@ ltm profile fastl4 /Common/fastl4_loose {
         }
         /Common/http { }
         /Common/tcp { }
-[2023-04-16T18:24:05.797Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
-[2023-04-16T18:24:05.798Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+[2023-04-27T20:22:48.030Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-27T20:22:48.030Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
         /Common/app3_rule
         /Common/app3_rule2
         /Common/app3_rule3
-[2023-04-16T18:24:05.798Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+[2023-04-27T20:22:48.030Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
         pool /Common/app3_snat_pool
         type snat
-[2023-04-16T18:24:05.798Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
-[2023-04-16T18:24:05.798Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
-[2023-04-16T18:24:05.798Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+[2023-04-27T20:22:48.030Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-27T20:22:48.030Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-27T20:22:48.031Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
         /Common/app3_ltm_policy { }
-[2023-04-16T18:24:05.799Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+[2023-04-27T20:22:48.031Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
         /Common/app3_cookie {
             default yes
         }
-[2023-04-16T18:24:05.799Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
-[2023-04-16T18:24:05.799Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-04-16T18:24:05.799Z] [DEBUG]: digging pool config for /Common/app4_pool
-[2023-04-16T18:24:05.799Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
-[2023-04-16T18:24:05.799Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
-[2023-04-16T18:24:05.800Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
-[2023-04-16T18:24:05.800Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
-[2023-04-16T18:24:05.800Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+[2023-04-27T20:22:48.031Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-27T20:22:48.031Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-27T20:22:48.031Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-27T20:22:48.031Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-27T20:22:48.031Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-27T20:22:48.031Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.031Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.031Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
         /Common/http { }
         /Common/tcp { }
-[2023-04-16T18:24:05.800Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
-[2023-04-16T18:24:05.800Z] [DEBUG]: digging pool config for /Common/css_pool
-[2023-04-16T18:24:05.800Z] [DEBUG]: digging pool config for /Common/jpg.pool
-[2023-04-16T18:24:05.800Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
-[2023-04-16T18:24:05.800Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
-[2023-04-16T18:24:05.800Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+[2023-04-27T20:22:48.031Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-27T20:22:48.031Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-27T20:22:48.031Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-27T20:22:48.031Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-27T20:22:48.031Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
         /Common/_sys_https_redirect
         /Common/app4_pool_rule
-[2023-04-16T18:24:05.800Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
-[2023-04-16T18:24:05.800Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
-[2023-04-16T18:24:05.801Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
-[2023-04-16T18:24:05.801Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
-[2023-04-16T18:24:05.801Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
-[2023-04-16T18:24:05.801Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+[2023-04-27T20:22:48.032Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-27T20:22:48.032Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-27T20:22:48.032Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-27T20:22:48.032Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-27T20:22:48.032Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
         /Common/app4_ltPolicy { }
-[2023-04-16T18:24:05.804Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-04-16T18:24:05.805Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
-[2023-04-16T18:24:05.805Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+[2023-04-27T20:22:48.032Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-27T20:22:48.032Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
         /Common/fastl4_loose { }
-[2023-04-16T18:24:05.806Z] [INFO]: digging DO classes for base config info
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "sys global-settings" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cli global-settings" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "sys db" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "sys management-ip" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "sys provision" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "sys ntp" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "sys dns" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net trunk" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net vlan" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net self" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net route" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net routing access-list" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net routing as-path" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net routing route-map" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "net routing bgp" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cm device-group" in object
-[2023-04-16T18:24:05.807Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys management-route" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys syslog" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "auth tacacs" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "net route-domain" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "auth ldap" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys snmp" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys snmp" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys snmp users" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "net dag-globals" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys httpd" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys sshd" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "net tunnels tunnel" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "sys disk directory" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm server" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "security firewall policy" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "security firewall port-list" in object
-[2023-04-16T18:24:05.808Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-27T20:22:48.032Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2023-04-27T20:22:48.032Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-27T20:22:48.032Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-27T20:22:48.032Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
+[2023-04-27T20:22:48.032Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
+        /Common/udp { }
+[2023-04-27T20:22:48.032Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
+        /Common/source_addr {
+            default yes
+        }
+[2023-04-27T20:22:48.032Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2023-04-27T20:22:48.032Z] [DEBUG]: digging pool config for /hue-infra/hue-up/hue-up.benlab.io_t80_pool
+[2023-04-27T20:22:48.032Z] [DEBUG]: Pool /hue-infra/hue-up/hue-up.benlab.io_t80_pool members found: null
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found the following pool /hue-infra/hue-up/hue-up.benlab.io_t80_pool
+[2023-04-27T20:22:48.032Z] [DEBUG]: profile references found:  [ '/Common/f5-tcp-progressive', '/Common/http' ]
+[2023-04-27T20:22:48.032Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found the following profiles 
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+[2023-04-27T20:22:48.032Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found the following persistence 
+        /Common/cookie {
+            default yes
+        }
+[2023-04-27T20:22:48.032Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2023-04-27T20:22:48.032Z] [DEBUG]: digging pool config for /hue-infra/hue-up/hue-up.benlab.io_t443_pool
+[2023-04-27T20:22:48.032Z] [DEBUG]: Pool /hue-infra/hue-up/hue-up.benlab.io_t443_pool members found: null
+[2023-04-27T20:22:48.032Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found the following pool /hue-infra/hue-up/hue-up.benlab.io_t443_pool
+[2023-04-27T20:22:48.033Z] [DEBUG]: profile references found:  [ '/Common/f5-tcp-progressive', '/Common/http' ]
+[2023-04-27T20:22:48.033Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.033Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found the following profiles 
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+[2023-04-27T20:22:48.033Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.033Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.033Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found the following persistence 
+        /Common/cookie {
+            default yes
+        }
+[2023-04-27T20:22:48.034Z] [INFO]: digging DO classes for base config info
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "sys db" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net trunk" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net self" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net route" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-27T20:22:48.034Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-27T20:22:48.035Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-27T20:22:48.567Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2580499]
+[2023-04-27T20:22:48.569Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2023-04-27T20:22:48.569Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2023-04-27T20:22:48.570Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2023-04-27T20:22:48.841Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-27T20:22:48.842Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.842Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.842Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:48.842Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-27T20:22:48.842Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:48.842Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+[2023-04-27T20:22:48.842Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-27T20:22:48.842Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-27T20:22:48.843Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: pool monitor configs found: []
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-27T20:22:48.843Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:48.843Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.843Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-27T20:22:48.843Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:48.843Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+[2023-04-27T20:22:48.843Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2023-04-27T20:22:48.843Z] [DEBUG]: digging pool config for /Common/bigiq.benlab.io_t443_pool
+[2023-04-27T20:22:48.843Z] [DEBUG]: Pool /Common/bigiq.benlab.io_t443_pool members found: [ '/Common/10.200.244.15' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: pool monitor references found: [ '/Common/https_head_f5' ]
+[2023-04-27T20:22:48.843Z] [DEBUG]: pool monitor configs found: []
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_pool] references 1 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:48.843Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following pool /Common/bigiq.benlab.io_t443_pool
+[2023-04-27T20:22:48.843Z] [DEBUG]: profile references found:  [
+  '/Common/ASM_basic_policy_1',
+  '/Common/f5-tcp-progressive',
+  '/Common/http',
+  '/Common/websecurity'
+]
+[2023-04-27T20:22:48.844Z] [DEBUG]: Found 4 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.844Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following profiles 
+        /Common/ASM_basic_policy_1 { }
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+        /Common/websecurity { }
+[2023-04-27T20:22:48.844Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.844Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.844Z] [DEBUG]: policy references found:  [ '/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs' ]
+[2023-04-27T20:22:48.844Z] [DEBUG]: policy found [/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs]
+[2023-04-27T20:22:48.844Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following policies 
+        /Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs { }
+[2023-04-27T20:22:48.845Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-27T20:22:48.845Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-27T20:22:48.845Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-27T20:22:48.845Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-27T20:22:48.845Z] [DEBUG]: pool monitor configs found: [
+  'ltm monitor http /Common/global_http_monitor {\n' +
+    '    adaptive disabled\n' +
+    '    defaults-from /Common/http\n' +
+    '    interval 5\n' +
+    '    ip-dscp 0\n' +
+    '    recv "ok 200"\n' +
+    '    recv-disable none\n' +
+    '    send "GET /anywebsite.com\\r\\n"\n' +
+    '    time-until-up 0\n' +
+    '    timeout 16\n' +
+    '}',
+  'ltm monitor https /Common/global_https_monitor {\n' +
+    '    adaptive disabled\n' +
+    '    defaults-from /Common/https\n' +
+    '    interval 5\n' +
+    '    ip-dscp 0\n' +
+    '    recv "201 continue"\n' +
+    '    recv-disable none\n' +
+    '    send "GET /any-secure-website.com\\r\\n"\n' +
+    '    time-until-up 0\n' +
+    '    timeout 16\n' +
+    '}'
+]
+[2023-04-27T20:22:48.845Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-27T20:22:48.845Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.845Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.845Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:48.845Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.845Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.845Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-27T20:22:48.845Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-27T20:22:48.845Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-27T20:22:48.845Z] [DEBUG]: pool monitor references found: [
+  '/Common/app1_tcp_half_open_quick_monitor',
+  '/Common/http_head_f5',
+  '/Common/http2_head_f5',
+  '/Common/http',
+  '/Common/tcp_half_open'
+]
+[2023-04-27T20:22:48.845Z] [DEBUG]: pool monitor configs found: [
+  'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
+    '    defaults-from /Common/tcp_half_open\n' +
+    '    destination *:*\n' +
+    '    interval 1\n' +
+    '    time-until-up 0\n' +
+    '    timeout 4\n' +
+    '}'
+]
+[2023-04-27T20:22:48.845Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:48.845Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-27T20:22:48.845Z] [DEBUG]: profile references found:  [
+  '/Common/app3_clientssl',
+  '/Common/app3_serverssl',
+  '/Common/http',
+  '/Common/tcp'
+]
+[2023-04-27T20:22:48.845Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.845Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+        /Common/app3_clientssl {
+            context clientside
+        }
+        /Common/app3_serverssl {
+            context serverside
+        }
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:48.845Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+        /Common/app3_rule
+        /Common/app3_rule2
+        /Common/app3_rule3
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+        pool /Common/app3_snat_pool
+        type snat
+[2023-04-27T20:22:48.846Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-27T20:22:48.846Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+        /Common/app3_ltm_policy { }
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+        /Common/app3_cookie {
+            default yes
+        }
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-27T20:22:48.846Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-27T20:22:48.846Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-27T20:22:48.846Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-27T20:22:48.846Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:48.846Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.846Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:48.846Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-27T20:22:48.846Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-27T20:22:48.846Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-27T20:22:48.846Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-27T20:22:48.847Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+        /Common/app4_pool_rule
+[2023-04-27T20:22:48.847Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-27T20:22:48.847Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-27T20:22:48.847Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-27T20:22:48.847Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-27T20:22:48.847Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+        /Common/app4_ltPolicy { }
+[2023-04-27T20:22:48.847Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-27T20:22:48.847Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+        /Common/fastl4_loose { }
+[2023-04-27T20:22:48.847Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2023-04-27T20:22:48.847Z] [DEBUG]: digging pool config for /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-27T20:22:48.847Z] [DEBUG]: Pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1 members found: [ '/foo/192.50.2.2' ]
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following pool /foo/defaultsUDP_5555/defaultsUDP_5555_Pool1
+[2023-04-27T20:22:48.847Z] [DEBUG]: profile references found:  [ '/Common/udp' ]
+[2023-04-27T20:22:48.847Z] [DEBUG]: Found 1 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following profiles 
+        /Common/udp { }
+[2023-04-27T20:22:48.847Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/foo/defaultsUDP_5555/serviceMain] found the following persistence 
+        /Common/source_addr {
+            default yes
+        }
+[2023-04-27T20:22:48.847Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2023-04-27T20:22:48.847Z] [DEBUG]: digging pool config for /hue-infra/hue-up/hue-up.benlab.io_t80_pool
+[2023-04-27T20:22:48.847Z] [DEBUG]: Pool /hue-infra/hue-up/hue-up.benlab.io_t80_pool members found: null
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found the following pool /hue-infra/hue-up/hue-up.benlab.io_t80_pool
+[2023-04-27T20:22:48.847Z] [DEBUG]: profile references found:  [ '/Common/f5-tcp-progressive', '/Common/http' ]
+[2023-04-27T20:22:48.847Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found the following profiles 
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+[2023-04-27T20:22:48.847Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t80_vs] found the following persistence 
+        /Common/cookie {
+            default yes
+        }
+[2023-04-27T20:22:48.847Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2023-04-27T20:22:48.847Z] [DEBUG]: digging pool config for /hue-infra/hue-up/hue-up.benlab.io_t443_pool
+[2023-04-27T20:22:48.847Z] [DEBUG]: Pool /hue-infra/hue-up/hue-up.benlab.io_t443_pool members found: null
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found the following pool /hue-infra/hue-up/hue-up.benlab.io_t443_pool
+[2023-04-27T20:22:48.847Z] [DEBUG]: profile references found:  [ '/Common/f5-tcp-progressive', '/Common/http' ]
+[2023-04-27T20:22:48.847Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found the following profiles 
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+[2023-04-27T20:22:48.847Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:48.847Z] [DEBUG]: [/hue-infra/hue-up/hue-up.benlab.io_t443_vs] found the following persistence 
+        /Common/cookie {
+            default yes
+        }
+[2023-04-27T20:22:48.848Z] [INFO]: digging DO classes for base config info
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys db" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net trunk" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net self" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net route" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-27T20:22:48.848Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2023-04-27T20:22:49.276Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.conf], size [76020]
+[2023-04-27T20:22:49.276Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2023-04-27T20:22:49.293Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2023-04-27T20:22:49.294Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app1_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:49.294Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app1_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+[2023-04-27T20:22:49.294Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2023-04-27T20:22:49.294Z] [DEBUG]: digging pool config for /Common/app1_t80_pool
+[2023-04-27T20:22:49.294Z] [DEBUG]: Pool /Common/app1_t80_pool members found: [ '/Common/app1_Node1', '/Common/app1_Node2' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: pool monitor references found: [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: pool monitor configs found: []
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app1_t80_pool] references 2 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app1_t443_vs] found the following pool /Common/app1_t80_pool
+[2023-04-27T20:22:49.294Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app1_t443_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:49.294Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app1_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:49.294Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2023-04-27T20:22:49.294Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app2_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:49.294Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect' ]
+[2023-04-27T20:22:49.294Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:49.294Z] [DEBUG]: [/Common/app2_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+[2023-04-27T20:22:49.295Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2023-04-27T20:22:49.295Z] [DEBUG]: digging pool config for /Common/bigiq.benlab.io_t443_pool
+[2023-04-27T20:22:49.295Z] [DEBUG]: Pool /Common/bigiq.benlab.io_t443_pool members found: [ '/Common/10.200.244.15' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: pool monitor references found: [ '/Common/https_head_f5' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: pool monitor configs found: []
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_pool] references 1 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following pool /Common/bigiq.benlab.io_t443_pool
+[2023-04-27T20:22:49.295Z] [DEBUG]: profile references found:  [
+  '/Common/ASM_basic_policy_1',
+  '/Common/f5-tcp-progressive',
+  '/Common/http',
+  '/Common/websecurity'
+]
+[2023-04-27T20:22:49.295Z] [DEBUG]: Found 4 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following profiles 
+        /Common/ASM_basic_policy_1 { }
+        /Common/f5-tcp-progressive { }
+        /Common/http { }
+        /Common/websecurity { }
+[2023-04-27T20:22:49.295Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:49.295Z] [DEBUG]: policy references found:  [ '/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: policy found [/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs]
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/bigiq.benlab.io_t443_vs] found the following policies 
+        /Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs { }
+[2023-04-27T20:22:49.295Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2023-04-27T20:22:49.295Z] [DEBUG]: digging pool config for /Common/app2_t80_pool
+[2023-04-27T20:22:49.295Z] [DEBUG]: Pool /Common/app2_t80_pool members found: [ '/Common/app2_Node1', '/Common/app2_Node2' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: pool monitor references found: [ '/Common/global_http_monitor', '/Common/global_https_monitor' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: pool monitor configs found: [
+  'ltm monitor http /Common/global_http_monitor {\n' +
+    '    adaptive disabled\n' +
+    '    defaults-from /Common/http\n' +
+    '    interval 5\n' +
+    '    ip-dscp 0\n' +
+    '    recv "ok 200"\n' +
+    '    recv-disable none\n' +
+    '    send "GET /anywebsite.com\\r\\n"\n' +
+    '    time-until-up 0\n' +
+    '    timeout 16\n' +
+    '}',
+  'ltm monitor https /Common/global_https_monitor {\n' +
+    '    adaptive disabled\n' +
+    '    defaults-from /Common/https\n' +
+    '    interval 5\n' +
+    '    ip-dscp 0\n' +
+    '    recv "201 continue"\n' +
+    '    recv-disable none\n' +
+    '    send "GET /any-secure-website.com\\r\\n"\n' +
+    '    time-until-up 0\n' +
+    '    timeout 16\n' +
+    '}'
+]
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/app2_t443_vs] found the following pool /Common/app2_t80_pool
+[2023-04-27T20:22:49.295Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/app2_t443_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:49.295Z] [DEBUG]: snat configuration detected, but no pool reference found, presume -> automap
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/app2_t443_vs] found snat configuration 
+        type automap
+[2023-04-27T20:22:49.295Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2023-04-27T20:22:49.295Z] [DEBUG]: digging pool config for /Common/app3_t8443_pool
+[2023-04-27T20:22:49.295Z] [DEBUG]: Pool /Common/app3_t8443_pool members found: [ '/Common/app3_Node1', '/Common/app3_Node2' ]
+[2023-04-27T20:22:49.295Z] [DEBUG]: pool monitor references found: [
+  '/Common/app1_tcp_half_open_quick_monitor',
+  '/Common/http_head_f5',
+  '/Common/http2_head_f5',
+  '/Common/http',
+  '/Common/tcp_half_open'
+]
+[2023-04-27T20:22:49.295Z] [DEBUG]: pool monitor configs found: [
+  'ltm monitor tcp-half-open /Common/app1_tcp_half_open_quick_monitor {\n' +
+    '    defaults-from /Common/tcp_half_open\n' +
+    '    destination *:*\n' +
+    '    interval 1\n' +
+    '    time-until-up 0\n' +
+    '    timeout 4\n' +
+    '}'
+]
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/app3_t8443_pool] references 4 system default monitors, compare previous arrays for details
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/app3_t8443_vs] found the following pool /Common/app3_t8443_pool
+[2023-04-27T20:22:49.295Z] [DEBUG]: profile references found:  [
+  '/Common/app3_clientssl',
+  '/Common/app3_serverssl',
+  '/Common/http',
+  '/Common/tcp'
+]
+[2023-04-27T20:22:49.295Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.295Z] [DEBUG]: [/Common/app3_t8443_vs] found the following profiles 
+        /Common/app3_clientssl {
+            context clientside
+        }
+        /Common/app3_serverssl {
+            context serverside
+        }
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:49.295Z] [DEBUG]: rule references found:  [ '/Common/app3_rule', '/Common/app3_rule2', '/Common/app3_rule3' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app3_t8443_vs] found the following rules 
+        /Common/app3_rule
+        /Common/app3_rule2
+        /Common/app3_rule3
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app3_t8443_vs] found snat configuration 
+        pool /Common/app3_snat_pool
+        type snat
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy references found:  [ '/Common/app3_ltm_policy' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy found [/Common/app3_ltm_policy]
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app3_t8443_vs] found the following policies 
+        /Common/app3_ltm_policy { }
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence 
+        /Common/app3_cookie {
+            default yes
+        }
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app3_t8443_vs] found the following persistence /Common/app3_srcAddr_persist
+[2023-04-27T20:22:49.296Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2023-04-27T20:22:49.296Z] [DEBUG]: digging pool config for /Common/app4_pool
+[2023-04-27T20:22:49.296Z] [DEBUG]: Pool /Common/app4_pool members found: [ '/Common/api.chucknorris.io' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app4_t80_vs] found the following pool /Common/app4_pool
+[2023-04-27T20:22:49.296Z] [DEBUG]: profile references found:  [ '/Common/http', '/Common/tcp' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: Found 2 system default profiles, compare previous arrays for details
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app4_t80_vs] found the following profiles 
+        /Common/http { }
+        /Common/tcp { }
+[2023-04-27T20:22:49.296Z] [DEBUG]: rule references found:  [ '/Common/_sys_https_redirect', '/Common/app4_pool_rule' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: digging pool config for /Common/css_pool
+[2023-04-27T20:22:49.296Z] [DEBUG]: digging pool config for /Common/jpg.pool
+[2023-04-27T20:22:49.296Z] [DEBUG]: digging pool config for /Common/js.io_t80_pool
+[2023-04-27T20:22:49.296Z] [DEBUG]: Found 1 system default iRules, compare previous arrays for details
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app4_t80_vs] found the following rules 
+        /Common/_sys_https_redirect
+        /Common/app4_pool_rule
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy references found:  [ '/Common/app4_ltPolicy' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy found [/Common/app4_ltPolicy]
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/css_pool]
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/jpg.pool]
+[2023-04-27T20:22:49.296Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [/Common/js.io_t80_pool]
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/app4_t80_vs] found the following policies 
+        /Common/app4_ltPolicy { }
+[2023-04-27T20:22:49.296Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2023-04-27T20:22:49.296Z] [DEBUG]: profile references found:  [ '/Common/fastl4_loose' ]
+[2023-04-27T20:22:49.296Z] [DEBUG]: [/Common/forwarder_net_0.0.0.0] found the following profiles 
+        /Common/fastl4_loose { }
+[2023-04-27T20:22:49.296Z] [INFO]: digging DO classes for base config info
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "sys global-settings" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "cli global-settings" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "sys db" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "sys management-ip" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "sys provision" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "sys ntp" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "sys dns" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "net trunk" in object
+[2023-04-27T20:22:49.296Z] [DEBUG]: no path "net vlan" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net self" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net route" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net routing access-list" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net routing as-path" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net routing prefix-list" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net routing route-map" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net routing bgp" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm device-group" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "cm traffic-group" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys management-route" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys syslog" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "auth tacacs" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net route-domain" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "auth ldap" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys snmp" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys snmp traps" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys snmp" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys snmp users" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys snmp communities" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net dag-globals" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys httpd" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys sshd" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net tunnels tunnel" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "sys disk directory" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm global-settings general" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm datacenter" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm server" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm monitor http" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm monitor https" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm monitor udp" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "gtm prober-pool" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "security firewall policy" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "security firewall address-list" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "security firewall port-list" in object
+[2023-04-27T20:22:49.297Z] [DEBUG]: no path "security firewall management-ip-rules" in object
 
 #######################################
 ### configMultiLevelObjects ###########
@@ -816,12 +1452,17 @@ ltm profile fastl4 /Common/fastl4_loose {
     },
     "epsec": {
       "epsec-package": {
-        "/Common/epsec-1.0.0-892.0.iso": "\n    cache-path /config/filestore/files_d/Common_d/epsec_package_d/:Common:epsec-1.0.0-892.0.iso_65040_1\n    oesis-version 4.3.1158.0\n    revision 1\n    version 1.0.0-892.0\n"
+        "/Common/epsec-1.0.0-892.0.iso": "\n    cache-path /config/filestore/files_d/Common_d/epsec_package_d/:Common:epsec-1.0.0-892.0.iso_65040_1\n    oesis-version 4.3.1158.0\n    revision 1\n    version 1.0.0-892.0\n",
+        "/Common/epsec-1.0.0-846.0.iso": "\n    cache-path /config/filestore/files_d/Common_d/epsec_package_d/:Common:epsec-1.0.0-846.0.iso_62973_1\n    oesis-version 4.3.716.0\n    revision 1\n    version 1.0.0-846.0\n",
+        "/Common/epsec-1.0.0-888.0.iso": "\n    cache-path /config/filestore/files_d/Common_d/epsec_package_d/:Common:epsec-1.0.0-888.0.iso_66742_1\n    oesis-version 4.3.1103.0\n    revision 1\n    version 1.0.0-888.0\n",
+        "/Common/epsec-1.0.0-1372.0.iso": "\n    cache-path /config/filestore/files_d/Common_d/epsec_package_d/:Common:epsec-1.0.0-1372.0.iso_68987_1\n    oesis-version 4.3.3348.0\n    revision 1\n    version 1.0.0-1372.0\n"
       }
     },
     "policy": {
       "access-policy": {
-        "/Common/adminAuth_local_aPolicy": "\n    default-ending /Common/adminAuth_local_aPolicy_end_deny\n    items {\n        /Common/adminAuth_local_aPolicy_act_localdb_auth { }\n        /Common/adminAuth_local_aPolicy_act_logon_page { }\n        /Common/adminAuth_local_aPolicy_end_allow { }\n        /Common/adminAuth_local_aPolicy_end_deny { }\n        /Common/adminAuth_local_aPolicy_ent { }\n    }\n    start-item /Common/adminAuth_local_aPolicy_ent\n"
+        "/Common/adminAuth_local_aPolicy": "\n    default-ending /Common/adminAuth_local_aPolicy_end_deny\n    items {\n        /Common/adminAuth_local_aPolicy_act_localdb_auth { }\n        /Common/adminAuth_local_aPolicy_act_logon_page { }\n        /Common/adminAuth_local_aPolicy_end_allow { }\n        /Common/adminAuth_local_aPolicy_end_deny { }\n        /Common/adminAuth_local_aPolicy_ent { }\n    }\n    start-item /Common/adminAuth_local_aPolicy_ent\n",
+        "/Common/radiusServer": "\n    default-ending /Common/radiusServer_end_deny\n    items {\n        /Common/radiusServer_act_radius_auth { }\n        /Common/radiusServer_end_allow { }\n        /Common/radiusServer_end_deny { }\n        /Common/radiusServer_ent { }\n    }\n    start-item /Common/radiusServer_ent\n",
+        "/Common/sslvpn_network_access": "\n    default-ending /Common/sslvpn_network_access_end_deny\n    items {\n        /Common/sslvpn_network_access_act_full_resource_assign { }\n        /Common/sslvpn_network_access_act_localdb_auth { }\n        /Common/sslvpn_network_access_act_logon_page { }\n        /Common/sslvpn_network_access_end_allow { }\n        /Common/sslvpn_network_access_end_deny { }\n        /Common/sslvpn_network_access_ent { }\n    }\n    start-item /Common/sslvpn_network_access_ent\n"
       },
       "customization-group": {
         "/Common/adminAuth_local_aPolicy_act_logon_page_ag": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_act_logon_page_ag_65223_2\n    revision 2\n    source /Common/modern\n",
@@ -830,7 +1471,23 @@ ltm profile fastl4 /Common/fastl4_loose {
         "/Common/adminAuth_local_aPolicy_errormap": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_errormap_65167_1\n    revision 1\n    source /Common/modern\n    type errormap\n",
         "/Common/adminAuth_local_aPolicy_framework_installation": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_framework_installation_65173_1\n    revision 1\n    source /Common/modern\n    type framework-installation\n",
         "/Common/adminAuth_local_aPolicy_general_ui": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_general_ui_65124_1\n    revision 1\n    source /Common/modern\n    type general-ui\n",
-        "/Common/adminAuth_local_aPolicy_logout": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_logout_65164_1\n    revision 1\n    source /Common/modern\n    type logout\n"
+        "/Common/adminAuth_local_aPolicy_logout": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:adminAuth_local_aPolicy_logout_65164_1\n    revision 1\n    source /Common/modern\n    type logout\n",
+        "/Common/radiusServer_end_deny_ag": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:radiusServer_end_deny_ag_216201_1\n    revision 1\n    source /Common/standard\n    type logout\n",
+        "/Common/radiusServer_eps": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:radiusServer_eps_216183_1\n    revision 1\n    source /Common/standard\n    type eps\n",
+        "/Common/radiusServer_errormap": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:radiusServer_errormap_216181_1\n    revision 1\n    source /Common/standard\n    type errormap\n",
+        "/Common/radiusServer_frameworkinstallation": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:radiusServer_frameworkinstallation_216185_1\n    revision 1\n    source /Common/standard\n    type framework-installation\n",
+        "/Common/radiusServer_general_ui": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:radiusServer_general_ui_216187_1\n    revision 1\n    source /Common/standard\n    type general-ui\n",
+        "/Common/radiusServer_logout": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:radiusServer_logout_216179_1\n    revision 1\n    source /Common/standard\n    type logout\n",
+        "/Common/ssl_webtop_customization": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:ssl_webtop_customization_103262_1\n    revision 1\n    source /Common/standard\n    type webtop\n",
+        "/Common/sslvpn_access_list_resource_network_access_customization": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_access_list_resource_network_access_customization_103276_1\n    revision 1\n    source /Common/standard\n    type resource-network-access\n",
+        "/Common/sslvpn_connectivity_profile_secure_access_client_customization": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_connectivity_profile_secure_access_client_customization_103292_1\n    revision 1\n    source /Common/standard\n    type secure-access-client\n",
+        "/Common/sslvpn_network_access_act_logon_page_ag": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_act_logon_page_ag_103365_2\n    revision 2\n    source /Common/standard\n",
+        "/Common/sslvpn_network_access_end_deny_ag": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_end_deny_ag_103326_1\n    revision 1\n    source /Common/standard\n    type logout\n",
+        "/Common/sslvpn_network_access_eps": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_eps_103308_1\n    revision 1\n    source /Common/standard\n    type eps\n",
+        "/Common/sslvpn_network_access_errormap": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_errormap_103306_1\n    revision 1\n    source /Common/standard\n    type errormap\n",
+        "/Common/sslvpn_network_access_frameworkinstallation": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_frameworkinstallation_103310_1\n    revision 1\n    source /Common/standard\n    type framework-installation\n",
+        "/Common/sslvpn_network_access_general_ui": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_general_ui_103312_1\n    revision 1\n    source /Common/standard\n    type general-ui\n",
+        "/Common/sslvpn_network_access_logout": "\n    cache-path /config/filestore/files_d/Common_d/customization_group_d/:Common:sslvpn_network_access_logout_103304_1\n    revision 1\n    source /Common/standard\n    type logout\n"
       },
       "customization-source": {
         "/Common/modern": " ",
@@ -841,30 +1498,129 @@ ltm profile fastl4 /Common/fastl4_loose {
         "/Common/adminAuth_local_aPolicy_act_logon_page": "\n    agents {\n        /Common/adminAuth_local_aPolicy_act_logon_page_ag {\n            type logon-page\n        }\n    }\n    caption \"Logon Page\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption fallback\n            next-item /Common/adminAuth_local_aPolicy_act_localdb_auth\n        }\n    }\n",
         "/Common/adminAuth_local_aPolicy_end_allow": "\n    agents {\n        /Common/adminAuth_local_aPolicy_end_allow_ag {\n            type ending-allow\n        }\n    }\n    caption Allow\n    color 1\n    item-type ending\n",
         "/Common/adminAuth_local_aPolicy_end_deny": "\n    agents {\n        /Common/adminAuth_local_aPolicy_end_deny_ag {\n            type ending-deny\n        }\n    }\n    caption Deny\n    color 2\n    item-type ending\n",
-        "/Common/adminAuth_local_aPolicy_ent": "\n    caption Start\n    color 1\n    rules {\n        {\n            caption fallback\n            next-item /Common/adminAuth_local_aPolicy_act_logon_page\n        }\n    }\n"
+        "/Common/adminAuth_local_aPolicy_ent": "\n    caption Start\n    color 1\n    rules {\n        {\n            caption fallback\n            next-item /Common/adminAuth_local_aPolicy_act_logon_page\n        }\n    }\n",
+        "/Common/radiusServer_act_radius_auth": "\n    agents {\n        /Common/radiusServer_act_radius_auth_ag {\n            type aaa-radius\n        }\n    }\n    caption \"RADIUS Auth\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption Successful\n            expression \"expr {[mcget {session.radius.last.result}] == 1}\"\n            next-item /Common/radiusServer_end_deny\n        }\n        {\n            caption fallback\n            next-item /Common/radiusServer_end_deny\n        }\n    }\n",
+        "/Common/radiusServer_end_allow": "\n    agents {\n        /Common/radiusServer_end_allow_ag {\n            type ending-allow\n        }\n    }\n    caption Allow\n    color 1\n    item-type ending\n",
+        "/Common/radiusServer_end_deny": "\n    agents {\n        /Common/radiusServer_end_deny_ag {\n            type ending-deny\n        }\n    }\n    caption Deny\n    color 2\n    item-type ending\n",
+        "/Common/radiusServer_ent": "\n    caption Start\n    color 1\n    rules {\n        {\n            caption fallback\n            next-item /Common/radiusServer_act_radius_auth\n        }\n    }\n",
+        "/Common/sslvpn_network_access_act_full_resource_assign": "\n    agents {\n        /Common/sslvpn_network_access_act_full_resource_assign_ag {\n            type resource-assign\n        }\n    }\n    caption \"Advanced Resource Assign\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption fallback\n            next-item /Common/sslvpn_network_access_end_allow\n        }\n    }\n",
+        "/Common/sslvpn_network_access_act_localdb_auth": "\n    agents {\n        /Common/sslvpn_network_access_act_localdb_auth_ag {\n            type aaa-localdb\n        }\n    }\n    caption \"LocalDB Auth\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption Successful\n            expression \"expr {[mcget {session.localdb.last.result}] == 1}\"\n            next-item /Common/sslvpn_network_access_act_full_resource_assign\n        }\n        {\n            caption \"Locked User Out\"\n            expression \"expr {[mcget {session.localdb.last.result}] == 2}\"\n            next-item /Common/sslvpn_network_access_end_deny\n        }\n        {\n            caption fallback\n            next-item /Common/sslvpn_network_access_end_deny\n        }\n    }\n",
+        "/Common/sslvpn_network_access_act_logon_page": "\n    agents {\n        /Common/sslvpn_network_access_act_logon_page_ag {\n            type logon-page\n        }\n    }\n    caption \"Logon Page\"\n    color 1\n    item-type action\n    rules {\n        {\n            caption fallback\n            next-item /Common/sslvpn_network_access_act_localdb_auth\n        }\n    }\n",
+        "/Common/sslvpn_network_access_end_allow": "\n    agents {\n        /Common/sslvpn_network_access_end_allow_ag {\n            type ending-allow\n        }\n    }\n    caption Allow\n    color 1\n    item-type ending\n",
+        "/Common/sslvpn_network_access_end_deny": "\n    agents {\n        /Common/sslvpn_network_access_end_deny_ag {\n            type ending-deny\n        }\n    }\n    caption Deny\n    color 2\n    item-type ending\n",
+        "/Common/sslvpn_network_access_ent": "\n    caption Start\n    color 1\n    rules {\n        {\n            caption fallback\n            next-item /Common/sslvpn_network_access_act_logon_page\n        }\n    }\n"
       },
       "agent": {
         "aaa-localdb": {
-          "/Common/adminAuth_local_aPolicy_act_localdb_auth_ag": "\n    localdb-instance /Common/localDB\n"
+          "/Common/adminAuth_local_aPolicy_act_localdb_auth_ag": "\n    localdb-instance /Common/localDB\n",
+          "/Common/sslvpn_network_access_act_localdb_auth_ag": "\n    localdb-instance /Common/localDB\n"
         },
         "ending-allow": {
-          "/Common/adminAuth_local_aPolicy_end_allow_ag": " "
+          "/Common/adminAuth_local_aPolicy_end_allow_ag": " ",
+          "/Common/radiusServer_end_allow_ag": " ",
+          "/Common/sslvpn_network_access_end_allow_ag": " "
         },
         "ending-deny": {
-          "/Common/adminAuth_local_aPolicy_end_deny_ag": "\n    customization-group /Common/adminAuth_local_aPolicy_end_deny_ag\n"
+          "/Common/adminAuth_local_aPolicy_end_deny_ag": "\n    customization-group /Common/adminAuth_local_aPolicy_end_deny_ag\n",
+          "/Common/radiusServer_end_deny_ag": "\n    customization-group /Common/radiusServer_end_deny_ag\n",
+          "/Common/sslvpn_network_access_end_deny_ag": "\n    customization-group /Common/sslvpn_network_access_end_deny_ag\n"
         },
         "logon-page": {
-          "/Common/adminAuth_local_aPolicy_act_logon_page_ag": "\n    customization-group /Common/adminAuth_local_aPolicy_act_logon_page_ag\n"
+          "/Common/adminAuth_local_aPolicy_act_logon_page_ag": "\n    customization-group /Common/adminAuth_local_aPolicy_act_logon_page_ag\n",
+          "/Common/sslvpn_network_access_act_logon_page_ag": "\n    customization-group /Common/sslvpn_network_access_act_logon_page_ag\n"
+        },
+        "aaa-radius": {
+          "/Common/radiusServer_act_radius_auth_ag": "\n    max-logon-attempt 5\n    show-extended-error true\n"
+        },
+        "resource-assign": {
+          "/Common/sslvpn_network_access_act_full_resource_assign_ag": "\n    rules {\n        {\n            network-access-resources { /Common/sslvpn_access_list }\n            webtop /Common/ssl_webtop\n        }\n    }\n"
         }
       }
     },
     "profile": {
       "access": {
-        "/Common/adminAuth_local_aPolicy": "\n    accept-languages { en }\n    access-policy /Common/adminAuth_local_aPolicy\n    app-service none\n    customization-group /Common/adminAuth_local_aPolicy_logout\n    customization-key 22ac0aeb0346bcebf5e867279edf9d7b\n    default-language en\n    domain-cookie none\n    eps-group /Common/adminAuth_local_aPolicy_eps\n    errormap-group /Common/adminAuth_local_aPolicy_errormap\n    exchange-profile none\n    framework-installation-group /Common/adminAuth_local_aPolicy_framework_installation\n    general-ui-group /Common/adminAuth_local_aPolicy_general_ui\n    generation 4\n    generation-action noop\n    httponly-cookie false\n    log-settings {\n        /Common/default-log-setting\n    }\n    logout-uri-include none\n    logout-uri-timeout 5\n    modified-since-last-policy-sync true\n    named-scope none\n    persistent-cookie false\n    scope profile\n    secure-cookie true\n    sso-name none\n    type system-authentication\n    user-identity-method http\n"
+        "/Common/adminAuth_local_aPolicy": "\n    accept-languages { en }\n    access-policy /Common/adminAuth_local_aPolicy\n    app-service none\n    customization-group /Common/adminAuth_local_aPolicy_logout\n    customization-key 22ac0aeb0346bcebf5e867279edf9d7b\n    default-language en\n    domain-cookie none\n    eps-group /Common/adminAuth_local_aPolicy_eps\n    errormap-group /Common/adminAuth_local_aPolicy_errormap\n    exchange-profile none\n    framework-installation-group /Common/adminAuth_local_aPolicy_framework_installation\n    general-ui-group /Common/adminAuth_local_aPolicy_general_ui\n    generation 4\n    generation-action noop\n    httponly-cookie false\n    log-settings {\n        /Common/default-log-setting\n    }\n    logout-uri-include none\n    logout-uri-timeout 5\n    modified-since-last-policy-sync true\n    named-scope none\n    persistent-cookie false\n    scope profile\n    secure-cookie true\n    sso-name none\n    type system-authentication\n    user-identity-method http\n",
+        "/Common/radiusServer": "\n    accept-languages { en }\n    access-policy /Common/radiusServer\n    app-service none\n    customization-group /Common/radiusServer_logout\n    customization-key c649c57de3b753f9764ae640df53f6cb\n    default-language en\n    domain-cookie none\n    eps-group /Common/radiusServer_eps\n    errormap-group /Common/radiusServer_errormap\n    exchange-profile none\n    framework-installation-group /Common/radiusServer_frameworkinstallation\n    general-ui-group /Common/radiusServer_general_ui\n    generation 1\n    generation-action noop\n    httponly-cookie false\n    log-settings {\n        /Common/default-log-setting\n    }\n    logout-uri-include none\n    logout-uri-timeout 5\n    modified-since-last-policy-sync true\n    oauth-profile none\n    persistent-cookie false\n    scope profile\n    secure-cookie true\n    sso-name none\n    type all\n    user-identity-method http\n",
+        "/Common/sslvpn_network_access": "\n    accept-languages { en }\n    access-policy /Common/sslvpn_network_access\n    app-service none\n    customization-group /Common/sslvpn_network_access_logout\n    customization-key c0595c63f1a549ebf25e99e683989536\n    default-language en\n    domain-cookie none\n    eps-group /Common/sslvpn_network_access_eps\n    errormap-group /Common/sslvpn_network_access_errormap\n    exchange-profile none\n    framework-installation-group /Common/sslvpn_network_access_frameworkinstallation\n    general-ui-group /Common/sslvpn_network_access_general_ui\n    generation 2\n    generation-action noop\n    httponly-cookie false\n    log-settings {\n        /Common/default-log-setting\n    }\n    logout-uri-include none\n    logout-uri-timeout 5\n    modified-since-last-policy-sync true\n    oauth-profile none\n    persistent-cookie false\n    scope profile\n    secure-cookie true\n    sso-name none\n    type all\n    user-identity-method http\n"
+      },
+      "connectivity": {
+        "/Common/sslvpn_connectivity_profile": "\n    adaptive-compression enabled\n    app-service none\n    citrix-client-bundle /Common/default-citrix-client-bundle\n    client-policy {\n        sslvpn_connectivity_profile_clientPolicy { }\n    }\n    compress-buffer-size 4096\n    compress-cpu-saver true\n    compress-cpu-saver-high 90\n    compress-cpu-saver-low 75\n    compress-gzip-level 6\n    compress-gzip-memlevel 8192\n    compress-gzip-window-size 16384\n    compress-ingress false\n    compress-preferred-method zlib\n    compression enabled\n    compression-codecs { deflate lzo bzip2 }\n    customization-group /Common/sslvpn_connectivity_profile_secure_access_client_customization\n    defaults-from /Common/connectivity\n    deflate-compression-level 1\n    description none\n    fec-name none\n    location-specific false\n    tunnel-name /Common/sslvpn_connectivity_profile\n"
       }
     },
     "report": {
       "default-report": "\n    report-name sessionReports/sessionSummary\n    user /Common/admin\n"
+    },
+    "resource": {
+      "leasepool": {
+        "/Common/sslvpn_lease_pool": "\n    members {\n        10.10.10.10-10.10.10.20 { }\n    }\n"
+      },
+      "network-access": {
+        "/Common/sslvpn_access_list": "\n    address-space-include-dns-name { 192.168.200.7 192.168.200.8 }\n    address-space-include-subnet {\n        {\n            subnet 10.200.0.0/16\n        }\n        {\n            subnet 192.168.200.0/24\n        }\n    }\n    customization-group /Common/sslvpn_access_list_resource_network_access_customization\n    dns-primary 192.168.200.7\n    dns-secondary 192.168.200.8\n    dns-suffix benlab.io\n    leasepool-name /Common/sslvpn_lease_pool\n    split-tunneling true\n"
+      },
+      "webtop": {
+        "/Common/ssl_webtop": "\n    customization-group /Common/ssl_webtop_customization\n    webtop-type full\n"
+      }
+    }
+  },
+  "asm": {
+    "policy": {
+      "/Common/basic_policy_1": {
+        "line": "\n    active\n    blocking-mode enabled\n    description 'some description'\n    encoding utf-8\n    policy-builder enabled\n    policy-template POLICY_TEMPLATE_RAPID_DEPLOYMENT\n    policy-type security\n    parent-policy some-.other_policy1\n",
+        "status": "active",
+        "blocking-mode": "enabled",
+        "description": "'some description'",
+        "policy-builder": "enabled",
+        "policy-template": "POLICY_TEMPLATE_RAPID_DEPLOYMENT",
+        "policy-type": "security",
+        "parent-policy": "some-.other_policy1"
+      }
+    },
+    "predefined-policy": {
+      "POLICY_TEMPLATE_ACTIVESYNC_V1_0_V2_0_HTTP": " ",
+      "POLICY_TEMPLATE_ACTIVESYNC_V1_0_V2_0_HTTPS": " ",
+      "POLICY_TEMPLATE_API_SECURITY": " ",
+      "POLICY_TEMPLATE_BEHAVIORAL_WAF": " ",
+      "POLICY_TEMPLATE_COMPREHENSIVE": " ",
+      "POLICY_TEMPLATE_DRUPAL": " ",
+      "POLICY_TEMPLATE_DRUPAL_8": " ",
+      "POLICY_TEMPLATE_FUNDAMENTAL": " ",
+      "POLICY_TEMPLATE_JOOMLA": " ",
+      "POLICY_TEMPLATE_LOTUSDOMINO_6_5_HTTP": " ",
+      "POLICY_TEMPLATE_LOTUSDOMINO_6_5_HTTPS": " ",
+      "POLICY_TEMPLATE_ORACLE_10G_PORTAL_HTTP": " ",
+      "POLICY_TEMPLATE_ORACLE_10G_PORTAL_HTTPS": " ",
+      "POLICY_TEMPLATE_ORACLE_APPLICATIONS_11I_HTTP": " ",
+      "POLICY_TEMPLATE_ORACLE_APPLICATIONS_11I_HTTPS": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2003_HTTP": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2003_HTTPS": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2003_WITH_ACTIVESYNC_HTTP": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2003_WITH_ACTIVESYNC_HTTPS": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2007_HTTP": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2007_HTTPS": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2007_WITH_ACTIVESYNC_HTTP": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2007_WITH_ACTIVESYNC_HTTPS": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2010_HTTP": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2010_HTTPS": " ",
+      "POLICY_TEMPLATE_OWA_EXCHANGE_2016": " ",
+      "POLICY_TEMPLATE_PASSIVE": " ",
+      "POLICY_TEMPLATE_PEOPLESOFT_PORTAL_9_HTTP": " ",
+      "POLICY_TEMPLATE_PEOPLESOFT_PORTAL_9_HTTPS": " ",
+      "POLICY_TEMPLATE_RAPID_DEPLOYMENT": " ",
+      "POLICY_TEMPLATE_SAP_NETWEAVER": " ",
+      "POLICY_TEMPLATE_SAP_NETWEAVER_7_HTTP": " ",
+      "POLICY_TEMPLATE_SAP_NETWEAVER_7_HTTPS": " ",
+      "POLICY_TEMPLATE_SHAREPOINT": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2003_HTTP": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2003_HTTPS": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2007_HTTP": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2007_HTTPS": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2010_HTTP": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2010_HTTPS": " ",
+      "POLICY_TEMPLATE_SHAREPOINT_2016": " ",
+      "POLICY_TEMPLATE_VULNERABILITY_ASSESSMENT": " ",
+      "POLICY_TEMPLATE_WORDPRESS": " ",
+      "POLICY_TEMPLATE_WORDPRESS_4_9": " "
     }
   },
   "auth": {
@@ -886,6 +1642,7 @@ ltm profile fastl4 /Common/fastl4_loose {
   "ltm": {
     "default-node-monitor": "\n    rule none\n",
     "node": {
+      "/Common/10.200.244.15": "\n    address 10.200.244.15\n    description bigiq01\n",
       "/Common/10.10.10.1": "\n    address 10.10.10.1\n",
       "/Common/192.168.200.42": "\n    address 192.168.200.42\n",
       "/Common/api.chucknorris.io": "\n    fqdn {\n        address-family all\n        autopopulate enabled\n        name api.chucknorris.io\n    }\n",
@@ -898,10 +1655,12 @@ ltm profile fastl4 /Common/fastl4_loose {
       "/Common/app5_Node5": "\n    address 192.168.10.23\n"
     },
     "policy": {
+      "/Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs": "\n    controls { asm }\n    requires { http }\n    rules {\n        default {\n            actions {\n                1 {\n                    asm\n                    enable\n                    policy /Common/basic_policy_1\n                }\n            }\n            ordinal 1\n        }\n    }\n    strategy /Common/first-match\n",
       "/Common/app3_ltm_policy": "\n    rules {\n        global_rule_1 { }\n    }\n    strategy /Common/first-match\n",
       "/Common/app4_ltPolicy": "\n    controls { forwarding }\n    description \"testing for pool extraction function\"\n    requires { http }\n    rules {\n        css_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/css_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .css }\n                }\n            }\n        }\n        jpg_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/jpg.pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    query-string\n                    ends-with\n                    values { .jpg }\n                }\n            }\n            ordinal 1\n        }\n        js_pool_rule {\n            actions {\n                0 {\n                    forward\n                    select\n                    pool /Common/js.io_t80_pool\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .js }\n                }\n            }\n            ordinal 2\n        }\n        txt_node {\n            actions {\n                0 {\n                    forward\n                    select\n                    node 10.10.10.1\n                }\n            }\n            conditions {\n                0 {\n                    http-uri\n                    scheme\n                    ends-with\n                    values { .txt }\n                }\n            }\n            ordinal 3\n        }\n    }\n    strategy /Common/first-match\n"
     },
     "pool": {
+      "/Common/bigiq.benlab.io_t443_pool": "\n    members {\n        /Common/10.200.244.15:443 {\n            address 10.200.244.15\n        }\n    }\n    monitor /Common/https_head_f5\n",
       "/Common/app1_t80_pool": "\n    members {\n        /Common/app1_Node1:80 {\n            address 192.168.1.22\n        }\n        /Common/app1_Node2:80 {\n            address 192.168.1.23\n        }\n    }\n    monitor /Common/http and /Common/tcp\n",
       "/Common/app2_t80_pool": "\n    load-balancing-mode least-connections-member\n    members {\n        /Common/app2_Node1:80 {\n            address 192.168.2.22\n        }\n        /Common/app2_Node2:80 {\n            address 192.168.2.23\n        }\n    }\n    monitor /Common/global_http_monitor and /Common/global_https_monitor\n",
       "/Common/app3_t8443_pool": "\n    load-balancing-mode least-connections-member\n    members {\n        /Common/app3_Node1:8443 {\n            address 192.168.1.52\n        }\n        /Common/app3_Node2:8443 {\n            address 192.168.1.53\n        }\n    }\n    monitor /Common/app1_tcp_half_open_quick_monitor and /Common/http_head_f5 and /Common/http2_head_f5 and /Common/http and /Common/tcp_half_open\n",
@@ -927,6 +1686,7 @@ ltm profile fastl4 /Common/fastl4_loose {
       "/Common/app1_t80_vs": "\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.1.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",
       "/Common/app1_t443_vs": "\n    destination /Common/192.168.1.21:443\n    ip-protocol tcp\n    last-modified-time 2020-09-18:10:05:54\n    mask 255.255.255.255\n    pool /Common/app1_t80_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n",
       "/Common/app2_t80_vs": "\n    creation-time 2020-09-17:08:50:22\n    destination /Common/192.168.2.21:80\n    ip-protocol tcp\n    last-modified-time 2020-09-17:08:51:07\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",
+      "/Common/bigiq.benlab.io_t443_vs": "\n    creation-time 2019-10-01:17:59:21\n    description \"not flowing traffic, just used for GTM\"\n    destination /Common/10.200.244.15:443\n    ip-protocol tcp\n    last-modified-time 2019-10-01:18:11:46\n    mask 255.255.255.255\n    policies {\n        /Common/asm_auto_l7_policy__bigiq.benlab.io_t443_vs { }\n    }\n    pool /Common/bigiq.benlab.io_t443_pool\n    profiles {\n        /Common/ASM_basic_policy_1 { }\n        /Common/f5-tcp-progressive { }\n        /Common/http { }\n        /Common/websecurity { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n    vlans {\n        /Common/vlan255_f5peer\n    }\n    vlans-enabled\n",
       "/Common/app2_t443_vs": "\n    destination /Common/192.168.2.21:443\n    ip-protocol tcp\n    last-modified-time 2020-09-18:10:05:47\n    mask 255.255.255.255\n    pool /Common/app2_t80_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n",
       "/Common/app3_t8443_vs": "\n    destination /Common/192.168.1.51:8443\n    fallback-persistence /Common/app3_srcAddr_persist\n    ip-protocol tcp\n    last-modified-time 2020-09-17:12:45:40\n    mask 255.255.255.255\n    persist {\n        /Common/app3_cookie {\n            default yes\n        }\n    }\n    policies {\n        /Common/app3_ltm_policy { }\n    }\n    pool /Common/app3_t8443_pool\n    profiles {\n        /Common/app3_clientssl {\n            context clientside\n        }\n        /Common/app3_serverssl {\n            context serverside\n        }\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/app3_rule\n        /Common/app3_rule2\n        /Common/app3_rule3\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        pool /Common/app3_snat_pool\n        type snat\n    }\n    translate-address enabled\n    translate-port enabled\n",
       "/Common/app4_t80_vs": "\n    description \"test pool references in irule extration and ltp\"\n    destination /Common/192.168.2.25:80\n    ip-protocol tcp\n    last-modified-time 2020-10-07:07:28:35\n    mask 255.255.255.255\n    policies {\n        /Common/app4_ltPolicy { }\n    }\n    pool /Common/app4_pool\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n        /Common/app4_pool_rule\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",

@@ -76,7 +76,8 @@ export async function archiveMake(type: 'ucs' | 'qkview' | 'conf' | 'mini' = 'mi
      */
     const qkviewFiles = [
         'config/low_profile_base.conf',
-        'config/profile_base.conf'
+        'config/profile_base.conf',
+        'config/mcp_module.xml'
     ]
 
     if (type === 'ucs') {
@@ -88,6 +89,7 @@ export async function archiveMake(type: 'ucs' | 'qkview' | 'conf' | 'mini' = 'mi
     } else if (type === 'qkview') {
 
         fileExt = 'qkview'
+        filesPaths.push(...globSync('*.xml', { cwd: baseArchiveDir }));
 
     }
 

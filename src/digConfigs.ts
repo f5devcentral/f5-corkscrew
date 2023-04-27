@@ -3,7 +3,7 @@
 
 import logger from './logger';
 import { AppMap, BigipConfObj } from './models'
-import { TmosRegExTree } from './regex';
+import { RegExTree } from './regex';
 import { cleanObject, pathValueFromKey } from './objects';
 import { poolsInPolicy, poolsInRule } from './pools';
 import { digDataGroupsiniRule } from './digiRules';
@@ -14,7 +14,7 @@ import { digDataGroupsiniRule } from './digiRules';
  * @param vsName virtual server name
  * @param vsConfig virtual server tmos config body 
  */
-export async function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree) {
+export async function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: RegExTree) {
 
     /**
      * 
@@ -117,7 +117,7 @@ export async function digVsConfig(vsName: string, vsConfig: string, configTree: 
  * get full pool config and supporting node/monitor configs
  * @param poolName 
  */
-function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: RegExTree) {
 
     logger.debug(`digging pool config for ${poolName}`);
 
@@ -216,7 +216,7 @@ function digPoolConfig(poolName: string, configObject: BigipConfObj, rx: TmosReg
 
 
 
-function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx: RegExTree) {
 
     // regex profiles list to individual profiles
     const profileNames = profilesList.match(rx.vs.profiles.names);
@@ -258,7 +258,7 @@ function digProfileConfigs(profilesList: string, configObject: BigipConfObj, rx:
  * 
  * @param rulesList raw irules regex from vs dig
  */
-async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx: RegExTree) {
 
     const ruleNames = rulesList.match(rx.vs.rules.names);
     logger.debug(`rule references found: `, ruleNames);
@@ -364,7 +364,7 @@ async function digRuleConfigs(rulesList: string, configObject: BigipConfObj, rx:
  * analyzes vs snat config, returns full snat configuration if pool reference
  * @param snat vs snat reference as string
  */
-function digSnatConfig(snat: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+function digSnatConfig(snat: string, configObject: BigipConfObj, rx: RegExTree) {
     const config = [];
     const map = [];
     if (snat.includes('pool')) {
@@ -389,7 +389,7 @@ function digSnatConfig(snat: string, configObject: BigipConfObj, rx: TmosRegExTr
  * loops through vs ltp list and returns full ltp configs
  * @param ltPolicys vs ltp config
  */
-function digPolicyConfig(policys: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+function digPolicyConfig(policys: string, configObject: BigipConfObj, rx: RegExTree) {
 
     // regex local traffic list to individual profiles
     const policyNames = policys.match(rx.vs.ltPolicies.names);
@@ -454,7 +454,7 @@ export function uniqueList(x: string[]) {
  * get persistence config
  * @param persistence vs persistence referecne
  */
-function digPersistConfig(persist: string, configObject: BigipConfObj, rx: TmosRegExTree) {
+function digPersistConfig(persist: string, configObject: BigipConfObj, rx: RegExTree) {
 
     const config = [];
     const map = [];

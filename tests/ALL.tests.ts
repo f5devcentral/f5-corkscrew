@@ -1,10 +1,3 @@
-/*
- * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
- * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
- * may copy and modify this software product for its internal business purposes.
- * Further, Licensee may upload, publish and distribute the modified version of
- * the software product on devcentral.f5.com.
- */
 
 'use strict';
 
@@ -14,19 +7,23 @@
  * higher level components
  */
 
+require('./010_json_objects.test');
 
-require('./json_objects.test')
-require('./regexTree.tests')
+require('./015_regexTree.tests');
 
-require('./unPacker.tests')
+require('./020_unPacker.tests');
 
-// require('./tmosParser.tests')    // development only, not in use
+require('./025_pools.tests');
 
-require('./pools.test')
+require('./030_doClasses.tests');
 
+require('./040_waf.tests');
 
-require('./conf_file.tests')
-require('./ucs.tests')
-require('./qkview.tests')
+require('./045_xmlParsing.tests');
 
-// require('./outside_files.tests')
+require('./050_conf_file.tests');
+
+require('./052_ucs.tests');
+
+require('./054_qkview.tests');
+
