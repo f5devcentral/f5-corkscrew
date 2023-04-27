@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: 14.x
+  NODE_VERSION: 16
 
 jobs:
 
@@ -16,43 +16,68 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
     name: Test on ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - run: npm install
-      
         
   release-publish:
     runs-on: ubuntu-latest
     environment: publishing
+    permissions:
+      contents: write
     needs: test
-    name: Release-Publish
+    name: Package-Release-Publish
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: setup node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: install node deps
         run: npm ci
 
-      # - name: Generate GitHub Release
-      #   uses: lsegal/github-release-from-changelog-action@latest
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: get extension version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
-      - name: publish release
-        uses: JS-DevTools/npm-publish@v1
+      # https://github.com/marketplace/actions/changelog-reader
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          validation_level: warn
+          version: ${{ env.PACKAGE_VERSION }}
+          path: ./CHANGELOG.md
+
+      - name: publish release to npm
+        id: publish
+        uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
+      - name: create local npm package
+        id: package
+        run: npm pack
 
+      - name: get local package name
+        run: echo "PACKAGE_NAME=$(basename $(find . -maxdepth 1 -type f -iname "*.tgz" | head -1))" >> $GITHUB_ENV
+
+      - name: create github release
+        uses: ncipollo/release-action@v1
+        id: create_release
+        with:
+          tag: v${{ steps.publish.outputs.version }}
+          name: ${{ steps.publish.outputs.name }}
+          body: "${{ steps.changelog_reader.outputs.changes }}"
+          artifacts: ${{ env.PACKAGE_NAME }}
+          draft: false
+          prerelease: false
 
 
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
