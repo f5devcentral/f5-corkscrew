@@ -11,6 +11,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.0] - (04.20.2023)
 
+### Changed
+
 - **formerly v0.14.0**
 - updated all deps
 - removed legacy syncronous unpack function
@@ -40,6 +42,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.10.0] - (07.10.2022)
 
+### Changed
+
 - Added parent APM profile digging (apm profile acces \<name\>)
   - Not digging the entire apm profile yet, just the main profile that gets attached to the virtual so we can at least see that this VS has APM
 - Removed old base config digging
@@ -49,12 +53,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.9.3] - (02.02.2022)
 
+### fixed
+
 - TypeError: Cannot read properties of undefined (reading 'internal') #23
   - https://github.com/f5devcentral/f5-corkscrew/issues/23
 
 ---
 
 ## [0.9.0] - (10.31.2021)
+
+### changed
 
 - updated base config extraction to pull all DO classes supported in ACC
 - fixed parsing error when no virtual servers
@@ -88,19 +96,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.7.0] - (01-25-2021)
 
-### Modified
+### changed
 
 - Disabled errors for files that do not have the same tmos version as the first
   - this opened the opportunity to try to parse parent tmos objects from the file anyway, at least attempting to extract config
 - Line returns are converted from \r\n to \n
 - Added datagroup extraction from irules
-
----
-
-## [0.7.0] - (01-25-2021)
-
-### Modified
-
 - More work to make functions async and throw appropriate errors
   - Mainly around the unPacker function responsible for detecting and unpacking ucs/qkviews
 
@@ -108,11 +109,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.6.0] - (01-24-2021)
 
-### Added
+### added
 
 - Configured events for each application extraction
 
-### Modified
+### changed
 
 - fixed a bug where ending brackets were missing on iRules
 - changed and removed some logic that was consuming large amount of resources causing some "explosions" to fail
@@ -127,7 +128,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.5.0] - (01-18-2021)
 
-### Modified
+### changed
 
 - Updated explosion output to include source config file contents.  
 
@@ -135,7 +136,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.4.0] - (10-21-2020)
 
-### Added
+### added
 
 - Added support for extracting pools referenced by local traffic policies and irules
   - Including application maps for those destinations
@@ -143,7 +144,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added hostname, source file type and source tmos version to collected details and ouput in explosion
   - These are just informatory details what will be utilized for visibility while working in the vscode extension
 
-### Modified
+### changed
 
 - Cleaned up app array to not have so much nested information
 - Changed config storage in object to array of individual objects instead of one big string
@@ -160,7 +161,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.3.0] - (10-12-2020)
 
-### Added
+### added
 
 - Added support for ucs/qkview input
   - This resulted in all inputs being a single file reference and letting it figure out what to do from there
@@ -171,14 +172,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added base configuration information to explode function
   - This includes vlans and SelfIPs
 
-### Modified
+### changed
 
 - Parsing now includes bigip.conf, bigip_base.conf and any supporting /partitions/ folders+config files
 - cli now handles errors better and responses with log files if any problems occur
 
 ## [0.2.0] - (10-8-2020)
 
-### Added
+### added
 
 - Processing stats
   - config parsing time (how long it took to break down the config files)
@@ -191,7 +192,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - support for fqdn pool members and nodes
 - Option to only parse configs, get list of applications and choose which apps to get configuration for
 
-### Modified
+### changed
 
 - vsConfig app parsing logic to not fail if object is not found (reduces chances of catastrophic processing failure)
 - reworked ininital config parsing logic and removed unnecessary processing and objects
@@ -201,11 +202,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - removed full application extraction from initial parsing so they can be called independantly
   - This is for big configs where it can take a while to extract all applications
   - The user can pick which apps to get extracted applications for
-
-> NOTE:  currently able to fully process a 6MB config file with almost 300vs, 223k lines, and over 13k tmos objects in about 20 seconds
-
-### Pending/In-Progress
-
+- NOTE:  currently able to fully process a 6MB config file with almost 300vs, 223k lines, and over 13k tmos objects in about 20 seconds
 - finish regular pool member mapping
 - implement pool discovery/mapping functions for irules
   - add support for other virtual servers?
@@ -216,7 +213,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.1] - (9-24-2020)
 
-### Modified
+### changed
 
 - adjusted "getVsConfig" function to include "ltm virtual" at the beginning of each virtual server name
   - this completes the object and show allow for apps to be import to other f5s
@@ -225,7 +222,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.0] - (9-22-2020)
 
-### initial release
+### added
 
 - intakes bigip.conf
   - extracts tmos applications including major configuration objects
