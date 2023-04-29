@@ -200,7 +200,7 @@ export async function parseDeep(obj: any, rx) {
         let body = obj.gtm.wideip[dnsType][wipName];
         obj.gtm.wideip[dnsType][wipName] = { line: body };   // re-assign the original config string
         const sObj = obj.gtm.wideip[dnsType][wipName];  // local var the object we are working with
-        const nameRx = body.match(rx.gtm.wideip.name);
+        const nameRx = wipName.match(rx.gtm.wideip.name);
 
         sObj.fqdn = nameRx.groups.name,
         sObj.partition = nameRx.groups.partition,

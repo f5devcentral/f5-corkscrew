@@ -61,29 +61,32 @@ export class DigGslb {
                         tmpObj.lines = [ originalCfg ];
                         const appObj = tmpObj as GslbApp;
 
-                        // dig each pool reference, replacing as we go
-                        for (let poolRef of appObj.pools) {
+                        if(appObj.pools) {
 
-                            // copy full pool details
-                            const poolDetails = JSON.parse(
-                                JSON.stringify(this.gtm.pool[appObj.type][poolRef.name]));
-                            const originalLine = `gtm pool ${poolDetails.type} ${poolRef.name} { ${poolDetails.line} }`;
-                            appObj.lines.push(originalLine)
-                            delete poolDetails.line;
-
-                            if(poolDetails.members) {
-
-                                poolDetails.members.forEach( e => {
-                                    const serverDetails = this.gtm.server[e.server];
-                                    const originalLine = `gtm server ${e.server} { ${serverDetails.line} }`;
-                                    const vServer = serverDetails['virtual-servers'][e.vs];
-                                    appObj.lines.push(originalLine);
-                                    deepmergeInto(e, vServer);
-                                })
+                            // dig each pool reference, replacing as we go
+                            for (let poolRef of appObj.pools) {
+    
+                                // copy full pool details
+                                const poolDetails = JSON.parse(
+                                    JSON.stringify(this.gtm.pool[appObj.type][poolRef.name]));
+                                const originalLine = `gtm pool ${poolDetails.type} ${poolRef.name} { ${poolDetails.line} }`;
+                                appObj.lines.push(originalLine)
+                                delete poolDetails.line;
+    
+                                if(poolDetails.members) {
+    
+                                    poolDetails.members.forEach( e => {
+                                        const serverDetails = this.gtm.server[e.server];
+                                        const originalLine = `gtm server ${e.server} { ${serverDetails.line} }`;
+                                        const vServer = serverDetails['virtual-servers'][e.vs];
+                                        appObj.lines.push(originalLine);
+                                        deepmergeInto(e, vServer);
+                                    })
+                                }
+    
+                                deepmergeInto(poolRef, poolDetails)
+    
                             }
-
-                            deepmergeInto(poolRef, poolDetails)
-
                         }
 
                         this.apps.push(appObj)
