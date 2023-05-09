@@ -2,7 +2,7 @@
   "name": "f5-corkscrew",
   "description": "extracting tmos config",
   "author": "F5DevCentral",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "Apache-2.0",
   "homepage": "https://github.com/f5devcentral/f5-corkscrew#readme",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'src/tests/**/*.{js,ts,tsx}'",
-    "test": "nyc mocha -r ts-node/register \"tests/ALL.tests.ts\"",
+    "test": "nyc mocha -r ts-node/register \"tests/*.tests.ts\"",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "build-code-docs": "typedoc --out code_docs src",
     "compile": "tsc -p .",

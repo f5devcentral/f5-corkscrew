@@ -12,7 +12,7 @@ import { EventEmitter } from 'events';
 import { RegExTree } from './regex'
 import logger from './logger';
 import { nestedObjValue } from './objects'
-import { BigipConfObj, ConfigFile, ConfigFiles, Explosion, Stats, xmlStats } from './models'
+import { BigipConfObj, ConfigFile, Explosion, Stats, xmlStats } from './models'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
 import { digVsConfig, getHostname } from './digConfigs';
@@ -21,7 +21,7 @@ import { UnPacker } from './unPackerStream';
 import { digDoConfig } from './digDoClassesAuto';
 import { DigGslb } from './digGslb';
 import { parseDeep } from './deepParse';
-import { XMLParser } from 'fast-xml-parser';
+// import { XMLParser } from 'fast-xml-parser';
 import { deepmergeInto } from 'deepmerge-ts';
 
 
@@ -35,7 +35,7 @@ export default class BigipConfig extends EventEmitter {
      * incoming config files array
      * ex. [{filename:'config/bigip.conf',size:12345,content:'...'},{...}]
      */
-    configFiles: ConfigFiles = [];
+    configFiles: ConfigFile[] = [];
     /**
      * tmos config as nested json objects 
      * - consolidated parant object keys like ltm/apm/sys/...
@@ -452,11 +452,11 @@ export default class BigipConfig extends EventEmitter {
 
                 // dig config, but catch errors
                 await digVsConfig(key, value, this.configObject, this.rx)
-                    .then(vsConfig => {
-                        apps.push({ name: key, configs: vsConfig.config, map: vsConfig.map });
+                    .then(vsApp => {
+                        apps.push(vsApp);
                     })
                     .catch(err => {
-                        apps.push({ name: key, configs: err, map: '' });
+                        apps.push({ name: key, lines: err, });
                     })
             }
 

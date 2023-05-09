@@ -16,7 +16,7 @@
  */
 import Logger from 'f5-conx-core/dist/logger';
 export declare const logger: Logger;
-export declare type argsObj = {
+export type argsObj = {
     no_sources: boolean;
     no_file_store: boolean;
     no_command_logs: boolean;

@@ -22,13 +22,13 @@ export function logOutput (configObject: BigipConfObj, explosion: Explosion): st
     output += JSON.stringify(explosion.stats, undefined, 2);
     output += `\n################################################\n`;
     
-    explosion.config.apps.forEach( el => {
+    explosion.config.apps?.forEach( el => {
         output += '\n################################################\n';
         output += `#### app name: ${el.name}\n`;
-        output += `#### app map: `;
-        output += JSON.stringify(el.map, undefined, 4);
+        // output += `#### app map: `;
+        // output += JSON.stringify(el.map, undefined, 4);
         output += `\n####\n`;
-        output += el.configs.join('\n');
+        output += el.lines.join('\n');
         output += '\n################################################\n';
     })
     

@@ -9,26 +9,26 @@ env:
 
 jobs:
 
-  # test:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [windows-latest, ubuntu-latest, macos-latest]
-  #   name: Test on ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    name: Test on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-  #     - run: npm install
+      - run: npm install
         
   release-publish:
     runs-on: ubuntu-latest
     environment: publishing
     permissions:
       contents: write
-    # needs: test
+    needs: test
     name: Package-Release-Publish
     steps:
 

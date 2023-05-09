@@ -2,6 +2,7 @@
  * Regex Tree used for searching configs
  */
 export declare class RegExTree {
+    tmosVersion: string;
     /**
      * extracts tmos version at beginning of bigip.conf
      */
@@ -13,61 +14,14 @@ export declare class RegExTree {
      *  - name = tmos object name
      *  - body = tmos object body
      */
-    private parentNameValueRegex;
+    parentNameValue: RegExp;
     /**
      * Parent tmos object regex
      * Extracts each parent tmos object starting with
      *  (apm|ltm|security|net|pem|sys|wom|ilx|auth|analytics|wom),
      *  then "{" and ending "}" just before next partent object
      */
-    private parentObjectsRegex;
-    /**
-     * vs detail regexs
-     */
-    private poolRegex;
-    private profilesRegex;
-    private rulesRegex;
-    private snatRegex;
-    private ltPoliciesRegex;
-    private persistRegex;
-    private fallBackPersistRegex;
-    private destination;
-    /**
-     * pool detail regexs
-     */
-    private poolMembersRegex;
-    private poolNodesFromMembersRegex;
-    private poolMonitorsRegex;
-    /**
-     * profiles
-     */
-    private profileNamesRegex;
-    private snatNameRegex;
-    private ruleNamesRegex;
-    private ltpNamesRegex;
-    private persistNameRegex;
-    /**
-     * base regex tree for extracting tmos config items
-     */
-    private regexTree;
-    constructor();
-    /**
-     * Return updated base regex tree depending on version config differences
-     *
-     * @param tmosVersion
-     */
-    get(tmosVersion?: string): TmosRegExTree;
-}
-/**
- * combines multi-line commented regex final regex
- * @param regs regex pieces in array
- * @param opts regex options (g/m/s/i/y/u/s)
- */
-export declare function multilineRegExp(regs: RegExp[], opts: string): RegExp;
-export declare type TmosRegExTree = {
-    tmosVersion: RegExp;
     parentObjects: RegExp;
-    parentNameValue: RegExp;
     vs: {
         pool: {
             obj: RegExp;
@@ -77,6 +31,7 @@ export declare type TmosRegExTree = {
         };
         profiles: {
             obj: RegExp;
+            asmProf: RegExp;
             names: RegExp;
         };
         rules: {
@@ -89,6 +44,7 @@ export declare type TmosRegExTree = {
         };
         ltPolicies: {
             obj: RegExp;
+            asmRef: RegExp;
             names: RegExp;
         };
         persist: {
@@ -98,4 +54,74 @@ export declare type TmosRegExTree = {
         fbPersist: RegExp;
         destination: RegExp;
     };
-};
+    gtm: {
+        wideip: {
+            name: RegExp;
+            persistence: RegExp;
+            'pool-lb-mode': RegExp;
+            aliases: RegExp;
+            rules: RegExp;
+            lastResortPool: RegExp;
+            poolsParent: RegExp;
+            pools: RegExp;
+            poolDetails: RegExp;
+        };
+        pool: {
+            membersGroup: RegExp;
+            membersDetails: RegExp;
+            membersDetailsG: RegExp;
+            'load-balancing-mode': RegExp;
+            'alternate-mode': RegExp;
+            'fallback-mode': RegExp;
+            'fallback-ip': RegExp;
+            'verify-member-availability': RegExp;
+        };
+        server: {
+            devices: RegExp;
+            devicesG: RegExp;
+            dAddressT: RegExp;
+            'virtual-servers': RegExp;
+            vs: {
+                'depends-on': RegExp;
+            };
+        };
+    };
+    asm: {
+        status: RegExp;
+        'blocking-mode': RegExp;
+        description: RegExp;
+        encoding: RegExp;
+        'policy-builder': RegExp;
+        'policy-template': RegExp;
+        'policy-type': RegExp;
+        'parent-policy': RegExp;
+    };
+    /**
+     * first tmos config file
+     *
+     * **must have '#TMSH-VERSION: 15.1.0.4' version at top**
+     *
+     * this tmos version will update rx tree as needed and return itself
+     *
+     * @param config tmos config file
+     */
+    constructor(config: string);
+    /**
+     * Update rx tree depending on tmos version
+     *
+     * @param tmosVersion
+     */
+    private update;
+    /**
+     * extract tmos config version from first line
+     * ex.  #TMSH-VERSION: 15.1.0.4
+     * @param config bigip.conf config file as string
+     */
+    getTMOSversion(config: string): string;
+}
+/**
+ * combines multi-line commented regex final regex
+ * @param regs regex pieces in array
+ * @param opts regex options (g/m/s/i/y/u/s)
+ */
+export declare function multilineRegExp(regs: RegExp[], opts: string): RegExp;

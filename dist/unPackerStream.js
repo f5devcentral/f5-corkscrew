@@ -92,7 +92,7 @@ class UnPacker extends events_1.EventEmitter {
                     const content = fs.readFileSync(path_1.default.join(filePath.dir, filePath.base), 'utf-8');
                     logger_1.default.debug(`got .conf file [${input}], size [${size}]`);
                     this.emit('conf', { fileName: filePath.base, size, content });
-                    // return [{ fileName: filePath.base, size, content }];
+                    // don't return anything here, since the conf file got sent via event
                     return;
                 }
                 catch (e) {
@@ -231,6 +231,7 @@ function fileFilter(name) {
         allConfs,
         /^config\/bigip.license$/,
         /^config\/profile_base.conf$/,
+        /^config\/low_profile_base.conf$/,
         fileStoreFilesUcs,
         fileStoreFilesQkview,
         /^\w+.xml$/ // qkview stats files

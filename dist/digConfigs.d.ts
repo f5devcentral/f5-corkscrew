@@ -1,11 +1,11 @@
 import { AppMap, BigipConfObj } from './models';
-import { TmosRegExTree } from './regex';
+import { RegExTree } from './regex';
 /**
  * scans vs config, and discovers child configs
  * @param vsName virtual server name
  * @param vsConfig virtual server tmos config body
  */
-export declare function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: TmosRegExTree): Promise<{
+export declare function digVsConfig(vsName: string, vsConfig: string, configTree: BigipConfObj, rx: RegExTree): Promise<{
     config: any[];
     map: AppMap;
 }>;

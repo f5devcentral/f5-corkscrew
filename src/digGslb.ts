@@ -60,6 +60,13 @@ export class DigGslb {
                         delete tmpObj.line;
                         tmpObj.lines = [ originalCfg ];
                         const appObj = tmpObj as GslbApp;
+                        appObj.allPossibleDestinations = [];
+
+                        // if we have iRules, try to parse them for responses/pool/destinations
+                        if(appObj.iRules) {
+                            // loop through each irule associated and dig out details
+                            // add possible destinations or resposnes to the allPossibleDestinations array
+                        }
 
                         if(appObj.pools) {
 
@@ -72,6 +79,10 @@ export class DigGslb {
                                 const originalLine = `gtm pool ${poolDetails.type} ${poolRef.name} { ${poolDetails.line} }`;
                                 appObj.lines.push(originalLine)
                                 delete poolDetails.line;
+
+                                if(poolDetails['fallback-ip']) {
+                                    appObj.allPossibleDestinations.push(poolDetails['fallback-ip'])
+                                }
     
                                 if(poolDetails.members) {
     
@@ -79,6 +90,13 @@ export class DigGslb {
                                         const serverDetails = this.gtm.server[e.server];
                                         const originalLine = `gtm server ${e.server} { ${serverDetails.line} }`;
                                         const vServer = serverDetails['virtual-servers'][e.vs];
+
+                                        const tPort = vServer["translation-port"] ? vServer["translation-port"] : '';
+                                        const tAddress = vServer["translation-address"] ? vServer["translation-address"] : '';
+                                        const tAddressPort = tPort ? `${tAddress}:${tPort}` : tAddress;
+                                        const dest = tAddress ? `${vServer.destination}->NAT->${tAddressPort}` : vServer.destination
+
+                                        appObj.allPossibleDestinations.push(dest)
                                         appObj.lines.push(originalLine);
                                         deepmergeInto(e, vServer);
                                     })

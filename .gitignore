@@ -1,6 +1,6 @@
 # Node modules
 node_modules/
-# package-lock.jsons
+# package-lock.json
 # Package build directory
 dist/
 # Coverage directory
@@ -27,4 +27,3 @@ tmp/
 package-lock.json
 # exclude package files
 *.tgz
-tests/artifacts/f5_corkscrew_test.tar.gz

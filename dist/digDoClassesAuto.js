@@ -35,8 +35,14 @@ function digDoConfig(configTree) {
                 // const objectProperties = []
                 // if config is object, loop through object and expand it
                 for (const [key, value] of Object.entries(val)) {
-                    // objectProperties.push(`${key} ${value}`);
-                    confs.push(`${path.join(' ')} ${key} { ${value} }`);
+                    const v = value;
+                    if (v.line) {
+                        // this is to support the exdended parsing scheme started Apr2023
+                        confs.push(`${path.join(' ')} ${key} { ${v.line} }`);
+                    }
+                    else {
+                        confs.push(`${path.join(' ')} ${key} { ${v} }`);
+                    }
                 }
             }
             else if (typeof val == 'string') {
