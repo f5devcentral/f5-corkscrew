@@ -59,7 +59,7 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^16.11.7",
     "@types/object-path": "^0.11.1",
-    "@types/tar": "^6.1.4",
+    "@types/tar": "^6.1.5",
     "@types/tar-stream": "^2.2.2",
     "@types/uuid": "^9.0.1",
     "@types/yargs": "^17.0.24",
@@ -78,13 +78,13 @@
     "deepmerge-ts": "^5.1.0",
     "f5-conx-core": "^0.17.2",
     "fast-xml-parser": "^4.2.2",
-    "glob": "^9.3.4",
+    "glob": "^10.2.3",
     "object-path": "^0.11.8",
-    "tar": "^6.1.13",
+    "tar": "^6.1.14",
     "tar-stream": "^3.0.0",
     "uuid": "^9.0.0",
     "xregexp": "^5.1.1",
-    "yargs": "^17.7.1",
+    "yargs": "^17.7.2",
     "zlib": "^1.0.5"
   }
 }

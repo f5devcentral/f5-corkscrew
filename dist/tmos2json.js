@@ -1,161 +1,92 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tmosChildToObj = void 0;
-const balanced_match_1 = __importDefault(require("balanced-match"));
-const logger_1 = __importDefault(require("./logger"));
-// /**
-//  * search object for nested value, return path to value
-//  * 
-//  * Initial goal for this is to find all the final children
-//  *  values that have not been coverted to json
-//  * if they include a line return "\n", crawl them till they
-//  *  are converted to json
-//  * 
-//  * Other than irules/datagroups, everything shouldn't have a LR
-//  * 
-//  * @param obj 
-//  * @param val 
-//  */
-// export function getPathFromValue(obj: any, val: string) {
-//     // asdf
-// }
+exports.balancedRxAll = exports.balancedRx1 = void 0;
 /**
+ * Capture tmos backeted object ex. ltm pool <name> { <body>}
  *
- * @param cfg child config to parse
- * @param obj used to iterate
+ * created 4.30.2023 to more accurately capture tmos bracketd objects
+ *
+ * @param preRx parent object string to start counting with
+ * @param x tmos config string to find body of ending brack }
+ * @returns
  */
-function tmosChildToObj(cfg, obj) {
-    /**
-     * input tmos parent object body
-     *  (ex. ltm virtual { <...everything_here...> })
-     *
-     * 1. capture single line 'key': 'value' pairs
-     *      (ex 'destination /Common/192.168.1.51:8443')
-     * 2. capture lists
-     *      (ex )
-     *
-     */
-    // used for iteration in the future
-    obj = obj ? obj : {};
-    const startingCfg = cfg;
-    /**
-     * loop through each of the objects
-     *  remove the match, check if "{}" in match
-     *  If bracket, re-iterate tmosChildtoObj to convert to child object
-     *  if no brackets, split each new line
-     *      split each new line
-     *          if two elements in array, set key/value pair
-     *          if >2 el in array, set value as array
-     */
-    // while this part of the config has brackets...
-    while (/{/.test(cfg)) {
-        const blncd = (0, balanced_match_1.default)('{', '}', cfg);
-        if (blncd) {
-            // get line up to first '{'
-            const name = blncd.pre;
-            const name2 = name.split(/\n/).pop().trim();
-            const body = blncd.body;
-            /**
-             * does body include:
-             *  if {} = means it's another object
-             *
-             */
-            const xx = body.trim().includes('\n');
-            if (body.includes('{') || body === ' ') {
-                //  it's a nested object, put in body for next round
-                const rebuiltObj = `${name2} {${body}}`;
-                cfg = cfg.replace(rebuiltObj, '');
-                obj[name2] = body;
-            }
-            else if (body.trim().includes('\n')) {
-                //regex single-line key-value pairs
-                const singleLineKVpairsRegex = /([\w-]+) (.+)/g;
-                const childKVpair = cfg.match(singleLineKVpairsRegex);
-                if (childKVpair) {
-                    childKVpair.forEach(el2 => {
-                        // remove items as we convert them
-                        cfg = cfg.replace(el2, '');
-                        const [key, val] = el2.split(' ');
-                        obj[key] = val;
-                    });
-                }
-                // // split on line returns
-                // const body2 = body.split('\n');
-                // // check each line for spaces
-                // body2.forEach(el => {
-                //     const line = el.split(' ');
-                //     if (line.length > 1) {
-                //     }
-                // });
-            }
-            else if (body.trim().includes(' ')) {
-                const keyVal = body.split(' ');
-                obj[keyVal[0]] = keyVal[1];
-                cfg = cfg.replace(body, '');
-            }
-            else {
-                // no line returns, split on spaces return array
-                const arr1 = body.trim().split(' ');
-                obj[name2] = arr1;
-                const rebuiltObj = `${name2} {${body}}`;
-                cfg = cfg.replace(rebuiltObj, '');
-            }
-            // const cfg2 = cfg;
-        }
+function balancedRx1(preRx, x) {
+    // looking to build a custom funtion similar to balance-matched
+    //  https://github.com/juliangruber/balanced-match
+    // find the matching rx
+    const pRx = x.match(preRx);
+    // if no match, return
+    if (pRx) {
+        const preface = pRx[0];
+        const preIndexStart = pRx.index; // beginning of the rxMatch
+        const preIndexEnd = preIndexStart + preRx.length; // end of the rxMatch
+        let idx = preIndexEnd + 1; // start our index just after ther first match
+        let beginCount = 1; // since our firt match was in the rx
+        let endCount = 0;
+        do {
+            // loop through the string counting brackets till even
+            const a = x[idx];
+            if (a === '{')
+                beginCount++;
+            if (a === '}')
+                endCount++;
+            idx++;
+        } while (beginCount != endCount);
+        const pre = preface === null || preface === void 0 ? void 0 : preface.slice(0, -1).trim(); // trim off parent start bracket {
+        const bdy = x.slice(preIndexEnd, idx - 1); // trim off parent ending bracket }
+        // return the original string without everything we just found
+        const rest = x.slice(0, preIndexStart) + x.slice(idx);
+        // return parent name and body
+        // example:  <k> {<v>}
+        return { prefaceKey: pre, body: bdy, rest };
     }
-    // const childObjectsRegex = /([\w\-.]+) {\n([\s\S]+?)\n    }/
-    // const childObjects = cfg.match(childObjectsRegex);
-    // // parsing child objects and removing
-    // if (childObjects && childObjects.length === 3) {
-    //     childObjects.forEach(el => {
-    //         // if(el.includes('{')) {
-    //         //     // const objName = el.match(/\s([\w\-.]+) {/)[1]
-    //         //     //     const objBody = el.match(/\s([ \w\-.]+) {\n([\s\S]+?)\n    }/)
-    //         //     if (objName) {
-    //         //         obj[objName] = objBody;
-    //         //     }
-    //         // }
-    //         cfg = cfg.replace(el, '');
-    //         obj[childObjects[1]] = childObjects[2]
-    //     });
-    // }
-    // const childObjectsSLRegex = /[\/ \w\-.]+ {(.+?)}/g
-    // const childObjectsSL = cfg.match(childObjectsSLRegex);
-    // if(childObjectsSL) {
-    //     childObjectsSL.forEach(el => {
-    //         cfg = cfg.replace(el, '');
-    //         const objName = el.match(/([\w\-.]+) {/)[1]
-    //         obj[objName] = ''
-    //     })
-    // }
-    const singleLineKVpairsRegex = /([\w-]+) (.+)/g;
-    const childKVpair = cfg.match(singleLineKVpairsRegex);
-    if (childKVpair) {
-        childKVpair.forEach(el2 => {
-            // remove items as we convert them
-            cfg = cfg.replace(el2, '');
-            const [key, val] = el2.split(' ');
-            obj[key] = val;
-        });
-    }
-    // /**
-    //  * down here, we didn't detect any objects "{}",
-    //  *  nor single line key: value pair (name<space>value)
-    //  * it must be a list, so lets see what kind of list it is
-    //  */
-    // if (cfg.trim().includes('\n')) {
-    //     //
-    // }
-    // split on lines
-    const regex = new RegExp(/\S/); // any non-white space characters
-    if (regex.test(cfg)) {
-        logger_1.default.error('parsing child object has leftover config:', cfg);
-        logger_1.default.error('parsing child object original config:', startingCfg);
-    }
-    return obj;
 }
-exports.tmosChildToObj = tmosChildToObj;
+exports.balancedRx1 = balancedRx1;
+/**
+ * Capture tmos backeted object ex. ltm pool <name> { <body>}
+ *
+ * created 4.30.2023 to more accurately capture tmos bracketd objects
+ *
+ * this one returns an array of matches and requires a RegExp input
+ *
+ * @param preRx parent object string to start counting with
+ * @param x tmos config string to find body of ending brack }
+ * @returns
+ */
+function balancedRxAll(x, objB = false) {
+    // looking to build a custom funtion similar to balance-matched
+    //  https://github.com/juliangruber/balanced-match
+    const preRx = /\n +[\w\-\/:. ]+ {/;
+    let pRx;
+    const ret = [];
+    do {
+        // run the rx to find the beginning of a backeted object
+        pRx = x.match(preRx);
+        if (pRx) {
+            // catpure the bracketed object
+            const r = balancedRx1(pRx[0], x);
+            if (r) {
+                // push key/value from bracketed object to the return array
+                ret.push(r);
+                // update the original string so we can dig out the next object
+                x = r.rest;
+            }
+        }
+    } while (pRx);
+    // remove all the rest strings from the matches
+    // https://stackoverflow.com/questions/12482961/change-values-in-array-when-doing-foreach
+    // ret.forEach( (o, i, a) => a[i] = { prefaceKey: o.prefaceKey, body: o.body })
+    if (objB) {
+        // build an object of all the key/bodies
+        // const obj = {}
+        // ret.forEach(b => {
+        //     obj[b.prefaceKey] = b.body
+        // })
+        // return { matches: obj, rest: x };
+    }
+    else {
+        return { matches: ret, rest: x };
+    }
+}
+exports.balancedRxAll = balancedRxAll;
 //# sourceMappingURL=tmos2json.js.map

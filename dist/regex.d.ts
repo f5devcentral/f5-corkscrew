@@ -22,41 +22,57 @@ export declare class RegExTree {
      *  then "{" and ending "}" just before next partent object
      */
     parentObjects: RegExp;
-    vs: {
+    /**
+     * used for abstracting partition from name
+     */
+    name: RegExp;
+    ltm: {
+        virtual: {
+            name: RegExp;
+            destination: RegExp;
+            description: RegExp;
+            pool: RegExp;
+            profiles: RegExp;
+            rules: RegExp;
+            snat: RegExp;
+            policies: RegExp;
+            persist: RegExp;
+            fbPersist: RegExp;
+        };
         pool: {
-            obj: RegExp;
+            name: RegExp;
+            membersGroup: RegExp;
             members: RegExp;
+            member: RegExp;
+            fqdn: RegExp;
+            memberDef: RegExp;
+            memberFqdnDef: RegExp;
             nodesFromMembers: RegExp;
             monitors: RegExp;
         };
         profiles: {
-            obj: RegExp;
             asmProf: RegExp;
             names: RegExp;
         };
         rules: {
-            obj: RegExp;
             names: RegExp;
         };
         snat: {
-            obj: RegExp;
+            details: RegExp;
             name: RegExp;
         };
         ltPolicies: {
-            obj: RegExp;
             asmRef: RegExp;
             names: RegExp;
         };
         persist: {
-            obj: RegExp;
             name: RegExp;
         };
-        fbPersist: RegExp;
-        destination: RegExp;
     };
     gtm: {
         wideip: {
             name: RegExp;
+            description: RegExp;
             persistence: RegExp;
             'pool-lb-mode': RegExp;
             aliases: RegExp;
@@ -95,6 +111,12 @@ export declare class RegExTree {
         'policy-template': RegExp;
         'policy-type': RegExp;
         'parent-policy': RegExp;
+    };
+    apm: {
+        name: RegExp;
+        'accept-languages': RegExp;
+        'access-policy': RegExp;
+        'log-settings': RegExp;
     };
     /**
      * first tmos config file

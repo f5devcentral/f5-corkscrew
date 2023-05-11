@@ -20,6 +20,6 @@ export type argsObj = {
     no_sources: boolean;
     no_file_store: boolean;
     no_command_logs: boolean;
-    no_conversion_logs: boolean;
+    no_process_logs: boolean;
     file: string;
 };

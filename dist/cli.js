@@ -30,8 +30,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logger = void 0;
 const ltm_1 = __importDefault(require("./ltm"));
+const yargs_1 = __importDefault(require("yargs"));
 const logger_1 = __importDefault(require("f5-conx-core/dist/logger"));
 exports.logger = new logger_1.default('F5_CORKSCREW_LOG_LEVEL');
+const argv = (0, yargs_1.default)(process.argv.slice(2)).options({
+    file: {
+        type: 'string',
+        demandOption: true,
+        describe: '.conf|ucs|kqview to explode'
+    },
+    no_sources: { type: 'boolean', default: true },
+    no_file_store: { type: 'boolean', default: true },
+    no_command_logs: { type: 'boolean', default: true },
+    no_process_logs: { type: 'boolean', default: true },
+}).argv;
+explode(argv);
+// yargs
+//     .command('explode <file>', 'explode bigip config', (yargs) => {
+//         yargs
+//             .positional('file', {
+//                 describe: '.conf|ucs|kqview to explode',
+//                 demandOption: true
+//             })
+//         .option('no_sources', {
+//             describe: 'supress config file sources bigip.conf, bigip_base.conf output',
+//             boolean: true
+//         })
+//         .option('no_file_store', {
+//             describe: 'supress filestore files output',
+//             boolean: true
+//         })
+//         .option('no_command_logs', {
+//             describe: 'no cli output',
+//             boolean: true
+//         })
+//         .option('no_conversion_logs', {
+//             describe: 'no extraction parsing logs',
+//             boolean: true
+//         })
+//     }, (argv: argsObj) => {
+//         explode(argv)
+//     })
+//     .demandCommand(1, 'A command is required')
+//     .wrap(120)
+//     .strict()
+//     .argv;
 function explode(args) {
     return __awaiter(this, void 0, void 0, function* () {
         exports.logger.console = false;
@@ -73,7 +116,7 @@ function explode(args) {
                 delete output.config.sources;
             if (args.no_file_store)
                 delete output.fileStore;
-            if (args.no_conversion_logs)
+            if (args.no_process_logs)
                 delete output.logs;
             // add successful output if there
             respObj['output'] = output;

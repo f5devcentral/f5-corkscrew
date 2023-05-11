@@ -4,13 +4,38 @@
 export type BigipConfObj = {
     ltm?: {
         virtual?: {
-            [key: string]: string;
+            [key: string]: {
+                name: string;
+                partition: string;
+                destination: string;
+                line: string;
+                description?: string;
+                pool?: string;
+                profiles?: string[];
+                rules?: string[];
+                snat?: string;
+                policies?: string[];
+                persist?: string;
+                'fallback-persistence'?: string;
+            };
         };
         pool?: {
-            [key: string]: string;
+            [key: string]: {
+                line: string;
+                name: string;
+                partition: string;
+                members: {
+                    [key: string]: unknown;
+                };
+            };
         };
         node?: {
-            [key: string]: string;
+            [key: string]: {
+                line: string;
+                name: string;
+                partition: string;
+                address: string;
+            };
         };
         monitor?: {
             [key: string]: string;
@@ -52,7 +77,37 @@ export type BigipConfObj = {
         };
         profile?: {
             access?: {
-                [key: string]: string;
+                [key: string]: {
+                    line: string;
+                    name: string;
+                    partition: string;
+                    "accept-languages": string[];
+                    "access-policy": string;
+                    "log-settings": string[];
+                    "app-service": string;
+                    "customization-group": string;
+                    "customization-key": string;
+                    "default-language": string;
+                    "domain-cookie": string;
+                    "eps-group": string;
+                    "errormap-group": string;
+                    "exchange-profile": string;
+                    "framework-installation-group": string;
+                    "general-ui-group": string;
+                    generation: string;
+                    "generation-action": string;
+                    "httponly-cookie"?: string;
+                    "logout-uri-timeout"?: string;
+                    "modified-since-last-policy-sync": string;
+                    "named-scope"?: string;
+                    "oauth-profile"?: string;
+                    "persistent-cookie"?: string;
+                    scope?: string;
+                    "secure-cookie"?: string;
+                    "sso-name"?: string;
+                    type: string;
+                    "user-identity-method"?: string;
+                };
             };
         };
     };
@@ -72,6 +127,14 @@ export type BigipConfObj = {
         "self-allow"?: string;
         trunk?: string;
         vlan?: string;
+    };
+    security?: {
+        dos?: {
+            profile?: unknown;
+        };
+        ['bot-defense']?: {
+            profile?: unknown;
+        };
     };
     sys?: {
         "global-settings"?: string;
@@ -209,7 +272,9 @@ export type GslbApp = {
     fqdn: string;
     partition: string;
     type: GtmRecordTypes;
+    description?: string;
     lines: string[];
+    allPossibleDestinations: string[];
     aliases?: string[];
     iRules?: string[];
     pools?: GtmPool[] | GtmPoolRef[];
@@ -240,7 +305,17 @@ export type GtmPool = {
  */
 export type TmosApp = {
     name: string;
+    partition: string;
+    destination: string;
     lines: string[];
+    description?: string;
+    pool?: BigipConfObj["ltm"]["pool"]['key'];
+    profiles?: string[];
+    rules?: string[];
+    snat?: string;
+    policies?: string[];
+    persist?: string;
+    'fallback-persistence'?: string;
     map?: AppMap;
 };
 /**
@@ -248,7 +323,7 @@ export type TmosApp = {
  * - child of explosion
  */
 export type AppMap = {
-    vsDest?: string;
+    destination?: string;
     pool?: string[];
     irule?: {
         pools?: string[] | string[][];
@@ -293,6 +368,8 @@ export type ObjStats = {
     apmProfiles?: number;
     apmPolicies?: number;
     asmPolicies?: number;
+    botProfiles?: number;
+    dosProfiles?: number;
     gtm?: GslbStats;
 };
 export type GslbStats = {

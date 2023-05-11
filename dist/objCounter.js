@@ -58,6 +58,12 @@ function countObjects(obj) {
         if ((_j = obj.asm) === null || _j === void 0 ? void 0 : _j.policy) {
             stats.asmPolicies = Object.keys(obj.asm.policy).length;
         }
+        if (obj.security['bot-defense']) {
+            stats.botProfiles = Object.keys(obj.security['bot-defense']).length;
+        }
+        if (obj.security.dos) {
+            stats.dosProfiles = Object.keys(obj.security.dos).length;
+        }
         return stats;
     });
 }

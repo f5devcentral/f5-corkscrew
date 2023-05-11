@@ -366,11 +366,11 @@ class BigipConfig extends events_1.EventEmitter {
                     });
                     // dig config, but catch errors
                     yield (0, digConfigs_1.digVsConfig)(key, value, this.configObject, this.rx)
-                        .then(vsConfig => {
-                        apps.push({ name: key, lines: vsConfig.config, map: vsConfig.map });
+                        .then(vsApp => {
+                        apps.push(vsApp);
                     })
                         .catch(err => {
-                        apps.push({ name: key, lines: err, map: '' });
+                        apps.push({ name: key, lines: err, });
                     });
                 }
                 this.stats.appTime = Number(process.hrtime.bigint() - startTime) / 1000000;
