@@ -13,15 +13,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
-- [RFE] include xml stats in extraction #15
+- [RFE] include xml stats in extraction #15 (pending-researching)
 
 ### Fixed
 
-- [BUG] no cli parse output in my environment #27
-
 ---
 
-## [1.1.0] - (04.30.2023)
+## [1.1.0] - (05.15.2023)
 
 ### Added
 
@@ -29,10 +27,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - [RFE] better apm parsing #31
 - [RFE] deeper parsing of key ltm objects #30
 - [RFE] add bot/dos profiles to abstraction/visibility #33
+- github issue templates for BUGs and RFEs
+
+### Changed
+
+- updated deps
 
 ### Fixed
 
 - [BUG] gslb no pool error #32
+- [BUG] no cli parse output in my environment #27
 
 ---
 
