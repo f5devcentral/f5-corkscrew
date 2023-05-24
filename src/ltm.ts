@@ -456,7 +456,8 @@ export default class BigipConfig extends EventEmitter {
                         apps.push(vsApp);
                     })
                     .catch(err => {
-                        apps.push({ name: key, lines: err, });
+                        // apps.push({ name: key, lines: err, });
+                        logger.error(`corkscrew: problem abstracting app/vs ${key}`, err);
                     })
             }
 

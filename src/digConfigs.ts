@@ -39,10 +39,10 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
     if (appObj.pool) {
         // dig pool details
         // just reassign the parsed pool details into the vs
-        const body = configTree.ltm.pool[vsConfig.pool];
+        const body = configTree.ltm?.pool?.[vsConfig.pool];
         appObj.lines.push(`ltm pool ${appObj.pool} {${body.line}}`);
         // raw copy the pool config
-        appObj.pool = JSON.parse(JSON.stringify(configTree.ltm.pool[vsConfig.pool]));
+        appObj.pool = JSON.parse(JSON.stringify(configTree.ltm?.pool?.[vsConfig.pool]));
         delete appObj.pool.line;
 
         if(appObj.pool?.members) {
@@ -103,7 +103,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
 
         // if this snat string is the name of a snat pool, then replace with snatpool details
         //  if not, then its 'automap' or 'none' => nothing to add here
-        if (configTree.ltm.snatpool[vsConfig.snat]) {
+        if (configTree.ltm?.snatpool?.[vsConfig.snat]) {
             const c = JSON.parse(JSON.stringify(configTree.ltm.snatpool[vsConfig.snat]));
             appObj.lines.push(`ltm snatpool ${vsConfig.snat} { ${c.line} }`)
             delete c.line;

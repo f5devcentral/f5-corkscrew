@@ -20,6 +20,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [1.1.3] - (05.25.2023)
+
+### Changed
+
+- [BUG] more snatpool abstraction bug/tweaks
+- log error when app abstraction encounters error
+
 ## [1.1.2] - (05.25.2023)
 
 ### Changed

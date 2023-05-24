@@ -91,6 +91,16 @@ describe('LTM parsing/abstraction', async function () {
 
     });
 
+    it(`no snat pools`, async function () {
+
+        delete device.configObject.ltm?.snatpool;
+
+        const localExpld = await device.explode();
+
+        assert.ok(localExpld, 'should not error while abstracting apps with missing configs');
+
+    });
+
 
 
 
