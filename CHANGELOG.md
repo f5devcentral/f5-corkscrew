@@ -20,6 +20,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [1.1.2] - (05.25.2023)
+
+### Changed
+
+- [BUG] snatpool abstraction broken #36
+
+---
+
 ## [1.1.1] - (05.25.2023)
 
 ### Added
