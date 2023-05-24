@@ -58,44 +58,62 @@ export class RegExTree {
         /(?=(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom|---end---))/
     ], 'g');
 
+    /**
+     * used for abstracting partition from name
+     */
+    name = /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/;
 
-    vs = {
+    ltm = {
+        virtual: {
+            name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            destination: /destination [\w.\-\/]+\/([\d.]+:\d+)/,
+            description: /\n +description "(?<desc>[\w' .-/]+)"\n/,
+            pool: /(?<!source-address-translation {\n\s+)    pool (.+?)\n/,
+            profiles: /profiles {([\s\S]+?)\n    }\n/,
+            rules: /rules {([\s\S]+?)\n    }\n/,
+            snat: /source-address-translation {([\s\S]+?)\n    }\n/,
+            policies: /policies {([\s\S]+?)\n    }\n/,
+            persist: /persist {([\s\S]+?)\n    }\n/,
+            fbPersist: /fallback-persistence (\/\w+.+?)\n/,
+            vlans: /vlans {([\s\S]+?)\n    }\n/,
+        },
         pool: {
-            obj: /(?<!source-address-translation {\n\s+)    pool (.+?)\n/,
-            members: /members {([\s\S]+?)\n    }\n/,
+            name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            membersGroup: /members {([\s\S]+?)\n    }\n/,
+            members: /(?<name>[\w\-\/:.]+) {\n +(?<body>[\s\S]+?)\n +}/g,
+            member: /(?<name>[\w\-\/:.]+) {\n +(?<body>[\s\S]+?)\n +}/,
+            fqdn: /fqdn {\n +(?<body>[\s\S]+?)\n +}/,
+            memberDef: /(\/[\w\-\/.]+:\d+) {\s+address(.+?)\s+}/g,
+            memberFqdnDef: /(\/[\w\-\/.]+:\d+) {\s+fqdn {\s+([\s\S]+?)\s+}\s+}/g,
             nodesFromMembers: /(\/\w+\/.+?)(?=:)/g,
-            monitors: /monitor (\/\w+.+?)\n/
+            monitors: /monitor ([\/\w.]+?)\n/
         },
         profiles: {
-            obj: /profiles {([\s\S]+?)\n    }\n/,
             asmProf: /ASM_([\w-.]+)/,
             names: /(\/[\w\-\/.]+)/g
         },
         rules: {
-            obj: /rules {([\s\S]+?)\n    }\n/,
             names: /(\/[\w\-\/.]+)/g
         },
         snat: {
-            obj: /source-address-translation {([\s\S]+?)\n    }\n/,
+            details: /(pool (?<pool>[\w.\/]+)?)|(type (?<type>(none|automap|snat)?))/,
             name: /pool (\/[\w\-\/.]+)/
         },
         ltPolicies: {
-            obj: /policies {([\s\S]+?)\n    }\n/,
             asmRef: /asm (?<status>enable|disable) policy (?<policy>[\w\/._]+)/,
             names: /(\/[\w\-\/.]+)/g
         },
         persist: {
-            obj: /persist {([\s\S]+?)\n    }\n/,
             name: /(\/[\w\-\/.]+)/
         },
-        fbPersist: /fallback-persistence (\/\w+.+?)\n/,
-        destination: /destination (\/\w+\/[\w+\.\-]+:\d+)/
+
     }
 
 
     gtm = {
         wideip: {
             name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            description: /description "(?<desc>[\w' .-/]+)"\n/,
             persistence: /persistence (?<bool>\w+)/,
             'pool-lb-mode': /pool-lb-mode (?<mode>\w+)/,
             aliases: /aliases {([\s\S]+?)\n    }\n/,
@@ -129,12 +147,19 @@ export class RegExTree {
     asm = {
         status: /\n +(?<bool>active|inactive)\n/,
         'blocking-mode': /\n +blocking-mode (?<bm>enabled|disabled)\n/,
-        description: /\n +description (?<desc>[\w'" .-]+)\n/,
+        description: /\n +description "(?<desc>[\w' .-/]+)"\n/,
         encoding: /\n +encoding (?<enc>[\w]+)\n/,
         'policy-builder': /\n +policy-builder (?<status>enabled|disabled)\n/,
         'policy-template': /\n +policy-template (?<name>[\w-.]+)\n/,
         'policy-type': /\n +policy-type (?<type>security|parent)\n/,
         'parent-policy': /\n +parent-policy (?<name>[\w-.]+)\n/
+    }
+
+    apm = {
+        name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+        'accept-languages': /\n +accept-languages { (?<langs>[\w ]+)? }\n/,
+        'access-policy': /\n +access-policy (?<name>[\w/.]+)\n/,
+        'log-settings': /\n +log-settings {\n +(?<profiles>[\S\s]+?)\n +}\n/,
     }
 
     /**
@@ -170,8 +195,8 @@ export class RegExTree {
         // full tmos version without decimals
         if (x > 19000) {
             logger.error('>v19.0.0.0 tmos detected - this should never happen!!!')
-            this.vs.fbPersist = /new-fallBackPersist-regex/;
-            this.vs.pool.obj = /new-pool-regex/;
+            this.ltm.virtual.fbPersist = /new-fallBackPersist-regex/;
+            this.ltm.virtual.pool = /new-pool-regex/;
         }
         if (x < 10000) {
             logger.error('<v10.0.0.0 tmos detected - have not tested this yet!!!')

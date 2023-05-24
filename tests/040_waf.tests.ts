@@ -39,21 +39,22 @@ describe('WAF/ASM parsing/abstraction', async function () {
             asmObj = device.configObject.asm
         }
 
+        // do we have any asm objects?
         assert.ok(typeof asmObj === 'object')
 
     });
 
     it(`Inspect asm policy object for params`, async function () {
 
-        const basicPolic1 = asmObj.policy['/Common/basic_policy_1']
-        assert.ok(typeof basicPolic1.line === 'string');
-        assert.ok(typeof basicPolic1.description === 'string');
-        assert.ok(typeof basicPolic1.status === 'string');
-        assert.ok(typeof basicPolic1['blocking-mode'] === 'string');
-        assert.ok(typeof basicPolic1['policy-builder'] === 'string');
-        assert.ok(typeof basicPolic1['policy-template'] === 'string');
-        assert.ok(typeof basicPolic1['parent-policy'] === 'string');
-        assert.ok(typeof basicPolic1['policy-type'] === 'string');
+        const basicPolicy1 = asmObj.policy['/Common/basic_policy_1']
+        assert.ok(typeof basicPolicy1.line === 'string');
+        assert.ok(typeof basicPolicy1.description === 'string');
+        assert.ok(typeof basicPolicy1.status === 'string');
+        assert.ok(typeof basicPolicy1['blocking-mode'] === 'string');
+        assert.ok(typeof basicPolicy1['policy-builder'] === 'string');
+        assert.ok(typeof basicPolicy1['policy-template'] === 'string');
+        assert.ok(typeof basicPolicy1['parent-policy'] === 'string');
+        assert.ok(typeof basicPolicy1['policy-type'] === 'string');
 
     });
 
@@ -73,7 +74,7 @@ describe('WAF/ASM parsing/abstraction', async function () {
 
             const body = v.replace(/\n +/g, ' ')
 
-            const iAsm = body.match(device.rx!.vs.ltPolicies.asmRef)
+            const iAsm = body.match(device.rx!.ltm.ltPolicies.asmRef)
             if (iAsm) {
                 asmLtKeys.push(k)
                 asmLtProfiles.push({ [k]: iAsm[0] })
@@ -97,18 +98,18 @@ describe('WAF/ASM parsing/abstraction', async function () {
             // so, now we will dig the profiles object for what we need instead...
             
             // const 
-            const profilesObj = v.match(device.rx!.vs.profiles.obj);
+            // const profilesObj = v.match(device.rx!.ltm.profiles.names);
             
-            if (profilesObj) {
-                const asmProf = profilesObj[1].match(device.rx!.vs.profiles.asmProf)
-                if(asmProf) {
-                    if(asmVirtuals[asmProf[1]]) {
-                        asmVirtuals[asmProf[1]].push(k);
-                    } else {
-                        asmVirtuals[asmProf[1]] = [k]
-                    }
-                }
-            }
+            // if (profilesObj) {
+            //     const asmProf = profilesObj[1].match(device.rx!.ltm.profiles.asmProf)
+            //     if(asmProf) {
+            //         if(asmVirtuals[asmProf[1]]) {
+            //             asmVirtuals[asmProf[1]].push(k);
+            //         } else {
+            //             asmVirtuals[asmProf[1]] = [k]
+            //         }
+            //     }
+            // }
         }
 
 

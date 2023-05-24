@@ -6,15 +6,53 @@
  */
 export type BigipConfObj = {
     ltm?: {
-        virtual?: { [key: string]: string };
-        pool?: { [key: string]: string };
-        node?: { [key: string]: string };
+        virtual?: {
+            [key: string]: {
+                name: string;
+                partition: string;
+                folder?: string;
+                destination?: string;
+                line: string;
+                description?: string;
+                pool?: string;
+                profiles?: string[];
+                rules?: string[];
+                snat?: string;
+                policies?: string[];
+                persist?: string;
+                'fallback-persistence'?: string;
+            }
+        };
+        pool?: {
+            [key: string]: {
+                line: string;
+                name: string;
+                partition: string;
+                members: { [key: string]: unknown };
+            };
+        };
+        node?: {
+            [key: string]: {
+                line: string;
+                name: string;
+                partition: string;
+                address: string;
+            };
+        };
         monitor?: { [key: string]: string };
         profile?: { [key: string]: string };
         policy?: { [key: string]: string };
         rule?: { [key: string]: string };
         persistence?: { [key: string]: string };
-        snatpool?: { [key: string]: string };
+        snatpool?: {
+            [key: string]: {
+                line: string;
+                name: string;
+                partition: string;
+                folder?: string;
+                members?: string[];
+            }
+        };
         "data-group"?: {
             internal?: { [key: string]: string }
         },
@@ -28,15 +66,48 @@ export type BigipConfObj = {
             "access-policy"?: { [k: string]: string };
         };
         profile?: {
-            access?: { [key: string]: string }
+            access?: {
+                [key: string]: {
+                    line: string;
+                    name: string;
+                    partition: string;
+                    "accept-languages": string[];
+                    "access-policy": string;
+                    "log-settings": string[];
+                    "app-service": string;
+                    "customization-group": string;
+                    "customization-key": string;
+                    "default-language": string;
+                    "domain-cookie": string;
+                    "eps-group": string;
+                    "errormap-group": string;
+                    "exchange-profile": string;
+                    "framework-installation-group": string;
+                    "general-ui-group": string;
+                    generation: string;
+                    "generation-action": string;
+                    "httponly-cookie"?: string;
+                    "logout-uri-timeout"?: string;
+                    "modified-since-last-policy-sync": string;
+                    "named-scope"?: string;
+                    "oauth-profile"?: string;
+                    "persistent-cookie"?: string;
+                    scope?: string;
+                    "secure-cookie"?: string;
+                    "sso-name"?: string;
+                    type: string;
+                    "user-identity-method"?: string;
+                }
+
+            }
         }
     };
     asm?: {
         policy?: { [k: string]: string };
-    }
+    };
     auth?: {
         partition?: unknown;
-    }
+    };
     net?: {
         route?: unknown;
         "port-list"?: unknown;
@@ -45,7 +116,15 @@ export type BigipConfObj = {
         "self-allow"?: string;
         trunk?: string;
         vlan?: string;
-    },
+    };
+    security?: {
+        dos?: {
+            profile?: unknown;
+        };
+        ['bot-defense']?: {
+            profile?: unknown;
+        };
+    };
     sys?: {
         "global-settings"?: string;
         application?: {
@@ -178,7 +257,9 @@ export type GslbApp = {
     fqdn: string;
     partition: string;
     type: GtmRecordTypes;
+    description?: string;
     lines: string[];
+    allPossibleDestinations: string[];
     aliases?: string[];
     iRules?: string[];
     pools?: GtmPool[] | GtmPoolRef[];
@@ -222,16 +303,24 @@ export type GtmPool = {
 
 
 
-
-
-
-
 /**
  * array item of returned "apps"
  */
 export type TmosApp = {
-    name: string,
-    configs: string[],
+    name: string;
+    partition: string;
+    folder?: string;
+    destination: string;
+    lines: string[],
+    description?: string;
+    pool?: BigipConfObj["ltm"]["pool"]['key'];
+    profiles?: string[];
+    rules?: string[];
+    snat?: BigipConfObj["ltm"]["snatpool"]['key'];
+    policies?: string[];
+    persist?: string;
+    diagnostics?: any[];
+    'fallback-persistence'?: string;
     map?: AppMap
 }
 
@@ -241,7 +330,7 @@ export type TmosApp = {
  */
 export type AppMap = {
     // the virtual server clients connect to
-    vsDest?: string,
+    destination?: string,
     // default pool members (ip:port)
     pool?: string[],
     irule?: {
@@ -293,6 +382,8 @@ export type ObjStats = {
     apmProfiles?: number,
     apmPolicies?: number,
     asmPolicies?: number,
+    botProfiles?: number;
+    dosProfiles?: number;
     gtm?: GslbStats;
 }
 
@@ -324,14 +415,6 @@ export type ConfigFile = {
 }
 
 
-/**
- * defines the structure of the archive file extraction or single bigip.conf
- */
-export type ConfigFiles = {
-    fileName: string,
-    size: number,
-    content: string
-}[]
 
 export type xmlStats = {
     'mcp_module.xml'?: {

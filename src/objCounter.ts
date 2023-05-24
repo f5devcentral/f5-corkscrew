@@ -63,6 +63,14 @@ export async function countObjects (obj: BigipConfObj): Promise<ObjStats> {
     if(obj.asm?.policy) {
         stats.asmPolicies = Object.keys(obj.asm.policy).length;
     }
+    
+    if(obj.security['bot-defense']) {
+        stats.botProfiles = Object.keys(obj.security['bot-defense']).length;
+    }
+
+    if(obj.security.dos) {
+        stats.dosProfiles = Object.keys(obj.security.dos).length;
+    }
 
 
     return stats;

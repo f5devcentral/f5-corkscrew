@@ -14,9 +14,8 @@ let expld: Explosion;
 const parsedFileEvents: any[] = [];
 const parsedObjEvents: any[] = [];
 let testFile = '';
-const gslb: GslbApp[] = [];
 
-describe('GTM/DNS parsing/abstraction', async function () {
+describe('APM parsing/abstraction', async function () {
 
     before(async () => {
 
@@ -35,31 +34,26 @@ describe('GTM/DNS parsing/abstraction', async function () {
 
     })
 
-    it(`found gslb object in explosion!`, async function () {
+    it(`number of expected apm access profiles`, async function () {
 
-        if (expld.config.gslb) {
-            gslb.push(...expld.config.gslb);
-        }
+        const keys = Object.keys(device.configObject.apm!.profile!.access!);
 
-        assert.ok(gslb.length != 0)
-
+        assert.ok(keys.length === 3, 'should find three apm access profiles');
+        
     });
 
-    it(`expected number of do classes abstracted`, async function () {
+    it(`confirm 'apm profile access' structur`, async function () {
 
-        assert.ok(gslb.length === 5);
+        const profile = device.configObject.apm!.profile!.access!['/Common/sslvpn_network_access'];
 
+        assert.ok(profile['accept-languages'].length === 3);
+        assert.ok(profile['log-settings'].length === 2);
+        assert.ok(typeof profile['access-policy'] === 'string');
+        assert.ok(typeof profile.type === 'string');
+        
     });
 
 
 
-    it(`basic gtm - high level fqdn details`, async function () {
-
-        assert.ok(typeof gslb![0] == 'object');
-        assert.ok(typeof gslb![0].fqdn == 'string');
-        assert.ok(typeof gslb![0].type == 'string');
-        assert.ok(typeof gslb![1].aliases![0] == 'string');
-
-    });
 });
 

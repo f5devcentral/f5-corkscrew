@@ -21,9 +21,26 @@ import BigipConfig from './ltm'
 import yargs from 'yargs';
 import Logger from 'f5-conx-core/dist/logger';
 
-export const logger = new Logger('F5_CORKSCREW_LOG_LEVEL');
+const logger = new Logger('F5_CORKSCREW_LOG_LEVEL');
 
-async function explode(args: argsObj) {
+
+export const cli = yargs(process.argv.slice(2)).options({
+    file: { 
+        type: 'string',
+        demandOption: true,
+        describe: '.conf|ucs|kqview to explode'
+    },
+    no_sources: { type: 'boolean', default: true },
+    no_file_store: { type: 'boolean', default: true },
+    no_command_logs: { type: 'boolean', default: true },
+    no_process_logs: { type: 'boolean', default: true },
+  }).argv
+
+  explode(cli)
+
+
+
+async function explode(args: any) {
 
     logger.console = false
 
@@ -70,7 +87,7 @@ async function explode(args: argsObj) {
     if (output) {
         if(args.no_sources) delete output.config.sources
         if(args.no_file_store) delete output.fileStore
-        if(args.no_conversion_logs) delete output.logs
+        if(args.no_process_logs) delete output.logs
 
         // add successful output if there
         respObj['output'] = output;
@@ -83,45 +100,13 @@ async function explode(args: argsObj) {
     }
 
     console.log(JSON.stringify(respObj))
-
+    return respObj;
 }
 
-// yargs
-//     .command('explode <file>', 'explode bigip config', (yargs) => {
-//         yargs
-//             .positional('file', {
-//                 describe: '.conf|ucs|kqview to explode',
-//                 demandOption: true
-//             })
-//         .option('no_sources', {
-//             describe: 'supress config file sources bigip.conf, bigip_base.conf output',
-//             boolean: true
-//         })
-//         .option('no_file_store', {
-//             describe: 'supress filestore files output',
-//             boolean: true
-//         })
-//         .option('no_command_logs', {
-//             describe: 'no cli output',
-//             boolean: true
-//         })
-//         .option('no_conversion_logs', {
-//             describe: 'no extraction parsing logs',
-//             boolean: true
-//         })
-//     }, (argv: argsObj) => {
-//         explode(argv)
-//     })
-//     .demandCommand(1, 'A command is required')
-//     .wrap(120)
-//     .strict()
-//     .argv;
-
-
-export type argsObj = {
+type argsObj = {
     no_sources: boolean,
     no_file_store: boolean,
     no_command_logs: boolean,
-    no_conversion_logs: boolean,
+    no_process_logs: boolean,
     file: string
 }

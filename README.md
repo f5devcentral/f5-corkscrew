@@ -223,9 +223,7 @@ The top of the main class also describes some of the different ways I have the t
 
 Everything is in a json tree for easy manipulation
 
-Updated as of 10.26.2021
-
-> latest test output file [output_example.json](./output_example.json)
+Check out the .log and .json outputs in the ./tests/artifacts directory
 
 ---
 
@@ -400,7 +398,7 @@ Please include some sort of tests for any new features or functionality.  It's r
 
 ## Support
 
-For support, please open a GitHub issue.  Note, the code in this repository is community supported and is not supported by F5 Networks.  For a complete list of supported projects please reference [SUPPORT.md](support.md).
+For support, please open a GitHub issue.  Note, the code in this repository is community supported and is not supported by F5 Networks.
 
 ---
 

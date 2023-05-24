@@ -24,7 +24,7 @@ import BigipConfig from '../src/ltm';
 const privateFolder = path.join(__dirname, '..', '..', 'private');
 let device: BigipConfig;
 const log = [];
-const events = []
+const events: any = []
 let mainErr;
 let expld;
 // let load;
@@ -51,16 +51,13 @@ describe('corkscrew explode tests on multiple archives', async function () {
             device.on('parseObject', x => events.push(x))
             device.on('extractApp', x => events.push(x))
 
-            expld = await device.load(path.join(privateFolder, file))
-                .then(async loadTime => {
-                    return await device.parse()
-                        .then(async parseTime => {
-                            return await device.explode();
-                        })
+            expld = await device.loadParseAsync(path.join(privateFolder, file))
+                .then(async parseTime => {
+                    return await device.explode();
                 })
                 .catch(async err => {
                     mainErr = err;
-                    log.push(...await device.logs());
+                    // log.push(...await device.logs());
                     debugger;
                 })
 

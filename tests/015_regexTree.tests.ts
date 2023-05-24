@@ -29,7 +29,7 @@ describe('Testing regex tree functions', function () {
     const rx = new RegExTree(config)
     assert.ok(typeof rx === 'object');
     assert.deepStrictEqual(
-      rx.vs.pool.obj,
+      rx.ltm.virtual.pool,
       /(?<!source-address-translation {\n\s+)    pool (.+?)\n/
     );
 
@@ -40,7 +40,7 @@ describe('Testing regex tree functions', function () {
     const config = '#TMSH-VERSION: 19.0.1.0\n\ntmos config object...\n'
     const rx = new RegExTree(config)
     assert.ok(typeof rx === 'object');
-    assert.deepStrictEqual(rx.vs.pool.obj, /new-pool-regex/);
+    assert.deepStrictEqual(rx.ltm.virtual.pool, /new-pool-regex/);
 
   })
 

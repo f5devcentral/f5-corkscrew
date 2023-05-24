@@ -7,6 +7,42 @@ All notable changes to the corkscrew rpm will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [Unreleased]
+
+### Added
+
+### Changed
+
+- [RFE] include xml stats in extraction #15 (pending-researching)
+- main README.md/documentation updates
+
+### Fixed
+
+---
+
+## [1.1.1] - (05.25.2023)
+
+### Added
+
+- [RFE] dns/gslb - provide all possible destinations as array #29
+- [RFE] better apm parsing #31
+- [RFE] deeper parsing of key ltm objects #30
+  - full parsing of vs/pool/monitor/pool/node/snatpool
+  - vs with no destination
+  - pool with no members
+  - vs with missing prolicy
+- [RFE] add bot/dos profiles to abstraction/visibility #33
+- github issue templates for BUGs and RFEs
+
+### Changed
+
+- updated deps
+
+### Fixed
+
+- [BUG] gslb no pool error #32
+- [BUG] no cli parse output in my environment #27
+
 ---
 
 ## [1.0.0] - (04.20.2023)
@@ -86,7 +122,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - certificate/key extraction
 
-### Modified
+### Changed
 
 - Core parsing/extraction process is now asyncronous
   - emits config and stats files during processing
