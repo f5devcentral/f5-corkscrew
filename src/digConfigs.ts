@@ -105,10 +105,9 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         //  if not, then its 'automap' or 'none' => nothing to add here
         if (configTree.ltm.snatpool[vsConfig.snat]) {
             const c = JSON.parse(JSON.stringify(configTree.ltm.snatpool[vsConfig.snat]));
+            appObj.lines.push(`ltm snatpool ${vsConfig.snat} { ${c.line} }`)
             delete c.line;
             appObj.snat = c;
-            appObj.lines.push(`ltm snatpool ${vsConfig.snat} { ${c.line} }`)
-
         }
     }
 
