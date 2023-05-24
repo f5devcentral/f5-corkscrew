@@ -44,7 +44,7 @@ describe('ACC DO Classes parsing/abstraction', async function() {
 
         // console.log(device.configObject.gtm)
 
-        assert.ok(doc.length === 31)
+        assert.ok(doc.length === 34)
 
     });
 

@@ -39,7 +39,7 @@ describe('LTM parsing/abstraction', async function () {
 
         const keys = Object.keys(device.configObject.ltm?.virtual!);
 
-        assert.ok(keys.length === 13, 'should find 13 virtual servers');
+        assert.ok(keys.length === 15, 'should find 15 virtual servers');
 
     });
 
@@ -48,7 +48,7 @@ describe('LTM parsing/abstraction', async function () {
 
         const keys = Object.keys(device.configObject.ltm?.pool!);
 
-        assert.ok(keys.length === 11, 'should find 11 pools');
+        assert.ok(keys.length === 13, 'should find 13 pools');
 
     });
 
@@ -67,6 +67,31 @@ describe('LTM parsing/abstraction', async function () {
         assert.ok(keys.length === 2, 'should find 2 snat pools');
 
     });
+
+    it(`vs no destination`, async function () {
+
+        // ltm virtual /foo/wiffle_redirect_vs 
+        const idx = expld.config.apps?.findIndex(i => !i.destination)
+        let app;
+        if(idx) {
+            app = expld.config?.apps?.[idx];
+        }
+        assert.ok(!app.destination, 'app should not have a destination');
+        assert.ok(app.description, 'app should have a description');
+
+    });
+
+    it(`missing local traffic policies`, async function () {
+
+        delete device.configObject.ltm?.policy;
+
+        const localExpld = await device.explode();
+
+        assert.ok(localExpld, 'should not error while abstracting apps with missing configs');
+
+    });
+
+
 
 
 });

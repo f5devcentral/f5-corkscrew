@@ -14,6 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - [RFE] include xml stats in extraction #15 (pending-researching)
+- main README.md/documentation updates
 
 ### Fixed
 
@@ -26,6 +27,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - [RFE] dns/gslb - provide all possible destinations as array #29
 - [RFE] better apm parsing #31
 - [RFE] deeper parsing of key ltm objects #30
+  - full parsing of vs/pool/monitor/pool/node/snatpool
+  - vs with no destination
+  - pool with no members
+  - vs with missing prolicy
 - [RFE] add bot/dos profiles to abstraction/visibility #33
 - github issue templates for BUGs and RFEs
 

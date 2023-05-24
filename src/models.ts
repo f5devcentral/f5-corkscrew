@@ -10,7 +10,8 @@ export type BigipConfObj = {
             [key: string]: {
                 name: string;
                 partition: string;
-                destination: string;
+                folder?: string;
+                destination?: string;
                 line: string;
                 description?: string;
                 pool?: string;
@@ -43,7 +44,15 @@ export type BigipConfObj = {
         policy?: { [key: string]: string };
         rule?: { [key: string]: string };
         persistence?: { [key: string]: string };
-        snatpool?: { [key: string]: string };
+        snatpool?: {
+            [key: string]: {
+                line: string;
+                name: string;
+                partition: string;
+                folder?: string;
+                members?: string[];
+            }
+        };
         "data-group"?: {
             internal?: { [key: string]: string }
         },
@@ -300,15 +309,17 @@ export type GtmPool = {
 export type TmosApp = {
     name: string;
     partition: string;
+    folder?: string;
     destination: string;
     lines: string[],
     description?: string;
     pool?: BigipConfObj["ltm"]["pool"]['key'];
     profiles?: string[];
     rules?: string[];
-    snat?: string;
+    snat?: BigipConfObj["ltm"]["snatpool"]['key'];
     policies?: string[];
     persist?: string;
+    diagnostics?: any[];
     'fallback-persistence'?: string;
     map?: AppMap
 }

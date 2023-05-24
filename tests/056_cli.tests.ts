@@ -57,7 +57,7 @@ describe('cli (yargs) tests', async function () {
 
     });
 
-    it(`run cli with defaults`, async function () {
+    it(`run cli with all details returned`, async function () {
 
         const cmd = [
             'node', 'dist/cli.js',
@@ -79,7 +79,7 @@ describe('cli (yargs) tests', async function () {
         assert.ok(typeof output.output === 'object')
         
         assert.ok(Array.isArray(output.command_logs))
-        assert.ok(typeof output.output.command_logs[0] === 'string')
+        assert.ok(typeof output.command_logs[0] === 'string')
         
         assert.ok(Array.isArray(output.output.logs))
         assert.ok(typeof output.output.logs[0] === 'string')

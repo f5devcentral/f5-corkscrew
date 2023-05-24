@@ -66,7 +66,7 @@ export class RegExTree {
     ltm = {
         virtual: {
             name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
-            destination: /destination ([\w.\-\/]+:\d+)/,
+            destination: /destination [\w.\-\/]+\/([\d.]+:\d+)/,
             description: /\n +description "(?<desc>[\w' .-/]+)"\n/,
             pool: /(?<!source-address-translation {\n\s+)    pool (.+?)\n/,
             profiles: /profiles {([\s\S]+?)\n    }\n/,
@@ -75,6 +75,7 @@ export class RegExTree {
             policies: /policies {([\s\S]+?)\n    }\n/,
             persist: /persist {([\s\S]+?)\n    }\n/,
             fbPersist: /fallback-persistence (\/\w+.+?)\n/,
+            vlans: /vlans {([\s\S]+?)\n    }\n/,
         },
         pool: {
             name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,

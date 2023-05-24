@@ -210,7 +210,8 @@ export async function parseDeep(obj: any, rx: RegExTree) {
         const nameRx = wipName.match(rx.gtm.wideip.name);
 
         sObj.fqdn = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
+
         sObj.type = dnsType;    // add dns type to object body
 
         const descriptionRx = body.match(rx.gtm.wideip.description)
@@ -343,7 +344,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.apm.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         const alRx = body.match(rx.apm['accept-languages']);
         const apRx = body.match(rx.apm['access-policy']);
@@ -400,11 +401,13 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.ltm.virtual.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         const destination = body.match(rx.ltm.virtual.destination);
-        body = body.replace(destination[0], '');
-        sObj.destination = destination[1];
+        if(destination) {
+            body = body.replace(destination[0], '');
+            sObj.destination = destination[1];
+        }
 
         const descRx = body.match(rx.ltm.virtual.description);
         const poolRx = body.match(rx.ltm.virtual.pool);
@@ -414,10 +417,11 @@ export async function parseDeep(obj: any, rx: RegExTree) {
         const policiesRx = body.match(rx.ltm.virtual.policies);
         const persistenceRx = body.match(rx.ltm.virtual.persist);
         const fallBackPersistRx = body.match(rx.ltm.virtual.fbPersist);
+        const vlansRx = body.match(rx.ltm.virtual.vlans);
 
         if (descRx) {
             body = body.replace(descRx[0], '');
-            sObj.pool = descRx[1];
+            sObj.description = descRx[1];
         }
 
         if (poolRx) {
@@ -461,6 +465,12 @@ export async function parseDeep(obj: any, rx: RegExTree) {
             body = body.replace(fallBackPersistRx[0], '');
             sObj['fallback-persistence'] = fallBackPersistRx[1];
         }
+        
+        if (vlansRx) {
+            body = body.replace(vlansRx[0], '');
+            sObj.vlans = vlansRx[1].trim().split(/\n +/);
+
+        }
 
         const rest = keyValuePairs(body)
         deepmergeInto(sObj, rest);
@@ -477,7 +487,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.ltm.virtual.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         // const membersGroupRx = body.match(rx.ltm.pool.membersGroup);
 
@@ -490,7 +500,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
                 balancedRxAll(e.body).matches.forEach(f => {
 
-                    const n = f.prefaceKey.match(rx.ltm.pool.name)
+                    const n = f.prefaceKey.match(rx.ltm?.pool?.name)
 
                     const mbrObj = {
                         // name: n.groups.name,
@@ -561,7 +571,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.ltm.virtual.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         const m = balancedRx1('fqdn {', body)
 
@@ -589,11 +599,14 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         balancedRxAll(body).matches.forEach(e => {
             body = e.rest;
-            sObj[e.prefaceKey] = e.body.trim().split(/\n +/);
+            // sObj[e.prefaceKey] = e.body.trim().split(/\n +/);
+            const x = e.body.trim().split('\n')
+            sObj[e.prefaceKey] = x.map(x => x.split('/')[2]);
+            sObj;
         });
 
         sObj;
@@ -611,7 +624,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         const remaining = keyValuePairs(body)
         deepmergeInto(sObj, remaining);
@@ -630,7 +643,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         // going three layers deep since this is only for visibility
         balancedRxAll(body).matches.forEach(e => {
@@ -674,7 +687,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.name);
         sObj.name = nameRx.groups.name;
-        sObj.partition = nameRx.groups.partition;
+        partitionFolder(sObj, nameRx.groups.partition);
 
         // going three layers deep since this is only for visibility
         balancedRxAll(body).matches.forEach(e => {
@@ -713,8 +726,19 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 }
 
 
+/**
+ * takes partition/folder abstracted from object name and adds them to the parsed objects
+ * 
+ */
+function partitionFolder(obj, x: string) {
 
 
+    const partitionFolder = x.split('/')
+    obj.partition = partitionFolder[1];
+    if(partitionFolder[2]) {
+        obj.folder = partitionFolder[2];
+    }
+}
 
 
 /**
@@ -808,7 +832,7 @@ export function keyValuePairs(body: string) {
                 body = body.replace(m[0], '')
                 obj[m.groups.key] = m.groups.value
 
-            } if (n) {
+            } else if (n) {
 
                 body = body.replace(n[0], '')
                 obj[n.groups.key] = n.groups.value
@@ -820,6 +844,7 @@ export function keyValuePairs(body: string) {
                     obj[a[0]] = a[1];
                 }
             }
+            line;
         })
 
     return obj;

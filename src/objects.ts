@@ -67,6 +67,10 @@ export function pathValueFromKey(obj: unknown, key: string): RetObj {
         return;
     }
 
+    // if(obj === undefined) {
+    //     return;
+    // }
+
     /**
      * iterate through json tree looking for key match
      */

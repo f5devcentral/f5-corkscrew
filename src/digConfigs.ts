@@ -41,17 +41,22 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         // just reassign the parsed pool details into the vs
         const body = configTree.ltm.pool[vsConfig.pool];
         appObj.lines.push(`ltm pool ${appObj.pool} {${body.line}}`);
-        appObj.pool = configTree.ltm.pool[vsConfig.pool];
+        // raw copy the pool config
+        appObj.pool = JSON.parse(JSON.stringify(configTree.ltm.pool[vsConfig.pool]));
+        delete appObj.pool.line;
 
-        Object.keys(appObj.pool.members).forEach( n => {
-            // loop through all the pool members and get the node details
-            const name = n.split(':')[0];
-            const body = configTree.ltm.node[name]
-            if (body) {
-                appObj.lines.push(`ltm node ${name} {${body.line}}`);
-            }
+        if(appObj.pool?.members) {
 
-        })
+            Object.keys(appObj.pool?.members).forEach( n => {
+                // loop through all the pool members and get the node details
+                const name = n.split(':')[0];
+                const body = configTree.ltm.node[name]
+                if (body) {
+                    appObj.lines.push(`ltm node ${name} {${body.line}}`);
+                }
+    
+            })
+        }
     }
 
     if (appObj.profiles) {
@@ -61,19 +66,19 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
 
         appObj.profiles.forEach(name => {
             // check the ltm profiles
-            const x = pathValueFromKey(configTree.ltm.profile, name);
+            const x = pathValueFromKey(configTree.ltm?.profile, name);
             if (x) {
                 appObj.lines.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
             }
 
             // check apm profiles
-            const y = pathValueFromKey(configTree.apm.profile.access, name);
+            const y = pathValueFromKey(configTree?.apm?.profile?.access, name);
             if (y) {
                 appObj.lines.push(`apm profile access ${y.path} ${y.key} {${y.value}}`);
             }
 
             // check asm profile
-            const z = pathValueFromKey(configTree.asm?.policy, name);
+            const z = pathValueFromKey(configTree?.asm?.policy, name);
             if (z) {
                 appObj.lines.push(`asm policy ${z.path} ${z.key} {${z.value}}`);
             }
@@ -86,7 +91,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         // todo: dig deeper like digRuleConfigs() in digConfigs.ts.331
         appObj.rules.forEach(name => {
 
-            const x = pathValueFromKey(configTree.ltm.rule, name)
+            const x = pathValueFromKey(configTree.ltm?.rule, name)
             if (x) {
                 appObj.lines.push(`ltm rule ${x.key} {${x.value}}`);
             }
@@ -98,8 +103,11 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
 
         // if this snat string is the name of a snat pool, then replace with snatpool details
         //  if not, then its 'automap' or 'none' => nothing to add here
-        if (configTree.ltm.snatpool[appObj.snat]) {
-            appObj.snat = configTree.ltm.snatpool[appObj.snat];
+        if (configTree.ltm.snatpool[vsConfig.snat]) {
+            const c = JSON.parse(JSON.stringify(configTree.ltm.snatpool[vsConfig.snat]));
+            delete c.line;
+            appObj.snat = c;
+            appObj.lines.push(`ltm snatpool ${vsConfig.snat} { ${c.line} }`)
 
         }
     }
@@ -108,7 +116,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         // dig profiles details
         appObj.policies.forEach(name => {
 
-            const x = pathValueFromKey(configTree.ltm.policy, name)
+            const x = pathValueFromKey(configTree.ltm?.policy, name)
             if (x) {
                 appObj.lines.push(`ltm policy ${x.key} {${x.value}}`);
 
@@ -133,7 +141,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
 
     if (appObj.persist) {
         // dig profiles details
-        const x = pathValueFromKey(configTree.ltm.persistence, appObj.persist)
+        const x = pathValueFromKey(configTree.ltm?.persistence, appObj.persist)
         if (x) {
             appObj.lines.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
         }
@@ -141,7 +149,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
 
     if (appObj['fallback-persistence']) {
         // dig profiles details
-        const x = pathValueFromKey(configTree.ltm.persistence, appObj['fallback-persistence'])
+        const x = pathValueFromKey(configTree.ltm?.persistence, appObj['fallback-persistence'])
         if (x) {
             appObj.lines.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
         }
