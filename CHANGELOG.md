@@ -20,7 +20,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [1.1.0] - (05.15.2023)
+## [1.1.1] - (05.25.2023)
 
 ### Added
 

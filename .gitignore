@@ -1,6 +1,5 @@
 # Node modules
 node_modules/
-# package-lock.json
 # Package build directory
 dist/
 # Coverage directory
@@ -24,6 +23,5 @@ settings.json
 *.xml.json
 # temp directory for testing files
 tmp/
-# package-lock.json
 # exclude package files
 *.tgz
