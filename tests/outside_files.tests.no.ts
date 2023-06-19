@@ -34,6 +34,7 @@ let expld;
 let testFiles: string[] = fs.readdirSync(privateFolder)
     .filter(el => /\.(ucs|qkview)/.test(path.parse(el).ext))
 // testFiles = testFiles.filter(el => /1-/.test(el))
+// testFiles = testFiles.filter(x => x === 'udf_bigip1.ucs')
 
 describe('corkscrew explode tests on multiple archives', async function () {
 

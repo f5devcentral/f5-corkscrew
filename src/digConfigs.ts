@@ -6,6 +6,7 @@ import { BigipConfObj, TmosApp } from './models'
 import { RegExTree } from './regex';
 import { pathValueFromKey } from './objects';
 import { poolsInPolicy } from './pools';
+import { keyValuePairs } from './deepParse';
 
 
 /**
@@ -45,18 +46,41 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         appObj.pool = JSON.parse(JSON.stringify(configTree.ltm?.pool?.[vsConfig.pool]));
         delete appObj.pool.line;
 
-        if(appObj.pool?.members) {
+        if (appObj.pool?.members) {
 
-            Object.keys(appObj.pool?.members).forEach( n => {
+            Object.keys(appObj.pool?.members).forEach(n => {
                 // loop through all the pool members and get the node details
                 const name = n.split(':')[0];
                 const body = configTree.ltm.node[name]
                 if (body) {
                     appObj.lines.push(`ltm node ${name} {${body.line}}`);
                 }
-    
+
             })
         }
+
+        if (appObj?.pool?.monitor) {
+
+            appObj.pool.monitor.map(x => {
+
+                const p = pathValueFromKey(configTree.ltm?.monitor, x)
+                if (p) {
+
+                    // clone the app config
+                    const tmpObj = JSON.parse(JSON.stringify(p.value));
+                    delete tmpObj.line;
+
+                    // replace the monitor name with the full monitor config object in the app
+                    const idx = appObj.pool.monitor.indexOf(x)
+                    appObj.pool.monitor[idx] = tmpObj;
+
+                    appObj.lines.push(`ltm monitor ${p.path} ${p.key} { ${p.value.line} }`);
+
+                }
+            })
+        }
+
+        appObj;
     }
 
     if (appObj.profiles) {
@@ -68,19 +92,19 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
             // check the ltm profiles
             const x = pathValueFromKey(configTree.ltm?.profile, name);
             if (x) {
-                appObj.lines.push(`ltm profile ${x.path} ${x.key} {${x.value}}`);
+                appObj.lines.push(`ltm profile ${x.path} ${x.key} {${x.value.line}}`);
             }
 
             // check apm profiles
             const y = pathValueFromKey(configTree?.apm?.profile?.access, name);
             if (y) {
-                appObj.lines.push(`apm profile access ${y.path} ${y.key} {${y.value}}`);
+                appObj.lines.push(`apm profile access ${y.path} ${y.key} {${y.value.line}}`);
             }
 
             // check asm profile
             const z = pathValueFromKey(configTree?.asm?.policy, name);
             if (z) {
-                appObj.lines.push(`asm policy ${z.path} ${z.key} {${z.value}}`);
+                appObj.lines.push(`asm policy ${z.path} ${z.key} {${z.value.line}}`);
             }
         })
     }
@@ -117,10 +141,10 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
 
             const x = pathValueFromKey(configTree.ltm?.policy, name)
             if (x) {
-                appObj.lines.push(`ltm policy ${x.key} {${x.value}}`);
+                appObj.lines.push(`ltm policy ${x.key} {${x.value.line}}`);
 
                 // got through each policy and dig references (like pools)
-                const pools = poolsInPolicy(x.value)
+                const pools = poolsInPolicy(x.value.line)
 
                 if (pools) {
                     pools.forEach(pool => {
@@ -142,7 +166,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         // dig profiles details
         const x = pathValueFromKey(configTree.ltm?.persistence, appObj.persist)
         if (x) {
-            appObj.lines.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
+            appObj.lines.push(`ltm persistence ${x.path} ${x.key} {${x.value.line}}`);
         }
     }
 
@@ -150,7 +174,7 @@ export async function digVsConfig(vsName: string, vsConfig: BigipConfObj["ltm"][
         // dig profiles details
         const x = pathValueFromKey(configTree.ltm?.persistence, appObj['fallback-persistence'])
         if (x) {
-            appObj.lines.push(`ltm persistence ${x.path} ${x.key} {${x.value}}`);
+            appObj.lines.push(`ltm persistence ${x.path} ${x.key} {${x.value.line}}`);
         }
     }
 
