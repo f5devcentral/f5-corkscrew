@@ -86,7 +86,7 @@ export class RegExTree {
             memberDef: /(\/[\w\-\/.]+:\d+) {\s+address(.+?)\s+}/g,
             memberFqdnDef: /(\/[\w\-\/.]+:\d+) {\s+fqdn {\s+([\s\S]+?)\s+}\s+}/g,
             nodesFromMembers: /(\/\w+\/.+?)(?=:)/g,
-            monitors: /monitor ([\/\w.]+?)\n/
+            monitors: /monitor (?:min \d of )?([{}\/\w. ]+)/
         },
         profiles: {
             asmProf: /ASM_([\w-.]+)/,
@@ -213,6 +213,11 @@ export class RegExTree {
      */
     getTMOSversion(config: string): string {
         const version = config.match(this.tmosVersionReg);
+
+        // learning that making sure the tmos version is in every file can be problematic
+        //      gonna lean into the idea that if we detect a version at some point we will use it,
+        //       else default to the current regex tree
+        
         if (version) {
             //found tmos version
             // if(version[1] === this.tmosVersion) {
@@ -225,8 +230,8 @@ export class RegExTree {
         } else {
             const msg = 'tmos version not detected -> meaning this probably is not a bigip.conf'
             logger.error(msg)
-            Promise.reject(msg);
-            throw new Error(msg);
+            // Promise.reject(msg);
+            // throw new Error(msg);
         }
         
     }

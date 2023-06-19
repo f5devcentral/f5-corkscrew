@@ -547,10 +547,24 @@ export async function parseDeep(obj: any, rx: RegExTree) {
         const monitorRx = body.match(rx.ltm.pool.monitors)
 
         if (monitorRx) {
-            // monitors parse situation 1.  "requirement=>ALL", list of monitors
-            // monitor /Common/app1_tcp_half_open_quick_monitor and /Common/http_head_f5 and /Common/http2_head_f5 and /Common/http and /Common/tcp_half_open
+
             body = body.replace(monitorRx[0], '');
-            sObj.monitor = monitorRx[1].split(/ and /);
+            
+            if (monitorRx[1].startsWith('{')) {
+                
+                // monitor parse situation 1.  "min x of {"
+                // monitor min 2 of { /Common/gateway_icmp /Common/http /Common/http2 }
+                //  so we will look for "{" and parse accordingly
+                const monitors = monitorRx[1].replace(/({ | })/gm, '').split(' ');
+                sObj.monitor = monitors;
+
+            } else {
+                
+                // monitors parse situation 2.  "requirement=>ALL", list of monitors
+                // monitor /Common/app1_tcp_half_open_quick_monitor and /Common/http_head_f5 and /Common/http2_head_f5 and /Common/http and /Common/tcp_half_open
+                sObj.monitor = monitorRx[1].split(/ and /);
+            }
+
         }
 
         const remaining = keyValuePairs(body)
@@ -588,7 +602,35 @@ export async function parseDeep(obj: any, rx: RegExTree) {
         sObj;
 
 
+    } else if (obj.ltm?.policy) {
 
+        const key = Object.keys(obj.ltm.policy)[0]; // only one policy at this point
+        let body = obj.ltm.policy[key];
+        obj.ltm.policy[key] = { line: body };   // re-assign the original config string
+        const sObj = obj.ltm.policy[key];
+
+
+    } else if (obj.ltm?.persistence) {
+
+        const type = Object.keys(obj.ltm.persistence)[0]; // only one policy at this point
+        const key = Object.keys(obj.ltm.persistence[type])[0];
+        let body = obj.ltm.persistence[type][key];
+        obj.ltm.persistence[type][key] = { line: body };   // re-assign the original config string
+        const sObj = obj.ltm.persistence[type][key];
+
+        const remaining = keyValuePairs(body)
+        deepmergeInto(sObj, remaining);
+        sObj;
+
+    } else if (obj.ltm?.profile) {
+
+        const type = Object.keys(obj.ltm.profile)[0]; // only one policy at this point
+        const key = Object.keys(obj.ltm.profile[type])[0];
+        let body = obj.ltm.profile[type][key];
+        obj.ltm.profile[type][key] = { line: body };   // re-assign the original config string
+        const sObj = obj.ltm.profile[type][key];
+
+        // todo: deep parse the rest of this object
 
     } else if (obj.ltm?.snatpool) {
 
@@ -624,6 +666,7 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         const nameRx = key.match(rx.name);
         sObj.name = nameRx.groups.name;
+        sObj.type = monType;
         partitionFolder(sObj, nameRx.groups.partition);
 
         const remaining = keyValuePairs(body)

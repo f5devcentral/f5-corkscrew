@@ -29,6 +29,7 @@ export type BigipConfObj = {
                 name: string;
                 partition: string;
                 members: { [key: string]: unknown };
+                monitor: string[];
             };
         };
         node?: {
@@ -39,11 +40,30 @@ export type BigipConfObj = {
                 address: string;
             };
         };
-        monitor?: { [key: string]: string };
-        profile?: { [key: string]: string };
-        policy?: { [key: string]: string };
+        monitor?: {
+            [key: string]: {
+                name: string;
+                partition: string;
+                line: string;
+                folder?: string;
+            }
+        };
+        profile?: {
+            [key: string]: {
+                line: string;
+            }
+        };
+        policy?: {
+            [key: string]: {
+                line: string;
+            }
+        };
         rule?: { [key: string]: string };
-        persistence?: { [key: string]: string };
+        persistence?: {
+            [key: string]: {
+                line: string;
+            }
+        };
         snatpool?: {
             [key: string]: {
                 line: string;

@@ -100,12 +100,12 @@ describe('bigip.conf tests', async function () {
             "/Common/app1_t80_vs",
             "/Common/app1_t443_vs",
             "/Common/app2_t80_vs",
-            "/Common/bigiq.benlab.io_t443_vs",
             "/Common/app2_t443_vs",
             "/Common/persistTest_80_vs",
             "/Common/app3_t8443_vs",
             "/Common/app4_t80_vs",
             "/Common/forwarder_net_0.0.0.0",
+            "/Common/bigiq.benlab.io_t443_vs",
           ]
 
         assert.deepStrictEqual(apps, expected, 'Should get list of virtual servers / apps');

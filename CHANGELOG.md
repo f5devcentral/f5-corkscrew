@@ -13,10 +13,20 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
-- [RFE] include xml stats in extraction #15 (pending-researching)
+- [RFE] include xml stats in extraction #15 (researching)
 - main README.md/documentation updates
 
 ### Fixed
+
+
+---
+
+## [1.2.0] - (06.19.2023)
+
+### Fixed
+
+- [BUG] custom http monitor missing from abstration #40
+- [BUG] udf lab as3/acc/fast ucs bug on exploer #41s
 
 ---
 

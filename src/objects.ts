@@ -6,7 +6,7 @@ import { BigipConfObj } from "./models";
 export type RetObj = {
     path?: string,
     key?: string,
-    value?: string
+    value?: { line: string; };
 }
 
 

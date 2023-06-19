@@ -23,6 +23,7 @@ import { DigGslb } from './digGslb';
 import { parseDeep } from './deepParse';
 // import { XMLParser } from 'fast-xml-parser';
 import { deepmergeInto } from 'deepmerge-ts';
+import { balancedRx1, balancedRxAll } from './tmos2json';
 
 
 
@@ -276,6 +277,33 @@ export default class BigipConfig extends EventEmitter {
     }
 
     async parentTmosObjects(conf: ConfigFile): Promise<string[]> {
+
+        // // *** todo: may need to copy the config body here so we don't modify the object that will get added to the sources
+
+        // const preRx = /(apm|ltm|gtm|asm|security|net|pem|sys|wom|ilx|auth|analytics|wom) [\w\-\/:. ]+ {/
+
+        // let pRx: RegExpMatchArray | null;
+        // const ret: any[] = []
+        // let rest: string;
+        
+        // do {
+    
+        //     // run the rx to find the beginning of a backeted object
+        //     pRx = conf.content.match(preRx);
+    
+        //     if(pRx) {
+        //         // catpure the bracketed object
+        //         const r = balancedRx1(pRx[0], conf.content);
+    
+        //         if(r) {
+        //             // push key/value from bracketed object to the return array
+        //             ret.push({key: r.prefaceKey, body: r.body});
+        //             // update the original string so we can dig out the next object
+        //             conf.content = r.rest;
+        //         }
+        //     }
+        // }
+        // while (pRx);
 
         // this is needed to mark the end of the file, and get the regex to complete
         //      the parentObjects rx relies on the start of the next known parent object (ltm|apm|gtm|asm|sys|...)

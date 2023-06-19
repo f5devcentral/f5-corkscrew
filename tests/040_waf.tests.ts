@@ -72,7 +72,7 @@ describe('WAF/ASM parsing/abstraction', async function () {
 
         for await (const [k, v] of Object.entries(ltps)) {
 
-            const body = v.replace(/\n +/g, ' ')
+            const body = v.line.replace(/\n +/g, ' ')
 
             const iAsm = body.match(device.rx!.ltm.ltPolicies.asmRef)
             if (iAsm) {

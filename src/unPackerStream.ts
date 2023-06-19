@@ -173,16 +173,28 @@ export class UnPacker extends EventEmitter {
  */
 export function fileFilter(name: string): boolean {
 
+    /**
+     * 5.24.2023
+     * 
+     * had a problem where there were "backup" config files causing conflicts with the file filter process
+     * 
+     * todo: tighten the file filter based on this article
+     * K26582310: Overview of BIG-IP configuration files
+     * https://my.f5.com/manage/s/article/K26582310
+     * 
+     */
+
+
 
     /**
      * breakind down this bigger regex for explaination
      * added to list of regex's below
      */
-    const allConfs = multilineRegExp([
+    const allPartitionsConfs = multilineRegExp([
         // base /config directory
         /^config/,
-        // optional /partitions directory including /partition name directory
-        /(?:\/partitions\/[\w-]+?)?/,
+        // /partitions directory including /partition name directory
+        /\/partitions\/[\w-]+?/,
         // any bigip*.conf file
         /\/bigip(?:[\w-]*).conf$/
     ], undefined)
@@ -222,7 +234,13 @@ export function fileFilter(name: string): boolean {
      * only one has to pass to return true
      */
     const fileRegexs: RegExp[] = [
-        allConfs,                           // all .conf files (including partitions)
+        allPartitionsConfs,                           // all .conf files (including partitions)
+        /^config\/bigip.conf$/,             // main/base config file
+        /^config\/bigip_gtm.conf$/,             // base gtm config file
+        /^config\/bigip_base.conf$/,        // system/network config file
+        /^config\/bigip_script.conf$/,        // scripts/iApps config file
+        /^config\/bigip_user.conf$/,        // user config file
+        /^config\/user_alert.conf$/,        // user config file
         /^config\/bigip.license$/,          // license file
         /^config\/profile_base.conf$/,      // default profiles
         /^config\/low_profile_base.conf$/,  // default system profiles
