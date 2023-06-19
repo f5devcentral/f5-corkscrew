@@ -26,7 +26,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 
 - [BUG] custom http monitor missing from abstration #40
-- [BUG] udf lab as3/acc/fast ucs bug on exploer #41s
+- [BUG] udf lab as3/acc/fast ucs bug on exploer #41
 
 ---
 
