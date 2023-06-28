@@ -11,6 +11,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
+- [RFE] dig ssl profiles and cipher groups #43
+
 ### Changed
 
 - [RFE] include xml stats in extraction #15 (researching)
@@ -18,6 +20,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+
+---
+
+## [1.3.0] - (06.24.2023)
+
+### Added
+
+- generate and add qkview to releases for consumption in vscode-f5 extension
 
 ---
 
