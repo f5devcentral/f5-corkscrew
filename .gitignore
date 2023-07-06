@@ -16,7 +16,6 @@ tmp_*
 *AppDataRoamingnpm
 # private folder for tests
 /private/
-settings.json
 *.ucs
 *.qkview
 # exclude the xml to json stats output
