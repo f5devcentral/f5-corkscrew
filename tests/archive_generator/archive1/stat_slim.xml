@@ -45845,25 +45845,5 @@
     <b_over>0</b_over>
    </object>
   </fslogd.timing_stat>
-  <logmysqld.config_stat>
-   <object name="row0">
-    <watch.dir>/var/fslog/pending/</watch.dir>
-    <watch.ext>.log</watch.ext>
-    <watch.err_ext>.err</watch.err_ext>
-    <db.name>logdb</db.name>
-    <db.num_tables>4</db.num_tables>
-    <db.rows_per_table>250000</db.rows_per_table>
-    <db.query_interval>1</db.query_interval>
-    <sql.load_file>LOAD DATA CONCURRENT INFILE '%s' INTO TABLE %s;</sql.load_file>
-    <sql.db_create>CREATE DATABASE IF NOT EXISTS %s;</sql.db_create>
-    <sql.table_create>CREATE TABLE IF NOT EXISTS %s (
-    time_stamp INT unsigned NOT NULL,
-    log_pid INT unsigned NOT NULL,
-    log_tid INT unsigned NOT NULL,
-    log_seq BIGINT unsigned NOT NULL,
-    log_id INT unsigned NOT NULL,
-    log_sid VARCHAR(64) NOT NULL,
-    log_partition VARCHAR(64) NOT NULL,
-    log_msg VARCHAR(4096) NOT NULL,
-    INDEX (time_stamp, log_id)
+</blade>
 </Qkproc>
