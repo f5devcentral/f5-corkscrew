@@ -23,11 +23,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
-## [1.3.0] - (06.24.2023)
+## [1.3.0] - (07.11.2023)
 
 ### Added
 
-- generate and add qkview to releases for consumption in vscode-f5 extension
+- generate and add qkview to releases for consumption in vscode-f5 extension (need to confirm)
+- initial xml stats rank system
 
 ---
 
