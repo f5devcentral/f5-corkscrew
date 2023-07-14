@@ -158,7 +158,7 @@ describe('XML stats parsing/abstraction', async function () {
         const newXml = mXml.join('\n');
         console.log(newXml.split('\n').length);
 
-        fs.writeFileSync('xmlStats_new1.xml', newXml)
+        // fs.writeFileSync('xmlStats_new1.xml', newXml)
         const xJson = xmlParser.parse(newXml);
 
         if (xJson) {
@@ -181,113 +181,113 @@ describe('XML stats parsing/abstraction', async function () {
 
     });
 
-    it(`diggn stat_module.xml`, async function () {
+    // it(`diggn stat_module.xml`, async function () {
 
 
-        /**
-         * original parsing xml to json dev
-         */
+    //     /**
+    //      * original parsing xml to json dev
+    //      */
 
-        const options = {
-            ignoreAttributes: false,
-            attributeNamePrefix: "",
-            updateTag: (tagName: string, jPath: string, attrs) => {
+    //     const options = {
+    //         ignoreAttributes: false,
+    //         attributeNamePrefix: "",
+    //         updateTag: (tagName: string, jPath: string, attrs) => {
 
-                // jPath === "Qkproc.cluster.virtual_server_stat"
+    //             // jPath === "Qkproc.cluster.virtual_server_stat"
 
-                if (tagName === 'object' && attrs['name']) {
-                    return tagName = attrs['name'];
-                }
+    //             if (tagName === 'object' && attrs['name']) {
+    //                 return tagName = attrs['name'];
+    //             }
 
-                // if(jPath.includes('virtual_server_stat') || jPath.includes('virtual_server_cpu_stat')) {
+    //             // if(jPath.includes('virtual_server_stat') || jPath.includes('virtual_server_cpu_stat')) {
 
-                //     if(tagName === 'object' && attrs['name']) {
-                //         return tagName = attrs['name'];
-                //     } else {
-                //         return;
-                //     }
-                // } else {
-                //     return false;
-                // }
+    //             //     if(tagName === 'object' && attrs['name']) {
+    //             //         return tagName = attrs['name'];
+    //             //     } else {
+    //             //         return;
+    //             //     }
+    //             // } else {
+    //             //     return false;
+    //             // }
 
-                // if(tagName === 'virtual_server_stat') {
-                //     tagName;
-                // }
-            },
-        };
-        const xmlParser = new XMLParser(options);
-        const xJson = xmlParser.parse(statXmlData)
-        if (xJson) {
+    //             // if(tagName === 'virtual_server_stat') {
+    //             //     tagName;
+    //             // }
+    //         },
+    //     };
+    //     const xmlParser = new XMLParser(options);
+    //     const xJson = xmlParser.parse(statXmlData)
+    //     if (xJson) {
 
-            // capture all the cluster data
-            for await (const [k, v] of Object.entries(xJson?.Qkproc?.cluster)) {
-                // only retrieve the non-empty values
-                if (v !== '') {
-                    stats[k] = v;
-                }
-            }
-            for await (const [k, v] of Object.entries(xJson?.Qkproc?.blade)) {
-                if (v !== '') {
-                    stats[k] = v;
-                }
-            }
-        }
+    //         // capture all the cluster data
+    //         for await (const [k, v] of Object.entries(xJson?.Qkproc?.cluster)) {
+    //             // only retrieve the non-empty values
+    //             if (v !== '') {
+    //                 stats[k] = v;
+    //             }
+    //         }
+    //         for await (const [k, v] of Object.entries(xJson?.Qkproc?.blade)) {
+    //             if (v !== '') {
+    //                 stats[k] = v;
+    //             }
+    //         }
+    //     }
 
-        fs.writeFileSync('sbux_xmlStats_1.json', JSON.stringify(stats, undefined, 4))
-        stats;
+    //     fs.writeFileSync('s_xmlStats_1.json', JSON.stringify(stats, undefined, 4))
+    //     stats;
 
-    });
-
-
-    it(`slim stats`, async function () {
-
-        // sliming of stats to test gridjs output
-
-        const vsStats: any[] = [];
-        const vsCpuStats: any[] = [];
-
-        Object.values(stats.virtual_server_stat).map(v => vsStats.push(v));
+    // });
 
 
-        Object.values(stats.virtual_server_cpu_stat).map(v => vsCpuStats.push(v));
+    // it(`slim stats`, async function () {
+
+    //     // sliming of stats to test gridjs output
+
+    //     const vsStats: any[] = [];
+    //     const vsCpuStats: any[] = [];
+
+    //     Object.values(stats.virtual_server_stat).map(v => vsStats.push(v));
 
 
-        // const grid = new Grid({
-        //     columns: [
-        //         {id: 'name', name: 'Name'},
-        //         {id: 'avg_5sec', name: 'Average - 5 sec'},
-        //         {id: 'avg_1min', name: 'Average - 1 min'},
-        //         {id: 'avg_5min', name: 'Average - 5 min'}
-        //     ],
-        //     data: vsCpuStats
-        // });
+    //     Object.values(stats.virtual_server_cpu_stat).map(v => vsCpuStats.push(v));
 
 
-        vsCpuStats;
-    });
+    //     // const grid = new Grid({
+    //     //     columns: [
+    //     //         {id: 'name', name: 'Name'},
+    //     //         {id: 'avg_5sec', name: 'Average - 5 sec'},
+    //     //         {id: 'avg_1min', name: 'Average - 1 min'},
+    //     //         {id: 'avg_5min', name: 'Average - 5 min'}
+    //     //     ],
+    //     //     data: vsCpuStats
+    //     // });
+
+
+    //     vsCpuStats;
+    // });
 
 
 
 
-    it(`jsdom option`, async function () {
+    // it(`jsdom option`, async function () {
 
-        // this option was an attempt to use jsdom to parse the xml data
-        // the hope was to filter out the xml we wanted, then convert to json
-        // this method proved to be complicated and slow
-        //  since DOM parsing creates a ton of overhead
+    //     // this option was an attempt to use jsdom to parse the xml data
+    //     // the hope was to filter out the xml we wanted, then convert to json
+    //     // this method proved to be complicated and slow
+    //     //  since DOM parsing creates a ton of overhead
 
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const jsdom = require("jsdom");
-        const dom = new jsdom.JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-        const x = dom.window.document.querySelector("p").textContent; // 'Hello world'
-        x;
+    //     // eslint-disable-next-line @typescript-eslint/no-var-requires
+    //     const jsdom = require("jsdom");
+    //     const dom = new jsdom.JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+    //     const x = dom.window.document.querySelector("p").textContent; // 'Hello world'
+    //     x;
 
-        const dom2 = new jsdom.JSDOM('')
-        const DOMParser = dom2.window.DOMParser;
-        const parser = new DOMParser;
-        const doc = parser.parseFromString(statXmlData, 'text/xml')
-        doc;
+    //     const dom2 = new jsdom.JSDOM('')
+    //     const DOMParser = dom2.window.DOMParser;
+    //     const parser = new DOMParser;
+    //     const doc = parser.parseFromString(statXmlData, 'text/xml')
+    //     doc;
 
-    });
+    // });
 });
 
