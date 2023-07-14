@@ -246,7 +246,8 @@ export function fileFilter(name: string): boolean {
         /^config\/low_profile_base.conf$/,  // default system profiles
         fileStoreFilesUcs,                  // certs/keys (ucs)
         fileStoreFilesQkview,               // certs/keys (qkviews)
-        /^\w+.xml$/                         // qkview stats files
+        /^stat_module.xml$/,                         // qkview stats files
+        /^mcp_module.xml$/                         // qkview stats files
     ]
     
     return fileRegexs.some( rx => rx.test(name));

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -9,34 +10,33 @@ import path from 'path';
 import XmlStats from '../src/xmlStats';
 
 import { XMLParser } from 'fast-xml-parser';
-import { log } from 'console';
 import logger from '../src/logger';
+import BigipConfig from '../src/ltm';
+import { Explosion } from '../src/models';
+import { archiveMake } from './archive_generator/archiveBuilder';
+import assert from 'assert';
 
 
 // const xmlSlimFilePath = path.join(__dirname, 'archive_generator', 'archive1', 'stat_slim.xml');
-const xmlFilePath = path.join(__dirname, 'archive_generator', 'archive1', 'stat_module.xml');
-// const xmlFilePath = path.join(__dirname, '..', 'chddc1slb004_vpr_15.1.8.2_07052023_stat_module.xml');
+const statFilePath = path.join(__dirname, 'archive_generator', 'archive1', 'stat_module.xml');
+const statXmlData = fs.readFileSync(statFilePath, 'utf-8');
+const statFilePathParsed = path.parse(statFilePath);
+const statSize = fs.statSync(path.join(statFilePathParsed.dir, statFilePathParsed.base)).size;
+
+
+const mcpFilePath = path.join(__dirname, 'archive_generator', 'archive1', 'mcp_module.xml');
+const mcpXmlData = fs.readFileSync(mcpFilePath, 'utf-8');
+const mcpFilePathParsed = path.parse(mcpFilePath);
+const mcpSize = fs.statSync(path.join(mcpFilePathParsed.dir, mcpFilePathParsed.base)).size;
+
 // tests/archive_generator/archive1/mcp_module.xml
-const xmlData = fs.readFileSync(xmlFilePath, 'utf-8');
-
-const filePath = path.parse(xmlFilePath);
-// get file size
-const size = fs.statSync(path.join(filePath.dir, filePath.base)).size;
-// try to read file contents
-const content = fs.readFileSync(path.join(filePath.dir, filePath.base), 'utf-8');
 
 
-const statsToGet = [
-    'virtual_server_stat',      // general vs stats
-    'virtual_server_cpu_stat',  // vs cpu stats
-    'gtm_wideip_stat',          // gtm wideip stats
-    'profile_clientssl_stat',
-    'plane_cpu_stat',
-    'rule_stat',
-    'asm_cpu_util_stats',
-    'asm_learning_suggestions_stats',
-    'asm_enforced_entities_stats',
-];
+let device: BigipConfig;
+let expld: Explosion;
+const parsedFileEvents: any[] = [];
+const parsedObjEvents: any[] = [];
+let testFile = '';
 
 const stats: any = {};
 
@@ -44,25 +44,68 @@ describe('XML stats parsing/abstraction', async function () {
 
     before(async () => {
 
+        testFile = await archiveMake('qkview') as string;
+        const testFileDetails = path.parse(testFile);
+
         console.log('test file: ', __filename);
 
     });
 
-    it(`diggn stat_module.xml class`, async function () {
+    it(`diggn stat_module.xml+mcp_module.xml class`, async function () {
         // something
 
+        // instantiate the class
         const xs = new XmlStats();
-        await xs.crunch({ fileName: filePath.base, size, content })
+        
+        // load the xml files
+        await xs.load({ fileName: statFilePathParsed.base, size: statSize, content: statXmlData })
+        await xs.load({ fileName: mcpFilePathParsed.base, size: mcpSize, content: mcpXmlData })
+        
+        // crunch the data
+        const resp = await xs.crunch()
         .catch((err) => {
+            // catch any errors
             logger.error(err);
         });
 
-        xs;
+        // write the output to a file for example/demo purposes
+        fs.writeFileSync('exampleRankings1.json', JSON.stringify(resp, undefined, 4));
+
+        // add assertions to test outputs
+        assert.ok(resp);
     })
 
-    it(`diggn stat_module.xml`, async function () {
 
-        const xmlD = xmlData.toString();
+    it(`XmlStats integration with parent LTM class`, async function () {
+        
+        
+        device = new BigipConfig();
+
+        device.on('parseFile', (x: any) => parsedFileEvents.push(x))
+        device.on('parseObject', (x: any) => parsedObjEvents.push(x))
+
+        const parseTime = await device.loadParseAsync(testFile)
+            .then(async parseTime => {
+                expld = await device.explode();
+                return parseTime;
+            });
+
+        parseTime;
+
+    })
+
+    it(`diggn stat_module.xml original dev`, async function () {
+
+        /**
+         * this was the original dev code exploring the idea of just regexing the xml
+         * and then building a new xml document from the matches, then parsing to json
+         * 
+         * this ended up being much faster and cleaner than trying to parse the full xml to json
+         *    This method takes less than a second, 
+         *      while the other method took almost a minute for <10MB xml
+         */
+
+        const xmlD = statXmlData.toString();
 
         // <?xml version="1.0" encoding="UTF-8"\?>
         const xmlHeaderRx = /^.+?$/m;   // line 1
@@ -141,7 +184,9 @@ describe('XML stats parsing/abstraction', async function () {
     it(`diggn stat_module.xml`, async function () {
 
 
-
+        /**
+         * original parsing xml to json dev
+         */
 
         const options = {
             ignoreAttributes: false,
@@ -171,7 +216,7 @@ describe('XML stats parsing/abstraction', async function () {
             },
         };
         const xmlParser = new XMLParser(options);
-        const xJson = xmlParser.parse(xmlData)
+        const xJson = xmlParser.parse(statXmlData)
         if (xJson) {
 
             // capture all the cluster data
@@ -195,6 +240,8 @@ describe('XML stats parsing/abstraction', async function () {
 
 
     it(`slim stats`, async function () {
+
+        // sliming of stats to test gridjs output
 
         const vsStats: any[] = [];
         const vsCpuStats: any[] = [];
@@ -224,6 +271,10 @@ describe('XML stats parsing/abstraction', async function () {
 
     it(`jsdom option`, async function () {
 
+        // this option was an attempt to use jsdom to parse the xml data
+        // the hope was to filter out the xml we wanted, then convert to json
+        // this method proved to be complicated and slow
+        //  since DOM parsing creates a ton of overhead
 
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const jsdom = require("jsdom");
@@ -234,7 +285,7 @@ describe('XML stats parsing/abstraction', async function () {
         const dom2 = new jsdom.JSDOM('')
         const DOMParser = dom2.window.DOMParser;
         const parser = new DOMParser;
-        const doc = parser.parseFromString(xmlData, 'text/xml')
+        const doc = parser.parseFromString(statXmlData, 'text/xml')
         doc;
 
     });

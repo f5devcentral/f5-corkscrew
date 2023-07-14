@@ -7,18 +7,20 @@ All notable changes to the corkscrew rpm will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+---
+
 ## [Unreleased]
 
 ### Added
 
-- [RFE] dig ssl profiles and cipher groups #43
+- [RFE] dig ssl profiles and cipher groups #43 (pending/researching)
 
 ### Changed
 
-- [RFE] include xml stats in extraction #15 (researching)
-- main README.md/documentation updates
+- main README.md/documentation updates (pending)
 
 ### Fixed
+
 
 
 ---
@@ -27,8 +29,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
-- generate and add qkview to releases for consumption in vscode-f5 extension (need to confirm)
-- initial xml stats rank system
+- generate and add test qkview to releases for consumption in vscode-f5 extension
+- [RFE] include xml stats in extraction #15
+  - initial xml stats rank system to show top 10 VS and GSLB
+- initial report builder (html report) testing/dev
+
+### Fixed
+
+- added more catch statements to prevent errors (and log them) from total failures
 
 ---
 

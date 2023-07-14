@@ -29,5 +29,6 @@
         "statusBarItem.remoteForeground": "#e7e7e7",
         "commandCenter.border": "#e7e7e799"
     },
-    "peacock.remoteColor": "#013c34"
+    "peacock.remoteColor": "#013c34",
+    "livePreview.defaultPreviewPath": "/report1.html"
 }

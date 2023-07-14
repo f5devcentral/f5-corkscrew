@@ -12,7 +12,7 @@ import objectPath from 'object-path'
  * @param configTree bigip config as json tree
  * @returns raw config objects
  */
-export function digDoConfig (configTree: BigipConfObj): string[] {
+export async function digDoConfig (configTree: BigipConfObj): Promise<string[]> {
 
     const confs: string[] = [];
 
