@@ -71,7 +71,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * bigip license file
      */
-    license: ConfigFile;
+    license = {}
     /**
      * tmos file store files, which include certs/keys/external_monitors/...
      */
@@ -232,6 +232,31 @@ export default class BigipConfig extends EventEmitter {
 
             if (file.fileName.includes('license')) {
                 this.license = file;
+
+                const rx = /^([\w ]+) : +([\S ]+)$/gm;
+                const matches = file.content.match(rx);
+
+                matches.forEach(el => {
+                    const [k, v] = el.split(/ : +/);
+                    if (k && v) {
+                        this.license[k] = v;
+                    }
+                });
+
+                // potentially usfule info to filter out
+                // const itemsToFilter = [
+                //     'Usage',
+                //     'Vendor',
+                //     'active module',
+                //     'Licensed date',
+                //     'License start',
+                //     'License end',
+                //     'Service check date',
+                //     'Registration Key',
+                //     'Licensed version',
+                //     'Appliance SN',
+                //     'Platform ID'
+                // ]
             }
 
             if (file.fileName.includes('/filestore')) {
@@ -367,7 +392,7 @@ export default class BigipConfig extends EventEmitter {
             logs: await this.logs()                 // get all the processing logs
         }
 
-        if(doClasses) {
+        if (doClasses) {
             // add DO classes, if found
             retObj.config['doClasses'] = doClasses;
         }

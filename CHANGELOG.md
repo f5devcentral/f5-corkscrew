@@ -32,7 +32,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - generate and add test qkview to releases for consumption in vscode-f5 extension
 - [RFE] include xml stats in extraction #15
   - initial xml stats rank system to show top 10 VS and GSLB
+  - includes other stats for irule, asm and some lists of objects that have no stats
 - initial report builder (html report) testing/dev
+- full license parsing
 
 ### Fixed
 
