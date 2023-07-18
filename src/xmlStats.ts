@@ -231,10 +231,10 @@ export default class XmlStats {
             .catch((err) => {
                 // catching errors here to keep the rest of the process from failing
                 //  move catch logic higher up as things get more stable
-                logger.error('f5-corkscrew/xmlStats/topVirtualServers', err);
+                logger.error('f5-corkscrew/xmlStats/vsRank', err);
             }));
 
-        promises.push(this.topGtmWips()
+        promises.push(this.gslbStats()
             .catch((err) => {
                 // catching errors here to keep the rest of the process from failing
                 //  move catch logic higher up as things get more stable
@@ -257,6 +257,28 @@ export default class XmlStats {
 
         // wait for all promises to resolve
         await Promise.all(promises);
+
+        // count up all the stats
+        this.stats.summary = {};
+        if (this.stats.vs.rank.length) {
+            this.stats.summary.vsRankTotal = this.stats.vs.rank.length;
+        }
+        if (this.stats.vs.zeroVs.length) {
+            this.stats.summary.vsWithNoStats = this.stats.vs.zeroVs.length;
+        }
+        if (this.stats.gtm.wips.length) {
+            this.stats.summary.wipsRankTotal = this.stats.gtm.wips.length;
+        }
+
+        if (this.stats.gtm.wips_no_stats.length) {
+            this.stats.summary.wipsNoStats = this.stats.gtm.wips_no_stats.length;
+        }
+        if (this.stats.rule_stat.length) {
+            this.stats.summary.rulesRankTotal = this.stats.rule_stat.length;
+        }
+        if (this.stats.rule_stat_none.length) {
+            this.stats.summary.rulesWithNoStats = this.stats.rule_stat_none.length;
+        }
 
         logger.info("all xml stats crunched");
         return this.stats;
@@ -292,7 +314,7 @@ export default class XmlStats {
      * Get the topN gtm wideips by requests
      * source: stat_module.xml for now
      */
-    async topGtmWips() {
+    async gslbStats() {
 
         // map gtm wideip type to string
         // order matters here, the order of the array is the order of the enum
@@ -312,7 +334,7 @@ export default class XmlStats {
 
         // get topN gtm wideip names by requests 
         // (mcp_module.xml)
-        this.stats.gtm.topWideipsByRequests = this.xmlStats.mcp.gtm_wideip_stat
+        this.stats.gtm.wips = this.xmlStats.mcp.gtm_wideip_stat
             .sort((a: any, b: any) => b.requests - a.requests)      // sort by requests
             .filter((x: { requests: number }) => x.requests > 0)    // filter out wideips with 0 requests
             .slice(0, this.topN)    // get topN
@@ -331,6 +353,11 @@ export default class XmlStats {
                     persisted: x.persisted,
                 };
             });    // map to name and requests details out of object
+
+        // collect rules with no executions
+        this.stats.gtm.wips_no_stats = this.xmlStats.mcp.gtm_wideip_stat
+            // filter out gslbs with no requests
+            .filter((x: any) => x.requests === 0)
     }
 
     /**
@@ -503,6 +530,11 @@ export default class XmlStats {
     }
 
 
+
+    // private async topAsmCpu() {
+    //     // get asm cpu stats
+    //     this.stats;
+    // }
 
 
     /**

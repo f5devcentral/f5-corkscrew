@@ -34,6 +34,7 @@ export const cli = yargs(process.argv.slice(2)).options({
     no_file_store: { type: 'boolean', default: true },
     no_command_logs: { type: 'boolean', default: true },
     no_process_logs: { type: 'boolean', default: true },
+    includeXmlStats: { type: 'boolean', default: false}
   }).argv
 
   explode(cli)
@@ -91,6 +92,10 @@ async function explode(args: any) {
 
         // add successful output if there
         respObj['output'] = output;
+    }
+
+    if (args.includeXmlStats) {
+        respObj['xmlStats'] = device.xmlStats.stats;
     }
 
     if (err) {

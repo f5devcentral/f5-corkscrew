@@ -181,6 +181,7 @@ export type Explosion = {
     id: string,
     dateTime: Date,
     hostname?: string,
+    baseRegKey?: string,
     inputFileType: string,
     config: {
         sources: ConfigFile[],
@@ -433,3 +434,11 @@ export type ConfigFile = {
     size: number,
     content: string
 }
+
+
+export type License = { 
+    ['Registration Key']?: string;
+    fileName: string,
+    size: number,
+    content: string
+};

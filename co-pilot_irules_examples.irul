@@ -33,3 +33,30 @@ when HTTP_REQUEST {
         pool www.example.com
     }
 }
+
+# create an irule to log all client and server side connections details
+cat <<EOF > /config/connection_logging.irule
+when CLIENT_ACCEPTED {
+    log local0. "client accepted: [IP::client_addr]:[TCP::client_port]"
+}
+
+when CLIENT_CLOSED {
+    log local0. "client closed: [IP::client_addr]:[TCP::client_port]"
+}
+
+when SERVER_CONNECTED {
+    log local0. "server connected: [IP::server_addr]:[TCP::server_port]"
+}
+
+when SERVER_CLOSED {
+    log local0. "server closed: [IP::server_addr]:[TCP::server_port]"
+}
+
+when HTTP_REQUEST {
+    log local0. "http request: [IP::client_addr]:[TCP::client_port] -> [IP::server_addr]:[TCP::server_port] [HTTP::method] [HTTP::host][HTTP::uri]"
+}
+
+when HTTP_RESPONSE {
+    log local0. "http response: [IP::server_addr]:[TCP::server_port] -> [IP::client_addr]:[TCP::client_port] [HTTP::status] [HTTP::reason]"
+}
+

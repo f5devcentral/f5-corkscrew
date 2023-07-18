@@ -5,7 +5,7 @@ import { EventEmitter } from 'events';
 import { RegExTree } from './regex'
 import logger from './logger';
 import { nestedObjValue } from './objects'
-import { BigipConfObj, ConfigFile, Explosion, Stats } from './models'
+import { BigipConfObj, ConfigFile, Explosion, License, Stats } from './models'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
 import { digVsConfig, getHostname } from './digConfigs';
@@ -16,8 +16,6 @@ import { DigGslb } from './digGslb';
 import { parseDeep } from './deepParse';
 import { deepmergeInto } from 'deepmerge-ts';
 import XmlStats from './xmlStats';
-
-
 
 /**
  * Class to consume bigip configs -> parse apps + gather stats
@@ -71,7 +69,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * bigip license file
      */
-    license = {}
+    license: License;
     /**
      * tmos file store files, which include certs/keys/external_monitors/...
      */
@@ -226,7 +224,8 @@ export default class BigipConfig extends EventEmitter {
     async parseExtras(files: ConfigFile[]): Promise<void> {
         // take in list of files (non-conf)
 
-        files.map(file => {
+
+        for await (const file of files) {
 
             this.emit('parseFile', file.fileName)
 
@@ -263,7 +262,7 @@ export default class BigipConfig extends EventEmitter {
                 this.fileStore.push(file);
                 // todo: figure out what kind of file this is and put the contents into the main config tree
             }
-        })
+        }
         return;
 
     }
@@ -388,6 +387,7 @@ export default class BigipConfig extends EventEmitter {
             config: {
                 sources: this.configFiles,
             },
+            baseRegKey: this.license?.['Registration Key'],
             stats: this.stats,                      // add stats object
             logs: await this.logs()                 // get all the processing logs
         }
