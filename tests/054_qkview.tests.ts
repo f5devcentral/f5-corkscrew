@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 'use strict';
 
@@ -91,7 +94,7 @@ describe('qkview tests', async function () {
             "ltm pool js.io_t80_pool { }",
           ]
 
-        const appConfig = app![0].lines;
+        const appConfig = app?.[0].lines;
 
         assert.deepStrictEqual(appConfig, expected, 'Should get list of virtual servers / apps');
     });

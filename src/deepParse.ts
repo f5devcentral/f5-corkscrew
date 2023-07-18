@@ -632,6 +632,10 @@ export async function parseDeep(obj: any, rx: RegExTree) {
 
         // todo: deep parse the rest of this object
 
+        if(type === 'client-ssl') {
+            
+        }
+
     } else if (obj.ltm?.snatpool) {
 
         const key = Object.keys(obj.ltm.snatpool)[0]; // only one policy at this point

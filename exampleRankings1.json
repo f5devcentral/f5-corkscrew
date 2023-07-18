@@ -1,0 +1,1097 @@
+{
+    "vs": {
+        "topClientPktsIn": [
+            {
+                "name": "/Common/test_listener_u53_vs",
+                "pkts_in": 2823,
+                "bytes_in": 185861,
+                "pkts_out": 74,
+                "bytes_out": 5624,
+                "max_conns": 16,
+                "tot_conns": 2823,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/dns_listener_coreltm2_udp53_vs",
+                "pkts_in": 2752,
+                "bytes_in": 181604,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 16,
+                "tot_conns": 2752,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "pkts_in": 20,
+                "bytes_in": 3966,
+                "pkts_out": 20,
+                "bytes_out": 1428,
+                "max_conns": 3,
+                "tot_conns": 4,
+                "cur_conns": 0
+            }
+        ],
+        "topClientBytsIn": [
+            {
+                "name": "/Common/test_listener_u53_vs",
+                "pkts_in": 2823,
+                "bytes_in": 185861,
+                "pkts_out": 74,
+                "bytes_out": 5624,
+                "max_conns": 16,
+                "tot_conns": 2823,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/dns_listener_coreltm2_udp53_vs",
+                "pkts_in": 2752,
+                "bytes_in": 181604,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 16,
+                "tot_conns": 2752,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "pkts_in": 20,
+                "bytes_in": 3966,
+                "pkts_out": 20,
+                "bytes_out": 1428,
+                "max_conns": 3,
+                "tot_conns": 4,
+                "cur_conns": 0
+            }
+        ],
+        "topClientPktsOut": [
+            {
+                "name": "/Common/test_listener_u53_vs",
+                "pkts_in": 2823,
+                "bytes_in": 185861,
+                "pkts_out": 74,
+                "bytes_out": 5624,
+                "max_conns": 16,
+                "tot_conns": 2823,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "pkts_in": 20,
+                "bytes_in": 3966,
+                "pkts_out": 20,
+                "bytes_out": 1428,
+                "max_conns": 3,
+                "tot_conns": 4,
+                "cur_conns": 0
+            }
+        ],
+        "topClientBytsOut": [
+            {
+                "name": "/Common/test_listener_u53_vs",
+                "pkts_in": 2823,
+                "bytes_in": 185861,
+                "pkts_out": 74,
+                "bytes_out": 5624,
+                "max_conns": 16,
+                "tot_conns": 2823,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "pkts_in": 20,
+                "bytes_in": 3966,
+                "pkts_out": 20,
+                "bytes_out": 1428,
+                "max_conns": 3,
+                "tot_conns": 4,
+                "cur_conns": 0
+            }
+        ],
+        "topClientMaxConns": [
+            {
+                "name": "/Common/test_listener_u53_vs",
+                "pkts_in": 2823,
+                "bytes_in": 185861,
+                "pkts_out": 74,
+                "bytes_out": 5624,
+                "max_conns": 16,
+                "tot_conns": 2823,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/dns_listener_coreltm2_udp53_vs",
+                "pkts_in": 2752,
+                "bytes_in": 181604,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 16,
+                "tot_conns": 2752,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "pkts_in": 20,
+                "bytes_in": 3966,
+                "pkts_out": 20,
+                "bytes_out": 1428,
+                "max_conns": 3,
+                "tot_conns": 4,
+                "cur_conns": 0
+            }
+        ],
+        "topClientTotConns": [
+            {
+                "name": "/Common/test_listener_u53_vs",
+                "pkts_in": 2823,
+                "bytes_in": 185861,
+                "pkts_out": 74,
+                "bytes_out": 5624,
+                "max_conns": 16,
+                "tot_conns": 2823,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/dns_listener_coreltm2_udp53_vs",
+                "pkts_in": 2752,
+                "bytes_in": 181604,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 16,
+                "tot_conns": 2752,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "pkts_in": 20,
+                "bytes_in": 3966,
+                "pkts_out": 20,
+                "bytes_out": 1428,
+                "max_conns": 3,
+                "tot_conns": 4,
+                "cur_conns": 0
+            }
+        ],
+        "topClientCurConns": [],
+        "zeroVs": [
+            {
+                "name": "/vcenter-infra/vcenter/vcenter.benlab.io_t443_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/ntp-infra/ntp_vip/ntp_u123_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/nas-infra/nas01/nas01_t0_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/iqt1/iqt1/serviceMain-Redirect-",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/iqt1/iqt1/serviceMain",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/hue-infra/hue-up/hue-up.benlab.io_t443_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/hue-infra/hue-up/hue-up.benlab.io_t80_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/external_proxy/main/extExplicit_proxy_t8888_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/external_proxy/main/extExplicit_proxy_forwarder_0_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/core1_pizza_02/pizza/serviceMain",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/core1_epic_01/epic/serviceMain",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/test_listener_t53_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/sslvpn_tcp443_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/sslvpn_tcp80_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/ipv6_listener",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/dns_listener_coreltm2_tcp53_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            },
+            {
+                "name": "/Common/bigiq.benlab.io_t443_vs",
+                "pkts_in": 0,
+                "bytes_in": 0,
+                "pkts_out": 0,
+                "bytes_out": 0,
+                "max_conns": 0,
+                "tot_conns": 0,
+                "cur_conns": 0
+            }
+        ],
+        "rank": [
+            {
+                "score": 16,
+                "name": "/Common/test_listener_u53_vs",
+                "why": [
+                    "pkts_in",
+                    3,
+                    [
+                        "bytes_in",
+                        3
+                    ],
+                    [
+                        "pkts_out",
+                        2
+                    ],
+                    [
+                        "bytes_out",
+                        2
+                    ],
+                    [
+                        "max_conns",
+                        3
+                    ],
+                    [
+                        "tot_conns",
+                        3
+                    ]
+                ]
+            },
+            {
+                "score": 8,
+                "name": "/Common/dns_listener_coreltm2_udp53_vs",
+                "why": [
+                    "pkts_in",
+                    2,
+                    [
+                        "bytes_in",
+                        2
+                    ],
+                    [
+                        "max_conns",
+                        2
+                    ],
+                    [
+                        "tot_conns",
+                        2
+                    ]
+                ]
+            },
+            {
+                "score": 6,
+                "name": "/Common/russ.app/russ_iqdash_t80_vs",
+                "why": [
+                    "pkts_in",
+                    1,
+                    [
+                        "bytes_in",
+                        1
+                    ],
+                    [
+                        "pkts_out",
+                        1
+                    ],
+                    [
+                        "bytes_out",
+                        1
+                    ],
+                    [
+                        "max_conns",
+                        1
+                    ],
+                    [
+                        "tot_conns",
+                        1
+                    ]
+                ]
+            }
+        ]
+    },
+    "gtm": {
+        "wips": [
+            {
+                "name": "hat.test.cast.lab",
+                "requests": 9849406,
+                "type": "A",
+                "resolutions": 8526234,
+                "a_requests": 9849406,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 1323172,
+                "persisted": 6579808
+            },
+            {
+                "name": "myvpn.cast.lab",
+                "requests": 9752620,
+                "type": "A",
+                "resolutions": 9752823,
+                "a_requests": 9752620,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "snap.test.cast.lab",
+                "requests": 9122911,
+                "type": "A",
+                "resolutions": 9122911,
+                "a_requests": 9122911,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "hat.cast.lab",
+                "requests": 9041211,
+                "type": "A",
+                "resolutions": 7818711,
+                "a_requests": 9041211,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 1222521,
+                "persisted": 6013317
+            },
+            {
+                "name": "snap.cast.lab",
+                "requests": 2335841,
+                "type": "A",
+                "resolutions": 1970667,
+                "a_requests": 2335841,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 365201,
+                "persisted": 1529546
+            },
+            {
+                "name": "tsts.voice.cast.lab",
+                "requests": 1692231,
+                "type": "A",
+                "resolutions": 1692258,
+                "a_requests": 1692231,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "click.cast.lab",
+                "requests": 1399056,
+                "type": "A",
+                "resolutions": 1399253,
+                "a_requests": 1399056,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "citrix-vdi-ext.cast.lab",
+                "requests": 1206573,
+                "type": "A",
+                "resolutions": 1206758,
+                "a_requests": 1206573,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "portal.cast.lab",
+                "requests": 615158,
+                "type": "A",
+                "resolutions": 615367,
+                "a_requests": 615158,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "cccapps.cast.lab",
+                "requests": 585437,
+                "type": "A",
+                "resolutions": 585611,
+                "a_requests": 585437,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "smtp.cast.lab",
+                "requests": 373317,
+                "type": "A",
+                "resolutions": 0,
+                "a_requests": 373317,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "portal2.cast.lab",
+                "requests": 313607,
+                "type": "A",
+                "resolutions": 313628,
+                "a_requests": 313607,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "webmail.cast.lab",
+                "requests": 299003,
+                "type": "A",
+                "resolutions": 295224,
+                "a_requests": 299003,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "vpn.cast.lab",
+                "requests": 237209,
+                "type": "A",
+                "resolutions": 237314,
+                "a_requests": 237209,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "*.winterwinds.wa",
+                "requests": 112481,
+                "type": "A",
+                "resolutions": 65218,
+                "a_requests": 112481,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "control.cast.lab",
+                "requests": 92126,
+                "type": "A",
+                "resolutions": 0,
+                "a_requests": 92126,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "abc.cast.lab",
+                "requests": 90555,
+                "type": "A",
+                "resolutions": 90851,
+                "a_requests": 90555,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "drynide.cast.lab",
+                "requests": 67399,
+                "type": "A",
+                "resolutions": 35320,
+                "a_requests": 67399,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 32103,
+                "persisted": 15958
+            },
+            {
+                "name": "www.yabbadabba.do",
+                "requests": 34555,
+                "type": "A",
+                "resolutions": 6176,
+                "a_requests": 34555,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            },
+            {
+                "name": "abc-app1.cast.lab",
+                "requests": 31163,
+                "type": "A",
+                "resolutions": 31433,
+                "a_requests": 31163,
+                "aaaa_requests": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "persisted": 0
+            }
+        ],
+        "wips_no_stats": [
+            {
+                "wip_name": "/Common/snaplan-test.cast.lab",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/snap-old.test.cast.lab",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/snap-test.cast.lab",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/hatworkbook-lan.test.cast.lab",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/accesstqa.dev.cast.lab",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/nas-infra/nas01/nas01.benlab.io",
+                "wip_type": 1,
+                "partition_id": "nas-infra",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/vcenter-infra/vcenter/vcenter.benlab.io",
+                "wip_type": 1,
+                "partition_id": "vcenter-infra",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/dns/esxi_hosts/esxi02.benlab.io",
+                "wip_type": 1,
+                "partition_id": "dns",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/dns/esxi_hosts/esxi01.benlab.io",
+                "wip_type": 1,
+                "partition_id": "dns",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/unifi.benlab.io",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/dns-infra/core2/coreltm02.benlab.io",
+                "wip_type": 1,
+                "partition_id": "dns-infra",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/bigiq.benlab.io",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/devCloud01.benlab.io",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/dns-infra/hassio/hassio.benlab.io",
+                "wip_type": 1,
+                "partition_id": "dns-infra",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/hue-infra/hue-up/hue-up.benlab.io",
+                "wip_type": 1,
+                "partition_id": "hue-infra",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/dns-infra/core1/coreltm01.benlab.io",
+                "wip_type": 1,
+                "partition_id": "dns-infra",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            },
+            {
+                "wip_name": "/Common/benlab.io",
+                "wip_type": 1,
+                "partition_id": "Common",
+                "requests": 0,
+                "resolutions": 0,
+                "persisted": 0,
+                "preferred": 0,
+                "alternate": 0,
+                "fallback": 0,
+                "cname_resolutions": 0,
+                "dropped": 0,
+                "return_from_dns": 0,
+                "return_to_dns": 0,
+                "rcode": 0,
+                "a_requests": 0,
+                "aaaa_requests": 0
+            }
+        ]
+    },
+    "rule_stat": [
+        {
+            "name": "/Common/throttle_source_ip",
+            "event_type": "RULE_INIT",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 8,
+            "avg_cycles": 51573,
+            "max_cycles": 51573,
+            "min_cycles": 16407,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        },
+        {
+            "name": "/Common/russ.app/russ_irule",
+            "event_type": "RULE_INIT",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 8,
+            "avg_cycles": 94471,
+            "max_cycles": 94471,
+            "min_cycles": 12642,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        },
+        {
+            "name": "/Common/russ.app/russ_irule",
+            "event_type": "HTTP_REQUEST",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 4,
+            "avg_cycles": 3350291,
+            "max_cycles": 3350291,
+            "min_cycles": 0,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        }
+    ],
+    "rule_stat_none": [
+        {
+            "name": "/Common/ben_redirect2",
+            "event_type": "HTTP_REQUEST",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 0,
+            "avg_cycles": 0,
+            "max_cycles": 0,
+            "min_cycles": 0,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        },
+        {
+            "name": "/Common/test2",
+            "event_type": "HTTP_REQUEST",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 0,
+            "avg_cycles": 0,
+            "max_cycles": 0,
+            "min_cycles": 0,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        },
+        {
+            "name": "/Common/throttle_source_ip",
+            "event_type": "CLIENT_ACCEPTED",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 0,
+            "avg_cycles": 0,
+            "max_cycles": 0,
+            "min_cycles": 0,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        },
+        {
+            "name": "/Common/letEncrypt_challange_response_irule",
+            "event_type": "HTTP_REQUEST",
+            "priority": 500,
+            "failures": 0,
+            "aborts": 0,
+            "total_executions": 0,
+            "avg_cycles": 0,
+            "max_cycles": 0,
+            "min_cycles": 0,
+            "distribution_stat": {
+                "sample_count": 0,
+                "interval_size": 0,
+                "sample_offset": 0,
+                "under_samples": 0,
+                "over_samples": 0
+            }
+        }
+    ],
+    "summary": {
+        "vsRankTotal": 3,
+        "vsWithNoStats": 17,
+        "wipsRankTotal": 20,
+        "wipsNoStats": 17,
+        "rulesRankTotal": 3,
+        "rulesWithNoStats": 4
+    }
+}

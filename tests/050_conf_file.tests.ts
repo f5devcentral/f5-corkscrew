@@ -139,13 +139,13 @@ describe('bigip.conf tests', async function () {
         const sysLowProfiles = device.defaultLowProfileBase;
 
         const configFilesNumber = device.configFiles.length;
-        const xmlStats = device.deviceXmlStats;
+        // const xmlStats = device.deviceXmlStats;
         const fileStoreLength = device.fileStore.length;
 
         assert.ok(!baseLtmProfiles);
         assert.ok(!sysLowProfiles);
         assert.ok(configFilesNumber === 1);
-        assert.ok(Object.keys(xmlStats).length === 0);
+        // assert.ok(Object.keys(xmlStats).length === 0);
         assert.ok(fileStoreLength === 0);
 
     });

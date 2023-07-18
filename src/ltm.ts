@@ -1,10 +1,3 @@
-/*
- * Copyright 2020. F5 Networks, Inc. See End User License Agreement ("EULA") for
- * license terms. Notwithstanding anything to the contrary in the EULA, Licensee
- * may copy and modify this software product for its internal business purposes.
- * Further, Licensee may upload, publish and distribute the modified version of
- * the software product on devcentral.f5.com.
- */
 
 'use strict';
 
@@ -12,7 +5,7 @@ import { EventEmitter } from 'events';
 import { RegExTree } from './regex'
 import logger from './logger';
 import { nestedObjValue } from './objects'
-import { BigipConfObj, ConfigFile, Explosion, Stats, xmlStats } from './models'
+import { BigipConfObj, ConfigFile, Explosion, License, Stats } from './models'
 import { v4 as uuidv4 } from 'uuid';
 import { countObjects } from './objCounter';
 import { digVsConfig, getHostname } from './digConfigs';
@@ -21,14 +14,11 @@ import { UnPacker } from './unPackerStream';
 import { digDoConfig } from './digDoClassesAuto';
 import { DigGslb } from './digGslb';
 import { parseDeep } from './deepParse';
-// import { XMLParser } from 'fast-xml-parser';
 import { deepmergeInto } from 'deepmerge-ts';
-import { balancedRx1, balancedRxAll } from './tmos2json';
-
-
+import XmlStats from './xmlStats';
 
 /**
- * Class to consume bigip configs -> parse apps
+ * Class to consume bigip configs -> parse apps + gather stats
  * 
  */
 export default class BigipConfig extends EventEmitter {
@@ -67,7 +57,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * stats information extracted from qkview xml files
      */
-    deviceXmlStats: xmlStats = {};
+    xmlStats = new XmlStats();
     /**
      * default profile settings
      */
@@ -79,7 +69,7 @@ export default class BigipConfig extends EventEmitter {
     /**
      * bigip license file
      */
-    license: ConfigFile;
+    license: License;
     /**
      * tmos file store files, which include certs/keys/external_monitors/...
      */
@@ -108,7 +98,12 @@ export default class BigipConfig extends EventEmitter {
         })
         unPacker.on('stat', conf => {
             // parse stats files async since they are going to thier own tree
-            parseStatPromises.push(this.parseXmlStats(conf))
+            parseStatPromises.push(
+                this.xmlStats.load(conf)
+                    .catch((err) => {
+                        logger.error('xmlStats file parsing error: ', err);
+                    })
+            )
         })
 
         await unPacker.stream(file)
@@ -129,6 +124,11 @@ export default class BigipConfig extends EventEmitter {
 
         // wait for all the stats files processing promises to finish
         await Promise.all(parseStatPromises)
+
+        await this.xmlStats.crunch()
+            .catch((err) => {
+                logger.error('xmlStats crunch error - failed to process stats', err);
+            });
 
         // get ltm/gtm/apm/asm object counts
         this.stats.objects = await countObjects(this.configObject)
@@ -220,58 +220,49 @@ export default class BigipConfig extends EventEmitter {
     }
 
 
-    async parseXmlStats(file: ConfigFile): Promise<void> {
-
-        this.emit('parseFile', file.fileName)
-
-        // look at replacing with 'fast-xml-parser'
-
-        // todo: refactor xml parsing to just get the things we want
-        //  - virtual server stats (to get top apps)
-        //  - wideip stats (top talkers)
-        //      - any other dns sizing stats like listeners qps
-        //  - any other high level asm/apm stats that would help indicate importance
-
-        // was parsing all files for ALL stats, but it ends up being 100sMb of data
-        // so, just getting some interesting stuff for now
-        // if (file.fileName === 'stat_module.xml'){
-
-        //     const options = {
-        //         ignoreAttributes: false,
-        //         attributeValueProcessor: (name, val, jPath) => {
-        //             const a = name;
-        //         },
-        //         updateTag: (tagName, jPath, attrs) => {
-        //             attrs["At"] = "Home";
-        //             return true;
-        //         }
-        //     };
-        //     const xmlParser = new XMLParser(options);
-        //     const xJson = xmlParser.parse(file.content)
-            
-        //     if(xJson) {
-                
-        //     }
-        // }
-
-    }
 
     async parseExtras(files: ConfigFile[]): Promise<void> {
         // take in list of files (non-conf)
 
-        files.map(file => {
+
+        for await (const file of files) {
 
             this.emit('parseFile', file.fileName)
 
             if (file.fileName.includes('license')) {
                 this.license = file;
+
+                const rx = /^([\w ]+) : +([\S ]+)$/gm;
+                const matches = file.content.match(rx);
+
+                matches.forEach(el => {
+                    const [k, v] = el.split(/ : +/);
+                    if (k && v) {
+                        this.license[k] = v;
+                    }
+                });
+
+                // potentially usfule info to filter out
+                // const itemsToFilter = [
+                //     'Usage',
+                //     'Vendor',
+                //     'active module',
+                //     'Licensed date',
+                //     'License start',
+                //     'License end',
+                //     'Service check date',
+                //     'Registration Key',
+                //     'Licensed version',
+                //     'Appliance SN',
+                //     'Platform ID'
+                // ]
             }
 
             if (file.fileName.includes('/filestore')) {
                 this.fileStore.push(file);
                 // todo: figure out what kind of file this is and put the contents into the main config tree
             }
-        })
+        }
         return;
 
     }
@@ -285,16 +276,16 @@ export default class BigipConfig extends EventEmitter {
         // let pRx: RegExpMatchArray | null;
         // const ret: any[] = []
         // let rest: string;
-        
+
         // do {
-    
+
         //     // run the rx to find the beginning of a backeted object
         //     pRx = conf.content.match(preRx);
-    
+
         //     if(pRx) {
         //         // catpure the bracketed object
         //         const r = balancedRx1(pRx[0], conf.content);
-    
+
         //         if(r) {
         //             // push key/value from bracketed object to the return array
         //             ret.push({key: r.prefaceKey, body: r.body});
@@ -308,7 +299,7 @@ export default class BigipConfig extends EventEmitter {
         // this is needed to mark the end of the file, and get the regex to complete
         //      the parentObjects rx relies on the start of the next known parent object (ltm|apm|gtm|asm|sys|...)
         const confContent = conf.content.concat('---end---');
-        
+
         const x = []
         try {
             // try to parse the config into an array
@@ -367,16 +358,25 @@ export default class BigipConfig extends EventEmitter {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async explode(): Promise<Explosion> {
 
-
-        const apps = await this.apps();   // extract apps before pack timer...
+        // extract apps before pack timer...
+        const apps = await this.apps()
+            .catch((err) => {
+                logger.error('explode apps error', err);
+            });
 
         // extract all the dns apps/fqdns
-        const fqdns = await this.digGslb();
+        const fqdns = await this.digGslb()
+            .catch((err) => {
+                logger.error('explode gslb error', err);
+            });
 
         const startTime = process.hrtime.bigint();  // start pack timer
 
         // extract DO classes (base information expanded)
-        const doClasses = await digDoConfig(this.configObject);
+        const doClasses = await digDoConfig(this.configObject)
+            .catch((err) => {
+                logger.error('extract DO classes error', err);
+            });
 
         // build return object
         const retObj = {
@@ -386,22 +386,27 @@ export default class BigipConfig extends EventEmitter {
             inputFileType: this.inputFileType,      // add input file type
             config: {
                 sources: this.configFiles,
-                doClasses
             },
+            baseRegKey: this.license?.['Registration Key'],
             stats: this.stats,                      // add stats object
             logs: await this.logs()                 // get all the processing logs
         }
 
-        if (apps.length > 0) {
+        if (doClasses) {
+            // add DO classes, if found
+            retObj.config['doClasses'] = doClasses;
+        }
+
+        if (apps && apps.length > 0) {
             // add virtual servers (apps), if found
             retObj.config['apps'] = apps;
         }
-        
+
         if (fqdns) {
             // add dns/fqdn details, if available
             retObj.config['gslb'] = fqdns;
         }
-        
+
         if (this.fileStore.length > 0) {
             // add files from file store
             retObj['fileStore'] = this.fileStore;

@@ -46,6 +46,9 @@ jobs:
       - name: get extension version
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
+      - name: build test qkview
+        run: echo "QKVIEW=$(npx ts-node src/makeQkview.ts)" >> $GITHUB_ENV
+
       # https://github.com/marketplace/actions/changelog-reader
       - name: Get Changelog Entry
         id: changelog_reader
@@ -69,7 +72,7 @@ jobs:
           tag: v${{ env.PACKAGE_VERSION }}
           name: ${{ env.PACKAGE_NAME }}
           body: "${{ steps.changelog_reader.outputs.changes }}"
-          artifacts: ${{ env.PACKAGE_NAME }}
+          artifacts: ${{ env.PACKAGE_NAME }},${{ env.QKVIEW }}
           draft: false
           prerelease: false
 

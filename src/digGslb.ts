@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 
 
 
@@ -44,10 +45,10 @@ export class DigGslb {
             gtmRecordTypes.forEach(type => {
 
                 // make sure we have this object
-                if (this.gtm?.wideip[type]) {
+                if (this.gtm?.wideip?.[type]) {
 
                     // loop through the object
-                    for (const [key, value] of Object.entries(this.gtm.wideip[type])) {
+                    for (const [key, value] of Object.entries(this.gtm.wideip?.[type])) {
 
                         let v = value as any;   // dangerious to cast any, but only way to get it working
                         let k = key as string;
