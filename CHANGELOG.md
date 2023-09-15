@@ -25,6 +25,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [1.4.0] - (07.11.2023)
+
+### Fixed
+
+- fixed initial why nesting of vs rank
+- fixed UCS parsing bug related to non qkview files
+
+---
+
 ## [1.3.0] - (07.11.2023)
 
 ### Added

@@ -125,10 +125,13 @@ export default class BigipConfig extends EventEmitter {
         // wait for all the stats files processing promises to finish
         await Promise.all(parseStatPromises)
 
-        await this.xmlStats.crunch()
-            .catch((err) => {
-                logger.error('xmlStats crunch error - failed to process stats', err);
-            });
+        // if inputFileType is .qkview, then crunch the stats
+        if (this.inputFileType === '.qkview') {
+            await this.xmlStats.crunch()
+                .catch((err) => {
+                    logger.error('xmlStats crunch error - failed to process stats', err);
+                });
+        }
 
         // get ltm/gtm/apm/asm object counts
         this.stats.objects = await countObjects(this.configObject)

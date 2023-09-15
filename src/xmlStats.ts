@@ -520,6 +520,8 @@ export default class XmlStats {
                 acc[idx].score += cur.score;
                 acc[idx].why.push(cur.why);
             } else {
+                // nest the why array
+                cur.why = [cur.why];
                 acc.push(cur)
             }
 
