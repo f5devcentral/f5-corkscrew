@@ -218,6 +218,8 @@ export default class BigipConfig extends EventEmitter {
                     } else {
                         logger.error('Detected parent object, but does not have all necessary regex elements to get processed ->', el)
                     }
+
+                    name;
                 });
             })
     }

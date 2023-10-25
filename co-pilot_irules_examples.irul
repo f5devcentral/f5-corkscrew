@@ -60,3 +60,28 @@ when HTTP_RESPONSE {
     log local0. "http response: [IP::server_addr]:[TCP::server_port] -> [IP::client_addr]:[TCP::client_port] [HTTP::status] [HTTP::reason]"
 }
 
+
+# create an irule to forward traffic to pool based on uri
+cat <<EOF > /config/uri_pool.irule
+when HTTP_REQUEST {
+    if { [HTTP::uri] starts_with "/example" } {
+        pool www.example.com
+    }
+    elseif { [HTTP::uri] starts_with "/example2" } {
+        pool www.example2.com
+    }
+    else {
+        pool www.example.com
+    }
+}
+
+# create an irule to respond to a tcp connection with "got it"
+cat <<EOF > /config/tcp_got_it.irule
+when CLIENT_ACCEPTED {
+    TCP::collect
+}
+
+when CLIENT_DATA {
+    TCP::release
+    TCP::respond "got it"
+}
