@@ -350,8 +350,10 @@
                 "score": 16,
                 "name": "/Common/test_listener_u53_vs",
                 "why": [
-                    "pkts_in",
-                    3,
+                    [
+                        "pkts_in",
+                        3
+                    ],
                     [
                         "bytes_in",
                         3
@@ -378,8 +380,10 @@
                 "score": 8,
                 "name": "/Common/dns_listener_coreltm2_udp53_vs",
                 "why": [
-                    "pkts_in",
-                    2,
+                    [
+                        "pkts_in",
+                        2
+                    ],
                     [
                         "bytes_in",
                         2
@@ -398,8 +402,10 @@
                 "score": 6,
                 "name": "/Common/russ.app/russ_iqdash_t80_vs",
                 "why": [
-                    "pkts_in",
-                    1,
+                    [
+                        "pkts_in",
+                        1
+                    ],
                     [
                         "bytes_in",
                         1

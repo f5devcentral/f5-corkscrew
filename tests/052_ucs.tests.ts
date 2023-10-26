@@ -26,6 +26,7 @@ describe('ucs tests', async function () {
 
     before(async () => {
         testFile = await archiveMake('ucs') as string;
+        // testFile = path.join('/home', 'ted', 'temp.ucs');
         const testFileDetails = path.parse(testFile);
 
         outFile = path.join(testFileDetails.dir, `${testFileDetails.base}.log`)
