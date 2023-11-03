@@ -49,26 +49,26 @@ export async function countObjects (obj: BigipConfObj): Promise<ObjStats> {
 
 
     // GTM stats
-    if(obj.gtm) {
+    if(obj?.gtm) {
         // here we return/assign the value
         stats.gtm = await countGSLB(obj);
     }
 
-    if(obj.apm) {
+    if(obj?.apm) {
         // here we pass in the main stats object and add stats in the function
         await countAPM(obj, stats)
     }
 
     // asm policies are refenced by local traffic policies on each vs
-    if(obj.asm?.policy) {
+    if(obj?.asm?.policy) {
         stats.asmPolicies = Object.keys(obj.asm.policy).length;
     }
     
-    if(obj.security['bot-defense']) {
+    if(obj?.security?.['bot-defense']) {
         stats.botProfiles = Object.keys(obj.security['bot-defense']).length;
     }
 
-    if(obj.security.dos) {
+    if(obj?.security?.dos) {
         stats.dosProfiles = Object.keys(obj.security.dos).length;
     }
 
@@ -82,13 +82,13 @@ export async function countAPM(obj: BigipConfObj, stats: ObjStats): Promise<void
 
     // count access policies
     //  apm policy access-policy <name> <details>
-    if(obj.apm.policy?.['access-policy']) {
+    if(obj?.apm?.policy?.['access-policy']) {
         stats.apmPolicies = Object.keys(obj.apm.policy['access-policy']).length;
     }
 
     // count access profiles
     //  apm profile access <name> <details
-    if(obj.apm.profile?.access) {
+    if(obj?.apm?.profile?.access) {
         stats.apmProfiles = Object.keys(obj.apm.profile.access).length;
     }
 
@@ -112,7 +112,7 @@ export async function countGSLB(obj: BigipConfObj): Promise<GslbStats> {
     parents.forEach( p => {
 
         // if parent found in obj.gtm object
-        if(obj.gtm[p]) {
+        if(obj?.gtm?.[p]) {
             // count the keys
             gtmStats[`${p}s`] = Object.keys(obj.gtm[p]).length;
         }
@@ -122,7 +122,7 @@ export async function countGSLB(obj: BigipConfObj): Promise<GslbStats> {
     // pools and wideips have named children object for the different record types
     //  so we need to dig a bit deeper into each one 
 
-    if(obj.gtm.pool) {
+    if(obj?.gtm?.pool) {
 
         // we have some gslb pools so, create the param and set the initial value
         gtmStats.pools = 0
@@ -142,7 +142,7 @@ export async function countGSLB(obj: BigipConfObj): Promise<GslbStats> {
         })
     }
 
-    if(obj.gtm.wideip) {
+    if(obj?.gtm?.wideip) {
 
         gtmStats.wideips = 0;
 

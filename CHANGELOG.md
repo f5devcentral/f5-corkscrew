@@ -25,6 +25,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [1.5.0] - (11.03.2023)
+
+### Fixed
+
+- bug in objCounter when missing properties/objects
+
+---
+
 ## [1.4.0] - (07.11.2023)
 
 ### Fixed
