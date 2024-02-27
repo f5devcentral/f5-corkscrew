@@ -70,6 +70,8 @@ describe('ucs tests', async function () {
             "/foo/t1.lab.io_80vs",
             "/foo/wiffle_redirect_vs",
             "/foo/app8_80vs",
+            "/foo.a_1-c/barSpec.b-80_vs",
+            "/foo.a_1-c/barSpec.b-443_vs",
             "/hue-infra/hue-up/hue-up.benlab.io_t80_vs",
             "/hue-infra/hue-up/hue-up.benlab.io_t443_vs",
           ]

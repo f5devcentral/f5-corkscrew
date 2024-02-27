@@ -194,7 +194,7 @@ export function fileFilter(name: string): boolean {
         // base /config directory
         /^config/,
         // /partitions directory including /partition name directory
-        /\/partitions\/[\w-]+?/,
+        /\/partitions\/[A-Za-z][0-9A-Za-z_.-]+/,
         // any bigip*.conf file
         /\/bigip(?:[\w-]*).conf$/
     ], undefined)

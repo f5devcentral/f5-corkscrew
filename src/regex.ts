@@ -61,11 +61,11 @@ export class RegExTree {
     /**
      * used for abstracting partition from name
      */
-    name = /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/;
+    name = /(?<partition>(\/[\w\d_\-.]+\/[\w\d_\-.]+\/|\/[\w\d_\-.]+\/))(?<name>[\w\d_\-.]+)/;
 
     ltm = {
         virtual: {
-            name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            name: /(?<partition>(\/[\w\d_\-.]+\/[\w\d_\-.]+\/|\/[\w\d_\-.]+\/))(?<name>[\w\d_\-.]+)/,
             destination: /destination [\w.\-\/]+\/([\d.]+:\d+)/,
             description: /\n +description "(?<desc>[\w' .-/]+)"\n/,
             pool: /(?<!source-address-translation {\n\s+)    pool (.+?)\n/,
@@ -78,7 +78,7 @@ export class RegExTree {
             vlans: /vlans {([\s\S]+?)\n    }\n/,
         },
         pool: {
-            name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            name: /(?<partition>(\/[\w\d_\-.]+\/[\w\d_\-.]+\/|\/[\w\d_\-.]+\/))(?<name>[\w\d_\-.]+)/,
             membersGroup: /members {([\s\S]+?)\n    }\n/,
             members: /(?<name>[\w\-\/:.]+) {\n +(?<body>[\s\S]+?)\n +}/g,
             member: /(?<name>[\w\-\/:.]+) {\n +(?<body>[\s\S]+?)\n +}/,
@@ -112,7 +112,7 @@ export class RegExTree {
 
     gtm = {
         wideip: {
-            name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+            name: /(?<partition>(\/[\w\d_\-.]+\/[\w\d_\-.]+\/|\/[\w\d_\-.]+\/))(?<name>[\w\d_\-.]+)/,
             description: /description "(?<desc>[\w' .-/]+)"\n/,
             persistence: /persistence (?<bool>\w+)/,
             'pool-lb-mode': /pool-lb-mode (?<mode>\w+)/,
@@ -156,7 +156,7 @@ export class RegExTree {
     }
 
     apm = {
-        name: /(?<partition>(\/[\w\d_\-]+\/[\w\d_\-]+\/|\/[\w\d_\-]+\/))(?<name>[\w\d_\-.]+)/,
+        name: /(?<partition>(\/[\w\d_\-.]+\/[\w\d_\-.]+\/|\/[\w\d_\-.]+\/))(?<name>[\w\d_\-.]+)/,
         'accept-languages': /\n +accept-languages { (?<langs>[\w ]+)? }\n/,
         'access-policy': /\n +access-policy (?<name>[\w/.]+)\n/,
         'log-settings': /\n +log-settings {\n +(?<profiles>[\S\s]+?)\n +}\n/,

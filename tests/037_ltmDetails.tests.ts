@@ -43,7 +43,7 @@ describe('LTM parsing/abstraction', async function () {
 
         const keys = Object.keys(device.configObject.ltm?.virtual!);
 
-        assert.ok(keys.length === 15, 'should find 15 virtual servers');
+        assert.ok(keys.length === 17, 'should find 15 virtual servers');
 
     });
 

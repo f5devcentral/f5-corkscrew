@@ -5,18 +5,18 @@
 ###  Section 2: apps
 ###  Section 3: conversion logs (error/info/debug)
 ###  Section 4: configObjects (not object values yet)
-###  2023-11-03T16:36:30.316Z
+###  2024-02-27T12:10:43.577Z
 ################################################
 
 ################################################
 ### explosion stats ##########
-### uuid: c00fa0ae-7e07-40c4-bafa-9ca0c3bbe9b8
-### dateTime: Fri Nov 03 2023 11:36:30 GMT-0500 (Central Daylight Time)
+### uuid: 1f87b936-510f-4266-974f-ebee1d982536
+### dateTime: Tue Feb 27 2024 06:10:43 GMT-0600 (Central Standard Time)
 {
-  "objectCount": 424,
-  "sourceSize": 2556274,
+  "objectCount": 429,
+  "sourceSize": 2542765,
   "objects": {
-    "virtuals": 15,
+    "virtuals": 17,
     "profiles": 6,
     "policies": 3,
     "pools": 13,
@@ -38,10 +38,10 @@
     "dosProfiles": 3
   },
   "sourceTmosVersion": "15.1.8.2",
-  "parseTime": 1275.997433,
-  "appTime": 3.986993,
-  "fqdnTime": 0.339734,
-  "packTime": 0.469273
+  "parseTime": 901.197513,
+  "appTime": 2.923494,
+  "fqdnTime": 0.285329,
+  "packTime": 0.377595
 }
 ################################################
 
@@ -778,6 +778,60 @@ ltm pool /foo/app8_pool {
 ################################################
 
 ################################################
+#### app name: barSpec.b-80_vs
+
+####
+ltm virtual /foo.a_1-c/barSpec.b-80_vs {
+    creation-time 2024-02-21:19:56:41
+    destination /foo.a_1-c/5.40.43.88:80
+    ip-protocol tcp
+    last-modified-time 2024-02-21:19:56:41
+    mask 255.255.255.255
+    profiles {
+        /Common/http { }
+        /Common/tcp { }
+    }
+    rules {
+        /Common/_sys_https_redirect
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    translate-address enabled
+    translate-port enabled
+}
+################################################
+
+################################################
+#### app name: barSpec.b-443_vs
+
+####
+ltm virtual /foo.a_1-c/barSpec.b-443_vs {
+    creation-time 2024-02-21:19:57:52
+    destination /foo.a_1-c/5.40.43.88:443
+    ip-protocol tcp
+    last-modified-time 2024-02-21:19:57:52
+    mask 255.255.255.255
+    profiles {
+        /Common/clientssl {
+            context clientside
+        }
+        /Common/http { }
+        /Common/serverssl {
+            context serverside
+        }
+        /Common/tcp { }
+    }
+    serverssl-use-sni disabled
+    source 0.0.0.0/0
+    source-address-translation {
+        type automap
+    }
+    translate-address enabled
+    translate-port enabled
+}
+################################################
+
+################################################
 #### app name: hue-up.benlab.io_t80_vs
 
 ####
@@ -876,824 +930,844 @@ ltm node /hue-infra/10.200.30.29 {
 
 #######################################
 ### conversion log ####################
-[2023-11-03T16:36:12.443Z] DeBuG: 'regular date log message'
-[11/3/2023, 11:36:12 AM] DeBuG: 'toLocalString date log message'
-[Fri, 03 Nov 2023 16:36:12 GMT] DeBuG: 'to UTC date log message'
-[2023-11-03T16:36:15.117Z] [ERROR]: >v19.0.0.0 tmos detected - this should never happen!!!
-[2023-11-03T16:36:15.118Z] [ERROR]: <v10.0.0.0 tmos detected - have not tested this yet!!!
-[2023-11-03T16:36:15.183Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74269]
-[2023-11-03T16:36:15.209Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74269]
-[2023-11-03T16:36:15.218Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/unPacker_test.conf], size [45]
-[2023-11-03T16:36:15.219Z] [ERROR]: file type of ".io", not supported, try (.conf|.ucs|.kqview|.gz)
-[2023-11-03T16:36:15.219Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74269]
-[2023-11-03T16:36:15.226Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74269]
-[2023-11-03T16:36:15.234Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74269]
-[2023-11-03T16:36:15.240Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/badArchive1.tar.gz], size: [28643]
-[2023-11-03T16:36:15.969Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556275]
-[2023-11-03T16:36:15.977Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:15.977Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:15.978Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:16.064Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:16.064Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:16.544Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:16.544Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:17.314Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:17.316Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:17.317Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:17.317Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:17.317Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:17.318Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:17.318Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:17.319Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:17.320Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:17.320Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:17.320Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:17.320Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:17.320Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:17.320Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:17.321Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:17.321Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:17.321Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:17.321Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:17.322Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:17.323Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:17.323Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:17.323Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:17.324Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:18.028Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556274]
-[2023-11-03T16:36:18.030Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:18.030Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:18.031Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:18.110Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:18.111Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:18.555Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:18.555Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:19.261Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:19.262Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:19.262Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:19.262Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:19.263Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:19.263Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:19.263Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:19.264Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:19.264Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:19.265Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:19.265Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:19.265Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:19.265Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:19.265Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:19.265Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:19.265Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:19.265Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:19.266Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:19.266Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:19.267Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:19.267Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:19.268Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:19.997Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556274]
-[2023-11-03T16:36:20.001Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:20.001Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:20.002Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:20.118Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:20.118Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:20.558Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:20.558Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:21.244Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:21.245Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:21.245Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:21.245Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:21.246Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:21.246Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:21.246Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:21.247Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:21.247Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:21.247Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:21.247Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:21.247Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:21.247Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:21.248Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:21.248Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:21.248Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:21.249Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:21.249Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:21.249Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:21.250Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:21.250Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:21.251Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:21.939Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556274]
-[2023-11-03T16:36:21.942Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:21.942Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:21.942Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:22.010Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:22.010Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:22.480Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:22.480Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:23.203Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:23.203Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:23.204Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:23.204Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:23.204Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:23.205Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:23.205Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:23.205Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:23.206Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:23.206Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:23.206Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:23.206Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:23.206Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:23.206Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:23.207Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:23.207Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:23.207Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:23.207Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:23.207Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:23.208Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:23.208Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:23.210Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:23.210Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:23.210Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:23.210Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:23.211Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:23.211Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:23.211Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:23.211Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:23.212Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:23.212Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:23.212Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:23.213Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:23.213Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:23.213Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:23.213Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:23.214Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:23.214Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:23.214Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:23.214Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:23.214Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:23.946Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556274]
-[2023-11-03T16:36:23.948Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:23.948Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:23.948Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:24.012Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:24.012Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:24.445Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:24.445Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:25.132Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:25.132Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:25.132Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:25.132Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:25.132Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:25.133Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:25.133Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:25.134Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:25.134Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:25.134Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:25.134Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:25.134Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:25.134Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:25.134Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:25.135Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:25.135Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:25.135Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:25.135Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:25.135Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:25.137Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:25.137Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:25.829Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:25.829Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:26.024Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:26.024Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:26.737Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:26.745Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556274]
-[2023-11-03T16:36:26.749Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:26.750Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:26.751Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:26.819Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:26.819Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:27.287Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:27.287Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:27.956Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:27.956Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:27.957Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:27.957Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:27.957Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:27.958Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:27.958Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:27.959Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:27.959Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:27.959Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:27.959Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:27.959Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:27.959Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:27.959Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:27.960Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:27.960Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:27.960Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:27.960Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:27.960Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:27.961Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:27.961Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:27.962Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:28.182Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.conf], size [83088]
-[2023-11-03T16:36:28.183Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:28.198Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:28.198Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:28.199Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:28.199Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:28.199Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:28.199Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:28.200Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys global-settings" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys management-ip" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys provision" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys ntp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys dns" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net vlan" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys management-route" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net route-domain" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys snmp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys snmp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys httpd" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net tunnels tunnel" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm server" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "security firewall port-list" in object
-[2023-11-03T16:36:28.200Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:28.205Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:28.205Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:28.205Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:28.205Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:28.206Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/badArchive1.tar.gz], size: [28643]
-[2023-11-03T16:36:28.208Z] [INFO]: Recieved .conf file of version: 15.1.0.4
-[2023-11-03T16:36:28.209Z] [ERROR]: Parsing [config/partitions/bd1/bigip.conf], tmos version of this file does not match previous file [15.1.0.4]
-[2023-11-03T16:36:28.209Z] [ERROR]: tmos version not detected -> meaning this probably is not a bigip.conf
-[2023-11-03T16:36:28.209Z] [ERROR]: Parsing [config/partitions/bd2/bigip.conf], tmos version of this file does not match previous file [15.1.0.4]
-[2023-11-03T16:36:28.209Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/bd2/bigip.conf - might be a scripts file...
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /bd1/defaultsUDP_444/serviceMain
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.220Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.221Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:28.221Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:28.221Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:28.221Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:28.221Z] [ERROR]: findValueFromKey function expected object, got: undefined
-[2023-11-03T16:36:28.221Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys global-settings" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys management-ip" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys provision" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys ntp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys dns" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net vlan" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys management-route" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net route-domain" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys snmp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys snmp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys httpd" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net tunnels tunnel" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm global-settings general" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm datacenter" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm server" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "security firewall port-list" in object
-[2023-11-03T16:36:28.221Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:28.257Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.ucs], size: [45933]
-[2023-11-03T16:36:28.258Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:28.292Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:28.292Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:28.292Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:28.292Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:28.292Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:28.292Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:28.293Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:28.293Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:28.293Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:28.293Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:28.294Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:28.294Z] [DEBUG]: no path "security firewall management-ip-rules" in object
-[2023-11-03T16:36:28.300Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:28.300Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:28.300Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:28.300Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:29.033Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2556274]
-[2023-11-03T16:36:29.037Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:29.037Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
-[2023-11-03T16:36:29.037Z] [INFO]: Recieved .conf file of version: 15.1.8.2
-[2023-11-03T16:36:29.113Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:29.113Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:29.556Z] [INFO]: crunching xml stats
-[2023-11-03T16:36:29.556Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
-[2023-11-03T16:36:30.309Z] [INFO]: all xml stats crunched
-[2023-11-03T16:36:30.309Z] [INFO]: digging vs config for /Common/app1_t80_vs
-[2023-11-03T16:36:30.310Z] [INFO]: digging vs config for /Common/app1_t443_vs
-[2023-11-03T16:36:30.310Z] [INFO]: digging vs config for /Common/app2_t80_vs
-[2023-11-03T16:36:30.310Z] [INFO]: digging vs config for /Common/app2_t443_vs
-[2023-11-03T16:36:30.310Z] [INFO]: digging vs config for /Common/persistTest_80_vs
-[2023-11-03T16:36:30.311Z] [INFO]: digging vs config for /Common/app3_t8443_vs
-[2023-11-03T16:36:30.311Z] [INFO]: digging vs config for /Common/app4_t80_vs
-[2023-11-03T16:36:30.312Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
-[2023-11-03T16:36:30.312Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
-[2023-11-03T16:36:30.312Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
-[2023-11-03T16:36:30.312Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
-[2023-11-03T16:36:30.312Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
-[2023-11-03T16:36:30.312Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
-[2023-11-03T16:36:30.312Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
-[2023-11-03T16:36:30.313Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
-[2023-11-03T16:36:30.313Z] [INFO]: digging vs config for /foo/app8_80vs
-[2023-11-03T16:36:30.313Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
-[2023-11-03T16:36:30.313Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
-[2023-11-03T16:36:30.314Z] [INFO]: digging DO classes for base config info
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cli global-settings" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys db" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net trunk" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net self" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net route" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net routing access-list" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net routing as-path" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net routing prefix-list" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net routing route-map" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net routing bgp" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm device-group" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "cm traffic-group" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys syslog" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "auth tacacs" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "auth remote-role role-info" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "auth ldap" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys snmp traps" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys snmp users" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys snmp communities" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net dag-globals" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys sshd" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "net tunnels vxlan" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "sys disk directory" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "gtm monitor http" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "gtm monitor https" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "gtm monitor tcp" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "gtm monitor udp" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "gtm prober-pool" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "security firewall policy" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "security firewall address-list" in object
-[2023-11-03T16:36:30.314Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:30.358Z] DeBuG: 'regular date log message'
+[2/27/2024, 6:10:30 AM] DeBuG: 'toLocalString date log message'
+[Tue, 27 Feb 2024 12:10:30 GMT] DeBuG: 'to UTC date log message'
+[2024-02-27T12:10:32.344Z] [ERROR]: >v19.0.0.0 tmos detected - this should never happen!!!
+[2024-02-27T12:10:32.344Z] [ERROR]: <v10.0.0.0 tmos detected - have not tested this yet!!!
+[2024-02-27T12:10:32.390Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74623]
+[2024-02-27T12:10:32.404Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74623]
+[2024-02-27T12:10:32.412Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/unPacker_test.conf], size [45]
+[2024-02-27T12:10:32.413Z] [ERROR]: file type of ".io", not supported, try (.conf|.ucs|.kqview|.gz)
+[2024-02-27T12:10:32.413Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74623]
+[2024-02-27T12:10:32.418Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74623]
+[2024-02-27T12:10:32.423Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.tar.gz], size: [74623]
+[2024-02-27T12:10:32.432Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/badArchive1.tar.gz], size: [28643]
+[2024-02-27T12:10:32.945Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542770]
+[2024-02-27T12:10:32.957Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:32.958Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:32.958Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:33.036Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:33.036Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:33.416Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:33.416Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:33.944Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:33.946Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:33.946Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:33.947Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:33.947Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:33.947Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:33.947Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:33.948Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:33.948Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:33.948Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:33.948Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:33.948Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:33.948Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:33.949Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:33.950Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:33.951Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:33.951Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:33.952Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:34.437Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542765]
+[2024-02-27T12:10:34.440Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:34.441Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:34.441Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:34.491Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:34.491Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:34.870Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:34.870Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:35.415Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:35.415Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:35.415Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:35.415Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:35.416Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:35.416Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:35.416Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:35.417Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:35.417Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:35.417Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:35.417Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:35.417Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:35.417Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:35.417Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:35.417Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:35.418Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:35.418Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:35.418Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:35.418Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:35.418Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:35.418Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:35.419Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:35.419Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:35.919Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542765]
+[2024-02-27T12:10:35.922Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:35.922Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:35.923Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:36.034Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:36.035Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:36.337Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:36.337Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:36.850Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:36.850Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:36.850Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:36.850Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:36.851Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:36.851Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:36.851Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:36.852Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:36.852Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:36.852Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:36.852Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:36.853Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:36.853Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:36.853Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:36.853Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:36.854Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:36.854Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:37.420Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542765]
+[2024-02-27T12:10:37.428Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:37.428Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:37.429Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:37.481Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:37.481Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:37.824Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:37.825Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:38.359Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:38.359Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:38.359Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:38.359Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:38.360Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:38.360Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:38.360Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:38.361Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:38.361Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:38.361Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:38.361Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:38.361Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:38.361Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:38.361Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:38.361Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:38.361Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:38.362Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:38.362Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:38.362Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:38.362Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:38.362Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:38.363Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:38.363Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:38.364Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:38.364Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:38.365Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:38.365Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:38.365Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:38.365Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:38.366Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:38.366Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:38.366Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:38.366Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:38.367Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:38.367Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:38.367Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:38.367Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:38.368Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:38.368Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:38.368Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:38.871Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542765]
+[2024-02-27T12:10:38.872Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:38.873Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:38.874Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:38.922Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:38.922Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:39.268Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:39.268Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:39.790Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:39.791Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:39.791Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:39.791Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:39.791Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:39.791Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:39.792Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:39.792Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:39.792Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:39.792Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:39.792Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:39.792Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:39.792Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:39.793Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:39.794Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:39.794Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:39.794Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:40.290Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:40.290Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:40.455Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:40.455Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:40.942Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:40.945Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542765]
+[2024-02-27T12:10:40.948Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:40.948Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:40.948Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:41.115Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:41.115Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:41.419Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:41.419Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:41.917Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:41.918Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:41.918Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:41.918Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:41.918Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:41.918Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:41.919Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:41.919Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:41.919Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:41.919Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:41.919Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:41.919Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:41.919Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:41.920Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:41.921Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:41.921Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:42.056Z] [DEBUG]: got .conf file [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.conf], size [83088]
+[2024-02-27T12:10:42.057Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:42.065Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:42.066Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:42.066Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:42.066Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:42.066Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:42.067Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys global-settings" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys management-ip" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys provision" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys ntp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys dns" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net vlan" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys management-route" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net route-domain" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys snmp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys snmp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys httpd" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net tunnels tunnel" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm global-settings general" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm datacenter" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm server" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "security firewall port-list" in object
+[2024-02-27T12:10:42.067Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:42.073Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:42.073Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:42.073Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:42.073Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:42.074Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/badArchive1.tar.gz], size: [28643]
+[2024-02-27T12:10:42.075Z] [INFO]: Recieved .conf file of version: 15.1.0.4
+[2024-02-27T12:10:42.075Z] [ERROR]: Parsing [config/partitions/bd1/bigip.conf], tmos version of this file does not match previous file [15.1.0.4]
+[2024-02-27T12:10:42.075Z] [ERROR]: tmos version not detected -> meaning this probably is not a bigip.conf
+[2024-02-27T12:10:42.075Z] [ERROR]: Parsing [config/partitions/bd2/bigip.conf], tmos version of this file does not match previous file [15.1.0.4]
+[2024-02-27T12:10:42.075Z] [ERROR]: failed to extract any parent tmos matches from config/partitions/bd2/bigip.conf - might be a scripts file...
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /bd1/defaultsUDP_444/serviceMain
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.081Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:42.081Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:42.081Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:42.081Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:42.081Z] [ERROR]: findValueFromKey function expected object, got: undefined
+[2024-02-27T12:10:42.082Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys global-settings" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys management-ip" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys provision" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys ntp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys dns" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net vlan" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys management-route" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net route-domain" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys snmp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys snmp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys httpd" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net tunnels tunnel" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm global-settings general" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm datacenter" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm server" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "security firewall port-list" in object
+[2024-02-27T12:10:42.082Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:42.100Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.ucs], size: [46137]
+[2024-02-27T12:10:42.101Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:42.121Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:42.121Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:42.121Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:42.122Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:42.122Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:42.122Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:42.122Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:42.123Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:42.123Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:42.123Z] [DEBUG]: no path "security firewall management-ip-rules" in object
+[2024-02-27T12:10:42.127Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:42.127Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:42.127Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:42.127Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:42.671Z] [DEBUG]: detected file: [/home/ted/f5-corkscrew/tests/artifacts/f5_corkscrew_test.qkview], size: [2542765]
+[2024-02-27T12:10:42.672Z] [INFO]: config/profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:42.673Z] [INFO]: config/low_profile_base.conf: default profile base file, stashing for later
+[2024-02-27T12:10:42.673Z] [INFO]: Recieved .conf file of version: 15.1.8.2
+[2024-02-27T12:10:42.730Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:42.730Z] [INFO]: xml file name: stat_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:43.065Z] [INFO]: crunching xml stats
+[2024-02-27T12:10:43.065Z] [INFO]: xml file name: mcp_module.xml; qkproc version: 1.6
+[2024-02-27T12:10:43.572Z] [INFO]: all xml stats crunched
+[2024-02-27T12:10:43.572Z] [INFO]: digging vs config for /Common/app1_t80_vs
+[2024-02-27T12:10:43.572Z] [INFO]: digging vs config for /Common/app1_t443_vs
+[2024-02-27T12:10:43.572Z] [INFO]: digging vs config for /Common/app2_t80_vs
+[2024-02-27T12:10:43.572Z] [INFO]: digging vs config for /Common/app2_t443_vs
+[2024-02-27T12:10:43.573Z] [INFO]: digging vs config for /Common/persistTest_80_vs
+[2024-02-27T12:10:43.573Z] [INFO]: digging vs config for /Common/app3_t8443_vs
+[2024-02-27T12:10:43.573Z] [INFO]: digging vs config for /Common/app4_t80_vs
+[2024-02-27T12:10:43.573Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [css_pool]
+[2024-02-27T12:10:43.573Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [jpg.pool]
+[2024-02-27T12:10:43.573Z] [DEBUG]: policy [/Common/app4_ltPolicy], pool found [js.io_t80_pool]
+[2024-02-27T12:10:43.573Z] [INFO]: digging vs config for /Common/forwarder_net_0.0.0.0
+[2024-02-27T12:10:43.573Z] [INFO]: digging vs config for /Common/bigiq.benlab.io_t443_vs
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /foo/defaultsUDP_5555/serviceMain
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /foo/t1.lab.io_80vs
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /foo/wiffle_redirect_vs
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /foo/app8_80vs
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-80_vs
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /foo.a_1-c/barSpec.b-443_vs
+[2024-02-27T12:10:43.574Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t80_vs
+[2024-02-27T12:10:43.575Z] [INFO]: digging vs config for /hue-infra/hue-up/hue-up.benlab.io_t443_vs
+[2024-02-27T12:10:43.575Z] [INFO]: digging DO classes for base config info
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cli global-settings" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys db" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net trunk" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net self" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net route" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net routing access-list" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net routing as-path" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net routing prefix-list" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net routing route-map" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net routing bgp" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm device ~Common~{{deviceName}}" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm device-group" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "cm traffic-group" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys syslog" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "auth tacacs" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "auth remote-role role-info" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "auth ldap" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys snmp traps" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys snmp users" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys snmp communities" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net dag-globals" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "ltm global-settings traffic-control" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys sshd" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "net tunnels vxlan" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "sys disk directory" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "gtm monitor http" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "gtm monitor https" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "gtm monitor gateway-icmp" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "gtm monitor tcp" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "gtm monitor udp" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "gtm prober-pool" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "security firewall policy" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "security firewall address-list" in object
+[2024-02-27T12:10:43.575Z] [DEBUG]: no path "security firewall management-ip-rules" in object
 
 #######################################
 ### configMultiLevelObjects ###########
@@ -1718,6 +1792,7 @@ ltm node /hue-infra/10.200.30.29 {
       "/Common/atgTeem": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
       "/Common/f5-appsvcs-templates": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
       "/foo": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
+      "/foo.a_1-c": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
       "/foo/defaultsUDP_5555": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n",
       "/test": "\n    device-group none\n    hidden false\n    inherited-devicegroup true\n    inherited-traffic-group true\n    traffic-group /Common/traffic-group-1\n"
     },
@@ -1785,6 +1860,7 @@ ltm node /hue-infra/10.200.30.29 {
     "partition": {
       "Common": "\n    description \"Updated by AS3 at Thu, 17 Sep 2020 15:14:36 GMT\"\n",
       "foo": "\n    description \"Updated by AS3 at Tue, 06 Oct 2020 18:27:20 GMT\"\n",
+      "foo.a_1-c": " ",
       "test": " "
     },
     "password-policy": "\n    lockout-duration 10\n    manual-unlock-disabled true\n    policy-enforcement disabled\n}\ncli global-settings {\n    idle-timeout 20\n}\ncm cert /Common/dtca-bundle.crt {\n    cache-path /config/filestore/files_d/Common_d/trust_certificate_d/:Common:dtca-bundle.crt_62982_2\n    checksum SHA1:3389:19284e0ef6ad87b29507ec301eae079e0b59db5f\n    revision 2\n}\ncm cert /Common/dtca.crt {\n    cache-path /config/filestore/files_d/Common_d/trust_certificate_d/:Common:dtca.crt_62978_1\n    checksum SHA1:1289:fff6e3324bb50dc77143169cbafcd2d79bbed17d\n    revision 1\n}\ncm cert /Common/dtdi.crt {\n    cache-path /config/filestore/files_d/Common_d/trust_certificate_d/:Common:dtdi.crt_62974_1\n    checksum SHA1:1220:f989b434582f4bb9e185c5d816dc0ff75d16698a\n    revision 1\n}\ncm device /Common/devCloud01.benlab.io {\n    active-modules { \"APM, Base, VE GBB (500 CCU, 2500 Access Sessions)|MEYUYAE-LYUGYGN|Anti-Virus Checks|Base Endpoint Security Checks|Firewall Checks|Network Access|Secure Virtual Keyboard|APM, Web Application|Machine Certificate Checks|Protected Workspace|Remote Desktop|App Tunnel\" \"Best Bundle, VE-5G|COTNXDC-CXZIFUK|Rate Shaping|DNSSEC|GTM Licensed Objects, Unlimited|DNS Licensed Objects, Unlimited|DNS Rate Fallback, 250K|GTM Rate Fallback, 250K|GTM Rate, 250K|DNS Rate Limit, 250K QPS|Routing Bundle, VE|ASM, VE|DNS-GTM, Base, 5Gbps|SSL, VE|Max Compression, VE|AFM, VE|Exclusive Version, v12.1.X - 18.X|VE, Carrier Grade NAT (AFM ONLY)|PSM, VE\" }\n    base-mac 00:50:56:96:f4:cb\n    build 0.0.6\n    cert /Common/dtdi.crt\n    chassis-id 42167068-f586-7b5f-1e7aac1ada72\n    edition \"Point Release 4\"\n    hostname devCloud01.benlab.io\n    key /Common/dtdi.key\n    management-ip 10.200.244.110\n    marketing-name \"BIG-IP Virtual Edition\"\n    optional-modules { \"Advanced Protocols, VE\" \"App Mode (TMSH Only, No Root/Bash)\" \"ASM to AWF Upgrade, VE-3G\" \"Best, 5 Gbps -10 Gbps Upgrade\" \"BIG-IP VE, Multicast Routing\" \"BIG-IP VE, Privileged User Access, 100 Endpoints\" \"BIG-IP VE, Privileged User Access, 1000 Endpoints\" \"BIG-IP VE, Privileged User Access, 250 Endpoints\" \"BIG-IP VE, Privileged User Access, 50 Endpoints\" \"BIG-IP VE, Privileged User Access, 500 Endpoints\" \"CGN, ADD-VE, 5G\" \"Concurrent Users and Access Sessions, VE\" \"DataSafe, VE-5G\" \"DNS and GTM (250 QPS), VE\" \"External Interface and Network HSM, VE\" \"FIPS 140-2 Level 1, BIG-IP VE-1G to 10G\" \"Intrusion Prevention System, VE-5G\" \"IP Intelligence, 1Yr, VE-1G/VE-3G/VE-5G\" \"IP Intelligence, 3Yr, VE-1G/VE-3G/VE-5G\" \"IPS, 1Yr, VE-1G / VE-3G / VE-5G\" \"IPS, 3Yr, VE-1G / VE-3G / VE-5G\" \"PEM, ADD-VE, 5G\" \"Secure Web Gateway, VE-3G-10G, 10000 Sessions, 1Yr\" \"Secure Web Gateway, VE-3G-10G, 10000 Sessions, 3Yr\" \"Secure Web Gateway, VE-3G-10G, 5000 Sessions, 1Yr\" \"Secure Web Gateway, VE-3G-10G, 5000 Sessions, 3Yr\" \"SSL Orchestrator, VE (3G/5G/10G)\" \"URL Filtering, VE-3G-10G, 10000 Sessions, 1Yr\" \"URL Filtering, VE-3G-10G, 10000 Sessions, 3Yr\" \"URL Filtering, VE-3G-10G, 5000 Sessions, 1Yr\" \"URL Filtering, VE-3G-10G, 5000 Sessions, 3Yr\" \"VE SSL Compression Offload, Medium\" \"VPN Users\" }\n    platform-id Z100\n    product BIG-IP\n    self-device true\n    time-zone US/Central\n    version 15.1.8.2\n}\ncm device-group /Common/device_trust_group {\n    auto-sync enabled\n    devices {\n        /Common/devCloud01.benlab.io { }\n    }\n    hidden true\n    network-failover disabled\n}\ncm device-group /Common/gtm {\n    devices {\n        /Common/devCloud01.benlab.io { }\n    }\n    hidden true\n    network-failover disabled\n}\ncm key /Common/dtca.key {\n    cache-path /config/filestore/files_d/Common_d/trust_certificate_key_d/:Common:dtca.key_62980_1\n    checksum SHA1:1704:d108f95e23990ea14a618354af37dcf35dfb3561\n    revision 1\n}\ncm key /Common/dtdi.key {\n    cache-path /config/filestore/files_d/Common_d/trust_certificate_key_d/:Common:dtdi.key_62976_1\n    checksum SHA1:1704:a9772d8ba23f474da7881461c1c5900ea74bd21e\n    revision 1\n}\ncm traffic-group /Common/traffic-group-1 {\n    unit-id 1\n}\ncm traffic-group /Common/traffic-group-local-only { }\ncm trust-domain /Common/Root {\n    ca-cert /Common/dtca.crt\n    ca-cert-bundle /Common/dtca-bundle.crt\n    ca-devices { /Common/devCloud01.benlab.io }\n    ca-key /Common/dtca.key\n    guid ce731326-5456-423a-a14900505696f4cb\n    status standalone\n    trust-group /Common/device_trust_group\n",
@@ -3284,6 +3360,48 @@ ltm node /hue-infra/10.200.30.29 {
         "translate-address": "enabled",
         "translate-port": "enabled"
       },
+      "/foo.a_1-c/barSpec.b-80_vs": {
+        "line": "\n    creation-time 2024-02-21:19:56:41\n    destination /foo.a_1-c/5.40.43.88:80\n    ip-protocol tcp\n    last-modified-time 2024-02-21:19:56:41\n    mask 255.255.255.255\n    profiles {\n        /Common/http { }\n        /Common/tcp { }\n    }\n    rules {\n        /Common/_sys_https_redirect\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    translate-address enabled\n    translate-port enabled\n",
+        "name": "barSpec.b-80_vs",
+        "partition": "foo.a_1-c",
+        "destination": "5.40.43.88:80",
+        "profiles": [
+          "/Common/http",
+          "/Common/tcp"
+        ],
+        "rules": [
+          "/Common/_sys_https_redirect"
+        ],
+        "creation-time": "2024-02-21:19:56:41",
+        "ip-protocol": "tcp",
+        "last-modified-time": "2024-02-21:19:56:41",
+        "mask": "255.255.255.255",
+        "serverssl-use-sni": "disabled",
+        "source": "0.0.0.0/0",
+        "translate-address": "enabled",
+        "translate-port": "enabled"
+      },
+      "/foo.a_1-c/barSpec.b-443_vs": {
+        "line": "\n    creation-time 2024-02-21:19:57:52\n    destination /foo.a_1-c/5.40.43.88:443\n    ip-protocol tcp\n    last-modified-time 2024-02-21:19:57:52\n    mask 255.255.255.255\n    profiles {\n        /Common/clientssl {\n            context clientside\n        }\n        /Common/http { }\n        /Common/serverssl {\n            context serverside\n        }\n        /Common/tcp { }\n    }\n    serverssl-use-sni disabled\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n",
+        "name": "barSpec.b-443_vs",
+        "partition": "foo.a_1-c",
+        "destination": "5.40.43.88:443",
+        "profiles": [
+          "/Common/clientssl",
+          "/Common/http",
+          "/Common/serverssl",
+          "/Common/tcp"
+        ],
+        "snat": "automap",
+        "creation-time": "2024-02-21:19:57:52",
+        "ip-protocol": "tcp",
+        "last-modified-time": "2024-02-21:19:57:52",
+        "mask": "255.255.255.255",
+        "serverssl-use-sni": "disabled",
+        "source": "0.0.0.0/0",
+        "translate-address": "enabled",
+        "translate-port": "enabled"
+      },
       "/hue-infra/hue-up/hue-up.benlab.io_t80_vs": {
         "line": "\n    description hue-up\n    destination /hue-infra/192.168.200.29:80\n    ip-protocol tcp\n    last-modified-time 2022-04-03:14:25:43\n    mask 255.255.255.255\n    persist {\n        /Common/cookie {\n            default yes\n        }\n    }\n    pool /hue-infra/hue-up/hue-up.benlab.io_t80_pool\n    profiles {\n        /Common/f5-tcp-progressive { }\n        /Common/http { }\n    }\n    serverssl-use-sni disabled\n    service-down-immediate-action reset\n    source 0.0.0.0/0\n    source-address-translation {\n        type automap\n    }\n    translate-address enabled\n    translate-port enabled\n",
         "name": "hue-up.benlab.io_t80_vs",
@@ -3339,6 +3457,7 @@ ltm node /hue-infra/10.200.30.29 {
       "/Common/192.168.2.25": "\n    address 192.168.2.25\n    arp enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
       "/foo/192.50.2.1": "\n    address 192.50.2.1\n    arp enabled\n    inherited-traffic-group true\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
       "/foo/10.2.3.4": "\n    address 10.2.3.4\n    arp enabled\n    icmp-echo enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
+      "/foo.a_1-c/5.40.43.88": "\n    address 5.40.43.88\n    arp enabled\n    icmp-echo enabled\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n",
       "/hue-infra/192.168.200.29": "\n    address 192.168.200.29\n    arp enabled\n    icmp-echo enabled\n    inherited-traffic-group true\n    mask 255.255.255.255\n    traffic-group /Common/traffic-group-1\n"
     },
     "auth": {

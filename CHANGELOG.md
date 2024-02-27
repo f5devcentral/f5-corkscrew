@@ -25,6 +25,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ---
 
+## [1.4.2] - (02.27.2024)
+
+### Fixed
+
+- bug in tenants/partitions with special chars: .-_
+
+---
+
 ## [1.4.1] - (11.03.2023)
 
 ### Fixed
