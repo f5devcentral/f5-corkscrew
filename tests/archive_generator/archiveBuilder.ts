@@ -10,7 +10,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import tar from 'tar';
+import * as tar from 'tar';
 
 import { globSync } from 'glob';
 import { execSync } from 'child_process';

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES6",
+        "target": "ES2022",
         "module": "commonjs",
         "moduleResolution": "node",
         "removeComments": false,
@@ -21,6 +21,7 @@
     "exclude": [
         "node_modules",
         ".vscode",
-        "dist"
+        "dist",
+        "tests"
     ]
 }
