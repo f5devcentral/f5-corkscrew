@@ -69,7 +69,9 @@ describe('XML stats parsing/abstraction', async function () {
         });
 
         // write the output to a file for example/demo purposes
-        fs.writeFileSync('exampleRankings1.json', JSON.stringify(resp, undefined, 4));
+        if (resp) {
+            fs.writeFileSync('exampleRankings1.json', JSON.stringify(resp, undefined, 4));
+        }
 
         // add assertions to test outputs
         assert.ok(resp);
