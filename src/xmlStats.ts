@@ -260,23 +260,23 @@ export default class XmlStats {
 
         // count up all the stats
         this.stats.summary = {};
-        if (this.stats.vs.rank.length) {
+        if (this.stats.vs?.rank?.length) {
             this.stats.summary.vsRankTotal = this.stats.vs.rank.length;
         }
-        if (this.stats.vs.zeroVs.length) {
+        if (this.stats.vs?.zeroVs?.length) {
             this.stats.summary.vsWithNoStats = this.stats.vs.zeroVs.length;
         }
-        if (this.stats.gtm.wips.length) {
+        if (this.stats.gtm?.wips?.length) {
             this.stats.summary.wipsRankTotal = this.stats.gtm.wips.length;
         }
 
-        if (this.stats.gtm.wips_no_stats.length) {
+        if (this.stats.gtm?.wips_no_stats?.length) {
             this.stats.summary.wipsNoStats = this.stats.gtm.wips_no_stats.length;
         }
-        if (this.stats.rule_stat.length) {
+        if (this.stats.rule_stat?.length) {
             this.stats.summary.rulesRankTotal = this.stats.rule_stat.length;
         }
-        if (this.stats.rule_stat_none.length) {
+        if (this.stats.rule_stat_none?.length) {
             this.stats.summary.rulesWithNoStats = this.stats.rule_stat_none.length;
         }
 
