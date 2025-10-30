@@ -84,7 +84,8 @@ export async function archiveMake(type: 'ucs' | 'qkview' | 'conf' | 'mini' = 'mi
 
         fileExt = 'ucs'
         // filter out qkview specific files
-        filesPaths = filesPaths.filter(x => !qkviewFiles.includes(x))
+        // normalize paths to use forward slashes for cross-platform compatibility
+        filesPaths = filesPaths.filter(x => !qkviewFiles.includes(x.replace(/\\/g, '/')))
 
     } else if (type === 'qkview') {
 
