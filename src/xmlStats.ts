@@ -316,6 +316,9 @@ export default class XmlStats {
      */
     async gslbStats() {
 
+        // if no gtm stats, return so we don't throw errors
+        if (!this.xmlStats.mcp.gtm_wideip_stat) return;
+
         // map gtm wideip type to string
         // order matters here, the order of the array is the order of the enum
         const enumGtmWipTypeA = [

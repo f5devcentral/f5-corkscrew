@@ -21,7 +21,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+---
 
+## [1.5.0] - (10.30.2025)
+
+### Changed
+
+- Updated all dependencies to latest versions
+- Major updates: f5-conx-core (1.2.0), deepmerge-ts (7.1.5), fast-xml-parser (5.3.0), uuid (13.0.0), glob (11.0.3), yargs (18.0.0), mocha (11.7.4), nyc (17.1.0), eslint (9.38.0), @typescript-eslint (8.46.2)
+- Moved tar package from dependencies to devDependencies (only used in tests)
+- Updated TypeScript target from ES6 to ES2022
+- Updated @types packages to match parent package versions
+- Removed @types/glob and @types/uuid (now have built-in types)
 
 ---
 
