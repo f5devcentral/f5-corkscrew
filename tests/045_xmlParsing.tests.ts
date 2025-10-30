@@ -66,6 +66,7 @@ describe('XML stats parsing/abstraction', async function () {
         .catch((err) => {
             // catch any errors
             logger.error(err);
+            console.error(err);
         });
 
         // write the output to a file for example/demo purposes
