@@ -4,11 +4,14 @@ on:
   push:
     branches: [main]
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 env:
   NODE_VERSION: 22
 
 jobs:
-
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -24,16 +27,16 @@ jobs:
       - run: npm ci
       - run: npm run compile
       - run: npm test
-        
+
   release-publish:
     runs-on: ubuntu-latest
     environment: publishing
     permissions:
       contents: write
+      id-token: write  # Required for npm provenance/OIDC
     needs: test
     name: Package-Release-Publish
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -41,6 +44,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
 
       - name: install node deps
         run: npm ci
@@ -78,9 +82,7 @@ jobs:
           draft: false
           prerelease: false
 
-
       - name: publish release to npm
-        id: publish
-        uses: JS-DevTools/npm-publish@v2
-        with:
-          token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
