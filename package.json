@@ -8,11 +8,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "corkscrew": "./dist/cli.js"
+    "corkscrew": "dist/cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/f5devcentral/f5-corkscrew.git"
+    "url": "git+https://github.com/f5devcentral/f5-corkscrew.git"
   },
   "scripts": {
     "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'src/tests/**/*.{js,ts,tsx}'",
